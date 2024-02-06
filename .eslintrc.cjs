@@ -24,14 +24,12 @@ const config = {
     },
   ],
   parser: "@typescript-eslint/parser",
-  parserOptions: {
-    project,
-  },
   plugins: ["@typescript-eslint", "prettier", "promise"],
   extends: [
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@next/next/recommended",
     "plugin:prettier/recommended",
     "plugin:tailwindcss/recommended",
     "prettier",
