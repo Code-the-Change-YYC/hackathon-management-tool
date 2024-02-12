@@ -25,17 +25,14 @@ Fetch records from the database and use them in your frontend component.
   /* For example, in a React component, you can use this snippet in your
   function's RETURN statement */
 
-  function loadTeams() {
-    client.models.Team.list()
-      .then((teams) => {
-        console.log(teams);
-        return teams;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-  loadTeams();
+  client.models.Team?.list()
+    .then((teams) => {
+      console.log(teams);
+      return;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
