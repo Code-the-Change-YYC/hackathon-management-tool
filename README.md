@@ -1,4 +1,4 @@
-The main branch has a CI/CD delpoyment available at:
+The main branch has a CI/CD delpoyment available at: [https://main.dvv7xnx31hgrk.amplifyapp.com/](https://main.dvv7xnx31hgrk.amplifyapp.com/)
 
 ## Getting Started
 
