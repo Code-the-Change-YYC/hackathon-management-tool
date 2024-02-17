@@ -20,34 +20,34 @@ const SocialMediaIcons = ({ classes }: { classes: string }) => {
   const links: socialMediaType[] = [
     {
       link: "https://www.facebook.com/CodeTheChangeYYC/",
-      icon: FaFacebook as IconType,
+      icon: FaFacebook,
     },
     {
       link: "https://www.instagram.com/codethechangeyyc/",
-      icon: FaInstagram as IconType,
+      icon: FaInstagram,
     },
     {
       link: "https://www.tiktok.com/@codethechangeyyc/",
-      icon: FaTiktok as IconType,
+      icon: FaTiktok,
     },
     {
       link: "https://www.linkedin.com/company/code-the-change-yyc/",
-      icon: FaLinkedin as IconType,
+      icon: FaLinkedin,
     },
     {
       link: "https://www.youtube.com/channel/UC4wZt-bCL31HjxUF-zc5U_g",
-      icon: FaYoutube as IconType,
+      icon: FaYoutube,
     },
     {
       link: "https://github.com/Code-the-Change-YYC",
-      icon: FaGithub as IconType,
+      icon: FaGithub,
     },
   ];
 
   return (
     <div className={`flex items-start space-x-6 pt-5 ${classes}`}>
       {links.map(({ link, icon: Icon }) => (
-        <Link href={link} key={link}>
+        <Link href={link} key={link} target="_blank">
           <Icon size={ICON_SIZE} className="cursor-pointer" />
         </Link>
       ))}
