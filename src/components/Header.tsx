@@ -4,7 +4,7 @@ import Link from "next/link";
 const headerContainer =
   "flex flex-row items-center justify-between text-awesomer-purple h-36 bg-white px-8";
 
-const isSignedIn = true;
+const isSignedIn = false;
 const hasTeam = true;
 
 export default function Header() {
@@ -31,15 +31,17 @@ export default function Header() {
       </div>
 
       <div className="flex w-48 justify-end">
-        <Link href="/">
-          <Image
-            src={"/MissingProfile.svg"}
-            alt={"profile image"}
-            width={70}
-            height={70}
-            className="rounded-full"
-          />
-        </Link>
+        {isSignedIn && (
+          <Link href="/">
+            <Image
+              src={"/MissingProfile.svg"}
+              alt={"profile image"}
+              width={70}
+              height={70}
+              className="rounded-full"
+            />
+          </Link>
+        )}
       </div>
     </div>
   );
