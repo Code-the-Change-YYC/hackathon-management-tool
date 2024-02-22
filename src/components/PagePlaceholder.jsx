@@ -6,11 +6,7 @@ const PagePlaceholderStyles =
   "flex flex-col w-full h-screen items-center justify-center";
 
 const PagePlaceholder = () => {
-  if (!enableLandingPage) {
-    return null;
-  }
-
-  return (
+  return enableLandingPage ? (
     <div className={PagePlaceholderStyles}>
       <h1 className="text-center text-3xl">
         Under construction, stay tuned on social media for more!
@@ -33,7 +29,7 @@ const PagePlaceholder = () => {
         </a>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default PagePlaceholder;
