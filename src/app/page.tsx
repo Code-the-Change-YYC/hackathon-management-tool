@@ -1,4 +1,4 @@
-import JudgingCriteria from "@/components/JudgingCriteria";
+import JudgingCriteria from "@/components/LandingPage/JudgingCriteria";
 
 export default function Home() {
   return (
