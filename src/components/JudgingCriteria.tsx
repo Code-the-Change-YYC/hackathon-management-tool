@@ -1,10 +1,12 @@
 import Image from "next/image";
 
 const judgingCriteriaStyles =
-  "flex flex-col p-10 w-full h-screen justify-evenly bg-[#BAFBE4]";
+  "relative flex -mt-5 justify-between bg-[#BAFBE4] py-20 px-10 md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
+
+const itemStyles =
+  "flex justify-start p-4 lg:px-10 lg:text-[1.0rem] items-start";
 
 const checkMarkSvg = "/svgs/judgingCriteria/check_mark_bkg.svg";
-const svgSize = 50;
 
 export const JUDGING_CRITERIA = [
   {
@@ -36,14 +38,15 @@ export const JUDGING_CRITERIA = [
 
 const JudgingCriteria = () => {
   const listJudgingCriteria = JUDGING_CRITERIA.map((criterion, index) => (
-    <li key={index} className="flex items-center">
+    <li key={index} className={itemStyles}>
       <Image
         src={checkMarkSvg}
         alt="check mark icon"
-        width={svgSize}
-        height={svgSize}
+        width={60}
+        height={60}
+        className="mr-6"
       ></Image>
-      <div className="p-4">
+      <div>
         <h2>{criterion.category}</h2>
         <p>{criterion.description}</p>
       </div>
@@ -51,8 +54,13 @@ const JudgingCriteria = () => {
   ));
   return (
     <div className={judgingCriteriaStyles}>
-      <h1>Judging Criteria</h1>
-      <ul>{listJudgingCriteria}</ul>
+      <div>
+        <h1 className="mb-10 text-2xl font-bold">
+          Judging
+          <em className="text-[#7055FD]"> Criteria</em>
+        </h1>
+        <ul className="flex flex-col">{listJudgingCriteria}</ul>
+      </div>
     </div>
   );
 };
