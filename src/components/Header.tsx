@@ -1,15 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const headerContainer =
+const headerContainerStyles =
   "flex flex-row items-center justify-between text-awesomer-purple h-36 bg-white px-8";
 
-const isSignedIn = false;
+const isSignedIn = true;
 const hasTeam = true;
 
 export default function Header() {
   return (
-    <div className={headerContainer}>
+    <div className={headerContainerStyles}>
       <div className="flex w-48 font-semibold">
         {isSignedIn ? (
           hasTeam && <Link href="/">Join a Team</Link>
@@ -21,7 +21,7 @@ export default function Header() {
       <div className="flex w-48 justify-center">
         <Link href="/">
           <Image
-            src="/CTCYYCLOGO_Cropped 1.svg"
+            src="/CTCLogo.svg"
             alt="Awesome Logo"
             width={70}
             height={70}
@@ -34,7 +34,10 @@ export default function Header() {
         {isSignedIn && (
           <Link href="/">
             <Image
-              src={"/MissingProfile.svg"}
+              src={
+                // This is temporary. replace with user profile image
+                "/MissingProfile.svg"
+              }
               alt={"profile image"}
               width={70}
               height={70}
