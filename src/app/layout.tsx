@@ -9,6 +9,7 @@ import MainLayout from "@/components/layouts/MainLayout";
 // eslint-disable-next-line no-restricted-imports
 import amplifyconfig from "../../amplifyconfiguration.json";
 
+// eslint-disable-no-unsafe-argument
 Amplify.configure(amplifyconfig);
 const inter = Inter({ subsets: ["latin"] });
 
