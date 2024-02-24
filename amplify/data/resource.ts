@@ -1,4 +1,5 @@
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
+import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 /*== STEP 1 ===============================================================
@@ -46,7 +47,7 @@ const schema = a.schema({
     // return type of the query
     .returns(a.ref("GenericFunctionResponse"))
     // allow all users to call this api for now
-    .authorization([a.allow.public()])
+    .authorization([a.allow.custom()])
     .function("demoFunctionKey"),
 });
 
@@ -59,6 +60,9 @@ export const data = defineData({
     // API Key is used for a.allow.public() rules
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
+    },
+    lambdaAuthorizationMode: {
+      function: DemoAuthFunction,
     },
   },
   functions: {
