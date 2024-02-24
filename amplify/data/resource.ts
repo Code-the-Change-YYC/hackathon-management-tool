@@ -1,3 +1,4 @@
+import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 /*== STEP 1 ===============================================================
@@ -27,6 +28,26 @@ const schema = a.schema({
       Members: a.hasMany("User"),
     })
     .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+  GenericFunctionResponse: a.customType({
+    body: a.json(),
+    statusCode: a.integer(),
+    headers: a.json(),
+  }),
+
+  /**
+   * FUNCTION-RELATED APPSYNC RESOLVERS
+   */
+  DemoFunction: a
+    .mutation() // this should be set to .query for functions that only read data
+    // arguments that this query accepts
+    .arguments({
+      content: a.string(),
+    })
+    // return type of the query
+    .returns(a.ref("GenericFunctionResponse"))
+    // allow all users to call this api for now
+    .authorization([a.allow.public()])
+    .function("demoFunctionKey"),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -39,6 +60,9 @@ export const data = defineData({
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
     },
+  },
+  functions: {
+    demoFunctionKey: DemoFunction,
   },
 });
 

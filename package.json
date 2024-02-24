@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "aws-amplify": "^6.0.15",
+    "aws-lambda": "^1.0.7",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
@@ -25,6 +26,7 @@
     "@aws-amplify/backend": "^0.11.0",
     "@aws-amplify/backend-cli": "^0.11.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/aws-lambda": "^8.10.134",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
