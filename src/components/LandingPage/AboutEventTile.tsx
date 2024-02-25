@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 const eventImageContainerStyles =
   "bg-blackish w-[290px] h-[250px] mt-[50px] border-[5px] border-dark-pink rounded-t-[30px] border-b-0";
@@ -27,7 +27,7 @@ interface EventDetailProps {
 const eventDetails = {
   eventDate: 1731258000,
   eventLocation: "University of Calgary",
-  eventImg: "image",
+  eventImg: "/image",
   eventPrizeAmount: 17000,
 };
 
@@ -51,7 +51,13 @@ const AboutEventTile = () => {
   return (
     <div className="flex flex-col items-center bg-white">
       <div className={eventImageContainerStyles}>
-        <img className={eventImageStyles} src={eventDetails.eventImg} alt="" />
+        <Image
+          className={eventImageStyles}
+          src={eventDetails.eventImg}
+          alt={eventDetails.eventLocation}
+          width={100}
+          height={100}
+        />
       </div>
       <div className={eventDetailsContainerStyles}>
         <div>
