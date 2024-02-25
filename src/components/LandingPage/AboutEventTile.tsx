@@ -1,11 +1,14 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 
+const eventDetailsSectionStyles = "flex flex-col items-center bg-white";
+const eventDetailsContentStyles =
+  "bg-pastel-pink border-[5px] border-dark-pink rounded-[25px] mb-[80px] mt-[50px] md:flex md:justify-center md:max-w-[1100px] md:shadow-[15px_15px_0px_0px_#FF4D6F]";
 const eventImageContainerStyles =
-  "bg-blackish w-[290px] h-[250px] mt-[50px] border-[5px] border-dark-pink rounded-t-[30px] border-b-0";
+  "bg-blackish rounded-t-[20px] border-b-[5px] border-dark-pink w-[290px] h-[250px] md:rounded-tr-none md:rounded-l-[20px] md:border-b-0 md:border-r-[5px] md:h-[370px] md:w-[40vw]";
 const eventImageStyles = "w-full h-full object-cover";
 const eventDetailsContainerStyles =
-  "flex items-center w-[290px] h-[370px] bg-pastel-pink border-[5px] border-dark-pink rounded-b-[30px] mb-[70px]";
+  "flex items-center w-[290px] h-[370px] rounded-b-[20px] md:w-[50vw] md:rounded-bl-none md:rounded-r-[20px]";
 const eventDetailStyles = "flex items-center ml-[40px]";
 const eventDetailTitleStyles =
   "text-lg text-blackish font-extrabold leading-[1.2]";
@@ -49,30 +52,32 @@ const AboutEventTile = () => {
   });
 
   return (
-    <div className="flex flex-col items-center bg-white">
-      <div className={eventImageContainerStyles}>
-        <Image
-          className={eventImageStyles}
-          src={eventDetails.eventImg}
-          alt={eventDetails.eventLocation}
-          width={100}
-          height={100}
-        />
-      </div>
-      <div className={eventDetailsContainerStyles}>
-        <div>
-          <EventDetail iconSrc={icons.date} iconName="date">
-            {formattedDate}
-          </EventDetail>
-          <EventDetail iconSrc={icons.location} iconName="location">
-            {eventDetails.eventLocation}
-          </EventDetail>
-          <EventDetail iconSrc={icons.heart} iconName="heart">
-            Public
-          </EventDetail>
-          <EventDetail iconSrc={icons.diamond} iconName="diamond">
-            ${eventDetails.eventPrizeAmount}
-          </EventDetail>
+    <div className={eventDetailsSectionStyles}>
+      <div className={eventDetailsContentStyles}>
+        <div className={eventImageContainerStyles}>
+          <Image
+            className={eventImageStyles}
+            src={eventDetails.eventImg}
+            alt={eventDetails.eventLocation}
+            width={100}
+            height={100}
+          />
+        </div>
+        <div className={eventDetailsContainerStyles}>
+          <div>
+            <EventDetail iconSrc={icons.date} iconName="date">
+              {formattedDate}
+            </EventDetail>
+            <EventDetail iconSrc={icons.location} iconName="location">
+              {eventDetails.eventLocation}
+            </EventDetail>
+            <EventDetail iconSrc={icons.heart} iconName="heart">
+              Public
+            </EventDetail>
+            <EventDetail iconSrc={icons.diamond} iconName="diamond">
+              ${eventDetails.eventPrizeAmount}
+            </EventDetail>
+          </div>
         </div>
       </div>
     </div>
