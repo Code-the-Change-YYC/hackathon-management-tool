@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 const imageplaceholder = "/images/imgplaceholder.png";
+const squigglySvg = "/svgs/judgingCriteria/squiggly_line.svg";
 
 const JudgeShowcase = () => {
   type Judge = {
@@ -67,26 +68,12 @@ const JudgeShowcase = () => {
     <div className="flex h-full flex-col justify-center bg-white p-10">
       <div className="flex w-fit flex-col items-center sm:w-1/4 sm:pr-5">
         <h1 className="text-2xl font-extrabold">Judges</h1>
-        <svg
-          width="120"
-          height="20"
-          viewBox="0 0 136 23"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M3 16.0441C22.3333 10.2108 75.4 -0.355907 133 4.04409"
-            stroke="#00D3A9"
-            strokeWidth="6"
-            strokeLinecap="round"
-          />
-          <path
-            d="M44.5 19.544C53.3333 16.2107 81.4 9.84402 123 11.044"
-            stroke="#00D3A9"
-            strokeWidth="6"
-            strokeLinecap="round"
-          />
-        </svg>
+        <Image
+          src={squigglySvg}
+          alt="squiggly line"
+          width={120}
+          height={20}
+        ></Image>
       </div>
       <div className="flex w-full flex-row flex-wrap">
         {judges.map((judge, index) => (
