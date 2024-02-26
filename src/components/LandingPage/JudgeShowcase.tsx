@@ -64,7 +64,7 @@ const JudgeShowcase = () => {
   ];
 
   return (
-    <div className="flex flex-col bg-white px-10 py-5">
+    <div className="flex h-screen flex-col justify-center bg-white px-10">
       <div className="flex w-fit flex-col items-center sm:w-1/4 sm:pr-5">
         <h1 className="text-2xl font-extrabold">Judges</h1>
         <svg
