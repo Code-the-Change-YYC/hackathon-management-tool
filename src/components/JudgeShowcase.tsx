@@ -65,17 +65,17 @@ const JudgeShowcase = () => {
 
   return (
     <div className="flex flex-col bg-white px-10 py-5">
-      <div className="ml-5 flex flex-row">
+      <div className="flex w-full flex-row sm:w-1/5 sm:justify-center">
         <h1 className="text-2xl font-extrabold">Judges</h1>
       </div>
-      <div className="mb-5 flex w-full flex-row flex-wrap justify-center">
+      <div className="flex w-full flex-row flex-wrap">
         {judges.map((judge, index) => (
           <div
             className="flex w-1/2 flex-row py-10 sm:w-1/3 sm:justify-center"
             key={index}
           >
-            <div className="flex flex-row gap-3">
-              <div className="relative size-20 min-w-20 overflow-hidden rounded-full sm:size-28 sm:min-w-28">
+            <div className="flex flex-row gap-2 sm:gap-3">
+              <div className="relative size-16 min-w-16 overflow-hidden rounded-full sm:size-28 sm:min-w-28">
                 <Image
                   src={judge.judgeImg}
                   alt="Profile Picture"
@@ -84,10 +84,10 @@ const JudgeShowcase = () => {
                 />
               </div>
               <div className="flex flex-col justify-center">
-                <p className="font-extrabold text-awesome-purple">
+                <p className="text-xs font-extrabold text-awesome-purple sm:text-sm">
                   {judge.judgeName}
                 </p>
-                <p>{judge.judgeCompany}</p>
+                <p className="text-xs sm:text-sm">{judge.judgeCompany}</p>
               </div>
             </div>
           </div>
