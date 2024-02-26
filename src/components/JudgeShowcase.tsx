@@ -95,7 +95,7 @@ const JudgeShowcase = () => {
             key={index}
           >
             <div className="flex flex-row gap-2 sm:gap-3">
-              <div className="relative size-16 min-w-16 overflow-hidden rounded-full sm:size-28 sm:min-w-28">
+              <div className="relative size-16 min-w-16 overflow-hidden rounded-full sm:size-24 sm:min-w-24">
                 <Image
                   src={judge.judgeImg}
                   alt="Profile Picture"
@@ -104,10 +104,10 @@ const JudgeShowcase = () => {
                 />
               </div>
               <div className="flex flex-col justify-center">
-                <p className="text-xs font-extrabold text-awesome-purple sm:text-sm">
+                <p className="text-xs font-extrabold text-awesome-purple sm:text-base">
                   {judge.judgeName}
                 </p>
-                <p className="text-xs sm:text-sm">{judge.judgeCompany}</p>
+                <p className="text-xs sm:text-base">{judge.judgeCompany}</p>
               </div>
             </div>
           </div>
