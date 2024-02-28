@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import PropTypes from "prop-types";
 
 import HeroSectionBackground from "/public/images/landingpage/hero_section_background.png";
@@ -30,10 +31,11 @@ const HeroTile: React.FC<HeroTileProps> = ({
 }) => {
   return (
     <div className={heroTileStyles}>
-      <h1
-        className="-mt-20 text-7xl font-black text-[#FFFF] drop-shadow-lg md:m-0 md:text-center md:text-7xl"
-        style={{
-          textShadow: `
+      <div>
+        <h1
+          className="-mt-20 text-7xl font-black text-[#FFFF] drop-shadow-lg md:m-0 md:text-center md:text-7xl"
+          style={{
+            textShadow: `
     -2px -2px 0 #7055FD, 
     2px -2px 0 #7055FD, 
     -2px 2px 0 #7055FD, 
@@ -43,15 +45,23 @@ const HeroTile: React.FC<HeroTileProps> = ({
     -2px 2px 0 #7055FD,
     2px 2px 0 #7055FD
 `,
-        }}
-      >
-        {" "}
-        {eventName}
-        <span className="text-[#BAFBE4]"> {eventYear}</span>
-      </h1>
-      <strong className="my-8 flex flex-wrap justify-center text-2xl text-[#7055FD] md:px-40 md:text-center lg:px-72">
-        {eventBlurb}
-      </strong>
+          }}
+        >
+          {" "}
+          {eventName}
+          <span className="text-[#BAFBE4]"> {eventYear}</span>
+        </h1>
+        <strong className="my-8 flex flex-wrap justify-center text-2xl text-[#7055FD] md:px-40 md:text-center lg:px-72">
+          {eventBlurb}
+        </strong>
+      </div>
+      <div className="flex justify-start md:justify-center">
+        <Link href="/" legacyBehavior>
+          <div className=" cursor-pointer rounded-3xl border-4 border-white bg-[#7055FD] p-4 text-2xl font-bold text-white opacity-90 hover:opacity-80">
+            Join Hackathon
+          </div>
+        </Link>
+      </div>
     </div>
   );
 };
