@@ -2,16 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import PropTypes from "prop-types";
 
-import HeroSectionBackground from "/public/images/landingpage/hero_section_background.png";
+import HeroSectionBackground from "/public/images/landingpage/HeroSection/hero_section_background.png";
 
 const heroSectionStyles =
-  "flex flex-col relative flex h-screen items-center justify-center";
-// const heroTileStyles = "mx-10 md:m-0 ";
-const heroTileStyles = "mx-10 mt:m-72 md:mt-10  ";
+  "relative flex -mt-5 justify-between py-4 md:py-15 md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
 
-const linkStyles = "my-5 flex justify-start font-bold md:justify-center";
-const webPageContainerStyles =
-  "bg-[#00D3A9] flex justify-center items-center rounded-[5px] md:w-[1000px] mx-auto max-h-[100vh] p-24";
+const heroTileStyles = "mx-10 mt-20 md:mt-10 ";
+const linkStyles =
+  "my-3 md:my-4 flex justify-start font-bold md:justify-center";
+const webPageContainerStyles = "h-[25rem] rounded-t-md bg-[#00D3A9] opacity-90";
+
 interface HeroTileProps {
   eventName: string;
   eventYear: string;
@@ -38,7 +38,7 @@ const HeroTile: React.FC<HeroTileProps> = ({
     <div className={heroTileStyles}>
       <div>
         <h1
-          className="text-7xl font-black text-[#FFFF] drop-shadow-lg md:m-0 md:text-center md:text-7xl"
+          className="mt-20 flex-wrap text-5xl font-black text-[#FFFF] drop-shadow-lg md:text-center md:text-6xl"
           style={{
             textShadow: `
     -2px -2px 0 #7055FD, 
@@ -56,13 +56,13 @@ const HeroTile: React.FC<HeroTileProps> = ({
           {eventName}
           <span className="text-[#BAFBE4]"> {eventYear}</span>
         </h1>
-        <strong className="my-8 flex flex-wrap justify-center text-2xl text-[#7055FD] opacity-95 md:px-40 md:text-center lg:px-72">
+        <strong className="text-1xl my-4 flex flex-wrap justify-center text-[#7055FD] opacity-95  md:text-center md:text-xl lg:px-40">
           {eventBlurb}
         </strong>
       </div>
       <div className={linkStyles}>
         <Link href="/" legacyBehavior>
-          <div className=" cursor-pointer rounded-3xl border-4 border-white bg-[#7055FD] p-4 text-2xl text-white opacity-90 hover:opacity-70">
+          <div className=" cursor-pointer rounded-2xl border-4 border-white bg-[#7055FD] px-6 py-2 text-sm text-white opacity-90 hover:opacity-70 md:px-6">
             Join Hackathon
           </div>
         </Link>
@@ -71,14 +71,24 @@ const HeroTile: React.FC<HeroTileProps> = ({
         <p>
           Already registered?
           <Link href="/" legacyBehavior>
-            <span className="cursor-pointer text-[#7055FD] opacity-90 hover:opacity-70">
+            <span className="text-1xl cursor-pointer text-[#7055FD] opacity-90 hover:opacity-70">
               {" "}
               Sign in
             </span>
           </Link>
         </p>
       </div>
-      <div className={webPageContainerStyles}>hello</div>
+      <div className={webPageContainerStyles}>
+        <div className="rounded-t-md border-t-[30px] border-white">
+          <div className="container mx-auto p-4">
+            <div className="m-2 h-[25rem] rounded-t-3xl bg-[#BAFBE4] opacity-90 md:m-5">
+              <h1 className="p-5 text-center text-2xl font-bold text-[#7055FD]">
+                {eventName} begins...{" "}
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
