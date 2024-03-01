@@ -2,6 +2,8 @@ import Image from "next/image";
 
 const leftSponsorSvg = "/svgs/judgingCriteria/leftSponsorSvg.svg";
 const rightSponsorSvg = "/svgs/judgingCriteria/rightSponsorSvg.svg";
+const leftSponsorSvgSmall = "/svgs/judgingCriteria/leftSponsorSvgSmall.svg";
+const rightSponsorSvgSmall = "/svgs/judgingCriteria/rightSponsorSvgSmall.svg";
 const imageplaceholder = "/images/imgplaceholder.png";
 
 const ThankSponsors = () => {
@@ -53,9 +55,17 @@ const ThankSponsors = () => {
   );
 
   return (
-    <div className="relative flex flex-col items-center justify-center pb-12 pt-28">
-      <div className="flex h-48 w-full flex-row">
-        <div className="relative z-10 w-2/5 overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center pb-12 pt-10">
+      <div className="flex h-48 w-full flex-row justify-center">
+        <div className="absolute left-0 top-24 z-20  size-44 overflow-hidden sm:hidden">
+          <Image
+            src={leftSponsorSvgSmall}
+            alt="squiggly lines"
+            fill={true}
+            style={{ objectFit: "contain" }}
+          />
+        </div>
+        <div className="relative z-10 hidden w-2/5 overflow-hidden sm:flex">
           <Image
             src={leftSponsorSvg}
             alt="squiggly lines"
@@ -63,7 +73,7 @@ const ThankSponsors = () => {
             style={{ objectFit: "contain" }}
           />
         </div>
-        <div className=" flex-end flex h-full max-w-[318px] flex-col justify-end sm:max-w-[395px]">
+        <div className="flex-end flex h-full max-w-[315px] flex-col justify-end sm:max-w-[395px]">
           <h1 className="z-30 mb-4 text-center text-2xl font-extrabold sm:max-w-none sm:text-3xl">
             Thank you to our sponsors
           </h1>
@@ -73,7 +83,15 @@ const ThankSponsors = () => {
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
         </div>
-        <div className="relative z-20 w-2/5 overflow-hidden">
+        <div className="absolute right-0 z-20 size-44 overflow-hidden sm:hidden">
+          <Image
+            src={rightSponsorSvgSmall}
+            alt="squiggly lines"
+            fill={true}
+            style={{ objectFit: "contain" }}
+          />
+        </div>
+        <div className="relative z-20 hidden w-2/5 overflow-hidden sm:flex">
           <Image
             src={rightSponsorSvg}
             alt="squiggly lines"
@@ -85,8 +103,8 @@ const ThankSponsors = () => {
 
       <div className="flex w-full flex-row justify-around px-8 pt-10">
         {sortedSponsors.map((sponsor, index) => (
-          <div className="flex flex-row gap-2 sm:gap-3" key={index}>
-            <div className="group flex flex-col gap-3">
+          <div className="flex flex-row  gap-2 sm:gap-3" key={index}>
+            <div className="group flex flex-col items-center gap-3">
               <div className={IMAGE_CLASS}>
                 <a
                   href={sponsor.sponsorPage}
