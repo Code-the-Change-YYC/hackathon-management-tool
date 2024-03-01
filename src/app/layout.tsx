@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 
 import "@/app/globals.css";
 import { UserContextProvider } from "@/components/contexts/UserContext";
 import MainLayout from "@/components/layouts/MainLayout";
 
-const inter = Inter({ subsets: ["latin"] });
-
+const Omnes = localFont({
+  src: "./fonts/Omnes Medium.ttf",
+  variable: "--font-omnes",
+});
 export const metadata: Metadata = {
   title: "Hack the Change",
   description: "Hack the Change management tool",
@@ -19,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${Omnes.className}`}>
         <UserContextProvider>
           <MainLayout>{children}</MainLayout>
         </UserContextProvider>
