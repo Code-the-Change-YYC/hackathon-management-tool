@@ -21,6 +21,7 @@ const config: Config = {
         "awesome-purple": "#A689FF",
         "awesomer-purple": "#7055FD",
         "ehhh-grey": "#C5C5C5",
+        "fuzzy-peach": "#FFD2DC",
       },
     },
   },
