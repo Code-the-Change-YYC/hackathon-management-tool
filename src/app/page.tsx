@@ -1,7 +1,9 @@
+import JudgingCriteria from "@/components/LandingPage/JudgingCriteria";
+import PagePlaceholder from "@/components/PagePlaceholder";
+import { enableLandingPage } from "@/featureFlags";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Hackathon Management Tool | Landing Page
-    </main>
+    <main>{enableLandingPage ? <PagePlaceholder /> : <JudgingCriteria />}</main>
   );
 }
