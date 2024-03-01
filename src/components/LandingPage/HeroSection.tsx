@@ -7,24 +7,23 @@ import { useEffect, useState } from "react";
 
 import HeroSectionBackground from "/public/images/landingpage/HeroSection/hero_section_background.png";
 
-const heroSectionStyles =
+const HERO_SECTION_CONTAINER =
   "relative flex -mt-5 justify-between py-4 md:py-15 md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
 
-const heroTileStyles = "mx-10 my-20 md:my-10 lg:mt-10 ";
-const linkStyles =
-  "my-3 md:my-4 flex justify-start font-bold md:justify-center";
+const HERO_TILE_STYLES = "mx-10 mb-20 md:mb-0 lg:mt-10 ";
+const LINK_STYLES = "md:my-4 flex justify-start font-bold md:justify-center";
 
-const webPageContainerStyles =
+const WEBPAGE_CONTAINER =
   "hidden md:block lg:block h-[25rem] rounded-t-md bg-[#00D3A9] opacity-90";
-const timeContainerStyles = "flex justify-center my-10";
-const timeStyles =
+const COUNTDOWN_CONTAINER = "flex justify-center my-8";
+const COUNTDOWN_BACKGROUND =
   " bg-[#A689FF] text-white py-10 px-4 rounded-lg md:w-[8rem] md:h-[11rem] lg:w-[10rem] lg:h-[11rem] relative ";
-const numberStyles =
+const NUMBER_STYLES =
   "flex flex-col justify-center items-center font-bold text-[20px] md:text-[50px] lg:text-[60px]";
-const labelStyles =
+const LABEL_STYLES =
   " flex flex-col justify-center items-center uppercase text-1xl ";
-const horizontalLineStyles =
-  "absolute left-0 right-0 top-[50%] -translate-y-1/2 transform border-b-2 border-white opacity-50";
+const HORIZONTAL_LINE =
+  "absolute left-0 right-0 top-[50%] -translate-y-1/2 transform border-b-2 border-white opacity-95";
 
 interface HeroTileProps {
   eventName: string;
@@ -84,7 +83,7 @@ const HeroTile: React.FC<HeroTileProps> = ({
   }, []);
 
   return (
-    <div className={heroTileStyles}>
+    <div className={HERO_TILE_STYLES}>
       <div>
         <h1
           className="mt-20 flex-wrap text-5xl font-black text-[#FFFF] drop-shadow-lg md:text-center md:text-6xl"
@@ -109,18 +108,18 @@ const HeroTile: React.FC<HeroTileProps> = ({
           {eventBlurb}
         </strong>
       </div>
-      <div className={linkStyles}>
+      <div className={LINK_STYLES}>
         <Link href="/" legacyBehavior>
-          <div className=" cursor-pointer rounded-2xl border-4 border-white bg-[#7055FD] px-6 py-2 text-sm text-white opacity-90 hover:opacity-70 md:px-6">
+          <div className=" mb-4 cursor-pointer rounded-2xl border-4 border-white bg-[#7055FD] px-6 py-2 text-sm text-white opacity-90 hover:opacity-70 md:mb-0 md:px-6">
             Join Hackathon
           </div>
         </Link>
       </div>
-      <div className={linkStyles}>
+      <div className={LINK_STYLES}>
         <p>
           Already registered?
           <Link href="/" legacyBehavior>
-            <span className="text-1xl cursor-pointer text-[#7055FD] opacity-90 hover:opacity-70">
+            <span className="cursor-pointer text-sm text-[#7055FD] opacity-95 hover:opacity-70">
               {" "}
               Sign in
             </span>
@@ -128,10 +127,10 @@ const HeroTile: React.FC<HeroTileProps> = ({
         </p>
       </div>
 
-      <div className={webPageContainerStyles}>
+      <div className={WEBPAGE_CONTAINER}>
         <div className="rounded-t-md border-t-[30px] border-white">
           <div className="container mx-auto p-4">
-            <div className="m-2 h-[25rem] rounded-t-3xl bg-[#BAFBE4] opacity-90 md:m-5">
+            <div className="m-2 h-[24rem] rounded-t-3xl bg-[#BAFBE4] px-10 opacity-90 md:m-5">
               <h1 className="pt-10 text-center text-2xl font-bold text-[#7055FD]">
                 {eventName} begins...{" "}
               </h1>
@@ -140,27 +139,27 @@ const HeroTile: React.FC<HeroTileProps> = ({
                   {eventName} {eventYear} has begun!
                 </h1>
               ) : (
-                <div className={timeContainerStyles}>
+                <div className={COUNTDOWN_CONTAINER}>
                   <div className="flex space-x-3">
-                    <div className={timeStyles}>
-                      <div className={numberStyles}>{days}</div>
-                      <div className={labelStyles}>Days</div>
-                      <div className={horizontalLineStyles}></div>
+                    <div className={COUNTDOWN_BACKGROUND}>
+                      <div className={NUMBER_STYLES}>{days}</div>
+                      <div className={LABEL_STYLES}>Days</div>
+                      <div className={HORIZONTAL_LINE}></div>
                     </div>
-                    <div className={timeStyles}>
-                      <div className={numberStyles}>{hours}</div>
-                      <div className={labelStyles}>Hours</div>
-                      <div className={horizontalLineStyles}></div>
+                    <div className={COUNTDOWN_BACKGROUND}>
+                      <div className={NUMBER_STYLES}>{hours}</div>
+                      <div className={LABEL_STYLES}>Hours</div>
+                      <div className={HORIZONTAL_LINE}></div>
                     </div>
-                    <div className={timeStyles}>
-                      <div className={numberStyles}>{minutes}</div>
-                      <div className={labelStyles}>Minutes</div>
-                      <div className={horizontalLineStyles}></div>
+                    <div className={COUNTDOWN_BACKGROUND}>
+                      <div className={NUMBER_STYLES}>{minutes}</div>
+                      <div className={LABEL_STYLES}>Minutes</div>
+                      <div className={HORIZONTAL_LINE}></div>
                     </div>
-                    <div className={timeStyles}>
-                      <div className={numberStyles}>{seconds}</div>
-                      <div className={labelStyles}>Seconds</div>
-                      <div className={horizontalLineStyles}></div>
+                    <div className={COUNTDOWN_BACKGROUND}>
+                      <div className={NUMBER_STYLES}>{seconds}</div>
+                      <div className={LABEL_STYLES}>Seconds</div>
+                      <div className={HORIZONTAL_LINE}></div>
                     </div>
                   </div>
                 </div>
@@ -183,7 +182,7 @@ HeroTile.propTypes = {
 
 const HeroSection = () => {
   return (
-    <div className={heroSectionStyles}>
+    <div className={HERO_SECTION_CONTAINER}>
       <Image
         src={HeroSectionBackground}
         alt="Landing page background"
