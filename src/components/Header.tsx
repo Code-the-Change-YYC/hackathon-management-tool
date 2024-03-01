@@ -36,7 +36,7 @@ export default function Header() {
             <Image
               src={
                 // This is temporary. replace with user profile image
-                "/MissingProfile.svg"
+                "/MissingProfile.png"
               }
               alt={"profile image"}
               width={70}
