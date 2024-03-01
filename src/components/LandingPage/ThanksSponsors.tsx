@@ -6,7 +6,7 @@ const imageplaceholder = "/images/imgplaceholder.png";
 
 const ThankSponsors = () => {
   const IMAGE_CLASS =
-    "relative size-16 min-w-16 overflow-hidden rounded-full duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform sm:size-24 sm:min-w-24";
+    "relative size-12 min-w-12 overflow-hidden rounded-full duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform sm:size-28 sm:min-w-28";
 
   type Sponsor = {
     sponsorOrder: number;
@@ -53,19 +53,19 @@ const ThankSponsors = () => {
   );
 
   return (
-    <div className="flex flex-col items-center justify-center pb-12 pt-28">
-      <div className=" sm:1/3 mb-10 flex w-1/2 flex-col items-center gap-3">
-        <div className="absolute left-0 z-10 h-36 w-1/3 overflow-hidden">
-          <Image src={leftSponsorSvg} alt="squiggly lines" fill={true} />
-        </div>
-        <div className="absolute right-0 z-10 h-32 w-1/3 overflow-hidden">
-          <Image src={rightSponsorSvg} alt="squiggly lines" fill={true} />
-        </div>
-        <h1 className="text-s z-20 text-center font-extrabold sm:text-3xl ">
+    <div className="relative flex flex-col items-center justify-center pb-12 pt-28">
+      <div className="absolute -right-12 top-16 z-20 h-32 w-1/3 overflow-hidden sm:right-12 sm:top-8">
+        <Image src={rightSponsorSvg} alt="squiggly lines" fill={true} />
+      </div>
+      <div className="absolute -left-12 top-20 z-10 h-28 w-1/3 overflow-hidden sm:left-12">
+        <Image src={leftSponsorSvg} alt="squiggly lines" fill={true} />
+      </div>
+      <div className="sm:1/3 mb-10 flex w-3/4 flex-col items-center sm:max-w-none">
+        <h1 className="z-30 mb-4 max-w-72 text-center text-2xl font-extrabold sm:max-w-none sm:text-3xl">
           Thank you to our sponsors
         </h1>
 
-        <p className="w-11/12 text-center">
+        <p className="w-full text-center sm:w-3/4 md:w-1/3">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </p>
