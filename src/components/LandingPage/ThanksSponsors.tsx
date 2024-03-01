@@ -5,6 +5,9 @@ const rightSponsorSvg = "/svgs/judgingCriteria/rightSponsorSvg.svg";
 const imageplaceholder = "/images/imgplaceholder.png";
 
 const ThankSponsors = () => {
+  const IMAGE_CLASS =
+    "relative size-16 min-w-16 overflow-hidden rounded-full duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform sm:size-24 sm:min-w-24";
+
   type Sponsor = {
     sponsorOrder: number;
     sponsorImg: string;
@@ -51,14 +54,14 @@ const ThankSponsors = () => {
 
   return (
     <div className="flex flex-col items-center justify-center pb-12 pt-28">
-      <div className="z-20 mb-10 flex w-1/4 flex-col items-center gap-3">
-        <div className="absolute  left-28 z-10 h-36 w-1/3 overflow-hidden">
+      <div className=" sm:1/3 mb-10 flex w-1/2 flex-col items-center gap-3">
+        <div className="absolute left-0 z-10 h-36 w-1/3 overflow-hidden">
           <Image src={leftSponsorSvg} alt="squiggly lines" fill={true} />
         </div>
-        <div className="absolute  right-24 z-10 h-32 w-1/3 overflow-hidden">
+        <div className="absolute right-0 z-10 h-32 w-1/3 overflow-hidden">
           <Image src={rightSponsorSvg} alt="squiggly lines" fill={true} />
         </div>
-        <h1 className="text-s text-center font-extrabold sm:text-3xl">
+        <h1 className="text-s z-20 text-center font-extrabold sm:text-3xl ">
           Thank you to our sponsors
         </h1>
 
@@ -72,7 +75,7 @@ const ThankSponsors = () => {
         {sortedSponsors.map((sponsor, index) => (
           <div className="flex flex-row gap-2 sm:gap-3" key={index}>
             <div className="group flex flex-col gap-3">
-              <div className=" relative size-16 min-w-16 overflow-hidden rounded-full sm:size-24 sm:min-w-24">
+              <div className={IMAGE_CLASS}>
                 <a
                   href={sponsor.sponsorPage}
                   target="_blank"
