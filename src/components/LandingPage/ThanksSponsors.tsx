@@ -54,24 +54,36 @@ const ThankSponsors = () => {
 
   return (
     <div className="relative flex flex-col items-center justify-center pb-12 pt-28">
-      <div className="absolute right-0 top-16 z-20 h-32 w-1/3 overflow-hidden sm:right-0 sm:top-8">
-        <Image src={rightSponsorSvg} alt="squiggly lines" fill={true} />
-      </div>
-      <div className="absolute left-0 top-20 z-10 h-28 w-1/3 overflow-hidden sm:left-0">
-        <Image src={leftSponsorSvg} alt="squiggly lines" fill={true} />
-      </div>
-      <div className="sm:1/3 mb-10 flex w-3/4 flex-col items-center sm:max-w-none">
-        <h1 className="z-30 mb-4 max-w-72 text-center text-2xl font-extrabold sm:max-w-none sm:text-3xl">
-          Thank you to our sponsors
-        </h1>
+      <div className="flex h-48 w-full flex-row">
+        <div className="relative z-10 w-2/5 overflow-hidden">
+          <Image
+            src={leftSponsorSvg}
+            alt="squiggly lines"
+            fill={true}
+            style={{ objectFit: "contain" }}
+          />
+        </div>
+        <div className=" flex-end flex h-full max-w-[318px] flex-col justify-end sm:max-w-[395px]">
+          <h1 className="z-30 mb-4 text-center text-2xl font-extrabold sm:max-w-none sm:text-3xl">
+            Thank you to our sponsors
+          </h1>
 
-        <p className="w-full text-center sm:w-3/4 md:w-1/3">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
+          <p className="w-11/2 text-center text-sm sm:text-base">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </p>
+        </div>
+        <div className="relative z-20 w-2/5 overflow-hidden">
+          <Image
+            src={rightSponsorSvg}
+            alt="squiggly lines"
+            fill={true}
+            style={{ objectFit: "contain" }}
+          />
+        </div>
       </div>
 
-      <div className="flex w-full flex-row justify-around px-8 py-5">
+      <div className="flex w-full flex-row justify-around px-8 pt-10">
         {sortedSponsors.map((sponsor, index) => (
           <div className="flex flex-row gap-2 sm:gap-3" key={index}>
             <div className="group flex flex-col gap-3">
