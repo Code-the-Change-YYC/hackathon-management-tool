@@ -54,10 +54,10 @@ const ThankSponsors = () => {
 
   return (
     <div className="relative flex flex-col items-center justify-center pb-12 pt-28">
-      <div className="absolute -right-12 top-16 z-20 h-32 w-1/3 overflow-hidden sm:right-12 sm:top-8">
+      <div className="absolute right-0 top-16 z-20 h-32 w-1/3 overflow-hidden sm:right-0 sm:top-8">
         <Image src={rightSponsorSvg} alt="squiggly lines" fill={true} />
       </div>
-      <div className="absolute -left-12 top-20 z-10 h-28 w-1/3 overflow-hidden sm:left-12">
+      <div className="absolute left-0 top-20 z-10 h-28 w-1/3 overflow-hidden sm:left-0">
         <Image src={leftSponsorSvg} alt="squiggly lines" fill={true} />
       </div>
       <div className="sm:1/3 mb-10 flex w-3/4 flex-col items-center sm:max-w-none">
