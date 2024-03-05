@@ -9,10 +9,12 @@ import { generateServerClientUsingCookies } from "@aws-amplify/adapter-nextjs/ap
 import config from "../../amplifyconfiguration.json";
 
 export const { runWithAmplifyServerContext } = createServerRunner({
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   config,
 });
 
 export const cookiesClient = generateServerClientUsingCookies<Schema>({
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   config,
   cookies,
 });
