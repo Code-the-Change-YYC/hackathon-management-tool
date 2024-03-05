@@ -47,7 +47,7 @@ const schema = a.schema({
     // return type of the query
     .returns(a.ref("GenericFunctionResponse"))
     // allow all users to call this api for now
-    .authorization([a.allow.custom()])
+    .authorization([a.allow.public()])
     .function("demoFunctionKey"),
 });
 

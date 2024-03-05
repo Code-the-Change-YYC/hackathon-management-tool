@@ -1,11 +1,7 @@
-import { generateClient } from "aws-amplify/data";
-
-import { type Schema } from "@/amplify/data/resource";
+import client from "@/components/_Amplify/AmplifyBackendClient";
 import * as mutations from "@/graphql/mutations";
 
 function Dev() {
-  const client = generateClient<Schema>();
-
   async function callDemoFunction() {
     const response = await client.graphql({
       query: mutations.DemoFunction,

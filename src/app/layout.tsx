@@ -1,16 +1,11 @@
-import type { ResourcesConfig } from "aws-amplify";
-import { Amplify } from "aws-amplify";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "@/app/globals.css";
-import { UserContextProvider } from "@/components/contexts/UserContext";
+import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
+// import { UserContextProvider } from "@/components/contexts/UserContext";
 import MainLayout from "@/components/layouts/MainLayout";
-
-// eslint-disable-next-line no-restricted-imports
-import amplifyconfig from "../../amplifyconfiguration.json";
-
-Amplify.configure(amplifyconfig as ResourcesConfig);
+import "@aws-amplify/ui-react/styles.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,18 +14,17 @@ export const metadata: Metadata = {
   description: "Hack the Change management tool",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <UserContextProvider>
-          <MainLayout>{children}</MainLayout>
-        </UserContextProvider>
+        <ConfigureAmplifyClientSide />
+        {/* <UserContextProvider> */}
+        <MainLayout>{children}</MainLayout>
+        {/* </UserContextProvider> */}
       </body>
     </html>
   );
 }
+
+export default RootLayout;
