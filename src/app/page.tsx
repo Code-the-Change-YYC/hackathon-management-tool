@@ -1,4 +1,4 @@
-import AboutTheChallenge from "@/components/LandingPage/AboutTheChallenge";
+import HackathonInformationContainer from "@/components/LandingPage/HackathonInformationContainer";
 import JudgingCriteria from "@/components/LandingPage/JudgingCriteria";
 import PagePlaceholder from "@/components/PagePlaceholder";
 import { enableLandingPage } from "@/featureFlags";
@@ -10,7 +10,7 @@ export default function Home() {
         <PagePlaceholder />
       ) : (
         <div>
-          <AboutTheChallenge /> <JudgingCriteria />
+          <HackathonInformationContainer /> <JudgingCriteria />
         </div>
       )}
     </main>
