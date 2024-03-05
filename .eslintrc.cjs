@@ -50,6 +50,8 @@ const config = {
     "no-restricted-imports": ["error", { patterns: [".*"] }],
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/classnames-order": "off", // tcss prettier plugin handles this
+    "require-await": "off",
+    "@typescript-eslint/require-await": "off",
   },
 };
 
