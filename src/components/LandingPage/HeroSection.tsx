@@ -9,12 +9,15 @@ import HeroSectionBackground from "/public/images/landingpage/HeroSection/hero_s
 const HERO_SECTION_CONTAINER =
   "relative flex -mt-5 justify-between py-4 md:py-15 md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
 
+//CONTENT
 const HERO_TILE_STYLES = "mx-10 mb-20 md:mb-0 lg:mt-10 ";
 const LINK_STYLES =
   " cursor-pointer opacity-95 md:my-4 flex justify-start font-bold md:justify-center";
 
+//WINDOW WEBPAGE SECTION
 const WEBPAGE_CONTAINER =
   "hidden md:block lg:block h-[25rem] rounded-t-md bg-[#00D3A9] opacity-95";
+const WINDOW_BUTTONS_SVG = "/svgs/heroSection/window_control_buttons.svg";
 const COUNTDOWN_CONTAINER = "flex justify-center my-8";
 const COUNTDOWN_BACKGROUND =
   " bg-[#A689FF] text-white py-10 px-4 rounded-lg md:w-[8rem] md:h-[11rem] lg:w-[10rem] lg:h-[11rem] relative ";
@@ -87,12 +90,26 @@ const HeroSectionTile = (props: HeroSectionProps) => {
   return (
     <div className={HERO_TILE_STYLES}>
       <div>
-        <h1 className="mt-20 flex-wrap text-5xl font-black text-[#FFFF] outline-pink-400 drop-shadow-lg md:text-center md:text-6xl">
+        <h1
+          className="mt-20 flex-wrap text-5xl font-black text-[#FFFF] drop-shadow-lg md:text-center md:text-6xl"
+          style={{
+            textShadow: `
+    -2px -2px 0 #7055FD, 
+    2px -2px 0 #7055FD, 
+    -2px 2px 0 #7055FD, 
+    2px 2px 0 #7055FD,
+    -2px -2px 0 #7055FD,
+    2px -2px 0 #7055FD,
+    -2px 2px 0 #7055FD,
+    2px 2px 0 #7055FD
+`,
+          }}
+        >
           {" "}
           {eventName}
           <span className="text-[#BAFBE4]"> {eventYear}</span>
         </h1>
-        <strong className="text-1xl my-4 flex flex-wrap justify-center text-[#7055FD]   md:text-center md:text-xl lg:px-40">
+        <strong className="text-1xl my-4 flex flex-wrap justify-center text-[#7055FD] opacity-95  md:text-center md:text-xl lg:px-40">
           {eventBlurb}
         </strong>
       </div>
@@ -116,7 +133,14 @@ const HeroSectionTile = (props: HeroSectionProps) => {
       </div>
 
       <div className={WEBPAGE_CONTAINER}>
-        <div className="rounded-t-md border-t-[30px] border-white">
+        <div className="relative rounded-t-md border-t-[30px] border-white">
+          <Image
+            src={WINDOW_BUTTONS_SVG}
+            alt="check mark icon"
+            width={50}
+            height={50}
+            className="absolute left-0 top-0 -mt-5 ms-3"
+          ></Image>
           <div className="container mx-auto p-4">
             <div className="m-2 h-[24rem] rounded-t-3xl bg-[#BAFBE4] px-10 opacity-90 md:m-5">
               <h1 className="pt-10 text-center text-2xl font-bold text-[#7055FD]">
