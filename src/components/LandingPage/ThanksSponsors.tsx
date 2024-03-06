@@ -56,8 +56,8 @@ const ThankSponsors = () => {
 
   return (
     <div className="relative flex flex-col items-center justify-center pb-12 pt-10">
-      <div className="flex h-48 w-full flex-row justify-center">
-        <div className="absolute left-0 top-24 z-20  size-44 overflow-hidden sm:hidden">
+      <div className="flex h-48 w-full flex-row justify-center overflow-hidden">
+        <div className="absolute -left-12 top-24 z-20  size-44 overflow-hidden sm:hidden">
           <Image
             src={leftSponsorSvgSmall}
             alt="squiggly lines"
@@ -83,7 +83,7 @@ const ThankSponsors = () => {
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
         </div>
-        <div className="absolute right-0 z-20 size-44 overflow-hidden sm:hidden">
+        <div className="absolute -right-12 z-20 size-44 overflow-hidden sm:hidden">
           <Image
             src={rightSponsorSvgSmall}
             alt="squiggly lines"
