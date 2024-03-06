@@ -9,12 +9,10 @@ import HeroSectionBackground from "/public/images/landingpage/HeroSection/hero_s
 const HERO_SECTION_CONTAINER =
   "relative flex -mt-5 justify-between py-4 md:py-15 md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
 
-//CONTENT
 const HERO_TILE_STYLES = "mx-10 mb-20 md:mb-0 lg:mt-10 ";
 const LINK_STYLES =
   " cursor-pointer opacity-95 md:my-4 flex justify-start font-bold md:justify-center";
 
-//WINDOW WEBPAGE SECTION
 const WEBPAGE_CONTAINER =
   "hidden md:block lg:block h-[25rem] rounded-t-md bg-[#00D3A9] opacity-95";
 const WINDOW_BUTTONS_SVG = "/svgs/heroSection/window_control_buttons.svg";
