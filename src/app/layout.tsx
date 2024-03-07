@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 
 import "@/app/globals.css";
-import { UserContextProvider } from "@/components/contexts/UserContext";
+import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
+// import { UserContextProvider } from "@/components/contexts/UserContext";
 import MainLayout from "@/components/layouts/MainLayout";
+import "@aws-amplify/ui-react/styles.css";
 
 const Omnes = localFont({
   src: "./fonts/Omnes Medium.ttf",
@@ -14,18 +16,17 @@ export const metadata: Metadata = {
   description: "Hack the Change management tool",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${Omnes.className}`}>
-        <UserContextProvider>
-          <MainLayout>{children}</MainLayout>
-        </UserContextProvider>
+        <ConfigureAmplifyClientSide />
+        {/* <UserContextProvider> */}
+        <MainLayout>{children}</MainLayout>
+        {/* </UserContextProvider> */}
       </body>
     </html>
   );
 }
+
+export default RootLayout;
