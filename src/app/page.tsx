@@ -1,4 +1,5 @@
 import AboutEventTile from "@/components/LandingPage/AboutEventTile";
+import JudgeShowcase from "@/components/LandingPage/JudgeShowcase";
 import JudgingCriteria from "@/components/LandingPage/JudgingCriteria";
 import PagePlaceholder from "@/components/PagePlaceholder";
 import { enableLandingPage } from "@/featureFlags";
@@ -9,10 +10,11 @@ export default function Home() {
       {enableLandingPage ? (
         <PagePlaceholder />
       ) : (
-        <div>
+        <>
           <AboutEventTile />
           <JudgingCriteria />
-        </div>
+          <JudgeShowcase />
+        </>
       )}
     </main>
   );
