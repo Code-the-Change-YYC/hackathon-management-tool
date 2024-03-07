@@ -91,41 +91,41 @@ export default function HackathonInformationContainer() {
 
   return (
     <div className="relative overflow-hidden">
-      <>
+      <div className=" hidden lg:block">
         <Image
           src="/svgs/landingPage/vector_2.svg"
           alt=""
           width={140}
           height={80}
-          className="absolute  left-[-7rem]  top-[13rem] hidden lg:block"
+          className="absolute  left-[-7rem]  top-[13rem]"
         />
         <Image
           src="/svgs/landingPage/vector_14.svg"
           alt=""
           width={436}
           height={90}
-          className="absolute  top-[22rem] hidden lg:block"
+          className="absolute  top-[22rem]"
         />
         <Image
           src="/svgs/landingPage/vector_15.svg"
           alt=""
           width={1022}
           height={410}
-          className="absolute left-[20rem] top-[47rem] hidden w-full max-w-[99rem] lg:block"
+          className="absolute left-[20rem] top-[47rem] w-full max-w-[99rem]"
         />
         <Image
           src="/svgs/landingPage/vector_6.svg"
           alt=""
           width={430}
           height={320}
-          className="absolute top-[25rem] hidden w-1/3 max-w-[32rem] lg:block"
+          className="absolute top-[25rem] w-1/3 max-w-[32rem]"
         />
         <Image
           src="/svgs/landingPage/vector_10.svg"
           alt=""
           width={815}
           height={448}
-          className="absolute left-[15rem] top-[50rem] hidden w-2/3 max-w-[80rem] lg:block"
+          className="absolute left-[15rem] top-[50rem] w-2/3 max-w-[80rem]"
         />
 
         <Image
@@ -133,17 +133,16 @@ export default function HackathonInformationContainer() {
           alt=""
           width={200}
           height={65}
-          className="absolute right-[25rem] top-[95rem] hidden w-1/4 max-w-[25rem] lg:block"
+          className="absolute right-[25rem] top-[95rem] w-1/4 max-w-[25rem]"
         />
         <Image
           src="/svgs/landingPage/vector_16.svg"
           alt=""
           width={1465}
           height={210}
-          className="absolute top-[85rem] hidden w-full lg:block"
+          className="absolute top-[85rem] w-full"
         />
-      </>
-
+      </div>
       <SectionContainer
         bgColor="bg-awesomer-purple"
         sectionImage={ABOUT_THE_CHALLENGE_IMAGE}
