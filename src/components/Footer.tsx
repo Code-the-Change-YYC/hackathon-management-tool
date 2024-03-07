@@ -1,4 +1,4 @@
-import SocialMediaIcons from "@/components/SocialMediaIcons";
+import SocialMediaIcons from "@/components/atoms/SocialMediaIcons";
 
 const footerContainer =
   "flex flex-col items-center justify-center text-awesomer-purple h-36 bg-awesome-purple";
