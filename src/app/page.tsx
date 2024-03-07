@@ -1,3 +1,4 @@
+import AboutEventTile from "@/components/LandingPage/AboutEventTile";
 import HackathonInformationContainer from "@/components/LandingPage/HackathonInformationContainer";
 import JudgingCriteria from "@/components/LandingPage/JudgingCriteria";
 import PagePlaceholder from "@/components/PagePlaceholder";
@@ -10,7 +11,9 @@ export default function Home() {
         <PagePlaceholder />
       ) : (
         <div>
-          <HackathonInformationContainer /> <JudgingCriteria />
+          <HackathonInformationContainer />
+          <AboutEventTile />
+          <JudgingCriteria />
         </div>
       )}
     </main>
