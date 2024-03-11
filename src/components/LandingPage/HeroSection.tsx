@@ -20,7 +20,7 @@ const COUNTDOWN_CONTAINER = "flex justify-center my-12";
 const COUNTDOWN_BACKGROUND =
   " bg-[#A689FF] text-white py-10 px-4 rounded-lg md:w-[8rem] md:h-[11rem] lg:w-[10rem] lg:h-[11rem] relative ";
 const NUMBER_STYLES =
-  "flex flex-col justify-center items-center font-bold text-[20px] md:text-[50px] lg:text-[60px]";
+  "flex flex-col justify-center items-center font-bold text-[20px] md:text-[58px] lg:text-[60px]";
 const LABEL_STYLES =
   " flex flex-col justify-center items-center uppercase text-1xl";
 const HORIZONTAL_LINE =
@@ -185,7 +185,7 @@ const HeroSection = () => {
       <Image
         src={HeroSectionBackground}
         alt="Landing page background"
-        layout="fill"
+        fill={true}
         placeholder="blur"
         objectFit="cover"
         loading="lazy"
