@@ -7,16 +7,16 @@ import { useEffect, useState } from "react";
 import HeroSectionBackground from "/public/images/landingpage/HeroSection/hero_section_background.png";
 
 const HERO_SECTION_CONTAINER =
-  "relative flex -mt-5 justify-between py-4 md:py-15 md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
+  "relative flex flex-col justify-between md:py-15 md:px-24 lg:px-40 ";
 
-const HERO_TILE_STYLES = "mx-10 mb-20 md:mb-0 lg:mt-10 ";
+const HERO_TILE_STYLES = "mx-10 mb-20 md:mb-0 lg:mt-10";
 const LINK_STYLES =
   " cursor-pointer opacity-95 md:my-4 flex justify-start font-bold md:justify-center";
 
 const WEBPAGE_CONTAINER =
-  "hidden md:block lg:block h-[25rem] rounded-t-md bg-[#00D3A9] opacity-95";
+  "hidden md:block lg:block rounded-t-md bg-[#00D3A9] opacity-95 ";
 const WINDOW_BUTTONS_SVG = "/svgs/heroSection/window_control_buttons.svg";
-const COUNTDOWN_CONTAINER = "flex justify-center my-8";
+const COUNTDOWN_CONTAINER = "flex justify-center my-12";
 const COUNTDOWN_BACKGROUND =
   " bg-[#A689FF] text-white py-10 px-4 rounded-lg md:w-[8rem] md:h-[11rem] lg:w-[10rem] lg:h-[11rem] relative ";
 const NUMBER_STYLES =
@@ -89,7 +89,7 @@ const HeroSectionTile = (props: HeroSectionProps) => {
     <div className={HERO_TILE_STYLES}>
       <div>
         <h1
-          className="mt-20 flex-wrap text-5xl font-black text-[#FFFF] drop-shadow-lg md:text-center md:text-6xl"
+          className="mt-16 flex-wrap text-5xl font-black text-[#FFFF] drop-shadow-lg md:text-center md:text-6xl"
           style={{
             textShadow: `
     -2px -2px 0 #7055FD, 
@@ -119,7 +119,7 @@ const HeroSectionTile = (props: HeroSectionProps) => {
         </Link>
       </div>
       <div className={LINK_STYLES}>
-        <p>
+        <p className="my-2">
           Already registered?
           <Link href="/" legacyBehavior>
             <span className="text-sm text-[#7055FD]  hover:opacity-70">
@@ -139,8 +139,8 @@ const HeroSectionTile = (props: HeroSectionProps) => {
             height={50}
             className="absolute left-0 top-0 -mt-5 ms-3"
           ></Image>
-          <div className="container mx-auto p-4">
-            <div className="m-2 h-[24rem] rounded-t-3xl bg-[#BAFBE4] px-10 opacity-90 md:m-5">
+          <div className=" mx-auto p-4">
+            <div className="m-2 h-[24rem] rounded-3xl bg-[#BAFBE4] px-10 opacity-90 md:m-5">
               <h1 className="pt-10 text-center text-2xl font-bold text-[#7055FD]">
                 {eventName} begins...{" "}
               </h1>
