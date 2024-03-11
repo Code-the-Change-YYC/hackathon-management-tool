@@ -2,7 +2,7 @@
 
 // Enable landing page
 
-export const enableLandingPage = true;
+export const enableLandingPage = false;
 
 // Enable user profile
 
