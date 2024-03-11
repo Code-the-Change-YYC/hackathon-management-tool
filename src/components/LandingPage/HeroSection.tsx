@@ -122,10 +122,7 @@ const HeroSectionTile = (props: HeroSectionProps) => {
         <p className="my-2">
           Already registered?
           <Link href="/" legacyBehavior>
-            <span className="text-sm text-[#7055FD]  hover:opacity-70">
-              {" "}
-              Sign in
-            </span>
+            <span className=" text-[#7055FD]  hover:opacity-70"> Sign in</span>
           </Link>
         </p>
       </div>
