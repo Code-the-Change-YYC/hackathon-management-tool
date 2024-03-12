@@ -16,7 +16,7 @@ export default function Home() {
           <AboutEventTile />
           <JudgingCriteria />
           <JudgeShowcase />
-        </>
+        </div>
       )}
     </main>
   );
