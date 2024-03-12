@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import HeroSectionBackground from "/public/images/landingpage/HeroSection/hero_section_background.png";
+const HERO_SECTION_BACKGROUND =
+  "/images/landingPage/HeroSection/hero_section_background.png";
 
 const HERO_SECTION_CONTAINER =
   "relative flex flex-col justify-between md:py-15 md:px-24 lg:px-40 ";
@@ -27,12 +28,12 @@ const LABEL_STYLES =
 const HORIZONTAL_LINE =
   "absolute left-0 right-0 top-[50%] -translate-y-1/2 transform border-b-2 border-white opacity-95";
 
-type HeroSectionProps = {
+interface HeroSectionProps {
   eventName: string;
   eventYear: string;
   eventBlurb: string;
   eventDate: number;
-};
+}
 
 const HeroSectionDetails: HeroSectionProps = {
   eventName: "Hack the Change",
@@ -184,7 +185,7 @@ const HeroSection = () => {
   return (
     <div className={HERO_SECTION_CONTAINER}>
       <Image
-        src={HeroSectionBackground}
+        src={HERO_SECTION_BACKGROUND}
         alt="Landing page background"
         fill={true}
         objectFit="cover"
