@@ -6,7 +6,7 @@ const judgingCriteriaStyles =
 const itemStyles =
   "flex justify-start p-4 lg:px-10 lg:text-[1.0rem] items-start";
 
-const checkMarkSvg = "/svgs/judgingCriteria/check_mark_bkg.svg";
+const checkMarkSvg = "/svgs/landingPage/check_mark_bkg.svg";
 
 export const JUDGING_CRITERIA = [
   {
