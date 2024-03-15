@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import {
   Authenticator,
   Flex,
-  Image,
   Input,
   Label,
   SelectField,
@@ -25,23 +24,10 @@ const components: DefaultComponents = {
 
     return (
       <View textAlign="center" padding={tokens.space.large}>
-        <Image
-          alt="Amplify logo"
-          src="https://docs.amplify.aws/assets/logo-dark.svg"
-        />
-        <div className="">hello</div>
-      </View>
-    );
-  },
-  Footer() {
-    const { tokens } = useTheme();
-
-    return (
-      <View textAlign="center" padding={tokens.space.large}>
-        <Image
-          alt="Amplify logo"
-          src="https://docs.amplify.aws/assets/logo-dark.svg"
-        />
+        <div className=" text-6xl font-bold text-white">
+          Register for Hack the Change{" "}
+          <span className="text-green-200">2024</span>
+        </div>
       </View>
     );
   },
