@@ -25,9 +25,9 @@ const schema = a.schema({
   Team: a
     .model({
       Name: a.string(),
-      Code: a.string(),
+      Code: a.string().required(),
       Members: a.hasMany("User"),
-    })
+    }).identifier(['Code'])
     .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
   GenericFunctionResponse: a.customType({
     body: a.json(),
