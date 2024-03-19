@@ -1,18 +1,24 @@
 // app/food/page.tsx
-import { getCurrentUser } from "aws-amplify/auth";
+import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 
-export default async function FoodPage() {
+export default function FoodPage() {
   async function currentAuthenticatedUser() {
     try {
-      const { username, userId } = await getCurrentUser();
-      console.log(`The username: ${username}`);
-      console.log(`The userId: ${userId}`);
+      const user = await AuthGetCurrentUserServer()
+        .then((user) => {
+          return user;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+      console.log(`The username: ${user?.username}`);
+      console.log(`The userId: ${user?.userId}`);
     } catch (err) {
       console.log(err);
     }
   }
 
-  await currentAuthenticatedUser();
+  void currentAuthenticatedUser();
 
   return <a>test</a>;
 }
