@@ -1,6 +1,4 @@
-"use client";
-
-import { type AuthUser, getCurrentUser } from "aws-amplify/auth";
+import type { AuthUser } from "aws-amplify/auth";
 import {
   type ReactNode,
   createContext,
@@ -8,6 +6,8 @@ import {
   useEffect,
   useState,
 } from "react";
+
+import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 
 interface Props {
   children: ReactNode | ReactNode[];
@@ -40,10 +40,8 @@ export function UserContextProvider({ children }: Props) {
   useEffect(() => {
     async function currentAuthenticatedUser() {
       try {
-        const { username, userId, signInDetails } = await getCurrentUser();
-        console.log(`The username: ${username}`);
-        console.log(`The userId: ${userId}`);
-        console.log(`The signInDetails:`, signInDetails);
+        const user = await AuthGetCurrentUserServer();
+        console.log("user", user);
       } catch (err) {
         console.error(err);
       }
