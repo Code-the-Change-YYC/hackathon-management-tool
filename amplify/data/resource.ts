@@ -1,4 +1,5 @@
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
+import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
@@ -49,6 +50,15 @@ const schema = a.schema({
     // allow all users to call this api for now
     .authorization([a.allow.public()])
     .function("demoFunctionKey"),
+  AssignUsersToTeams: a
+    .mutation()
+    .arguments({
+      userId: a.string(),
+      teamId: a.string()
+    })
+    .returns(a.ref("GenericFunctionResponse"))
+    .authorization([a.allow.public()])
+    .function("assignUsersToTeamsKey")
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -67,6 +77,7 @@ export const data = defineData({
   },
   functions: {
     demoFunctionKey: DemoFunction,
+    assignUsersToTeamsKey: AssignUsersToTeams
   },
 });
 

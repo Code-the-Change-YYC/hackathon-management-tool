@@ -1,4 +1,4 @@
-// amplify/functions/my-demo-function/resource.ts
+// amplify/functions/AssignUsersToTeams/resource.ts
 import { defineFunction } from "@aws-amplify/backend";
 
-export const DemoFunction = defineFunction({});
+export const AssignUsersToTeams = defineFunction({});

@@ -1,3 +1,4 @@
+// amplify/functions/AssignUsersToTeams/handler.ts
 import type { AppSyncResolverHandler } from "aws-lambda";
 
 import client from "@/components/_Amplify/AmplifyBackendClient";
