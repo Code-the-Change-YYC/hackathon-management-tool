@@ -1,9 +1,10 @@
 // amplify/data/echo-handler.ts
+import client from "@/components/_Amplify/AmplifyBackendClient";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
 // types imported from @types/aws-lambda
 
-type ResolverArgs = { content: string };
+type ResolverArgs = { userId: number, teamId: string };
 
 type ResolverResult = {
   body: { value: string };
@@ -15,13 +16,9 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, context) => {
-  await new Promise((resolve) => setTimeout(resolve, 200)); // Demo delay to simulate asynchronous behavior
-  const start = performance.now();
-  console.log("Event: ", event);
-  console.log("Context: ", context);
-  console.log("Performance: ", performance.now() - start);
+  const team = await client.models.Team.get({id: event.arguments.teamId});
   return {
-    body: { value: `Echoing content: ${event.arguments.content}` },
+    body: { value: `Echoing content: ${team}` },
     statusCode: 200,
     headers: { "Content-Type": "application/json" },
   };
