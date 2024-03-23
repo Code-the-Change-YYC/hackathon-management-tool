@@ -1,10 +1,12 @@
-// amplify/data/echo-handler.ts
-import client from "@/components/_Amplify/AmplifyBackendClient";
 import type { AppSyncResolverHandler } from "aws-lambda";
+
+import client from "@/components/_Amplify/AmplifyBackendClient";
 
 // types imported from @types/aws-lambda
 
-type ResolverArgs = { userId: number, teamId: string };
+const MAX_TEAM_MEMBERS = 6
+
+type ResolverArgs = { userId: number; teamId: string };
 
 type ResolverResult = {
   body: { value: string };
@@ -16,9 +18,28 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, context) => {
-  const team = await client.models.Team.get({id: event.arguments.teamId});
+  console.log("Context: ", context);
+
+  const team = await client.models.Team.get({ id: event.arguments.teamId });
+
+  if (!team) {
+    return {
+      body: { value: "Error: Team does not exist" },
+      statusCode: 404,
+      headers: { "Content-Type": "application/json" },
+    };
+  }
+
+  if(team.data.Members.length > 6) {
+    return {
+      body: { value: 'Error: Team is full' },
+      statusCode: 400,
+      headers: { "Content-Type": "application/json" },
+    };
+  }
+
   return {
-    body: { value: `Echoing content: ${team}` },
+    body: { value: `Echoing content: ${team.data.id}` },
     statusCode: 200,
     headers: { "Content-Type": "application/json" },
   };
