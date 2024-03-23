@@ -33,7 +33,7 @@ export const handler: AppSyncResolverHandler<
 
   if (!user) {
     return {
-      body: { value: 'Error: User does not exist' },
+      body: { value: "Error: User does not exist" },
       statusCode: 404,
       headers: { "Content-Type": "application/json" },
     };
@@ -41,7 +41,7 @@ export const handler: AppSyncResolverHandler<
 
   if (await user.data.Team()) {
     return {
-      body: { value: 'Error: User is already part of a team' },
+      body: { value: "Error: User is already part of a team" },
       statusCode: 400,
       headers: { "Content-Type": "application/json" },
     };
@@ -49,8 +49,8 @@ export const handler: AppSyncResolverHandler<
 
   await client.models.User.update({
     id: event.arguments.userId,
-    Team: team
-  })
+    Team: team,
+  });
 
   if (team.data.Members.length > MAX_TEAM_MEMBERS) {
     return {
