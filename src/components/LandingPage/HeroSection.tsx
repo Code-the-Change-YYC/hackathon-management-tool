@@ -40,7 +40,8 @@ const HeroSectionDetails: HeroSectionProps = {
   eventYear: "2024",
   eventBlurb:
     "Hack the Change 2024 is a hybrid two-day for-charity hackathon with the mission of coding a better world together.",
-  eventDate: 1731394799, //UNIX Time stamp: Nov 10, 2024
+  // eventDate: 1731394799, //UNIX Time stamp: Nov 10, 2024
+  eventDate: 1711346400, //UNIX Time stamp: Nov 10, 2024
 };
 
 const HeroSectionTile = (props: HeroSectionProps) => {
@@ -138,37 +139,56 @@ const HeroSectionTile = (props: HeroSectionProps) => {
             height={50}
             className="absolute left-0 top-0 -mt-5 ms-3"
           ></Image>
-          <div className=" mx-auto p-4">
+          <div className="mx-auto p-4">
             <div className="m-2 h-[24rem] rounded-3xl bg-[#BAFBE4] px-10 opacity-90 md:m-5">
-              <h1 className="pt-10 text-center text-2xl font-bold text-[#7055FD]">
-                {eventName} begins...{" "}
-              </h1>
               {hackathonTime ? (
-                <h1>
-                  {eventName} {eventYear} has begun!
+                <h1
+                  className="flex-wrap pt-14 text-4xl font-black text-[#7055FD] drop-shadow-lg md:pt-20 md:text-center md:text-5xl lg:pt-32"
+                  style={{
+                    textShadow: `
+    -2px -2px 0 #fff, 
+    2px -2px 0 #fff, 
+    -2px 2px 0 #fff, 
+    2px 2px 0 #fff,
+    -2px -2px 0 #fff,
+    2px -2px 0 #fff,
+    -2px 2px 0 #fff,
+    2px 2px 0 #fff
+`,
+                  }}
+                >
+                  {" "}
+                  {eventName} {eventYear}
+                  <br />
+                  has begun!
                 </h1>
               ) : (
-                <div className={COUNTDOWN_CONTAINER}>
-                  <div className="flex space-x-3">
-                    <div className={COUNTDOWN_BACKGROUND}>
-                      <div className={NUMBER_STYLES}>{days}</div>
-                      <div className={LABEL_STYLES}>Days</div>
-                      <div className={HORIZONTAL_LINE}></div>
-                    </div>
-                    <div className={COUNTDOWN_BACKGROUND}>
-                      <div className={NUMBER_STYLES}>{hours}</div>
-                      <div className={LABEL_STYLES}>Hours</div>
-                      <div className={HORIZONTAL_LINE}></div>
-                    </div>
-                    <div className={COUNTDOWN_BACKGROUND}>
-                      <div className={NUMBER_STYLES}>{minutes}</div>
-                      <div className={LABEL_STYLES}>Minutes</div>
-                      <div className={HORIZONTAL_LINE}></div>
-                    </div>
-                    <div className={COUNTDOWN_BACKGROUND}>
-                      <div className={NUMBER_STYLES}>{seconds}</div>
-                      <div className={LABEL_STYLES}>Seconds</div>
-                      <div className={HORIZONTAL_LINE}></div>
+                <div>
+                  <h1 className="pt-10 text-center text-2xl font-bold text-[#7055FD]">
+                    {eventName} begins in ...{" "}
+                  </h1>
+                  <div className={COUNTDOWN_CONTAINER}>
+                    <div className="flex space-x-3">
+                      <div className={COUNTDOWN_BACKGROUND}>
+                        <div className={NUMBER_STYLES}>{days}</div>
+                        <div className={LABEL_STYLES}>Days</div>
+                        <div className={HORIZONTAL_LINE}></div>
+                      </div>
+                      <div className={COUNTDOWN_BACKGROUND}>
+                        <div className={NUMBER_STYLES}>{hours}</div>
+                        <div className={LABEL_STYLES}>Hours</div>
+                        <div className={HORIZONTAL_LINE}></div>
+                      </div>
+                      <div className={COUNTDOWN_BACKGROUND}>
+                        <div className={NUMBER_STYLES}>{minutes}</div>
+                        <div className={LABEL_STYLES}>Minutes</div>
+                        <div className={HORIZONTAL_LINE}></div>
+                      </div>
+                      <div className={COUNTDOWN_BACKGROUND}>
+                        <div className={NUMBER_STYLES}>{seconds}</div>
+                        <div className={LABEL_STYLES}>Seconds</div>
+                        <div className={HORIZONTAL_LINE}></div>
+                      </div>
                     </div>
                   </div>
                 </div>
