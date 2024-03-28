@@ -2,6 +2,8 @@ import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/reso
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
+import { getFoodTicket } from "../function/BusinessLogic/GetFoodTicket/resource";
+
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
 adding a new "isDone" field as a boolean. The authorization rules below
@@ -29,6 +31,7 @@ const schema = a.schema({
       Members: a.hasMany("User"),
     })
     .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+
   GenericFunctionResponse: a.customType({
     body: a.json(),
     statusCode: a.integer(),
@@ -49,6 +52,18 @@ const schema = a.schema({
     // allow all users to call this api for now
     .authorization([a.allow.public()])
     .function("demoFunctionKey"),
+
+  GetFoodTicket: a
+    .mutation() // this should be set to .query for functions that only read data
+    // arguments that this query accepts
+    .arguments({
+      userID: a.string(),
+    })
+    // return type of the query
+    .returns(a.ref("GenericFunctionResponse"))
+    // allow all users to call this api for now
+    .authorization([a.allow.public()])
+    .function("getFoodTicket"),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -67,6 +82,7 @@ export const data = defineData({
   },
   functions: {
     demoFunctionKey: DemoFunction,
+    getFoodTicket: getFoodTicket,
   },
 });
 

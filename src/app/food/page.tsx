@@ -1,18 +1,13 @@
 // app/food/page.tsx
-import hmac from "js-crypto-hmac";
-
+import Verification from "@/components/Food/Verification";
+// import client from "@/components/_Amplify/AmplifyBackendClient";
+// import * as mutations from "@/graphql/mutations";
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 
-// for npm
-
 export default async function FoodPage() {
-  let userVerificationId = null;
-  const key = new Uint8Array([
-    0x12, 0x34, 0x56, 0x78, 0x90, 0xab, 0xcd, 0xef, 0xea, 0x1f, 0x12, 0x34,
-    0x12, 0x34, 0x56, 0x78, 0x90, 0xab, 0xcd, 0xef, 0xea, 0x1f, 0x12, 0x34,
-    0x90, 0xab, 0xcd, 0xef, 0xea, 0x1f, 0x12, 0x34,
-  ]);
-  const hash = "SHA-256";
+  const userVerificationCode = null;
+  const inputUserCode = null;
+
   async function currentAuthenticatedUser() {
     try {
       const user = await AuthGetCurrentUserServer()
@@ -22,30 +17,29 @@ export default async function FoodPage() {
         .catch((err) => {
           console.error(err);
         });
-      console.log(`The username: ${user?.username}`);
-      console.log(`The userId: ${user?.userId}`);
 
-      console.log(await createAuthenticationCode("ab"));
       if (user) {
-        userVerificationId = user?.username;
+        // const response = await client.graphql({
+        //   query: mutations.getFoodTicket,
+        //   variables: {
+        //     userID: user.userId,
+        //   },
+        // });
       }
     } catch (err) {
       console.log(err);
     }
   }
 
-  function stringToUint8Array(inputString: string) {
-    const encoder = new TextEncoder();
-    return encoder.encode(inputString);
-  }
-
-  async function createAuthenticationCode(message: string) {
-    const msg = stringToUint8Array(message);
-    const messageCode = await hmac.compute(key, msg, hash);
-    return messageCode;
-  }
-
   await currentAuthenticatedUser();
 
-  return <a>{userVerificationId}</a>;
+  return (
+    <div>
+      <button>test</button>
+      <Verification></Verification>
+      <br />
+      <a> {userVerificationCode}</a>
+      <a>{inputUserCode}</a>
+    </div>
+  );
 }
