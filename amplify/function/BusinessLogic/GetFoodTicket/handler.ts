@@ -8,7 +8,7 @@ import {
 type ResolverArgs = { userID: string };
 
 type ResolverResult = {
-  body: { userCode: string };
+  value: string;
   statusCode: number;
   headers: { "Content-Type": string };
 };
@@ -23,7 +23,7 @@ export const handler: AppSyncResolverHandler<
   const userVerificationCode = createUserIDAndCode(userID, mac);
 
   return {
-    body: { userCode: userVerificationCode },
+    value: userVerificationCode,
     statusCode: 200,
     headers: { "Content-Type": "application/json" },
   };

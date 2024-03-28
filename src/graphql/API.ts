@@ -146,6 +146,13 @@ export type GenericFunctionResponse = {
   statusCode?: number | null;
 };
 
+export type SingleStringFunctionResponse = {
+  __typename: "SingleStringFunctionResponse";
+  headers?: string | null;
+  statusCode?: number | null;
+  value?: string | null;
+};
+
 export type ModelTeamConditionInput = {
   Code?: ModelStringInput | null;
   Name?: ModelStringInput | null;
@@ -406,6 +413,19 @@ export type DemoFunctionMutation = {
     body?: string | null;
     headers?: string | null;
     statusCode?: number | null;
+  } | null;
+};
+
+export type GetFoodTicketMutationVariables = {
+  userID?: string | null;
+};
+
+export type GetFoodTicketMutation = {
+  GetFoodTicket?: {
+    __typename: "SingleStringFunctionResponse";
+    headers?: string | null;
+    statusCode?: number | null;
+    value?: string | null;
   } | null;
 };
 

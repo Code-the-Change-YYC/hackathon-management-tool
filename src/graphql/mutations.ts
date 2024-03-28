@@ -22,6 +22,19 @@ export const DemoFunction =
     APITypes.DemoFunctionMutationVariables,
     APITypes.DemoFunctionMutation
   >;
+export const GetFoodTicket =
+  /* GraphQL */ `mutation GetFoodTicket($userID: String) {
+  GetFoodTicket(userID: $userID) {
+    headers
+    statusCode
+    value
+    __typename
+  }
+}
+` as GeneratedMutation<
+    APITypes.GetFoodTicketMutationVariables,
+    APITypes.GetFoodTicketMutation
+  >;
 export const createTeam = /* GraphQL */ `mutation CreateTeam(
   $condition: ModelTeamConditionInput
   $input: CreateTeamInput!

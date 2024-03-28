@@ -1,8 +1,7 @@
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
+import { getFoodTicket } from "@/amplify/function/BusinessLogic/GetFoodTicket/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-
-import { getFoodTicket } from "../function/BusinessLogic/GetFoodTicket/resource";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -32,11 +31,17 @@ const schema = a.schema({
     })
     .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
 
-  GenericFunctionResponse: a.customType({
-    body: a.json(),
-    statusCode: a.integer(),
-    headers: a.json(),
-  }),
+    GenericFunctionResponse: a.customType({
+      body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
+
+    SingleStringFunctionResponse: a.customType({
+      value: a.string(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
 
   /**
    * FUNCTION-RELATED APPSYNC RESOLVERS
@@ -60,7 +65,7 @@ const schema = a.schema({
       userID: a.string(),
     })
     // return type of the query
-    .returns(a.ref("GenericFunctionResponse"))
+    .returns(a.ref("SingleStringFunctionResponse"))
     // allow all users to call this api for now
     .authorization([a.allow.public()])
     .function("getFoodTicket"),
