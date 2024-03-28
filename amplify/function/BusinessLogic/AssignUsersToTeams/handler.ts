@@ -1,7 +1,7 @@
 // amplify/functions/AssignUsersToTeams/handler.ts
 import type { AppSyncResolverHandler } from "aws-lambda";
-
-import client from "@/components/_Amplify/AmplifyBackendClient";
+import { generateClient } from 'aws-amplify/data';
+import { type Schema } from '@/amplify/data/resource';
 
 // types imported from @types/aws-lambda
 
@@ -14,6 +14,8 @@ type ResolverResult = {
   statusCode: number;
   headers: { "Content-Type": string };
 };
+
+const client = generateClient<Schema>();
 
 export const handler: AppSyncResolverHandler<
   ResolverArgs,
