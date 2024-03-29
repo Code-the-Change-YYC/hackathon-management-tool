@@ -1,7 +1,8 @@
 // amplify/functions/AssignUsersToTeams/handler.ts
+import { generateClient } from "aws-amplify/data";
 import type { AppSyncResolverHandler } from "aws-lambda";
-import { generateClient } from 'aws-amplify/data';
-import { type Schema } from '@/amplify/data/resource';
+
+import { type Schema } from "@/amplify/data/resource";
 
 // types imported from @types/aws-lambda
 
@@ -23,7 +24,7 @@ export const handler: AppSyncResolverHandler<
 > = async (event, context) => {
   console.log("Context: ", context);
 
-  const team = await client.models.Team.get({ id: event.arguments.teamId });
+  const { team } = await client.models.Team.get({ id: event.arguments.teamId });
   const user = await client.models.User.get({ id: event.arguments.userId });
 
   if (!team) {
