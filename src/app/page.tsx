@@ -12,7 +12,9 @@ export default function Home() {
         <PagePlaceholder />
       ) : (
         <>
+          <AboutEventTile />
           <JudgingCriteria />
+          <JudgeShowcase />
           <ThankSponsors />
         </>
       )}
