@@ -1,7 +1,10 @@
+import UserProfile from "@/components/UserProfile/UserProfile";
+
 export default function Profile() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main>
       Profile
+      <UserProfile />
     </main>
   );
 }
