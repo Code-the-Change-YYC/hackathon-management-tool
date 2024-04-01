@@ -1,7 +1,11 @@
 import Link from "next/link";
 
+const LINK_STYLES =
+  "align-center text-center text-1xl md:text-md my-12 flex flex-row gap-16 text-[#FF6B54]";
 const INPUT_STYLES =
-  "rounded-full border-4 border-white bg-[#FFFFFF] bg-opacity-50 ps-2 py-2 text-white ";
+  "rounded-full border-4 border-white bg-[#FFFFFF] bg-opacity-50 ps-3 py-2 my-2 text-sm md:text-md";
+const BUTTON_STYLES =
+  " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
 
 const UserProfile = () => {
   return (
@@ -13,21 +17,21 @@ const UserProfile = () => {
         </h1>
         <div>Squiggly 2</div>
       </div>
-      <div className="px-16 py-10">
-        <div className="my-10 flex flex-row gap-4 ">
+      <div className="px-10  md:px-16 md:py-10">
+        <div className={LINK_STYLES}>
           <Link href="/participant/profile">My details</Link>
           <Link href="/participant/profile">Team details</Link>
           <Link href="/participant/profile">Food Ticket</Link>
         </div>
-        <div className="my-4 flex justify-between uppercase">
-          <h1>My Details</h1>
-          <button className="font-white rounded-full border-4 border-white bg-[#FF6B54] px-12 py-2 text-white ">
-            Edit
-          </button>
+        <div className="mb-3 flex justify-between uppercase text-[#FF6B54]">
+          <h1 className="mt-4 text-lg font-bold md:mt-3 md:text-2xl">
+            My Details
+          </h1>
+          <button className={BUTTON_STYLES}>Edit</button>
         </div>
-        <form className="flex flex-col">
+        <form className="flex flex-col ">
           <div>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-2 gap-5 ">
               <label>First Name</label>
               <label>Last name</label>
             </div>
@@ -59,19 +63,19 @@ const UserProfile = () => {
             placeholder="Institution"
           />
           <label>Do you want provided meals at the hackathon?</label>
-          <input className={INPUT_STYLES} type="checkbox" />
+          <input className={INPUT_STYLES} type="text" placeholder="Allergies" />
           <label>Do you have any allergies?</label>
           <input className={INPUT_STYLES} type="text" placeholder="Allergies" />
-          <p>Check-in Status</p>
           <p>
+            Check-in Status <br />
             This status will change to &quot;Yes&quot; after you&apos;ve checked
             in on hackathon day
           </p>
-          <p>checkin status....</p>
+          <input className={INPUT_STYLES} type="text" placeholder="Check-in" />
         </form>
-        <div className="flex justify-between ">
-          <button>Cancel</button>
-          <button>Save</button>
+        <div className="font-white my-6 flex flex-col justify-between md:flex-row">
+          <button className={BUTTON_STYLES}>Cancel</button>
+          <button className={BUTTON_STYLES}>Save</button>
         </div>
       </div>
     </div>
