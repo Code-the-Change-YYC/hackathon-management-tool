@@ -1,18 +1,27 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
 const LINK_STYLES =
-  "align-center text-center text-1xl md:text-md my-12 flex flex-row gap-16 text-[#FF6B54]";
+  "md:mx-10 align-center text-center text-1xl md:text-md my-12 flex flex-row gap-16 text-[#FF6B54]";
+const ACTIVE_LINK_CLASS = "underline";
 const INPUT_STYLES =
-  "rounded-full border-4 border-white bg-[#FFFFFF] /50 ps-3 py-2 my-2 text-sm md:text-md";
+  "rounded-full border-4 placeholder-black border-white bg-[#FFFFFF] bg-white/30 ps-3 py-2 my-2 text-sm md:text-md backdrop-opacity-30";
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
 
+const FORM_STYLES = "md:mx-10 flex flex-col";
+
 const TEAM_INSTRUCTION_STYLES =
-  "bg-pink /50 my-10 rounded-3xl  border-4 border-white bg-[#FFFFFF] px-10 py-20 md:px-20 md:py-32";
+  "bg-pink bg-white/30 my-10 rounded-3xl  border-4 border-white bg-[#FFFFFF] px-10 py-20 md:px-20 md:py-32";
 
 const hasTeam = true;
 
 const TeamProfile = () => {
+  const [activeLink, setActiveLink] = useState(
+    "/participant/profile/team-details",
+  );
   return (
     <div className="flex w-full flex-col bg-[#FFD7C5]">
       <div className="flex h-60 items-center justify-center bg-[#FF6B54]">
@@ -24,18 +33,24 @@ const TeamProfile = () => {
       </div>
       <div className="px-10  md:px-16 md:py-10">
         <div className={LINK_STYLES}>
-          <Link href="/participant/profile">My details</Link>
-          <Link href="/participant/profile/team-details">Team details</Link>
+          <Link href="/participant/profile">My Details</Link>
+          <Link
+            href="/participant/profile/team-details"
+            className={`${activeLink === "/participant/profile/team-details" ? ACTIVE_LINK_CLASS : ""}`}
+            onClick={() => setActiveLink("/participant/profile/team-details")}
+          >
+            Team Details
+          </Link>{" "}
           <Link href="/participant/profile/food-ticket">Food Ticket</Link>
         </div>
-        <div className="mb-3 flex justify-between uppercase text-[#FF6B54]">
+        <div className="  mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
           <h1 className="my-4 text-lg font-bold md:mt-3 md:text-2xl">
             Team Details
           </h1>
         </div>
         {hasTeam ? (
           <>
-            <form className="flex flex-col">
+            <form className={FORM_STYLES}>
               <label>Team ID</label>
               <input
                 className={INPUT_STYLES}
@@ -67,7 +82,7 @@ const TeamProfile = () => {
                 />
               </div>
             </form>
-            <div className="my-6 flex justify-end">
+            <div className="mb-10 mt-3 flex justify-end md:mx-10">
               <button className={`${BUTTON_STYLES} w-full md:w-auto`}>
                 Leave Team
               </button>
