@@ -6,7 +6,6 @@ import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 
 export default async function FoodPage() {
   let userVerificationCode = null;
-  const inputUserCode = null;
 
   async function currentAuthenticatedUser() {
     try {
@@ -30,7 +29,7 @@ export default async function FoodPage() {
         }
         const value = response.data.GetFoodTicket?.value;
         if (value) {
-          userVerificationCode = value as string;
+          userVerificationCode = value;
         }
       }
     } catch (err) {
@@ -42,11 +41,7 @@ export default async function FoodPage() {
 
   return (
     <div>
-      <button>test</button>
-      <Verification></Verification>
-      <br />
       <a> {userVerificationCode}</a>
-      <a>{inputUserCode}</a>
     </div>
   );
 }

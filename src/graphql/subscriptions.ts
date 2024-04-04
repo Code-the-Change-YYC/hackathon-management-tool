@@ -9,6 +9,28 @@ type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateFoodEvent = /* GraphQL */ `subscription OnCreateFoodEvent(
+  $filter: ModelSubscriptionFoodEventFilterInput
+  $owner: String
+) {
+  onCreateFoodEvent(filter: $filter, owner: $owner) {
+    Description
+    End
+    Groups
+    Name
+    Start
+    createdAt
+    id
+    owner
+    updatedAt
+    userMealsId
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateFoodEventSubscriptionVariables,
+  APITypes.OnCreateFoodEventSubscription
+>;
 export const onCreateTeam = /* GraphQL */ `subscription OnCreateTeam(
   $filter: ModelSubscriptionTeamFilterInput
   $owner: String
@@ -42,7 +64,10 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     FirstName
     Institution
     LastName
-    Meals
+    Meals {
+      nextToken
+      __typename
+    }
     Team {
       Code
       Name
@@ -63,6 +88,28 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
 ` as GeneratedSubscription<
   APITypes.OnCreateUserSubscriptionVariables,
   APITypes.OnCreateUserSubscription
+>;
+export const onDeleteFoodEvent = /* GraphQL */ `subscription OnDeleteFoodEvent(
+  $filter: ModelSubscriptionFoodEventFilterInput
+  $owner: String
+) {
+  onDeleteFoodEvent(filter: $filter, owner: $owner) {
+    Description
+    End
+    Groups
+    Name
+    Start
+    createdAt
+    id
+    owner
+    updatedAt
+    userMealsId
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteFoodEventSubscriptionVariables,
+  APITypes.OnDeleteFoodEventSubscription
 >;
 export const onDeleteTeam = /* GraphQL */ `subscription OnDeleteTeam(
   $filter: ModelSubscriptionTeamFilterInput
@@ -97,7 +144,10 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     FirstName
     Institution
     LastName
-    Meals
+    Meals {
+      nextToken
+      __typename
+    }
     Team {
       Code
       Name
@@ -118,6 +168,28 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
 ` as GeneratedSubscription<
   APITypes.OnDeleteUserSubscriptionVariables,
   APITypes.OnDeleteUserSubscription
+>;
+export const onUpdateFoodEvent = /* GraphQL */ `subscription OnUpdateFoodEvent(
+  $filter: ModelSubscriptionFoodEventFilterInput
+  $owner: String
+) {
+  onUpdateFoodEvent(filter: $filter, owner: $owner) {
+    Description
+    End
+    Groups
+    Name
+    Start
+    createdAt
+    id
+    owner
+    updatedAt
+    userMealsId
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateFoodEventSubscriptionVariables,
+  APITypes.OnUpdateFoodEventSubscription
 >;
 export const onUpdateTeam = /* GraphQL */ `subscription OnUpdateTeam(
   $filter: ModelSubscriptionTeamFilterInput
@@ -152,7 +224,10 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     FirstName
     Institution
     LastName
-    Meals
+    Meals {
+      nextToken
+      __typename
+    }
     Team {
       Code
       Name

@@ -2,6 +2,20 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type FoodEvent = {
+  __typename: "FoodEvent";
+  Description?: string | null;
+  End?: string | null;
+  Groups?: number | null;
+  Name?: string | null;
+  Start?: string | null;
+  createdAt: string;
+  id: string;
+  owner?: string | null;
+  updatedAt: string;
+  userMealsId?: string | null;
+};
+
 export type Team = {
   __typename: "Team";
   Code?: string | null;
@@ -27,7 +41,7 @@ export type User = {
   FirstName?: string | null;
   Institution?: string | null;
   LastName?: string | null;
-  Meals?: boolean | null;
+  Meals?: ModelFoodEventConnection | null;
   Team?: Team | null;
   createdAt: string;
   id: string;
@@ -36,16 +50,26 @@ export type User = {
   updatedAt: string;
 };
 
-export type ModelTeamFilterInput = {
-  Code?: ModelStringInput | null;
+export type ModelFoodEventConnection = {
+  __typename: "ModelFoodEventConnection";
+  items: Array<FoodEvent | null>;
+  nextToken?: string | null;
+};
+
+export type ModelFoodEventFilterInput = {
+  Description?: ModelStringInput | null;
+  End?: ModelStringInput | null;
+  Groups?: ModelIntInput | null;
   Name?: ModelStringInput | null;
-  and?: Array<ModelTeamFilterInput | null> | null;
+  Start?: ModelStringInput | null;
+  and?: Array<ModelFoodEventFilterInput | null> | null;
   createdAt?: ModelStringInput | null;
   id?: ModelIDInput | null;
-  not?: ModelTeamFilterInput | null;
-  or?: Array<ModelTeamFilterInput | null> | null;
+  not?: ModelFoodEventFilterInput | null;
+  or?: Array<ModelFoodEventFilterInput | null> | null;
   owner?: ModelStringInput | null;
   updatedAt?: ModelStringInput | null;
+  userMealsId?: ModelIDInput | null;
 };
 
 export type ModelStringInput = {
@@ -87,6 +111,18 @@ export type ModelSizeInput = {
   ne?: number | null;
 };
 
+export type ModelIntInput = {
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
+  between?: Array<number | null> | null;
+  eq?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  le?: number | null;
+  lt?: number | null;
+  ne?: number | null;
+};
+
 export type ModelIDInput = {
   attributeExists?: boolean | null;
   attributeType?: ModelAttributeTypes | null;
@@ -108,6 +144,18 @@ export enum ModelSortDirection {
   DESC = "DESC",
 }
 
+export type ModelTeamFilterInput = {
+  Code?: ModelStringInput | null;
+  Name?: ModelStringInput | null;
+  and?: Array<ModelTeamFilterInput | null> | null;
+  createdAt?: ModelStringInput | null;
+  id?: ModelIDInput | null;
+  not?: ModelTeamFilterInput | null;
+  or?: Array<ModelTeamFilterInput | null> | null;
+  owner?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+};
+
 export type ModelTeamConnection = {
   __typename: "ModelTeamConnection";
   items: Array<Team | null>;
@@ -121,7 +169,6 @@ export type ModelUserFilterInput = {
   FirstName?: ModelStringInput | null;
   Institution?: ModelStringInput | null;
   LastName?: ModelStringInput | null;
-  Meals?: ModelBooleanInput | null;
   and?: Array<ModelUserFilterInput | null> | null;
   createdAt?: ModelStringInput | null;
   id?: ModelIDInput | null;
@@ -153,6 +200,34 @@ export type SingleStringFunctionResponse = {
   value?: string | null;
 };
 
+export type ModelFoodEventConditionInput = {
+  Description?: ModelStringInput | null;
+  End?: ModelStringInput | null;
+  Groups?: ModelIntInput | null;
+  Name?: ModelStringInput | null;
+  Start?: ModelStringInput | null;
+  and?: Array<ModelFoodEventConditionInput | null> | null;
+  createdAt?: ModelStringInput | null;
+  not?: ModelFoodEventConditionInput | null;
+  or?: Array<ModelFoodEventConditionInput | null> | null;
+  owner?: ModelStringInput | null;
+  updatedAt?: ModelStringInput | null;
+  userMealsId?: ModelIDInput | null;
+};
+
+export type CreateFoodEventInput = {
+  Description?: string | null;
+  End?: string | null;
+  Groups?: number | null;
+  Name?: string | null;
+  Start?: string | null;
+  createdAt?: string | null;
+  id?: string | null;
+  owner?: string | null;
+  updatedAt?: string | null;
+  userMealsId?: string | null;
+};
+
 export type ModelTeamConditionInput = {
   Code?: ModelStringInput | null;
   Name?: ModelStringInput | null;
@@ -180,7 +255,6 @@ export type ModelUserConditionInput = {
   FirstName?: ModelStringInput | null;
   Institution?: ModelStringInput | null;
   LastName?: ModelStringInput | null;
-  Meals?: ModelBooleanInput | null;
   and?: Array<ModelUserConditionInput | null> | null;
   createdAt?: ModelStringInput | null;
   not?: ModelUserConditionInput | null;
@@ -197,12 +271,15 @@ export type CreateUserInput = {
   FirstName?: string | null;
   Institution?: string | null;
   LastName?: string | null;
-  Meals?: boolean | null;
   createdAt?: string | null;
   id?: string | null;
   owner?: string | null;
   teamMembersId?: string | null;
   updatedAt?: string | null;
+};
+
+export type DeleteFoodEventInput = {
+  id: string;
 };
 
 export type DeleteTeamInput = {
@@ -211,6 +288,19 @@ export type DeleteTeamInput = {
 
 export type DeleteUserInput = {
   id: string;
+};
+
+export type UpdateFoodEventInput = {
+  Description?: string | null;
+  End?: string | null;
+  Groups?: number | null;
+  Name?: string | null;
+  Start?: string | null;
+  createdAt?: string | null;
+  id: string;
+  owner?: string | null;
+  updatedAt?: string | null;
+  userMealsId?: string | null;
 };
 
 export type UpdateTeamInput = {
@@ -229,7 +319,6 @@ export type UpdateUserInput = {
   FirstName?: string | null;
   Institution?: string | null;
   LastName?: string | null;
-  Meals?: boolean | null;
   createdAt?: string | null;
   id: string;
   owner?: string | null;
@@ -237,14 +326,18 @@ export type UpdateUserInput = {
   updatedAt?: string | null;
 };
 
-export type ModelSubscriptionTeamFilterInput = {
-  Code?: ModelSubscriptionStringInput | null;
+export type ModelSubscriptionFoodEventFilterInput = {
+  Description?: ModelSubscriptionStringInput | null;
+  End?: ModelSubscriptionStringInput | null;
+  Groups?: ModelSubscriptionIntInput | null;
   Name?: ModelSubscriptionStringInput | null;
-  and?: Array<ModelSubscriptionTeamFilterInput | null> | null;
+  Start?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionFoodEventFilterInput | null> | null;
   createdAt?: ModelSubscriptionStringInput | null;
   id?: ModelSubscriptionIDInput | null;
-  or?: Array<ModelSubscriptionTeamFilterInput | null> | null;
+  or?: Array<ModelSubscriptionFoodEventFilterInput | null> | null;
   updatedAt?: ModelSubscriptionStringInput | null;
+  userMealsId?: ModelSubscriptionIDInput | null;
 };
 
 export type ModelSubscriptionStringInput = {
@@ -262,6 +355,18 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array<string | null> | null;
 };
 
+export type ModelSubscriptionIntInput = {
+  between?: Array<number | null> | null;
+  eq?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  in?: Array<number | null> | null;
+  le?: number | null;
+  lt?: number | null;
+  ne?: number | null;
+  notIn?: Array<number | null> | null;
+};
+
 export type ModelSubscriptionIDInput = {
   beginsWith?: string | null;
   between?: Array<string | null> | null;
@@ -277,6 +382,16 @@ export type ModelSubscriptionIDInput = {
   notIn?: Array<string | null> | null;
 };
 
+export type ModelSubscriptionTeamFilterInput = {
+  Code?: ModelSubscriptionStringInput | null;
+  Name?: ModelSubscriptionStringInput | null;
+  and?: Array<ModelSubscriptionTeamFilterInput | null> | null;
+  createdAt?: ModelSubscriptionStringInput | null;
+  id?: ModelSubscriptionIDInput | null;
+  or?: Array<ModelSubscriptionTeamFilterInput | null> | null;
+  updatedAt?: ModelSubscriptionStringInput | null;
+};
+
 export type ModelSubscriptionUserFilterInput = {
   Allergies?: ModelSubscriptionStringInput | null;
   CheckedIn?: ModelSubscriptionBooleanInput | null;
@@ -284,7 +399,6 @@ export type ModelSubscriptionUserFilterInput = {
   FirstName?: ModelSubscriptionStringInput | null;
   Institution?: ModelSubscriptionStringInput | null;
   LastName?: ModelSubscriptionStringInput | null;
-  Meals?: ModelSubscriptionBooleanInput | null;
   and?: Array<ModelSubscriptionUserFilterInput | null> | null;
   createdAt?: ModelSubscriptionStringInput | null;
   id?: ModelSubscriptionIDInput | null;
@@ -296,6 +410,26 @@ export type ModelSubscriptionUserFilterInput = {
 export type ModelSubscriptionBooleanInput = {
   eq?: boolean | null;
   ne?: boolean | null;
+};
+
+export type GetFoodEventQueryVariables = {
+  id: string;
+};
+
+export type GetFoodEventQuery = {
+  getFoodEvent?: {
+    __typename: "FoodEvent";
+    Description?: string | null;
+    End?: string | null;
+    Groups?: number | null;
+    Name?: string | null;
+    Start?: string | null;
+    createdAt: string;
+    id: string;
+    owner?: string | null;
+    updatedAt: string;
+    userMealsId?: string | null;
+  } | null;
 };
 
 export type GetTeamQueryVariables = {
@@ -331,7 +465,10 @@ export type GetUserQuery = {
     FirstName?: string | null;
     Institution?: string | null;
     LastName?: string | null;
-    Meals?: boolean | null;
+    Meals?: {
+      __typename: "ModelFoodEventConnection";
+      nextToken?: string | null;
+    } | null;
     Team?: {
       __typename: "Team";
       Code?: string | null;
@@ -346,6 +483,34 @@ export type GetUserQuery = {
     owner?: string | null;
     teamMembersId?: string | null;
     updatedAt: string;
+  } | null;
+};
+
+export type ListFoodEventsQueryVariables = {
+  filter?: ModelFoodEventFilterInput | null;
+  id?: string | null;
+  limit?: number | null;
+  nextToken?: string | null;
+  sortDirection?: ModelSortDirection | null;
+};
+
+export type ListFoodEventsQuery = {
+  listFoodEvents?: {
+    __typename: "ModelFoodEventConnection";
+    items: Array<{
+      __typename: "FoodEvent";
+      Description?: string | null;
+      End?: string | null;
+      Groups?: number | null;
+      Name?: string | null;
+      Start?: string | null;
+      createdAt: string;
+      id: string;
+      owner?: string | null;
+      updatedAt: string;
+      userMealsId?: string | null;
+    } | null>;
+    nextToken?: string | null;
   } | null;
 };
 
@@ -392,7 +557,6 @@ export type ListUsersQuery = {
       FirstName?: string | null;
       Institution?: string | null;
       LastName?: string | null;
-      Meals?: boolean | null;
       createdAt: string;
       id: string;
       owner?: string | null;
@@ -426,6 +590,27 @@ export type GetFoodTicketMutation = {
     headers?: string | null;
     statusCode?: number | null;
     value?: string | null;
+  } | null;
+};
+
+export type CreateFoodEventMutationVariables = {
+  condition?: ModelFoodEventConditionInput | null;
+  input: CreateFoodEventInput;
+};
+
+export type CreateFoodEventMutation = {
+  createFoodEvent?: {
+    __typename: "FoodEvent";
+    Description?: string | null;
+    End?: string | null;
+    Groups?: number | null;
+    Name?: string | null;
+    Start?: string | null;
+    createdAt: string;
+    id: string;
+    owner?: string | null;
+    updatedAt: string;
+    userMealsId?: string | null;
   } | null;
 };
 
@@ -464,7 +649,10 @@ export type CreateUserMutation = {
     FirstName?: string | null;
     Institution?: string | null;
     LastName?: string | null;
-    Meals?: boolean | null;
+    Meals?: {
+      __typename: "ModelFoodEventConnection";
+      nextToken?: string | null;
+    } | null;
     Team?: {
       __typename: "Team";
       Code?: string | null;
@@ -479,6 +667,27 @@ export type CreateUserMutation = {
     owner?: string | null;
     teamMembersId?: string | null;
     updatedAt: string;
+  } | null;
+};
+
+export type DeleteFoodEventMutationVariables = {
+  condition?: ModelFoodEventConditionInput | null;
+  input: DeleteFoodEventInput;
+};
+
+export type DeleteFoodEventMutation = {
+  deleteFoodEvent?: {
+    __typename: "FoodEvent";
+    Description?: string | null;
+    End?: string | null;
+    Groups?: number | null;
+    Name?: string | null;
+    Start?: string | null;
+    createdAt: string;
+    id: string;
+    owner?: string | null;
+    updatedAt: string;
+    userMealsId?: string | null;
   } | null;
 };
 
@@ -517,7 +726,10 @@ export type DeleteUserMutation = {
     FirstName?: string | null;
     Institution?: string | null;
     LastName?: string | null;
-    Meals?: boolean | null;
+    Meals?: {
+      __typename: "ModelFoodEventConnection";
+      nextToken?: string | null;
+    } | null;
     Team?: {
       __typename: "Team";
       Code?: string | null;
@@ -532,6 +744,27 @@ export type DeleteUserMutation = {
     owner?: string | null;
     teamMembersId?: string | null;
     updatedAt: string;
+  } | null;
+};
+
+export type UpdateFoodEventMutationVariables = {
+  condition?: ModelFoodEventConditionInput | null;
+  input: UpdateFoodEventInput;
+};
+
+export type UpdateFoodEventMutation = {
+  updateFoodEvent?: {
+    __typename: "FoodEvent";
+    Description?: string | null;
+    End?: string | null;
+    Groups?: number | null;
+    Name?: string | null;
+    Start?: string | null;
+    createdAt: string;
+    id: string;
+    owner?: string | null;
+    updatedAt: string;
+    userMealsId?: string | null;
   } | null;
 };
 
@@ -570,7 +803,10 @@ export type UpdateUserMutation = {
     FirstName?: string | null;
     Institution?: string | null;
     LastName?: string | null;
-    Meals?: boolean | null;
+    Meals?: {
+      __typename: "ModelFoodEventConnection";
+      nextToken?: string | null;
+    } | null;
     Team?: {
       __typename: "Team";
       Code?: string | null;
@@ -585,6 +821,27 @@ export type UpdateUserMutation = {
     owner?: string | null;
     teamMembersId?: string | null;
     updatedAt: string;
+  } | null;
+};
+
+export type OnCreateFoodEventSubscriptionVariables = {
+  filter?: ModelSubscriptionFoodEventFilterInput | null;
+  owner?: string | null;
+};
+
+export type OnCreateFoodEventSubscription = {
+  onCreateFoodEvent?: {
+    __typename: "FoodEvent";
+    Description?: string | null;
+    End?: string | null;
+    Groups?: number | null;
+    Name?: string | null;
+    Start?: string | null;
+    createdAt: string;
+    id: string;
+    owner?: string | null;
+    updatedAt: string;
+    userMealsId?: string | null;
   } | null;
 };
 
@@ -623,7 +880,10 @@ export type OnCreateUserSubscription = {
     FirstName?: string | null;
     Institution?: string | null;
     LastName?: string | null;
-    Meals?: boolean | null;
+    Meals?: {
+      __typename: "ModelFoodEventConnection";
+      nextToken?: string | null;
+    } | null;
     Team?: {
       __typename: "Team";
       Code?: string | null;
@@ -638,6 +898,27 @@ export type OnCreateUserSubscription = {
     owner?: string | null;
     teamMembersId?: string | null;
     updatedAt: string;
+  } | null;
+};
+
+export type OnDeleteFoodEventSubscriptionVariables = {
+  filter?: ModelSubscriptionFoodEventFilterInput | null;
+  owner?: string | null;
+};
+
+export type OnDeleteFoodEventSubscription = {
+  onDeleteFoodEvent?: {
+    __typename: "FoodEvent";
+    Description?: string | null;
+    End?: string | null;
+    Groups?: number | null;
+    Name?: string | null;
+    Start?: string | null;
+    createdAt: string;
+    id: string;
+    owner?: string | null;
+    updatedAt: string;
+    userMealsId?: string | null;
   } | null;
 };
 
@@ -676,7 +957,10 @@ export type OnDeleteUserSubscription = {
     FirstName?: string | null;
     Institution?: string | null;
     LastName?: string | null;
-    Meals?: boolean | null;
+    Meals?: {
+      __typename: "ModelFoodEventConnection";
+      nextToken?: string | null;
+    } | null;
     Team?: {
       __typename: "Team";
       Code?: string | null;
@@ -691,6 +975,27 @@ export type OnDeleteUserSubscription = {
     owner?: string | null;
     teamMembersId?: string | null;
     updatedAt: string;
+  } | null;
+};
+
+export type OnUpdateFoodEventSubscriptionVariables = {
+  filter?: ModelSubscriptionFoodEventFilterInput | null;
+  owner?: string | null;
+};
+
+export type OnUpdateFoodEventSubscription = {
+  onUpdateFoodEvent?: {
+    __typename: "FoodEvent";
+    Description?: string | null;
+    End?: string | null;
+    Groups?: number | null;
+    Name?: string | null;
+    Start?: string | null;
+    createdAt: string;
+    id: string;
+    owner?: string | null;
+    updatedAt: string;
+    userMealsId?: string | null;
   } | null;
 };
 
@@ -729,7 +1034,10 @@ export type OnUpdateUserSubscription = {
     FirstName?: string | null;
     Institution?: string | null;
     LastName?: string | null;
-    Meals?: boolean | null;
+    Meals?: {
+      __typename: "ModelFoodEventConnection";
+      nextToken?: string | null;
+    } | null;
     Team?: {
       __typename: "Team";
       Code?: string | null;

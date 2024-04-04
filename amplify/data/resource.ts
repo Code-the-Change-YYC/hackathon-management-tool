@@ -1,5 +1,6 @@
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { getFoodTicket } from "@/amplify/function/BusinessLogic/GetFoodTicket/resource";
+import { verifyFoodTicket } from "@/amplify/function/BusinessLogic/VerifyFoodTicket/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
@@ -16,7 +17,7 @@ const schema = a.schema({
       FirstName: a.string(),
       LastName: a.string(),
       Email: a.string(),
-      Meals: a.boolean(),
+      Meals: a.belongsTo("FoodEvent"),
       Institution: a.string(),
       Allergies: a.string(),
       CheckedIn: a.boolean(),
@@ -31,17 +32,35 @@ const schema = a.schema({
     })
     .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
 
-    GenericFunctionResponse: a.customType({
-      body: a.json(),
-      statusCode: a.integer(),
-      headers: a.json(),
-    }),
+  FoodEvent: a
+    .model({
+      Name: a.string(),
+      Description: a.string(),
+      Start: a.datetime(),
+      End: a.datetime(),
+      Groups: a.integer(),
+      Attended: a.hasMany("User"),
+    })
+    .authorization([a.allow.owner(), a.allow.public()]),
 
-    SingleStringFunctionResponse: a.customType({
-      value: a.string(),
-      statusCode: a.integer(),
-      headers: a.json(),
-    }),
+  GenericFunctionResponse: a.customType({
+    body: a.json(),
+    statusCode: a.integer(),
+    headers: a.json(),
+  }),
+
+  SingleStringFunctionResponse: a.customType({
+    value: a.string(),
+    statusCode: a.integer(),
+    headers: a.json(),
+  }),
+
+  FoodVerificationFunctionResponse: a.customType({
+    canEat: a.boolean(),
+    description: a.string(),
+    statusCode: a.integer(),
+    headers: a.json(),
+  }),
 
   /**
    * FUNCTION-RELATED APPSYNC RESOLVERS
@@ -69,6 +88,19 @@ const schema = a.schema({
     // allow all users to call this api for now
     .authorization([a.allow.public()])
     .function("getFoodTicket"),
+
+  VerifyFoodTicket: a
+    .mutation() // this should be set to .query for functions that only read data
+    // arguments that this query accepts
+    .arguments({
+      userCode: a.string(),
+      eventID: a.string(),
+    })
+    // return type of the query
+    .returns(a.ref("FoodVerificationFunctionResponse"))
+    // allow all users to call this api for now
+    .authorization([a.allow.public()])
+    .function("verifyFoodTicket"),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -88,6 +120,7 @@ export const data = defineData({
   functions: {
     demoFunctionKey: DemoFunction,
     getFoodTicket: getFoodTicket,
+    verifyFoodTicket: verifyFoodTicket,
   },
 });
 
