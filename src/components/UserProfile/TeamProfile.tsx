@@ -1,11 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
+import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 
-const LINK_STYLES =
-  "md:mx-10 align-center text-center text-1xl md:text-md my-12 flex flex-row gap-16 text-[#FF6B54]";
-const ACTIVE_LINK_STYLES = "underline";
 const INPUT_STYLES =
   "rounded-full border-4 placeholder-black border-white bg-[#FFFFFF] bg-white/30 ps-3 py-2 my-2 text-sm md:text-md backdrop-opacity-30";
 const BUTTON_STYLES =
@@ -19,23 +15,10 @@ const TEAM_INSTRUCTION_STYLES =
 const hasTeam = true; //change to false to see no team use case
 
 const TeamProfile = () => {
-  const [activeLink, setActiveLink] = useState(
-    "/participant/profile/team-details",
-  );
   return (
     <div className="flex w-full flex-col bg-[#FFD7C5]">
       <div className="px-10  md:px-16 md:py-10">
-        <div className={LINK_STYLES}>
-          <Link href="/participant/profile">My Details</Link>
-          <Link
-            href="/participant/profile/team-details"
-            className={`${activeLink === "/participant/profile/team-details" ? ACTIVE_LINK_STYLES : ""}`}
-            onClick={() => setActiveLink("/participant/profile/team-details")}
-          >
-            Team Details
-          </Link>{" "}
-          <Link href="/participant/profile/food-ticket">Food Ticket</Link>
-        </div>
+        <ProfileLinks />
         <div className="  mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
           <h1 className="my-4 text-lg font-bold md:mt-3 md:text-2xl">
             Team Details
