@@ -11,7 +11,7 @@ export default function ProfileHeader() {
           alt="Profile Image"
           width={120}
           height={120}
-          className="align-start mr-2 rounded-full border-4 border-white md:mr-10 md:h-36 md:w-36 lg:-mt-4 lg:ml-4 lg:h-60 lg:w-60 lg:border-8"
+          className="align-start mr-2 rounded-full border-4 border-white md:mr-10 md:w-36 lg:-mt-4 lg:ml-4 lg:w-60 lg:border-8"
         />
       </div>
       <div className="mt-40 flex flex-row items-center md:mt-0">
@@ -30,7 +30,7 @@ export default function ProfileHeader() {
           alt="Right Squiggly"
           width={105}
           height={60}
-          className="absolute right-0 ml-1 mt-2 md:right-0 md:h-56 md:w-60  lg:right-20 lg:block lg:h-1/3 lg:w-1/3"
+          className="absolute right-0 ml-1 mt-2 md:right-0 md:h-56 md:w-60  lg:right-20 lg:block lg:size-1/3"
         />
       </div>
     </div>
