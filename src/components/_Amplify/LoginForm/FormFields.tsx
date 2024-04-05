@@ -1,8 +1,10 @@
+import Image from "next/image";
+
 import {
-  Authenticator,
   Flex,
   Input,
   Label,
+  PasswordField,
   SelectField,
 } from "@aws-amplify/ui-react";
 
@@ -16,6 +18,16 @@ const FormFields = () => {
   ];
   return (
     <>
+      <div className=" text-2xl font-semibold xl:text-4xl">
+        <Image src="/svgs/login/vector_112.svg" alt="" width={28} height={21} />
+        <Image
+          src="/svgs/login/vector_113.svg"
+          alt=""
+          width={130}
+          height={17}
+        />
+        Individual Registration
+      </div>
       <Flex>
         <Flex direction="column" gap="small">
           <Label htmlFor="first_name">* First Name:</Label>
@@ -27,9 +39,11 @@ const FormFields = () => {
         </Flex>
       </Flex>
 
-      {/* Re-use default `Authenticator.SignUp.FormFields` */}
-      <Authenticator.SignUp.FormFields />
-
+      <PasswordField
+        name="password"
+        label="Password"
+        placeholder="* Password"
+      />
       <SelectField label="Which institution do you go to?">
         <option selected disabled>
           Select Insitution
