@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { twMerge } from "tailwind-merge";
 
 function SectionContainer({
   title,
@@ -17,14 +18,21 @@ function SectionContainer({
 }) {
   return (
     <div
-      className={`flex w-full flex-row items-center justify-between gap-16 ${bgColor} ${fontColor} px-[5%] py-20`}
+      className={twMerge(
+        `flex w-full flex-row items-center justify-between gap-16  px-[5%] py-20`,
+        bgColor,
+        fontColor,
+      )}
     >
-      <div className={`flex flex-col gap-4 ${fontColor}`}>
+      <div className={twMerge(`z-10 flex flex-col gap-4 `, fontColor)}>
         {title}
         <p className=" max-w-lg font-medium">{blurb}</p>
       </div>
       <div
-        className={`relative ${leftPosition && "order-first"} box-content hidden aspect-square w-2/3 min-w-48 max-w-96 rounded-lg md:block`}
+        className={twMerge(
+          "relative box-content hidden aspect-square w-2/3 min-w-48 max-w-96 rounded-lg md:block",
+          leftPosition && "order-first",
+        )}
       >
         <Image
           src={sectionImage}
