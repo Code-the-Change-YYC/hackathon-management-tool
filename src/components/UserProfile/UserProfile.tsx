@@ -27,8 +27,8 @@ type FormState = {
 
 const UserProfile = () => {
   const [activeLink, setActiveLink] = useState("/participant/profile");
-  const [editMode, setEditMode] = useState<boolean>(false);
-  // const [showCancel, setShowCancel] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [showCancelSave, setShowCancelSave] = useState<boolean>(false);
 
   const [wantMeals, setWantMeals] = useState<boolean>(true);
 
@@ -55,18 +55,25 @@ const UserProfile = () => {
     console.log(formState);
   };
 
-  const changeEditMode = () => {
-    setEditMode((prevEditMode) => !prevEditMode);
-    // setShowCancel(true);
+  const handleEditClick = () => {
+    setIsEditing((previsEditing) => !previsEditing);
+    setShowCancelSave(true);
   };
 
-  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    setShowCancelSave(false);
+  };
+
+  const handleSaveClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form submission behavior
-    setEditMode(false); // Exit edit mode
+    setIsEditing(false); // Exit edit mode
+    setShowCancelSave(false);
+    console.log("Saving changes...");
     console.log(formState); // Log the form state
   };
-  // const handleSave = () => {
-  //   setEditMode(false);
+  // const handleSaveClick = () => {
+  //   setisEditing(false);
   //   setShowCancel(false);
   // };
 
@@ -101,7 +108,7 @@ const UserProfile = () => {
         </div>
         <div className="mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
           <h1 className="mt-3 text-lg font-bold md:text-2xl">My Details</h1>
-          <button className={BUTTON_STYLES} onClick={changeEditMode}>
+          <button className={BUTTON_STYLES} onClick={handleEditClick}>
             Edit
           </button>
         </div>
@@ -110,65 +117,65 @@ const UserProfile = () => {
             <div className="flex flex-col">
               <label>First Name</label>
               <input
-                className={`${INPUT_STYLES} ${editMode ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+                className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                 type="text"
                 placeholder="First Name"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onChange(e)
                 }
                 name="firstName"
-                disabled={!editMode} // Disabled when not in edit mode
+                disabled={!isEditing} // Disabled when not in edit mode
               />
             </div>
             <div className="flex flex-col">
               <label>Last Name</label>
               <input
-                className={`${INPUT_STYLES} ${editMode ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+                className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                 type="text"
                 placeholder="Last Name"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onChange(e)
                 }
                 name="lastName"
-                disabled={!editMode} // Disabled when not in edit mode
+                disabled={!isEditing} // Disabled when not in edit mode
               />
             </div>
           </div>
           <label>Email</label>
           <input
-            className={`${INPUT_STYLES} ${editMode ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+            className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
             type="text"
             placeholder="Email"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
             name="email"
-            disabled={!editMode} // Disabled when not in edit mode
+            disabled={!isEditing} // Disabled when not in edit mode
           />
           <label>Password</label>
           <input
-            className={`${INPUT_STYLES} ${editMode ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+            className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
             type="password"
             placeholder="Password"
-            disabled={!editMode} // Disabled when not in edit mode
+            disabled={!isEditing} // Disabled when not in edit mode
           />
           <label>Institution</label>
           <input
-            className={`${INPUT_STYLES} ${editMode ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+            className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
             type="text"
             placeholder="Institution"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
             name="institution"
-            disabled={!editMode} // Disabled when not in edit mode
+            disabled={!isEditing} // Disabled when not in edit mode
           />
           <label>Do you want provided meals at the hackathon?</label>
           <select
-            className={`${INPUT_STYLES} ${editMode ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+            className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
             value={wantMeals ? "Yes" : "No"}
             onChange={(e) =>
               e.target.value === "Yes"
                 ? setWantMeals(true)
                 : setWantMeals(false)
             }
-            disabled={!editMode} // Disabled when not in edit mode
+            disabled={!isEditing} // Disabled when not in edit mode
           >
             <option value="Yes">Yes</option>
             <option value="No">No</option>
@@ -177,14 +184,14 @@ const UserProfile = () => {
             <>
               <label>Do you have any allergies?</label>
               <input
-                className={`${INPUT_STYLES} ${editMode ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+                className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                 type="text"
                 placeholder="e.g. Dairy, Nuts, etc."
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onChange(e)
                 }
                 name="allergies"
-                disabled={!editMode} // Disabled when not in edit mode
+                disabled={!isEditing} // Disabled when not in edit mode
               />
             </>
           )}
@@ -194,42 +201,32 @@ const UserProfile = () => {
             in on hackathon day
           </p>
           <input
-            className={`${INPUT_STYLES} ${editMode ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+            className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
             type="text"
             value={checkedIn ? "Yes" : "No"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
             readOnly
           />
           <div className=" mb-10 mt-3 flex flex-col justify-between md:flex-row">
-            {/* {showCancel && (
-              <button className={BUTTON_STYLES} onClick={handleSave}>
-                Cancel
-              </button> */}
-            <button
-              type="button"
-              className={BUTTON_STYLES}
-              onClick={changeEditMode}
-            >
-              Cancel
-            </button>
+            {showCancelSave && (
+              <>
+                <button
+                  type="button"
+                  className={BUTTON_STYLES}
+                  onClick={handleCancelClick}
+                >
+                  Cancel
+                </button>
 
-            <button
-              type="submit"
-              className={BUTTON_STYLES}
-              onClick={handleSave}
-            >
-              Save
-            </button>
-
-            {/* {editMode && (
-              <button
-                type="submit"
-                className={BUTTON_STYLES}
-                onClick={changeEditMode}
-              >
-                Save
-              </button>
-            )} */}
+                <button
+                  type="submit"
+                  className={BUTTON_STYLES}
+                  onClick={handleSaveClick}
+                >
+                  Save
+                </button>
+              </>
+            )}
           </div>
         </form>
       </div>
