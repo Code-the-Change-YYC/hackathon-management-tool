@@ -1,4 +1,4 @@
-The main branch has a CI/CD deployment available at: [https://main.dvv7xnx31hgrk.amplifyapp.com/](https://main.dvv7xnx31hgrk.amplifyapp.com/)
+The prod branch has a CI/CD deployment available at: [https://prod.hackthechangeyyc.ca/](https://prod.hackthechangeyyc.ca/)
 
 ## Getting Started
 
