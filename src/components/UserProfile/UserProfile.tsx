@@ -28,7 +28,7 @@ type FormState = {
 const UserProfile = () => {
   const [activeLink, setActiveLink] = useState("/participant/profile");
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [showCancel, setShowCancel] = useState<boolean>(false);
+  // const [showCancel, setShowCancel] = useState<boolean>(false);
 
   const [wantMeals, setWantMeals] = useState<boolean>(true);
 
@@ -57,13 +57,18 @@ const UserProfile = () => {
 
   const changeEditMode = () => {
     setEditMode((prevEditMode) => !prevEditMode);
-    setShowCancel(true);
+    // setShowCancel(true);
   };
 
-  const handleSave = () => {
-    setEditMode(false);
-    setShowCancel(false);
+  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default form submission behavior
+    setEditMode(false); // Exit edit mode
+    console.log(formState); // Log the form state
   };
+  // const handleSave = () => {
+  //   setEditMode(false);
+  //   setShowCancel(false);
+  // };
 
   const checkedIn = false; // Placeholder value for now
 
@@ -100,7 +105,7 @@ const UserProfile = () => {
             Edit
           </button>
         </div>
-        <form className={FORM_STYLES} action={createPost}>
+        <form className={FORM_STYLES} onSubmit={createPost}>
           <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5">
             <div className="flex flex-col">
               <label>First Name</label>
@@ -196,20 +201,35 @@ const UserProfile = () => {
             readOnly
           />
           <div className=" mb-10 mt-3 flex flex-col justify-between md:flex-row">
-            {showCancel && (
+            {/* {showCancel && (
               <button className={BUTTON_STYLES} onClick={handleSave}>
                 Cancel
-              </button>
-            )}
-            {editMode && (
+              </button> */}
+            <button
+              type="button"
+              className={BUTTON_STYLES}
+              onClick={changeEditMode}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              className={BUTTON_STYLES}
+              onClick={handleSave}
+            >
+              Save
+            </button>
+
+            {/* {editMode && (
               <button
                 type="submit"
                 className={BUTTON_STYLES}
-                onClick={handleSave}
+                onClick={changeEditMode}
               >
                 Save
               </button>
-            )}
+            )} */}
           </div>
         </form>
       </div>
