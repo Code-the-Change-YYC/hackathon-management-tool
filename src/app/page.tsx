@@ -1,4 +1,4 @@
-import CreateTeamPage from "@/components/CreateTeamPage";
+import CreateTeamPage from "@/app/participant/team-selection/CreateTeamPage";
 import AboutEventTile from "@/components/LandingPage/AboutEventTile";
 import JudgeShowcase from "@/components/LandingPage/JudgeShowcase";
 import JudgingCriteria from "@/components/LandingPage/JudgingCriteria";
