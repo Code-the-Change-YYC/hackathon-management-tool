@@ -1,11 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const LINK_STYLES =
-  "md:mx-10 align-center text-center text-1xl md:text-md my-12 flex flex-row gap-16 text-[#FF6B54]";
-const ACTIVE_LINK_STYLES = "underline";
+import ProfileLinks from "@/components/UserProfile/ProfileLinks";
+
 const INPUT_STYLES: string =
   "rounded-full  border-4 border-white bg-[#FFFFFF]  ps-3  py-2 my-2 text-sm md:text-md bg-white/30";
 const BUTTON_STYLES =
@@ -26,7 +24,6 @@ type FormState = {
 };
 
 const UserProfile = () => {
-  const [activeLink, setActiveLink] = useState("/participant/profile");
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [showCancelSave, setShowCancelSave] = useState<boolean>(false);
 
@@ -78,23 +75,7 @@ const UserProfile = () => {
   return (
     <div className="flex w-full flex-col bg-[#FFD7C5]">
       <div className="px-10 md:px-16 md:py-10">
-        <div className={LINK_STYLES}>
-          <Link
-            href="/participant/profile"
-            className={`${activeLink === "/participant/profile" ? ACTIVE_LINK_STYLES : ""}`}
-            onClick={() => setActiveLink("/participant/profile")}
-          >
-            My Details
-          </Link>
-          <Link
-            href="/participant/profile/team-details"
-            className={`${activeLink === "/participant/profile/team-details" ? ACTIVE_LINK_STYLES : ""}`}
-            onClick={() => setActiveLink("/participant/profile/team-details")}
-          >
-            Team Details
-          </Link>
-          <Link href="/participant/profile/food-ticket">Food Ticket</Link>
-        </div>
+        <ProfileLinks />
         <div className="mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
           <h1 className="mt-3 text-lg font-bold md:text-2xl">My Details</h1>
           <button className={BUTTON_STYLES} onClick={handleEditClick}>
