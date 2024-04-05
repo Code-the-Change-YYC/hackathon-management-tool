@@ -24,13 +24,6 @@ const TeamProfile = () => {
   );
   return (
     <div className="flex w-full flex-col bg-[#FFD7C5]">
-      <div className="flex h-60 items-center justify-center bg-[#FF6B54]">
-        <div>Squiggly 1</div>
-        <h1 className="text-4xl font-extrabold text-white">
-          Hello, <span className="italic">Full Name!</span>
-        </h1>
-        <div>Squiggly 2</div>
-      </div>
       <div className="px-10  md:px-16 md:py-10">
         <div className={LINK_STYLES}>
           <Link href="/participant/profile">My Details</Link>

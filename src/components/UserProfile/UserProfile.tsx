@@ -7,7 +7,7 @@ const LINK_STYLES =
   "md:mx-10 align-center text-center text-1xl md:text-md my-12 flex flex-row gap-16 text-[#FF6B54]";
 const ACTIVE_LINK_STYLES = "underline";
 const INPUT_STYLES: string =
-  "rounded-full border-4 border-white bg-[#FFFFFF]  ps-3  py-2 my-2 text-sm md:text-md bg-white/30";
+  "rounded-full  border-4 border-white bg-[#FFFFFF]  ps-3  py-2 my-2 text-sm md:text-md bg-white/30";
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
 const TEXT_COLOR_GRAY = "text-gray-400"; // CSS class for gray text color
@@ -72,22 +72,11 @@ const UserProfile = () => {
     console.log("Saving changes...");
     console.log(formState); // Log the form state
   };
-  // const handleSaveClick = () => {
-  //   setisEditing(false);
-  //   setShowCancel(false);
-  // };
 
   const checkedIn = false; // Placeholder value for now
 
   return (
     <div className="flex w-full flex-col bg-[#FFD7C5]">
-      <div className="flex h-60 items-center justify-center bg-[#FF6B54]">
-        <div>Squiggly 1</div>
-        <h1 className="text-4xl font-extrabold text-white">
-          Hello, <span className="italic">Full Name!</span>
-        </h1>
-        <div>Squiggly 2</div>
-      </div>
       <div className="px-10 md:px-16 md:py-10">
         <div className={LINK_STYLES}>
           <Link
