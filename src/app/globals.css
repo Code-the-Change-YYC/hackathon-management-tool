@@ -1,11 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+[data-amplify-authenticator] {
+  --amplify-components-button-primary-background-color: #7055fd;
+}
+
+[data-amplify-authenticator] div {
+  border-radius: 2rem;
+}
+
+div[role="tablist"] {
+  display: none; /* Additional rule to hide the items */
+}
 .amplify-select {
   --amplify-components-fieldcontrol-border-radius: 20px;
 }
 .amplify-input {
   --amplify-components-fieldcontrol-border-radius: 20px;
+}
+.amplify-tabs {
+  --amplify-tabs-border-radius: 20px;
 }
 :root {
   --foreground-rgb: 0, 0, 0;

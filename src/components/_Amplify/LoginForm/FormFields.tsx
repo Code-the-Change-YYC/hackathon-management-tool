@@ -17,16 +17,41 @@ const FormFields = () => {
     "None",
   ];
   return (
-    <>
+    <div className="relative">
+      <Image
+        className="absolute -right-28 -top-10"
+        src={"/svgs/login/Star_Icon.svg"}
+        height={51}
+        width={59}
+        alt={""}
+      />{" "}
+      <Image
+        className="absolute -bottom-24 -left-28"
+        src={"/svgs/login/Star_Icon.svg"}
+        height={51}
+        width={59}
+        alt={""}
+      />
       <div className=" text-2xl font-semibold xl:text-4xl">
-        <Image src="/svgs/login/vector_112.svg" alt="" width={28} height={21} />
-        <Image
-          src="/svgs/login/vector_113.svg"
-          alt=""
-          width={130}
-          height={17}
-        />
-        Individual Registration
+        <Flex direction={"column"}>
+          <Flex>
+            <Image
+              className="-mr-4"
+              src="/svgs/login/vector_112.svg"
+              alt=""
+              width={28}
+              height={21}
+            />
+            <div className=" text-nowrap">Individual Registration</div>
+          </Flex>
+          <Image
+            src="/svgs/login/vector_113.svg"
+            alt=""
+            className="-mt-4 ml-8"
+            width={130}
+            height={17}
+          />
+        </Flex>
       </div>
       <Flex>
         <Flex direction="column" gap="small">
@@ -38,12 +63,11 @@ const FormFields = () => {
           <Input id="last_name" name="last_name" placeholder="Last Name" />
         </Flex>
       </Flex>
-
-      <PasswordField
-        name="password"
-        label="Password"
-        placeholder="* Password"
-      />
+      <Flex direction="column" gap="small">
+        <Label htmlFor="email">*Email</Label>
+        <Input id="email" name="email" placeholder="Email" />
+      </Flex>
+      <PasswordField name="password" label="*Password" placeholder="Password" />
       <SelectField label="Which institution do you go to?">
         <option selected disabled>
           Select Insitution
@@ -68,7 +92,7 @@ const FormFields = () => {
         </Label>
         <Input id="allergies" name="allergies" placeholder="e.g. peanuts" />
       </Flex>
-    </>
+    </div>
   );
 };
 export default FormFields;
