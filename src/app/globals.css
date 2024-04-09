@@ -19,9 +19,6 @@ div[role="tablist"] {
 .amplify-input {
   --amplify-components-fieldcontrol-border-radius: 20px;
 }
-.amplify-tabs {
-  --amplify-tabs-border-radius: 20px;
-}
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
