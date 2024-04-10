@@ -2,14 +2,18 @@
 import Image from "next/image";
 
 import Login from "@/components/_Amplify/Login";
+import Header from "@/components/_Amplify/LoginForm/Header";
 
 export default function LoginPage() {
   return (
-    <div className=" relative w-full bg-awesomer-purple">
-      <Login />
+    <div className="flex min-h-[70vh] w-full flex-col items-center bg-awesomer-purple pt-6">
+      <div className=" jusitfy-center flex w-11/12 flex-col items-center md:w-9/12">
+        <Header />
+        <Login />
+      </div>
       <Image
         src={"/svgs/login/Events_vector.svg"}
-        className="w-full"
+        className="hidden w-full md:block"
         height={207}
         width={1485}
         alt={""}

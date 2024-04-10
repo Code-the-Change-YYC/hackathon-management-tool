@@ -1,16 +1,14 @@
 "use client";
 
 import type { AuthUser } from "aws-amplify/auth";
-import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 import FormFields from "@/components/_Amplify/LoginForm/FormFields";
-import Header from "@/components/_Amplify/LoginForm/Header";
+import PersonalFormFields from "@/components/_Amplify/LoginForm/PersonalFormFields";
 import { Authenticator } from "@aws-amplify/ui-react";
 import type { DefaultComponents } from "@aws-amplify/ui-react/dist/types/components/Authenticator/hooks/useCustomComponents/defaultComponents";
 
 const components: DefaultComponents = {
-  Header,
   SignUp: {
     FormFields,
   },
@@ -19,8 +17,14 @@ const components: DefaultComponents = {
 export default function Login({ user }: { user?: AuthUser }) {
   useEffect(() => {
     if (user) {
-      redirect("/");
+      console.log(user);
+      // User needs to complete their registration before redirecting
+      // redirect("/");
     }
   }, [user]);
-  return <Authenticator initialState="signUp" components={components} />;
+  return (
+    <Authenticator initialState="signUp" components={components}>
+      <PersonalFormFields />
+    </Authenticator>
+  );
 }

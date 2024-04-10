@@ -1,32 +1,28 @@
 import Image from "next/image";
 
-import { View, useTheme } from "@aws-amplify/ui-react";
-
 const Header = () => {
-  const { tokens } = useTheme();
-
   return (
-    <div className="relative">
-      <Image
-        className=" absolute right-[-7rem] top-1/2"
-        src={"/svgs/login/Vector_4.svg"}
-        width={117}
-        height={19}
-        alt={""}
-      />
-      <Image
-        src={"/svgs/login/Group_114.svg"}
-        className="absolute left-[-16rem] top-1/2"
-        width={276}
-        height={85}
-        alt={""}
-      />
-      <View textAlign="center" padding={tokens.space.large}>
-        <div className=" text-6xl font-bold text-white">
-          Register for Hack the Change{" "}
-          <span className="text-green-200">2024</span>
-        </div>
-      </View>
+    <div className="relative pb-4">
+      <div className="hidden md:block">
+        <Image
+          className=" absolute -top-6 right-[-130px] "
+          src={"/svgs/login/Vector_4.svg"}
+          width={117}
+          height={19}
+          alt={""}
+        />
+        <Image
+          src={"/svgs/login/Group_114.svg"}
+          className="absolute left-[-300px]"
+          width={276}
+          height={85}
+          alt={""}
+        />
+      </div>
+      <div className=" text-4xl font-bold text-white lg:text-6xl">
+        Register for Hack the Change{" "}
+        <span className="text-green-200">2024</span>
+      </div>
     </div>
   );
 };

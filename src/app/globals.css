@@ -4,6 +4,8 @@
 
 [data-amplify-authenticator] {
   --amplify-components-button-primary-background-color: #7055fd;
+  width: 100%;
+  --amplify-components-authenticator-container-width-max: 100%;
 }
 
 [data-amplify-authenticator] div {
