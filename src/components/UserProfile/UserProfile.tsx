@@ -78,21 +78,21 @@ const UserProfile = () => {
         <div className="hidden md:block">
           <Image
             src="/images/userProfile/Star_Icons.svg"
-            alt="Right Squiggly SVG"
+            alt="Star Icons"
             width={30}
             height={30}
             className="md:absolute md:left-10 md:top-[50rem]"
           />{" "}
           <Image
             src="/images/userProfile/Star_Icons.svg"
-            alt="Right Squiggly SVG"
+            alt="Star Icons"
             width={30}
             height={30}
             className="md:absolute md:right-8 md:top-[30rem]"
           />{" "}
           <Image
             src="/images/userProfile/Star_Icons.svg"
-            alt="Right Squiggly SVG"
+            alt="Star Icons"
             width={30}
             height={30}
             className="md:absolute md:right-10 md:top-[70rem]"
