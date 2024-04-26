@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+"use client";
+
 import { Inter } from "next/font/google";
 
 import "@/app/globals.css";
@@ -11,25 +12,21 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Hack the Change",
-  description: "Hack the Change management tool",
-};
 const queryClient = new QueryClient({});
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <html lang="en">
-        <body className={inter.className}>
+    <html lang="en">
+      <body className={inter.className}>
+        <QueryClientProvider client={queryClient}>
           <ConfigureAmplifyClientSide />
           {/* <UserContextProvider> */}
           <MainLayout>{children}</MainLayout>
           {/* </UserContextProvider> */}
-        </body>
-      </html>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </body>
+    </html>
   );
 }
 
