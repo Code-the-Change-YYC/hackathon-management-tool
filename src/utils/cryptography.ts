@@ -6,7 +6,6 @@ const key = "key"
 export async function createAuthenticationCode(
   message: string,
 ): Promise<string> {
-  console.log("making message userID is here " + message)
 
   const messageCode = kmac128(key, message, 256, 'customization, food ticket :)');  ;
   return messageCode;
@@ -17,15 +16,9 @@ export async function isValidAuthenticationCode(
   message: string,
   mac: string,
 ): Promise<boolean> {
-  console.log("actual userID is here " + message)
 
   const expectedMAC = await createAuthenticationCode(message);
   const isValid = expectedMAC == mac
-  console.log("the truth")
-  console.log(isValid)
-  console.log(expectedMAC)
-  console.log(mac)
-
   return isValid;
 }
 
