@@ -1,9 +1,8 @@
 /* tslint:disable */
-
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-import * as APITypes from "./API";
 
+import * as APITypes from "./API";
 type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionInput: InputType;
   __generatedSubscriptionOutput: OutputType;
@@ -14,6 +13,10 @@ export const onCreateFoodEvent = /* GraphQL */ `subscription OnCreateFoodEvent(
   $owner: String
 ) {
   onCreateFoodEvent(filter: $filter, owner: $owner) {
+    Attended {
+      nextToken
+      __typename
+    }
     Description
     End
     Groups
@@ -23,7 +26,6 @@ export const onCreateFoodEvent = /* GraphQL */ `subscription OnCreateFoodEvent(
     id
     owner
     updatedAt
-    userMealsId
     __typename
   }
 }
@@ -65,7 +67,15 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     Institution
     LastName
     Meals {
-      nextToken
+      Description
+      End
+      Groups
+      Name
+      Start
+      createdAt
+      id
+      owner
+      updatedAt
       __typename
     }
     Team {
@@ -78,6 +88,7 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
       __typename
     }
     createdAt
+    foodEventAttendedId
     id
     owner
     teamMembersId
@@ -94,6 +105,10 @@ export const onDeleteFoodEvent = /* GraphQL */ `subscription OnDeleteFoodEvent(
   $owner: String
 ) {
   onDeleteFoodEvent(filter: $filter, owner: $owner) {
+    Attended {
+      nextToken
+      __typename
+    }
     Description
     End
     Groups
@@ -103,7 +118,6 @@ export const onDeleteFoodEvent = /* GraphQL */ `subscription OnDeleteFoodEvent(
     id
     owner
     updatedAt
-    userMealsId
     __typename
   }
 }
@@ -145,7 +159,15 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     Institution
     LastName
     Meals {
-      nextToken
+      Description
+      End
+      Groups
+      Name
+      Start
+      createdAt
+      id
+      owner
+      updatedAt
       __typename
     }
     Team {
@@ -158,6 +180,7 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
       __typename
     }
     createdAt
+    foodEventAttendedId
     id
     owner
     teamMembersId
@@ -174,6 +197,10 @@ export const onUpdateFoodEvent = /* GraphQL */ `subscription OnUpdateFoodEvent(
   $owner: String
 ) {
   onUpdateFoodEvent(filter: $filter, owner: $owner) {
+    Attended {
+      nextToken
+      __typename
+    }
     Description
     End
     Groups
@@ -183,7 +210,6 @@ export const onUpdateFoodEvent = /* GraphQL */ `subscription OnUpdateFoodEvent(
     id
     owner
     updatedAt
-    userMealsId
     __typename
   }
 }
@@ -225,7 +251,15 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     Institution
     LastName
     Meals {
-      nextToken
+      Description
+      End
+      Groups
+      Name
+      Start
+      createdAt
+      id
+      owner
+      updatedAt
       __typename
     }
     Team {
@@ -238,6 +272,7 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
       __typename
     }
     createdAt
+    foodEventAttendedId
     id
     owner
     teamMembersId

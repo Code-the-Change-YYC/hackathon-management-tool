@@ -1,10 +1,13 @@
 // app/food/page.tsx
-import Verification from "@/components/Food/Verification";
+import Verification from "@/components/Food/TicketVerificationSubmit";
 import client from "@/components/_Amplify/AmplifyBackendClient";
-import * as mutations from "@/graphql/mutations";
+import * as mutations from "../../../mutations";
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
+import { createAuthenticationCode, createUserIDAndCode } from "@/utils/cryptography";
 
 export default async function FoodPage() {
+
+  //get the code
   let userVerificationCode = null;
 
   async function currentAuthenticatedUser() {
@@ -18,19 +21,10 @@ export default async function FoodPage() {
         });
 
       if (user) {
-        const response = await client.graphql({
-          query: mutations.GetFoodTicket,
-          variables: {
-            userID: user.userId,
-          },
-        });
-        if (response.errors) {
-          console.log(response.errors);
-        }
-        const value = response.data.GetFoodTicket?.value;
-        if (value) {
-          userVerificationCode = value;
-        }
+        const userID = user.userId;
+
+        const mac = await createAuthenticationCode(userID);
+        userVerificationCode = createUserIDAndCode(userID, mac);
       }
     } catch (err) {
       console.log(err);

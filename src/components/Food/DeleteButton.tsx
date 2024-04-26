@@ -2,9 +2,8 @@
 
 import { deleteFoodEvent } from "@/app/admin/food-tickets/actions";
 
-export default function DeleteButton({ eventId }) {
+export default function DeleteButton({ eventId }: { eventId: string }) {
   const handleDelete = async () => {
-    // Call your delete function here
     await deleteFoodEvent(eventId);
   };
 

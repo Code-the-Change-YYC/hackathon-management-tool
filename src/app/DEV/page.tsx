@@ -1,5 +1,5 @@
 import client from "@/components/_Amplify/AmplifyBackendClient";
-import * as mutations from "@/graphql/mutations";
+import * as mutations from "../../../mutations";
 
 function Dev() {
   async function callDemoFunction() {

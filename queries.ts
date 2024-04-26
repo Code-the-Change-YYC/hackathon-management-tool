@@ -1,9 +1,8 @@
 /* tslint:disable */
-
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-import * as APITypes from "./API";
 
+import * as APITypes from "./API";
 type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryInput: InputType;
   __generatedQueryOutput: OutputType;
@@ -11,6 +10,10 @@ type GeneratedQuery<InputType, OutputType> = string & {
 
 export const getFoodEvent = /* GraphQL */ `query GetFoodEvent($id: ID!) {
   getFoodEvent(id: $id) {
+    Attended {
+      nextToken
+      __typename
+    }
     Description
     End
     Groups
@@ -20,7 +23,6 @@ export const getFoodEvent = /* GraphQL */ `query GetFoodEvent($id: ID!) {
     id
     owner
     updatedAt
-    userMealsId
     __typename
   }
 }
@@ -53,7 +55,15 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     Institution
     LastName
     Meals {
-      nextToken
+      Description
+      End
+      Groups
+      Name
+      Start
+      createdAt
+      id
+      owner
+      updatedAt
       __typename
     }
     Team {
@@ -66,6 +76,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
       __typename
     }
     createdAt
+    foodEventAttendedId
     id
     owner
     teamMembersId
@@ -98,7 +109,6 @@ export const listFoodEvents = /* GraphQL */ `query ListFoodEvents(
       id
       owner
       updatedAt
-      userMealsId
       __typename
     }
     nextToken
@@ -159,6 +169,7 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       Institution
       LastName
       createdAt
+      foodEventAttendedId
       id
       owner
       teamMembersId
