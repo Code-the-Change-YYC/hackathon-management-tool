@@ -9,6 +9,7 @@ import {
 import { getUserTimeSlot } from "@/utils/food";
 
 import * as mutations from "../../../mutations";
+import { getLocalCalgaryTime } from "@/utils/date";
 
 export default async function FoodPage() {
   //get the code
@@ -42,13 +43,14 @@ export default async function FoodPage() {
   async function getUserNextFoodEvent() {
     try {
       const foodEvents = await client.models.FoodEvent.list();
-      const currentTime = new Date(); // Current local time
+      const currentTime = getLocalCalgaryTime(); // Current local time
 
       // Sort the events by their start time
       const sortedEvents = foodEvents.data.sort(
         (a, b) => new Date(a.Start) - new Date(b.Start),
       );
 
+      console.log(currentTime)
       // Find the event that has already started, between start and end times
       let nextEvent = sortedEvents.find(
         (event) =>

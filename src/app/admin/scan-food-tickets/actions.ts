@@ -5,6 +5,7 @@ import {
   getUserIDAndCode,
   isValidAuthenticationCode,
 } from "@/utils/cryptography";
+import { getLocalCalgaryTime } from "@/utils/date";
 import {
   getGroupNumber,
   getGroupNumberFromTime,
@@ -50,7 +51,7 @@ export async function verifyFoodTicket(userCode: string, eventID: string) {
     } else {
       //check if the user is in the right time slot, can still eat if not in the right timeslot
       let expectedGroupNumber = getGroupNumberFromTime(
-        new Date(),
+        getLocalCalgaryTime(),
         foodEvent.Groups,
         foodEvent?.Start,
         foodEvent?.End,
