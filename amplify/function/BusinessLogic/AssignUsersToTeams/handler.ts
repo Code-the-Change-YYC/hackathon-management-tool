@@ -3,7 +3,7 @@ import { generateClient } from "aws-amplify/data";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
 import type { Schema } from "../../../data/resource";
-import { modelIntrospection } from "./amplifyconfiguration.json";
+import { modelIntrospection } from "../../amplifyconfiguration.json";
 
 const MAX_TEAM_MEMBERS = 6;
 Amplify.configure(
@@ -50,7 +50,6 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, context) => {
-  await new Promise((resolve) => setTimeout(resolve, 200));
   console.log("Context: ", context);
   console.log(event);
 
@@ -86,7 +85,7 @@ export const handler: AppSyncResolverHandler<
 
   await dataClient.models.User.update({
     id: event.arguments.userId,
-    Team: team.data,
+    TeamId: team.data.id,
   });
 
   if (team.data.Members.length > MAX_TEAM_MEMBERS) {

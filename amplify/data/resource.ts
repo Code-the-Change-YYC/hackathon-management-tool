@@ -1,12 +1,7 @@
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
-import {
-  type ClientSchema,
-  a,
-  defineData,
-  defineFunction,
-} from "@aws-amplify/backend";
+import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -15,9 +10,6 @@ specify that owners, authenticated via your Auth resource can "create",
 "read", "update", and "delete" their own records. Public users,
 authenticated via an API key, can only "read" records.
 =========================================================================*/
-const functionWithDataAccess = defineFunction({
-  entry: "../functions/data-access.ts",
-});
 
 const schema = a
   .schema({
@@ -30,16 +22,17 @@ const schema = a
         Institution: a.string(),
         Allergies: a.string(),
         CheckedIn: a.boolean(),
-        Team: a.belongsTo("Team"),
+        TeamId: a.id(),
+        Team: a.belongsTo("Team", "TeamId"),
       })
-      .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+      .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
     Team: a
       .model({
         Name: a.string(),
         id: a.string().required(),
-        Members: a.hasMany("User"),
+        Members: a.hasMany("User", "TeamId"),
       })
-      .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+      .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
     GenericFunctionResponse: a.customType({
       body: a.json(),
       statusCode: a.integer(),
@@ -58,7 +51,7 @@ const schema = a
       // return type of the query
       .returns(a.ref("GenericFunctionResponse"))
       // allow all users to call this api for now
-      .authorization([a.allow.public()])
+      .authorization((allow) => [allow.guest()])
       .function("demoFunctionKey"),
     AssignUsersToTeams: a
       .mutation()
@@ -67,10 +60,12 @@ const schema = a
         teamId: a.string(),
       })
       .returns(a.ref("GenericFunctionResponse"))
-      .authorization([a.allow.public()])
-      .function("assignUsersToTeamsKey"),
+      .authorization((allow) => [allow.guest()])
+      .handler(a.handler.function("assignUsersToTeamsKey")),
   })
-  .authorization(allow => [allow.resource(functionWithDataAccess)]);
+  .authorization((allow) => [
+    allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
+  ]);
 
 export type Schema = ClientSchema<typeof schema>;
 

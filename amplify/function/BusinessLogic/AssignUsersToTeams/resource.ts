@@ -1,4 +1,7 @@
-// amplify/functions/AssignUsersToTeams/resource.ts
 import { defineFunction } from "@aws-amplify/backend";
 
-export const AssignUsersToTeams = defineFunction({});
+export const AssignUsersToTeams = defineFunction({
+  entry: "./handler.ts",
+  runtime: 20,
+  name: "AssignUsersToTeams",
+});
