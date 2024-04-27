@@ -70,7 +70,7 @@ const schema = a
       .authorization([a.allow.public()])
       .function("assignUsersToTeamsKey"),
   })
-  .authorization((allow: any) => [allow.resource(functionWithDataAccess)]);
+  .authorization(allow => [allow.resource(functionWithDataAccess)]);
 
 export type Schema = ClientSchema<typeof schema>;
 
