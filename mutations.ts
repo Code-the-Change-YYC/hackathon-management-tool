@@ -1,14 +1,16 @@
 /* tslint:disable */
+
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
 import * as APITypes from "./API";
+
 type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationInput: InputType;
   __generatedMutationOutput: OutputType;
 };
 
-export const DemoFunction = /* GraphQL */ `mutation DemoFunction($content: String) {
+export const DemoFunction =
+  /* GraphQL */ `mutation DemoFunction($content: String) {
   DemoFunction(content: $content) {
     body
     headers
@@ -17,10 +19,11 @@ export const DemoFunction = /* GraphQL */ `mutation DemoFunction($content: Strin
   }
 }
 ` as GeneratedMutation<
-  APITypes.DemoFunctionMutationVariables,
-  APITypes.DemoFunctionMutation
->;
-export const GetFoodTicket = /* GraphQL */ `mutation GetFoodTicket($userID: String) {
+    APITypes.DemoFunctionMutationVariables,
+    APITypes.DemoFunctionMutation
+  >;
+export const GetFoodTicket =
+  /* GraphQL */ `mutation GetFoodTicket($userID: String) {
   GetFoodTicket(userID: $userID) {
     headers
     statusCode
@@ -29,10 +32,11 @@ export const GetFoodTicket = /* GraphQL */ `mutation GetFoodTicket($userID: Stri
   }
 }
 ` as GeneratedMutation<
-  APITypes.GetFoodTicketMutationVariables,
-  APITypes.GetFoodTicketMutation
->;
-export const VerifyFoodTicket = /* GraphQL */ `mutation VerifyFoodTicket($userCode: String) {
+    APITypes.GetFoodTicketMutationVariables,
+    APITypes.GetFoodTicketMutation
+  >;
+export const VerifyFoodTicket =
+  /* GraphQL */ `mutation VerifyFoodTicket($userCode: String) {
   VerifyFoodTicket(userCode: $userCode) {
     headers
     statusCode
@@ -41,9 +45,9 @@ export const VerifyFoodTicket = /* GraphQL */ `mutation VerifyFoodTicket($userCo
   }
 }
 ` as GeneratedMutation<
-  APITypes.VerifyFoodTicketMutationVariables,
-  APITypes.VerifyFoodTicketMutation
->;
+    APITypes.VerifyFoodTicketMutationVariables,
+    APITypes.VerifyFoodTicketMutation
+  >;
 export const createFoodEvent = /* GraphQL */ `mutation CreateFoodEvent(
   $condition: ModelFoodEventConditionInput
   $input: CreateFoodEventInput!

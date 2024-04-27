@@ -1,24 +1,26 @@
 import { kmac128 } from "js-sha3";
 
 //TODO: replace with actual key in future
-const key = "key"
+const key = "key";
 
 export async function createAuthenticationCode(
   message: string,
 ): Promise<string> {
-
-  const messageCode = kmac128(key, message, 256, 'customization, food ticket :)');  ;
+  const messageCode = kmac128(
+    key,
+    message,
+    256,
+    "customization, food ticket :)",
+  );
   return messageCode;
 }
-
 
 export async function isValidAuthenticationCode(
   message: string,
   mac: string,
 ): Promise<boolean> {
-
   const expectedMAC = await createAuthenticationCode(message);
-  const isValid = expectedMAC == mac
+  const isValid = expectedMAC == mac;
   return isValid;
 }
 

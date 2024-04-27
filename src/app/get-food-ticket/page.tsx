@@ -1,13 +1,16 @@
 // app/food/page.tsx
 import Verification from "@/components/Food/TicketVerificationSubmit";
 import client from "@/components/_Amplify/AmplifyBackendClient";
-import * as mutations from "../../../mutations";
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
-import { createAuthenticationCode, createUserIDAndCode } from "@/utils/cryptography";
+import {
+  createAuthenticationCode,
+  createUserIDAndCode,
+} from "@/utils/cryptography";
 import { getUserTimeSlot } from "@/utils/food";
 
-export default async function FoodPage() {
+import * as mutations from "../../../mutations";
 
+export default async function FoodPage() {
   //get the code
   let userVerificationCode = null;
   let eventName = null;
@@ -40,25 +43,41 @@ export default async function FoodPage() {
     try {
       const foodEvents = await client.models.FoodEvent.list();
       const currentTime = new Date(); // Current local time
-  
-      // Sort the events by their start time
-      const sortedEvents = foodEvents.data.sort((a, b) => new Date(a.Start) - new Date(b.Start));
-  
-      // Find the next event that is scheduled to start after the current time
-      const nextEvent = sortedEvents.find(event => new Date(event.Start) > currentTime);
-  
-      if (nextEvent) {
-        console.log(`Next event: ${nextEvent.Name} - ${nextEvent.Description}`);
-        
-        eventName = nextEvent.Name
-        eventDescription = nextEvent.Description
 
-        if (userID)
-        {   
-          timeSlot = getUserTimeSlot(userID, nextEvent.id, nextEvent?.Groups, nextEvent.Start, nextEvent.End) 
+      // Sort the events by their start time
+      const sortedEvents = foodEvents.data.sort(
+        (a, b) => new Date(a.Start) - new Date(b.Start),
+      );
+
+      // Find the event that has already started, between start and end times
+      let nextEvent = sortedEvents.find(
+        (event) =>
+          currentTime >= new Date(event.Start) &&
+          currentTime <= new Date(event.End),
+      );
+
+      // find the next event if there is event as of now
+      if (nextEvent == undefined) {
+        nextEvent = sortedEvents.find(
+          (event) => new Date(event.Start) > currentTime,
+        );
+      }
+
+      if (nextEvent) {
+        eventName = nextEvent.Name;
+        eventDescription = nextEvent.Description;
+
+        if (userID) {
+          timeSlot = getUserTimeSlot(
+            userID,
+            nextEvent.id,
+            nextEvent?.Groups,
+            nextEvent.Start,
+            nextEvent.End,
+          );
         }
       } else {
-        console.log('No upcoming food events.');
+        console.log("No upcoming food events.");
       }
     } catch (err) {
       console.log(err);
@@ -69,10 +88,14 @@ export default async function FoodPage() {
   await getUserNextFoodEvent();
 
   return (
-    <div className='mx-auto text-center'>
-      <h1>{eventName}</h1>
-      <p>{eventDescription}</p>
-      <p>your time slot for food is: {timeSlot}</p>
+    <div className="mx-auto text-center">
+      {eventName && (
+        <>
+          <h1>{eventName}</h1>
+          <p>{eventDescription}</p>
+          <p>your time slot for food is: {timeSlot}</p>
+        </>
+      )}
       <br></br>
       <a> {userVerificationCode}</a>
     </div>
