@@ -6,10 +6,10 @@ import {
   createAuthenticationCode,
   createUserIDAndCode,
 } from "@/utils/cryptography";
+import { getLocalCalgaryTime } from "@/utils/date";
 import { getUserTimeSlot } from "@/utils/food";
 
 import * as mutations from "../../../mutations";
-import { getLocalCalgaryTime } from "@/utils/date";
 
 export default async function FoodPage() {
   //get the code
@@ -50,7 +50,7 @@ export default async function FoodPage() {
         (a, b) => new Date(a.Start) - new Date(b.Start),
       );
 
-      console.log(currentTime)
+      console.log(currentTime);
       // Find the event that has already started, between start and end times
       let nextEvent = sortedEvents.find(
         (event) =>

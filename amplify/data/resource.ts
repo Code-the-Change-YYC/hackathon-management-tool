@@ -15,20 +15,22 @@ const schema = a.schema({
       FirstName: a.string(),
       LastName: a.string(),
       Email: a.string(),
-      Meals: a.belongsTo("FoodEvent"),
+      MealId: a.id(),
+      Meals: a.belongsTo("FoodEvent", "MealId"),
       Institution: a.string(),
       Allergies: a.string(),
       CheckedIn: a.boolean(),
-      Team: a.belongsTo("Team"),
+      TeamId: a.id(),
+      Team: a.belongsTo("Team", "TeamId"),
     })
-    .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+    .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
   Team: a
     .model({
       Name: a.string(),
       Code: a.string(),
-      Members: a.hasMany("User"),
+      Members: a.hasMany("User", "TeamId"),
     })
-    .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+    .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
 
   FoodEvent: a
     .model({
@@ -37,9 +39,9 @@ const schema = a.schema({
       Start: a.datetime(),
       End: a.datetime(),
       Groups: a.integer(),
-      Attended: a.hasMany("User"),
+      Attended: a.hasMany("User", "MealId"),
     })
-    .authorization([a.allow.owner(), a.allow.public()]),
+    .authorization((allow) => [allow.owner(), allow.guest()]),
 
   GenericFunctionResponse: a.customType({
     body: a.json(),
@@ -59,7 +61,7 @@ const schema = a.schema({
     // return type of the query
     .returns(a.ref("GenericFunctionResponse"))
     // allow all users to call this api for now
-    .authorization([a.allow.public()])
+    .authorization((allow) => [allow.guest()])
     .function("demoFunctionKey"),
 });
 

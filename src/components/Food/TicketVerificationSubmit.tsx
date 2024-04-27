@@ -15,7 +15,7 @@ export default function TicketVerification() {
     // Handle the submission logic here
 
     console.log(await verifyFoodTicket(inputUserCode, inputEventIDValue));
-    let { canEat, description } = await verifyFoodTicket(
+    const { canEat, description } = await verifyFoodTicket(
       inputUserCode,
       inputEventIDValue,
     );

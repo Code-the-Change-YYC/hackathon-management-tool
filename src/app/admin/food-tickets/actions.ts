@@ -1,6 +1,6 @@
 "use server";
 
-import { FoodEventCreateFormInputValues } from "@/../ui-components/FoodEventCreateForm";
+import type { FoodEventCreateFormInputValues } from "@/../ui-components/FoodEventCreateForm";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
 export async function createFoodEvent(fields: FoodEventCreateFormInputValues) {
