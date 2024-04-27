@@ -21,12 +21,14 @@ const config: Config = {
         blackish: "#222222",
         "pastel-pink": "#FFD2DC",
         "dark-pink": "#FF4D6F",
+        "pastel-green": "#BAFBE4",
       },
       borderRadius: {
         "20": "20px",
       },
     },
   },
+
   plugins: [],
 };
 export default config;
