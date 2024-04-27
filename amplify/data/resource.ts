@@ -1,7 +1,12 @@
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import {
+  type ClientSchema,
+  a,
+  defineData,
+  defineFunction,
+} from "@aws-amplify/backend";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -10,56 +15,62 @@ specify that owners, authenticated via your Auth resource can "create",
 "read", "update", and "delete" their own records. Public users,
 authenticated via an API key, can only "read" records.
 =========================================================================*/
-const schema = a.schema({
-  User: a
-    .model({
-      FirstName: a.string(),
-      LastName: a.string(),
-      Email: a.string(),
-      Meals: a.boolean(),
-      Institution: a.string(),
-      Allergies: a.string(),
-      CheckedIn: a.boolean(),
-      Team: a.belongsTo("Team"),
-    })
-    .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
-  Team: a
-    .model({
-      Name: a.string(),
-      id: a.string().required(),
-      Members: a.hasMany("User"),
-    })
-    .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
-  GenericFunctionResponse: a.customType({
-    body: a.json(),
-    statusCode: a.integer(),
-    headers: a.json(),
-  }),
-
-  /**
-   * FUNCTION-RELATED APPSYNC RESOLVERS
-   */
-  DemoFunction: a
-    .mutation() // this should be set to .query for functions that only read data
-    // arguments that this query accepts
-    .arguments({
-      content: a.string(),
-    })
-    // return type of the query
-    .returns(a.ref("GenericFunctionResponse"))
-    // allow all users to call this api for now
-    .authorization([a.allow.public()])
-    .function("demoFunctionKey"),
-  AssignUsersToTeams: a
-    .mutation()
-    .arguments({
-      userId: a.string(),
-      teamId: a.string(),
-    })
-    .returns(a.ref("GenericFunctionResponse"))
-    .authorization([a.allow.public()])
-    .function("assignUsersToTeamsKey"),
+const functionWithDataAccess = defineFunction({
+  entry: "../functions/data-access.ts",
 });
+
+const schema = a
+  .schema({
+    User: a
+      .model({
+        FirstName: a.string(),
+        LastName: a.string(),
+        Email: a.string(),
+        Meals: a.boolean(),
+        Institution: a.string(),
+        Allergies: a.string(),
+        CheckedIn: a.boolean(),
+        Team: a.belongsTo("Team"),
+      })
+      .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+    Team: a
+      .model({
+        Name: a.string(),
+        id: a.string().required(),
+        Members: a.hasMany("User"),
+      })
+      .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+    GenericFunctionResponse: a.customType({
+      body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
+
+    /**
+     * FUNCTION-RELATED APPSYNC RESOLVERS
+     */
+    DemoFunction: a
+      .mutation() // this should be set to .query for functions that only read data
+      // arguments that this query accepts
+      .arguments({
+        content: a.string(),
+      })
+      // return type of the query
+      .returns(a.ref("GenericFunctionResponse"))
+      // allow all users to call this api for now
+      .authorization([a.allow.public()])
+      .function("demoFunctionKey"),
+    AssignUsersToTeams: a
+      .mutation()
+      .arguments({
+        userId: a.string(),
+        teamId: a.string(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization([a.allow.public()])
+      .function("assignUsersToTeamsKey"),
+  })
+  .authorization((allow: any) => [allow.resource(functionWithDataAccess)]);
 
 export type Schema = ClientSchema<typeof schema>;
 
@@ -86,7 +97,7 @@ Go to your frontend source code. From your client-side code, generate a
 Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
 WORK IN THE FRONTEND CODE FILE.)
 
-Using JavaScript or Next.js React Server Components, Middleware, Server 
+Using JavaScript or Next.js React Server Components, Middleware, Server
 Actions or Pages Router? Review how to generate Data clients for those use
 cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
 =========================================================================*/
