@@ -19,16 +19,23 @@ const schema = a.schema({
       Institution: a.string(),
       Allergies: a.string(),
       CheckedIn: a.boolean(),
-      Team: a.belongsTo("Team"),
+      TeamId: a.string(),
+      Team: a.belongsTo("Team", "TeamId"),
     })
-    .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+    .authorization((allow) => [
+      allow.authenticated(),
+      allow.guest().to(["read"]),
+    ]),
   Team: a
     .model({
       Name: a.string(),
       Code: a.string(),
-      Members: a.hasMany("User"),
+      Members: a.hasMany("User", "TeamId"),
     })
-    .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+    .authorization((allow) => [
+      allow.authenticated(),
+      allow.guest().to(["read"]),
+    ]),
   GenericFunctionResponse: a.customType({
     body: a.json(),
     statusCode: a.integer(),
@@ -47,8 +54,8 @@ const schema = a.schema({
     // return type of the query
     .returns(a.ref("GenericFunctionResponse"))
     // allow all users to call this api for now
-    .authorization([a.allow.public()])
-    .function("demoFunctionKey"),
+    .authorization((allow) => [allow.guest()])
+    .handler(a.handler.function(DemoFunction)),
 });
 
 export type Schema = ClientSchema<typeof schema>;
