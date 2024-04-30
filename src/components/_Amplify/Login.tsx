@@ -8,9 +8,8 @@ import { useEffect } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import FormFields from "@/components/_Amplify/LoginForm/FormFields";
-import PersonalFormFields from "@/components/_Amplify/LoginForm/PersonalFormFields";
 import type { AuthenticatorProps } from "@aws-amplify/ui-react";
-import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
+import { Authenticator } from "@aws-amplify/ui-react";
 import type { DefaultComponents } from "@aws-amplify/ui-react/dist/types/components/Authenticator/hooks/useCustomComponents/defaultComponents";
 import { type AuthContext } from "@aws-amplify/ui/dist/types";
 
@@ -18,6 +17,9 @@ const client = generateClient<Schema>(); // use this Data client for CRUDL reque
 
 const components: DefaultComponents = {
   SignUp: {
+    // TODO: Move the header fropm the FormFields component here.  (ideally a seperate file)
+    Header: () => <></>,
+    // TODO: This should only only include the buttons, I think. What do you think?
     FormFields,
   },
 };
@@ -26,10 +28,8 @@ const services: AuthContext["services"] = {
   async handleSignUp(formData) {
     const { username, password, options } = formData;
     console.log("User Attributes:", options?.userAttributes);
-    // custom username
-    // username = username.toLowerCase();
-    // attributes.email = attributes.email.toLowerCase();
-    const SignUpStatus = signUp({
+
+    const signUpReturn = await signUp({
       username,
       password,
       options: {
@@ -37,8 +37,15 @@ const services: AuthContext["services"] = {
         autoSignIn: true,
       },
     });
-    if (SignUpStatus) {
+    if (signUpReturn) {
+      console.log(options?.userAttributes);
+      // Do Create User call here
+      // TODO: if the user is created successfully, return signUpReturn
+      // TODO: else throw an error
+
+      return signUpReturn;
     }
+    throw new Error("Sign up failed");
   },
 };
 const formFields: AuthenticatorProps["formFields"] = {

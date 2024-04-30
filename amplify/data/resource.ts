@@ -68,9 +68,9 @@ export const data = defineData({
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
     },
-    // lambdaAuthorizationMode: {
-    // function: DemoAuthFunction,
-    // },
+    lambdaAuthorizationMode: {
+      function: DemoAuthFunction,
+    },
   },
   functions: {
     // demoFunctionKey: DemoFunction,

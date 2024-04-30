@@ -6,9 +6,11 @@ import {
   Input,
   Label,
   SelectField,
+  useAuthenticator,
 } from "@aws-amplify/ui-react";
 
 const FormFields = () => {
+  const { toSignUp } = useAuthenticator();
   const institutions = [
     "University of Calgary",
     "Mount Royal University",
@@ -90,17 +92,20 @@ const FormFields = () => {
           <option value={"no"}>No</option>
           <option value={"unsure"}>Unsure</option>
         </SelectField> */}
-        <Flex direction="column" gap="small">
+        {/* <Flex direction="column" gap="small">
           <Label htmlFor="allergies">
             * If you wanted provided food, please indicate any allergies:
           </Label>
           <Input id="allergies" name="allergies" placeholder="e.g. peanuts" />
-        </Flex>
+        </Flex> */}
         <div className=" flex w-full justify-end ">
           <button className=" rounded-full border-4 border-white bg-awesomer-purple px-4 py-1 font-semibold text-white shadow-lg hover:opacity-90 md:px-8 md:py-2">
             Cancel
           </button>
-          <button className=" rounded-full border-4 border-white bg-awesomer-purple px-4 py-1 font-semibold text-white  shadow-lg hover:opacity-90 md:px-8 md:py-2">
+          <button
+            onClick={() => toSignUp()}
+            className=" rounded-full border-4 border-white bg-awesomer-purple px-4 py-1 font-semibold text-white  shadow-lg hover:opacity-90 md:px-8 md:py-2"
+          >
             Sign up
           </button>
         </div>

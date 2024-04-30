@@ -28,6 +28,7 @@
     "api_key": "da2-b5p6j4wta5hjvcaknwtezs4r34",
     "default_authorization_type": "API_KEY",
     "authorization_types": [
+      "AWS_LAMBDA",
       "AMAZON_COGNITO_USER_POOLS",
       "AWS_IAM"
     ],
