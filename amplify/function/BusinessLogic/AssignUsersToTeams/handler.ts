@@ -3,14 +3,14 @@ import { generateClient } from "aws-amplify/data";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
 import type { Schema } from "../../../data/resource";
-import { modelIntrospection } from "../../amplifyconfiguration.json";
+import { modelIntrospection } from "./amplifyconfiguration.json";
 
 const MAX_TEAM_MEMBERS = 6;
 Amplify.configure(
   {
     API: {
       GraphQL: {
-        endpoint: process.env.amplifyData_GRAPHQL_ENDPOINT as string, // replace with your defineData name
+        endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string, // replace with your defineData name
         region: process.env.AWS_REGION,
         defaultAuthMode: "iam",
         modelIntrospection: modelIntrospection as never,
@@ -36,7 +36,9 @@ Amplify.configure(
   },
 );
 
-const dataClient = generateClient<Schema>();
+const dataClient = generateClient<Schema>({
+  authMode: "iam",
+});
 
 type ResolverArgs = { userId: string; teamId: string };
 
@@ -49,16 +51,11 @@ type ResolverResult = {
 export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
-> = async (event, context) => {
-  console.log("Context: ", context);
-  console.log(event);
-
-  const team = await dataClient.models.Team.get({ id: event.arguments.teamId });
-  console.log("Got team");
-  const user = await dataClient.models.User.get({ id: event.arguments.userId });
-  console.log("Got user");
-
-  if (!team) {
+> = async (event, _) => {
+  let team;
+  try {
+    team = await dataClient.models.Team.get({ id: event.arguments.teamId });
+  } catch (err) {
     return {
       body: { value: "Error: Team does not exist" },
       statusCode: 404,
@@ -66,7 +63,9 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  if (!user) {
+  const user = await dataClient.models.User.get({ id: event.arguments.userId });
+
+  if (user.data.id == null) {
     return {
       body: { value: "Error: User does not exist" },
       statusCode: 404,
@@ -74,7 +73,6 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  console.log(user);
   if (await user.data.Team()) {
     return {
       body: { value: "Error: User is already part of a team" },
@@ -88,7 +86,9 @@ export const handler: AppSyncResolverHandler<
     TeamId: team.data.id,
   });
 
-  if (team.data.Members.length > MAX_TEAM_MEMBERS) {
+  const { data: members } = await team.data.Members();
+
+  if (members.length >= MAX_TEAM_MEMBERS) {
     return {
       body: { value: "Error: Team is full" },
       statusCode: 400,
@@ -97,7 +97,7 @@ export const handler: AppSyncResolverHandler<
   }
 
   return {
-    body: { value: `Echoing content:` },
+    body: { value: `Success` },
     statusCode: 200,
     headers: { "Content-Type": "application/json" },
   };
