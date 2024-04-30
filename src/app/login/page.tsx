@@ -1,8 +1,8 @@
 // app/login/page.tsx
 import Image from "next/image";
 
-import Login from "@/components/_Amplify/Login";
-import Header from "@/components/_Amplify/LoginForm/Header";
+import Header from "@/components/LoginForm/Header";
+import Login from "@/components/LoginForm/Login";
 
 export default function LoginPage() {
   return (

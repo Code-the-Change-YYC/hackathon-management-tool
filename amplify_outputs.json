@@ -5,7 +5,9 @@
     "user_pool_client_id": "3i3a24vvi7hb7um562er9jd752",
     "identity_pool_id": "ca-central-1:51862f27-d927-4d32-95d2-f5af1ae8c89d",
     "standard_required_attributes": [
-      "email"
+      "email",
+      "given_name",
+      "family_name"
     ],
     "username_attributes": [
       "email"
