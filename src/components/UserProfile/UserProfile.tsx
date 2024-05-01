@@ -17,17 +17,6 @@ const TEXT_COLOR_BLACK = "text-black"; // CSS class for black text color
 
 const FORM_STYLES = "md:mx-10 flex flex-col";
 
-// This can be eliminated since we get it from the backend Schema :)
-// type FormState = {
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   institution: string;
-//   wantMeals: boolean;
-//   allergies: string;
-//   checkInStatus: boolean;
-// };
-
 const client = generateClient<Schema>();
 
 const UserProfile = () => {
@@ -36,32 +25,32 @@ const UserProfile = () => {
     initialData: {} as Schema["User"],
     initialDataUpdatedAt: 0,
     queryKey: ["User", 123],
-    queryFn: async () => (await client.models.User.get({ id: "123" })).data,
+    queryFn: async () =>
+      (
+        await client.models.User.get({
+          id: "123",
+        })
+      ).data,
   });
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [showCancelSave, setShowCancelSave] = useState<boolean>(false);
-
-  const [wantMeals, setWantMeals] = useState<boolean>(true);
-
   const [formState, setFormState] = useState<Schema["User"]>(data);
 
   useEffect(() => {
-    setFormState((prevState) => ({ ...prevState, wantMeals: wantMeals }));
-  }, [wantMeals]);
+    setFormState(data);
+  }, [data, setFormState]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormState((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const createPost = () => {
-    console.log(formState);
-  };
-
   const handleEditClick = () => {
-    setIsEditing((previsEditing) => !previsEditing);
-    setShowCancelSave(true);
+    if (!isEditing) {
+      setIsEditing((previsEditing) => !previsEditing);
+      setShowCancelSave(true);
+    }
   };
 
   const handleCancelClick = () => {
@@ -82,7 +71,9 @@ const UserProfile = () => {
     <div>
       {" "}
       {isFetching ? (
-        <div>Loading...</div>
+        <div className="flex h-screen w-full items-center justify-center bg-[#FFD7C5]">
+          <h1 className="text-2xl">Loading...</h1>
+        </div>
       ) : (
         <div className="flex w-full flex-col bg-[#FFD7C5]">
           <div className="hidden md:block">
@@ -117,18 +108,19 @@ const UserProfile = () => {
               </button>
             </div>
 
-            <form className={FORM_STYLES} onSubmit={createPost}>
+            <form className={FORM_STYLES} onSubmit={handleSaveClick}>
               <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5">
                 <div className="flex flex-col">
                   <label>First Name</label>
                   <input
                     className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                     type="text"
-                    placeholder="First Name"
+                    placeholder={formState.FirstName ?? "First Name"}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       onChange(e)
                     }
-                    name="firstName"
+                    value={formState.FirstName ?? ""}
+                    name="FirstName"
                     disabled={!isEditing} // Disabled when not in edit mode
                   />
                 </div>
@@ -137,11 +129,12 @@ const UserProfile = () => {
                   <input
                     className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                     type="text"
-                    placeholder="Last Name"
+                    placeholder={formState.LastName ?? "Last Name"}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       onChange(e)
                     }
-                    name="lastName"
+                    name="LastName"
+                    value={formState.LastName ?? ""}
                     disabled={!isEditing} // Disabled when not in edit mode
                   />
                 </div>
@@ -150,12 +143,13 @@ const UserProfile = () => {
               <input
                 className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                 type="text"
-                placeholder="Email"
+                placeholder={formState.Email ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onChange(e)
                 }
-                name="email"
-                disabled={!isEditing} // Disabled when not in edit mode
+                value={formState.Email ?? ""}
+                name="Email"
+                disabled // Should not be able to edit email
               />
               <label>Password</label>
               <input
@@ -168,38 +162,45 @@ const UserProfile = () => {
               <input
                 className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                 type="text"
-                placeholder="Institution"
+                placeholder={
+                  formState.Institution ?? "e.g. University of Calgary"
+                }
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onChange(e)
                 }
-                name="institution"
+                value={formState.Institution ?? ""}
+                name="Institution"
                 disabled={!isEditing} // Disabled when not in edit mode
               />
               <label>Do you want provided meals at the hackathon?</label>
               <select
                 className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
-                value={wantMeals ? "Yes" : "No"}
+                value={formState.Meals ? "Yes" : "No"}
                 onChange={(e) =>
-                  e.target.value === "Yes"
-                    ? setWantMeals(true)
-                    : setWantMeals(false)
+                  setFormState((prevState) => ({
+                    ...prevState,
+                    Meals: e.target.value === "Yes",
+                  }))
                 }
                 disabled={!isEditing} // Disabled when not in edit mode
               >
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
-              {wantMeals && (
+              {formState.Meals && (
                 <>
                   <label>Do you have any allergies?</label>
                   <input
                     className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                     type="text"
-                    placeholder="e.g. Dairy, Nuts, etc."
+                    placeholder={
+                      formState.Allergies ?? "e.g. Dairy, Nuts, etc."
+                    }
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       onChange(e)
                     }
-                    name="allergies"
+                    value={formState.Allergies ?? ""}
+                    name="Allergies"
                     disabled={!isEditing} // Disabled when not in edit mode
                   />
                 </>
@@ -229,11 +230,7 @@ const UserProfile = () => {
                       Cancel
                     </button>
 
-                    <button
-                      type="submit"
-                      className={BUTTON_STYLES}
-                      onClick={handleSaveClick}
-                    >
+                    <button type="submit" className={BUTTON_STYLES}>
                       Save
                     </button>
                   </>

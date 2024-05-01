@@ -21,14 +21,20 @@ const schema = a.schema({
       CheckedIn: a.boolean(),
       Team: a.belongsTo("Team"),
     })
-    .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+    .authorization([
+      a.allow.private().to(["read", "create", "update"]),
+      a.allow.public().to(["read"]),
+    ]),
   Team: a
     .model({
       Name: a.string(),
       Code: a.string(),
       Members: a.hasMany("User"),
     })
-    .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+    .authorization([
+      a.allow.private().to(["read"]),
+      a.allow.public().to(["read"]),
+    ]),
   GenericFunctionResponse: a.customType({
     body: a.json(),
     statusCode: a.integer(),
@@ -56,7 +62,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
+    defaultAuthorizationMode: "userPool",
     // API Key is used for a.allow.public() rules
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
