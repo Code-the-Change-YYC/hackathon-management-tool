@@ -4,6 +4,9 @@ import { generateClient } from "aws-amplify/data";
 
 import { type Schema } from "@/amplify/data/resource";
 
+// eslint-disable-next-line no-restricted-imports
+import TeamsTablePage from "./TeamsTablePage";
+
 export default function Teams() {
   /*== STEP 2 ===============================================================
 Go to your frontend source code. From your client-side code, generate a
@@ -35,8 +38,8 @@ Fetch records from the database and use them in your frontend component.
     });
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Teams
+    <main className="w-full bg-medium-grey">
+      <TeamsTablePage />
     </main>
   );
 }
