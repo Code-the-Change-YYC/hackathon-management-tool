@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { twMerge } from "tailwind-merge";
 
 import { Flex } from "@aws-amplify/ui-react";
 
@@ -9,9 +10,9 @@ export default function FormFieldsHeader({
 }) {
   return (
     <div
-      className={
-        "relative flex w-full flex-col justify-center bg-white" + className
-      }
+      className={twMerge(
+        "relative flex w-full flex-col justify-center bg-white" + className,
+      )}
     >
       <Image
         className="absolute -right-28 top-0"
