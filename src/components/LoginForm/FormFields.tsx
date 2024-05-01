@@ -1,14 +1,12 @@
 import { signOut } from "aws-amplify/auth";
-// import { generateClient } from "aws-amplify/data";
-import { useRef } from "react";
 
+// import { generateClient } from "aws-amplify/data";
 // import type { Schema } from "@/amplify/data/resource";
 import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
 
 // const client = generateClient<Schema>(); // use this Data client for CRUDL requests
 const FormFields = () => {
   const { toSignUp } = useAuthenticator();
-  const signOutRef = useRef<() => void>(signOut);
   return (
     <>
       <div
@@ -18,7 +16,7 @@ const FormFields = () => {
         <Authenticator.SignUp.FormFields />
         <div className=" flex w-full justify-end ">
           <button
-            onClick={signOutRef.current}
+            onClick={() => void signOut()}
             className=" rounded-full border-4 border-white bg-awesomer-purple px-4 py-1 font-semibold text-white shadow-lg hover:opacity-90 md:px-8 md:py-2"
           >
             Cancel
