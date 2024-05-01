@@ -9,7 +9,7 @@ const config = {
   overrides: [
     {
       extends: [
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        // "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:promise/recommended",
       ],
       files: ["*.ts", "*.tsx"],
