@@ -26,6 +26,7 @@ const config: Config = {
         "pastel-pink": "#FFD2DC",
         "dark-pink": "#FF4D6F",
         "pastel-green": "#BAFBE4",
+        "dark-grey": "#333333",
         "medium-grey": "#D9D9D9",
         "light-grey": "#F2F2F2",
       },

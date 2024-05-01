@@ -1,5 +1,8 @@
 import TeamsTablePage from "@/app/admin/teams/TeamsTablePage";
 
+// eslint-disable-next-line no-restricted-imports
+import TeamsTablePage from "./TeamsTablePage";
+
 export default function Teams() {
   /*== STEP 2 ===============================================================
 Go to your frontend source code. From your client-side code, generate a
