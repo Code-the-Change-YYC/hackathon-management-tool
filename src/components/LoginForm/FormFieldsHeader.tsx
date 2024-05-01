@@ -1,0 +1,53 @@
+import Image from "next/image";
+
+import { Flex } from "@aws-amplify/ui-react";
+
+export default function FormFieldsHeader({
+  className,
+}: {
+  className?: string;
+}) {
+  return (
+    <div
+      className={
+        "relative flex w-full flex-col justify-center bg-white" + className
+      }
+    >
+      <Image
+        className="absolute -right-28 top-0"
+        src={"/svgs/login/Star_Icon.svg"}
+        height={51}
+        width={59}
+        alt={""}
+      />{" "}
+      <Image
+        className="absolute -left-28 bottom-0"
+        src={"/svgs/login/Star_Icon.svg"}
+        height={51}
+        width={59}
+        alt={""}
+      />
+      <div className="text-lg font-semibold md:text-2xl xl:text-4xl">
+        <Flex direction={"column"}>
+          <Flex>
+            <Image
+              className="-mr-4"
+              src="/svgs/login/vector_112.svg"
+              alt=""
+              width={28}
+              height={21}
+            />
+            <div className=" text-nowrap">Individual Registration</div>
+          </Flex>
+          <Image
+            src="/svgs/login/vector_113.svg"
+            alt=""
+            className="-mt-4 ml-8"
+            width={130}
+            height={17}
+          />
+        </Flex>
+      </div>
+    </div>
+  );
+}
