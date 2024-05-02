@@ -6,8 +6,8 @@ import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
 const listOfRoles = ["Participant", "Judge"] as const;
 
 const DROPDOWN_STYLES =
-  "bg-light-grey mt-8 mb-8 p-4 rounded-md text-lg text-black w-4/5 max-w-[1500px]";
-const DROPDOWN_HEADER_BAR_STYLES = "bg-gray-200 rounded-md p-10";
+  "bg-light-grey mt-8  p-4 rounded-md text-lg text-black w-4/5 max-w-[1500px]";
+const DROPDOWN_HEADER_BAR_STYLES = "bg-white rounded-md p-10";
 const DROPDOWN_CONTENT_STYLES =
   "relative flex flex-col items-center w-[340px] h-[100px] rounded ";
 
@@ -32,10 +32,10 @@ export default function DropDownRole() {
               )}
             </button>
             {isOpen && (
-              <div className="item-start absolute top-20 flex w-full flex-col rounded-lg bg-white p-2">
+              <div className="item-start absolute top-20 flex w-full flex-col rounded-lg border-2 border-[#A689FF] bg-light-grey p-2">
                 {listOfRoles.map((role, index) => (
                   <div
-                    className="flex w-full cursor-pointer justify-between rounded-r-lg border-l-4 border-l-transparent p-4 hover:border-l-[#A689FF] hover:bg-gray-200"
+                    className="flex w-full cursor-pointer justify-between rounded-r-lg border-l-4 border-l-transparent p-4 hover:border-l-[#A689FF] hover:bg-white"
                     key={index}
                   >
                     <h3 className="font-bold">{role}</h3>

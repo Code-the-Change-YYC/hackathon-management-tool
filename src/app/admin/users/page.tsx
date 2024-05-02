@@ -7,7 +7,7 @@ import { type Schema } from "@/amplify/data/resource";
 // eslint-disable-next-line no-restricted-imports
 import UserTablePage from "./UserTablePage";
 
-export default function Teams() {
+export default function Users() {
   /*== STEP 2 ===============================================================
 Go to your frontend source code. From your client-side code, generate a
 Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
@@ -28,9 +28,9 @@ Fetch records from the database and use them in your frontend component.
   /* For example, in a React component, you can use this snippet in your
   function's RETURN statement */
 
-  client.models.Team?.list()
-    .then((teams) => {
-      console.log(teams);
+  client.models.User?.list()
+    .then((users) => {
+      console.log(users);
       return;
     })
     .catch((error) => {

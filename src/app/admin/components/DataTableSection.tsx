@@ -30,7 +30,7 @@ const CHANGE_PAGE_BUTTON_STYLING =
 const CHANGE_PAGE_BUTTON_TEXT_STYLING = "rounded-md bg-white p-2 px-8";
 
 interface DataTableProps {
-  tableData: Array<Array<string>>;
+  tableData: Array<Array<string | JSX.Element>>;
   tableHeaders: Array<{ columnHeader: string; className: string }>;
   showViewButton?: boolean;
   teamData?: Array<any>;
