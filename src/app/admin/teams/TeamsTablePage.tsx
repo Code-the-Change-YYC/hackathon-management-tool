@@ -7,12 +7,6 @@ const teams = [
   { teamName: "CatLovers", status: "TEAM - Approved, Not Checked In" },
 ];
 
-const filters = [
-  { topLabel: "Teams" },
-  { label: "Approved" },
-  { label: "Checked-in" },
-];
-
 // added option for styles to customize the column widths
 const tableHeaders = [
   { columnHeader: "Team Name", className: "w-1/2" },
@@ -21,10 +15,12 @@ const tableHeaders = [
 
 const tableData = teams.map((team) => [team.teamName, team.status]);
 
+const filters = [{ label: "Approved" }, { label: "Checked-in" }];
+
 const TeamsTablePage = () => {
   return (
     <div>
-      <FilterSection filters={filters} />
+      <FilterSection topLabel="Teams" filterLabels={filters} />
       {/* teams data tile */}
       <DataTableSection tableData={tableData} tableHeaders={tableHeaders} />
     </div>

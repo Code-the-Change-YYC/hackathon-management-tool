@@ -15,9 +15,7 @@ interface FilterSectionProps {
   filterLabels: Filter[];
 }
 
-const FilterSection = (props: FilterSectionProps) => {
-  const { topLabel, filterLabels } = props;
-
+const FilterSection = ({ topLabel, filterLabels }: FilterSectionProps) => {
   return (
     <div className="flex justify-center">
       <div className={FILTER_TILE_STYLES}>
@@ -25,7 +23,7 @@ const FilterSection = (props: FilterSectionProps) => {
           <h1 className="m-2 p-4">Filters</h1>
         </div>
         <div className={FILTER_TILE_CONTENT_STYLES}>
-          <label className="ml-8">
+          <label className="ml-4">
             <input type="checkbox" className={FILTER_CHECKBOX_STLYES} />
             {/* top label also separated to fit figma styling */}
             {topLabel}
@@ -35,7 +33,7 @@ const FilterSection = (props: FilterSectionProps) => {
               {/* map over first column of labels since it varies between team and users */}
               {filterLabels.map((filter, index) => (
                 <div key={index}>
-                  <div>
+                  <div className="ml-8">
                     <input type="checkbox" className={FILTER_CHECKBOX_STLYES} />
                     <label>{filter.label}</label>
                   </div>
