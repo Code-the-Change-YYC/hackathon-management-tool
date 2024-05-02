@@ -5,7 +5,13 @@ const DATA_TABLE_CONTENT_STYLES =
   "mt-6 w-full border-separate border-spacing-x-2 text-left";
 const DATA_TABLE_CELL_STYLES = "rounded-md p-6";
 
-const DataTableSection = ({ tableData, tableHeaders }) => {
+interface DataTableProps {
+  tableData: Array<Array<string>>;
+  tableHeaders: Array<{ columnHeader: string; className: string }>;
+}
+
+const DataTableSection = (props: DataTableProps) => {
+  const { tableData, tableHeaders } = props;
   return (
     <div className="flex justify-center">
       <div className={DATA_TABLE_SECTION_STYLES}>

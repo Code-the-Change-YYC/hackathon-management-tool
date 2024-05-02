@@ -1,9 +1,5 @@
-import DataTableSection from "../components/DataTableSection";
-import FilterSection from "../components/FilterSection";
-
-// const TEAMS_TABLE_SECTION_STYLES =
-//   "text-xl text-black flex flex-col items-center";
-// const TEAMS_TABLE_SECTION_CONTENT_STYLES = "w-4/5 max-w-[1500px]";
+import DataTableSection from "@/app/admin/components/DataTableSection";
+import FilterSection from "@/app/admin/components/FilterSection";
 
 const teams = [
   { teamName: "PickledBread", status: "TEAM - Approved, Not Checked in" },
@@ -20,7 +16,7 @@ const filters = [
 // added option for styles to customize the column widths
 const tableHeaders = [
   { columnHeader: "Team Name", className: "w-1/2" },
-  { columnHeader: "Status" },
+  { columnHeader: "Status", className: "" },
 ];
 
 const tableData = teams.map((team) => [team.teamName, team.status]);

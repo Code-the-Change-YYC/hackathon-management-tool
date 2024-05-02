@@ -6,8 +6,17 @@ const FILTER_CHECKBOX_COLUMN_STYLES =
   "flex max-w-[1200px] justify-between mx-auto p-8";
 const FILTER_CHECKBOX_STLYES = "h-5 w-5 m-2";
 
-const FilterSection = ({ filters }) => {
-  const [topLabel, ...filterLabels] = filters;
+interface Filter {
+  label: string;
+}
+
+interface FilterSectionProps {
+  topLabel: string;
+  filterLabels: Filter[];
+}
+
+const FilterSection = (props: FilterSectionProps) => {
+  const { topLabel, filterLabels } = props;
 
   return (
     <div className="flex justify-center">
@@ -19,7 +28,7 @@ const FilterSection = ({ filters }) => {
           <label className="ml-8">
             <input type="checkbox" className={FILTER_CHECKBOX_STLYES} />
             {/* top label also separated to fit figma styling */}
-            {topLabel.topLabel}
+            {topLabel}
           </label>
           <div className={FILTER_CHECKBOX_COLUMN_STYLES}>
             <div>
