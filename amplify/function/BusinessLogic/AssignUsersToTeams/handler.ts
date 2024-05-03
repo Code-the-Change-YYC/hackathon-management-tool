@@ -49,10 +49,21 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, _) => {
-  let team;
-  try {
-    team = await dataClient.models.Team.get({ id: event.arguments.teamId });
-  } catch (err) {
+  // let team;
+  // try {
+  //   team = await dataClient.models.Team.get({ id: event.arguments.teamId });
+  // } catch (err) {
+  //   return {
+  //     body: { value: "Error: Team does not exist" },
+  //     statusCode: 404,
+  //     headers: { "Content-Type": "application/json" },
+  //   };
+  // }
+
+  const team = await dataClient.models.Team.get({ id: event.arguments.teamId });
+  const teamId = team.data.id;
+
+  if (teamId == null) {
     return {
       body: { value: "Error: Team does not exist" },
       statusCode: 404,
@@ -61,8 +72,9 @@ export const handler: AppSyncResolverHandler<
   }
 
   const user = await dataClient.models.User.get({ id: event.arguments.userId });
+  const userId = user.data.id;
 
-  if (user.data.id == null) {
+  if (userId == null) {
     return {
       body: { value: "Error: User does not exist" },
       statusCode: 404,
@@ -89,8 +101,8 @@ export const handler: AppSyncResolverHandler<
   }
 
   const result = await dataClient.models.User.update({
-    id: event.arguments.userId,
-    TeamId: team.data.id,
+    id: userId,
+    TeamId: teamId,
   });
 
   if (!result.errors) {
