@@ -2,7 +2,9 @@
 
 import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
+import type React from "react";
 import { useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
 
 import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
@@ -12,6 +14,8 @@ const INPUT_STYLES: string =
   "rounded-full  border-4 border-white bg-[#FFFFFF]  ps-3  py-2 my-2 text-sm md:text-md bg-white/30";
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
+const DISABLE_BUTTON_STYLES =
+  " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white opacity-50";
 const TEXT_COLOR_GRAY = "text-gray-400"; // CSS class for gray text color
 const TEXT_COLOR_BLACK = "text-black"; // CSS class for black text color
 
@@ -20,6 +24,7 @@ const FORM_STYLES = "md:mx-10 flex flex-col";
 const client = generateClient<Schema>();
 
 const UserProfile = () => {
+  const { pending } = useFormStatus();
   // Queries
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["User"],
@@ -34,7 +39,7 @@ const UserProfile = () => {
   });
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [showCancelSave, setShowCancelSave] = useState<boolean>(false);
+  const [enableCancelSave, setEnableCancelSave] = useState<boolean>(false);
   const [formState, setFormState] = useState<Schema["User"]>(data);
 
   useEffect(() => {
@@ -49,20 +54,21 @@ const UserProfile = () => {
   const handleEditClick = () => {
     if (!isEditing) {
       setIsEditing((previsEditing) => !previsEditing);
-      setShowCancelSave(true);
+      setEnableCancelSave(true);
     }
   };
 
   const handleCancelClick = () => {
     setIsEditing(false);
-    setShowCancelSave(false);
+    setEnableCancelSave(false);
   };
 
   const handleSaveClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form submission behavior
     setIsEditing(false); // Exit edit mode
-    setShowCancelSave(false);
+    setEnableCancelSave(false);
     console.log(formState); // Log the form state
+    console.log(pending); // Log the form status
   };
 
   const checkedIn = false; // Placeholder value for now
@@ -220,7 +226,7 @@ const UserProfile = () => {
                 readOnly
               />
               <div className=" mb-10 mt-3 flex flex-col justify-between md:flex-row">
-                {showCancelSave && (
+                {enableCancelSave ? (
                   <>
                     <button
                       type="button"
@@ -230,7 +236,33 @@ const UserProfile = () => {
                       Cancel
                     </button>
 
-                    <button type="submit" className={BUTTON_STYLES}>
+                    <button
+                      type="submit"
+                      className={BUTTON_STYLES}
+                      disabled={pending}
+                    >
+                      {pending ? (
+                        <div className="size-5 animate-spin rounded-full border-b-2 border-white"></div>
+                      ) : (
+                        "Save"
+                      )}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className={DISABLE_BUTTON_STYLES}
+                      disabled
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      type="submit"
+                      className={DISABLE_BUTTON_STYLES}
+                      disabled
+                    >
                       Save
                     </button>
                   </>
