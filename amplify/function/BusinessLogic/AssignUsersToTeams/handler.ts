@@ -10,7 +10,7 @@ Amplify.configure(
   {
     API: {
       GraphQL: {
-        endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string, // replace with your defineData name
+        endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string,
         region: process.env.AWS_REGION,
         defaultAuthMode: "iam",
         modelIntrospection: modelIntrospection as never,
@@ -20,7 +20,6 @@ Amplify.configure(
   {
     Auth: {
       credentialsProvider: {
-        // eslint-disable-next-line @typescript-eslint/require-await
         getCredentialsAndIdentityId: async () => ({
           credentials: {
             accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
