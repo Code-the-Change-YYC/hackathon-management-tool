@@ -35,9 +35,7 @@ Amplify.configure(
   },
 );
 
-const dataClient = generateClient<Schema>({
-  authMode: "iam",
-});
+const dataClient = generateClient<Schema>();
 
 type ResolverArgs = { userId: string; teamId: string };
 
