@@ -78,11 +78,6 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  await dataClient.models.User.update({
-    id: event.arguments.userId,
-    TeamId: team.data.id,
-  });
-
   const { data: members } = await team.data.Members();
 
   if (members.length >= MAX_TEAM_MEMBERS) {
@@ -92,6 +87,11 @@ export const handler: AppSyncResolverHandler<
       headers: { "Content-Type": "application/json" },
     };
   }
+
+  await dataClient.models.User.update({
+    id: event.arguments.userId,
+    TeamId: team.data.id,
+  });
 
   return {
     body: { value: `Success` },
