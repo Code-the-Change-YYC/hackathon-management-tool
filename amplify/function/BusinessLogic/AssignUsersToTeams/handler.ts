@@ -60,7 +60,13 @@ export const handler: AppSyncResolverHandler<
   //   };
   // }
 
-  const team = await dataClient.models.Team.get({ id: event.arguments.teamId });
+  const user = await dataClient.models.User.get({ id: event.arguments.userId });
+  console.log(user);
+  console.log(event.arguments.teamId);
+  console.log("before error");
+  const team = await dataClient.models.Team.get({ id: event.arguments.teamId }); // i think this is where the error is occurring
+  console.log("after error");
+  console.log(team);
   const teamId = team.data.id;
 
   if (teamId == null) {
@@ -71,7 +77,6 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  const user = await dataClient.models.User.get({ id: event.arguments.userId });
   const userId = user.data.id;
 
   if (userId == null) {
