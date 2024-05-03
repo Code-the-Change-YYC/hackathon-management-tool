@@ -88,14 +88,22 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  await dataClient.models.User.update({
+  const result = await dataClient.models.User.update({
     id: event.arguments.userId,
     TeamId: team.data.id,
   });
 
-  return {
-    body: { value: `Success` },
-    statusCode: 200,
-    headers: { "Content-Type": "application/json" },
-  };
+  if (!result.errors) {
+    return {
+      body: { value: `Success` },
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+    };
+  } else {
+    return {
+      body: { value: `Error while updating database` },
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+    };
+  }
 };
