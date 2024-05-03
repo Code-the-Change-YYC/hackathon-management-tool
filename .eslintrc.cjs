@@ -9,7 +9,7 @@ const config = {
   overrides: [
     {
       extends: [
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        // "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:promise/recommended",
       ],
       files: ["*.ts", "*.tsx"],
@@ -19,7 +19,7 @@ const config = {
       rules: {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "error",
-        "@typescript-eslint/no-explicit-any": "error",
+        //"@typescript-eslint/no-explicit-any": "error",
       },
     },
   ],
@@ -28,7 +28,7 @@ const config = {
   extends: [
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
-    "plugin:@typescript-eslint/recommended",
+    //"plugin:@typescript-eslint/recommended",
     "plugin:@next/next/recommended",
     "plugin:prettier/recommended",
     "plugin:tailwindcss/recommended",

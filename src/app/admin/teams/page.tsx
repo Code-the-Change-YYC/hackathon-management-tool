@@ -3,9 +3,7 @@
 import { generateClient } from "aws-amplify/data";
 
 import { type Schema } from "@/amplify/data/resource";
-
-// eslint-disable-next-line no-restricted-imports
-import TeamsTablePage from "./TeamsTablePage";
+import TeamsTablePage from "@/app/admin/teams/TeamsTablePage";
 
 export default function Teams() {
   /*== STEP 2 ===============================================================
