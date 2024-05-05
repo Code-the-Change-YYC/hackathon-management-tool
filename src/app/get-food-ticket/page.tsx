@@ -1,93 +1,92 @@
+"use client"
 // app/food/page.tsx
-import Verification from "@/components/Food/TicketVerificationSubmit";
-import client from "@/components/_Amplify/AmplifyBackendClient";
-import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 import {
   createAuthenticationCode,
   createUserIDAndCode,
 } from "@/utils/cryptography";
+import { getLocalCalgaryTime } from "@/utils/date";
 import { getUserTimeSlot } from "@/utils/food";
 
 import * as mutations from "../../../mutations";
-import { getLocalCalgaryTime } from "@/utils/date";
 
-export default async function FoodPage() {
-  //get the code
-  let userVerificationCode = null;
-  let eventName = null;
-  let eventDescription = null;
-  let timeSlot = null;
-  let userID: string = null;
+import { type Schema } from "@/amplify/data/resource";
+import { generateClient } from "aws-amplify/api";
 
-  async function currentAuthenticatedUser() {
-    try {
-      const user = await AuthGetCurrentUserServer()
-        .then((user) => {
-          return user;
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+import { useEffect, useState } from "react";
+import { getCurrentUser } from 'aws-amplify/auth';
 
-      if (user) {
-        userID = user.userId;
+export default function FoodPage() {
+  const client = generateClient<Schema>();
 
-        const mac = await createAuthenticationCode(userID);
-        userVerificationCode = createUserIDAndCode(userID, mac);
+  
+  const [userVerificationCode, setUserVerificationCode] = useState('');
+  const [eventName, setEventName] = useState('');
+  const [eventDescription, setEventDescription] = useState('');
+  const [timeSlot, setTimeSlot] = useState('');
+
+  let userID: string = "";
+
+  useEffect(() => {
+    async function fetchCurrentAuthenticatedUser() {
+      try {
+        const { username, userId, signInDetails } = await getCurrentUser();
+  
+        if (userId) {
+          userID = userId;
+
+          const mac = await createAuthenticationCode(userID);
+          setUserVerificationCode(createUserIDAndCode(userID, mac))
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
-  }
 
-  async function getUserNextFoodEvent() {
-    try {
+    async function fetchUserNextFoodEvent() {
       const foodEvents = await client.models.FoodEvent.list();
       const currentTime = getLocalCalgaryTime(); // Current local time
-
+  
       // Sort the events by their start time
       const sortedEvents = foodEvents.data.sort(
         (a, b) => new Date(a.Start) - new Date(b.Start),
       );
-
-      console.log(currentTime)
+  
       // Find the event that has already started, between start and end times
       let nextEvent = sortedEvents.find(
         (event) =>
           currentTime >= new Date(event.Start) &&
           currentTime <= new Date(event.End),
       );
-
+  
       // find the next event if there is event as of now
       if (nextEvent == undefined) {
         nextEvent = sortedEvents.find(
           (event) => new Date(event.Start) > currentTime,
         );
       }
-
+  
       if (nextEvent) {
-        eventName = nextEvent.Name;
-        eventDescription = nextEvent.Description;
-
+        setEventName(nextEvent.Name);
+        setEventDescription(nextEvent.Description);
+  
         if (userID) {
-          timeSlot = getUserTimeSlot(
+          let userTimeSlot = getUserTimeSlot(
             userID,
             nextEvent.id,
             nextEvent?.Groups,
             nextEvent.Start,
             nextEvent.End,
           );
+          setTimeSlot(userTimeSlot)
         }
       } else {
         console.log("No upcoming food events.");
       }
-    } catch (err) {
-      console.log(err);
     }
-  }
 
-  await currentAuthenticatedUser();
-  await getUserNextFoodEvent();
+    fetchCurrentAuthenticatedUser();
+    fetchUserNextFoodEvent();
+  }, []);
 
   return (
     <div className="mx-auto text-center">
@@ -96,10 +95,12 @@ export default async function FoodPage() {
           <h1>{eventName}</h1>
           <p>{eventDescription}</p>
           <p>your time slot for food is: {timeSlot}</p>
+        
+          <br></br>
+          <a> {userVerificationCode}</a>
         </>
-      )}
-      <br></br>
-      <a> {userVerificationCode}</a>
+      )
+    }
     </div>
   );
 }

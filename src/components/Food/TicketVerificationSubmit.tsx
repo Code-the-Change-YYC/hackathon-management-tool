@@ -15,7 +15,7 @@ export default function TicketVerification() {
     // Handle the submission logic here
 
     console.log(await verifyFoodTicket(inputUserCode, inputEventIDValue));
-    let { canEat, description } = await verifyFoodTicket(
+    const { canEat, description } = await verifyFoodTicket(
       inputUserCode,
       inputEventIDValue,
     );
@@ -25,8 +25,8 @@ export default function TicketVerification() {
 
   return (
     <>
-      {canEatBoolean == true && <p>They can Eat!</p>}
-      {eatDescription != "" && <p>{eatDescription}</p>}
+      {canEatBoolean === true && <p>They can Eat!</p>}
+      {eatDescription !== "" && <p>{eatDescription}</p>}
 
       <form onSubmit={handleSubmit}>
         <input

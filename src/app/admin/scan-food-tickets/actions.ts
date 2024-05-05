@@ -50,13 +50,13 @@ export async function verifyFoodTicket(userCode: string, eventID: string) {
       };
     } else {
       //check if the user is in the right time slot, can still eat if not in the right timeslot
-      let expectedGroupNumber = getGroupNumberFromTime(
+      const expectedGroupNumber = getGroupNumberFromTime(
         getLocalCalgaryTime(),
         foodEvent.Groups,
         foodEvent?.Start,
         foodEvent?.End,
       );
-      let actualGroupNumber = getGroupNumber(
+      const actualGroupNumber = getGroupNumber(
         userID,
         foodEvent.id,
         foodEvent.Groups,
@@ -68,7 +68,7 @@ export async function verifyFoodTicket(userCode: string, eventID: string) {
           description: "Person is in the right place and time!",
         };
       } else {
-        let actualTimeSlot = getUserTimeSlot(
+        const actualTimeSlot = getUserTimeSlot(
           userID,
           foodEvent.id,
           foodEvent.Groups,

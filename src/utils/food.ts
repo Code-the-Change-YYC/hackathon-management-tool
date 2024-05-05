@@ -116,6 +116,6 @@ export function getUserTimeSlot(
   if (!groups) {
     groups = 1;
   }
-  let userGroupNumber = getGroupNumber(userID, eventID, groups);
+  const userGroupNumber = getGroupNumber(userID, eventID, groups);
   return getTimeFromGroupNumber(userGroupNumber, groups, startTime, endTime);
 }

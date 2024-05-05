@@ -20,11 +20,12 @@ export async function isValidAuthenticationCode(
   mac: string,
 ): Promise<boolean> {
   const expectedMAC = await createAuthenticationCode(message);
-  const isValid = expectedMAC == mac;
+  const isValid = expectedMAC === mac;
   return isValid;
 }
 
 export function createUserIDAndCode(userId: string, mac: string): string {
+  console.log("given id is " + userId)
   return userId + ":" + mac;
 }
 
