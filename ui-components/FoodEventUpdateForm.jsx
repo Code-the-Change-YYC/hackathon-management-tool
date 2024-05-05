@@ -16,6 +16,8 @@ import { fetchByPath, getOverrideProps, validateField } from "./utils";
 
 /* eslint-disable */
 
+/* eslint-disable */
+
 const client = generateClient();
 export default function FoodEventUpdateForm(props) {
   const {
