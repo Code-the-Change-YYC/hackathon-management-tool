@@ -2,18 +2,35 @@ import DataTableSection from "@/app/admin/components/DataTableSection";
 import FilterSection from "@/app/admin/components/FilterSection";
 
 const teams = [
-  { teamName: "PickledBread", status: "TEAM - Approved, Not Checked in" },
-  { teamName: "EcoFlow", status: "TEAM - Approved, Checked In" },
-  { teamName: "CatLovers", status: "TEAM - Approved, Not Checked In" },
+  {
+    teamName: "PickledBread",
+    approveStatus: "Approved",
+    checkinStatus: "Not Checked In",
+  },
+  {
+    teamName: "EcoFlow",
+    approveStatus: "Approved",
+    checkinStatus: "Checked In",
+  },
+  {
+    teamName: "CatLovers",
+    approveStatus: "Approved",
+    checkinStatus: "Not Checked In",
+  },
 ];
 
 // added option for styles to customize the column widths
 const tableHeaders = [
-  { columnHeader: "Team Name", className: "w-1/3" },
-  { columnHeader: "Status", className: "w-2/5" },
+  { columnHeader: "Team Name", className: "w-2/5" },
+  { columnHeader: "Approve Status", className: "w-1/5" },
+  { columnHeader: "Check-in Status", className: "w-1/5" },
 ];
 
-const tableData = teams.map((team) => [team.teamName, team.status]);
+const tableData = teams.map((team) => [
+  team.teamName,
+  team.approveStatus,
+  team.checkinStatus,
+]);
 
 const filters = [{ label: "Approved" }, { label: "Checked-in" }];
 

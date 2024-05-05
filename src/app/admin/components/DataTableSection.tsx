@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useState } from "react";
 
 const search_icon = "/svgs/admin/search_icon.svg";
 
@@ -16,6 +17,13 @@ const DATA_TABLE_CONTENT_STYLES =
   "w-full border-separate border-spacing-x-0.5 text-left";
 const DATA_TABLE_HEADER_CELL_STYLES = "p-3 font-normal text-xl";
 const DATA_TABLE_CELL_STYLES = "p-3 py-4 text-md font-light";
+const EDIT_BUTTON_STYLES = "mr-6 text-awesomer-purple";
+const EDIT_MODE_TEXT_INPUT_STYLES =
+  "w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple";
+
+const CHANGE_PAGE_BUTTON_STYLING =
+  "rounded-md border border-awesomer-purple bg-white px-6 hover:bg-awesomer-purple hover:text-white";
+const CHANGE_PAGE_BUTTON_TEXT_STYLING = "rounded-md bg-white p-2 px-8";
 
 interface DataTableProps {
   tableData: Array<Array<string>>;
@@ -24,6 +32,28 @@ interface DataTableProps {
 
 const DataTableSection = (props: DataTableProps) => {
   const { tableData, tableHeaders } = props;
+  const [editModes, setEditModes] = useState(
+    Array(tableData.length).fill(false),
+  );
+  const [editedValues, setEditedValues] = useState(tableData);
+
+  const toggleEditMode = (index: number) => {
+    const newEditModes = [...editModes];
+    newEditModes[index] = !newEditModes[index];
+    setEditModes(newEditModes);
+  };
+
+  // need to change the way this is handled once connected to database
+  const handleInputChange = (
+    value: string,
+    rowIndex: number,
+    cellIndex: number,
+  ) => {
+    const newEditedValues = [...editedValues];
+    newEditedValues[rowIndex][cellIndex] = value;
+    setEditedValues(newEditedValues);
+  };
+
   return (
     <div className="flex justify-center">
       <div className={DATA_TABLE_SECTION_STYLES}>
@@ -46,7 +76,7 @@ const DataTableSection = (props: DataTableProps) => {
             className={SEARCH_ICON_STYLES}
           />
         </div>
-        <div>
+        <div className="overflow-x-auto">
           <table className={DATA_TABLE_CONTENT_STYLES}>
             <thead className="bg-dark-grey">
               <tr className="bg-awesome-purple text-white">
@@ -63,26 +93,57 @@ const DataTableSection = (props: DataTableProps) => {
               </tr>
             </thead>
             <tbody>
-              {tableData.map((rowData, index) => (
+              {tableData.map((rowData, rowIndex) => (
                 <tr
-                  key={index}
-                  className={`${index % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
+                  key={rowIndex}
+                  className={`${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
                 >
                   {rowData.map((cellData, cellIndex) => (
                     <td className={DATA_TABLE_CELL_STYLES} key={cellIndex}>
-                      {cellData}
+                      {editModes[rowIndex] ? (
+                        <input
+                          type="text"
+                          value={editedValues[rowIndex][cellIndex]}
+                          onChange={(e) =>
+                            handleInputChange(
+                              e.target.value,
+                              rowIndex,
+                              cellIndex,
+                            )
+                          }
+                          className={EDIT_MODE_TEXT_INPUT_STYLES}
+                        />
+                      ) : (
+                        cellData
+                      )}
                     </td>
                   ))}
-                  <td className="p-3 text-center">
-                    <button className="mr-6 text-awesomer-purple">Edit</button>
+                  <td className="min-w-[150px] p-3 text-center">
+                    {editModes[rowIndex] ? (
+                      <button
+                        className={EDIT_BUTTON_STYLES}
+                        onClick={() => toggleEditMode(rowIndex)}
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        className={EDIT_BUTTON_STYLES}
+                        onClick={() => toggleEditMode(rowIndex)}
+                      >
+                        Edit
+                      </button>
+                    )}
                     <button className="text-dark-pink">Delete</button>
                   </td>
                 </tr>
               ))}
               <tr className="h-10 bg-awesome-purple">
-                <td></td>
-                <td></td>
-                <td></td>
+                {Array(tableHeaders.length + 1)
+                  .fill(null)
+                  .map((_, index) => (
+                    <td key={index}></td>
+                  ))}
               </tr>
             </tbody>
           </table>
@@ -90,15 +151,11 @@ const DataTableSection = (props: DataTableProps) => {
         <div className="my-4 flex items-center justify-between">
           {/* replace dynamically */}
           <h2 className="text-lg">Showing 1 of 10 of 500 entries</h2>
-          <div className="flex text-center text-sm text-awesomer-purple">
-            <p className="rounded-md bg-white p-2 px-8">Previous</p>
-            <button className="rounded-md border border-awesomer-purple bg-white px-6 hover:bg-awesomer-purple hover:text-white">
-              &lt;
-            </button>
-            <button className="rounded-md border border-awesomer-purple bg-white px-6 hover:bg-awesomer-purple hover:text-white">
-              &gt;
-            </button>
-            <p className="rounded-md bg-white p-2 px-8">Next</p>
+          <div className="flex text-sm text-awesomer-purple">
+            <p className={CHANGE_PAGE_BUTTON_TEXT_STYLING}>Previous</p>
+            <button className={CHANGE_PAGE_BUTTON_STYLING}>&lt;</button>
+            <button className={CHANGE_PAGE_BUTTON_STYLING}>&gt;</button>
+            <p className={CHANGE_PAGE_BUTTON_TEXT_STYLING}>Next</p>
           </div>
         </div>
       </div>
