@@ -15,9 +15,7 @@ const BUTTON_STYLES =
 const FORM_STYLES = "md:mx-10 flex flex-col";
 
 const TEAM_INSTRUCTION_STYLES =
-  "bg-pink bg-white/30 mx-10 my-10 rounded-3xl  border-4 border-white bg-[#FFFFFF] px-10 py-20 md:px-20 md:py-32";
-
-const hasTeam = true; //change to false to see no team use case
+  "bg-pink bg-white/30 mx-10 my-10 rounded-3xl  border-4 border-white bg-[#FFFFFF] px-10 py-20 md:px-20 md:py-16";
 
 const client = generateClient<Schema>();
 
@@ -35,14 +33,16 @@ const TeamProfile = () => {
   });
 
   const [formState, setFormState] = useState<Schema["Team"]>(data);
+  const [hasTeam, setHasTeam] = useState<boolean>(true);
+
+  const handleLeaveTeamClick = () => {
+    setHasTeam((prevHasTeam) => !prevHasTeam);
+    console.log(hasTeam);
+  };
 
   useEffect(() => {
     setFormState(data);
   }, [data, setFormState]);
-
-  // formState.members.map((member, index) => {
-  //   console.log(`Member ${index + 1}:`, member);
-  // });
 
   return (
     <>
@@ -99,7 +99,10 @@ const TeamProfile = () => {
                   </div>
                 </form>
                 <div className="mb-10 mt-3 flex justify-end md:mx-10">
-                  <button className={`${BUTTON_STYLES} w-full md:w-auto`}>
+                  <button
+                    className={`${BUTTON_STYLES} w-full md:w-auto`}
+                    onClick={handleLeaveTeamClick}
+                  >
                     Leave Team
                   </button>
                 </div>
@@ -111,8 +114,10 @@ const TeamProfile = () => {
                   a team?
                 </p>
                 <div className={TEAM_INSTRUCTION_STYLES}>
-                  <h1 className="mb-10 text-3xl">Looking for a team?</h1>
-                  <ol className="space-y-4">
+                  <h1 className="mb-10 text-3xl font-bold">
+                    Looking for a team?
+                  </h1>
+                  <ol className="space-y-4 pl-4">
                     <li>
                       1. Join the <strong>Code the Change YYC</strong> Discord
                       and navigate to the #looking-for-a-team channel.
@@ -140,7 +145,7 @@ const TeamProfile = () => {
                 </div>
                 <div className="my-6 flex justify-end">
                   <button className={`${BUTTON_STYLES} mx-10 w-full md:w-auto`}>
-                    Join Team
+                    <a href="/">Join Team</a>
                   </button>
                 </div>
               </div>
