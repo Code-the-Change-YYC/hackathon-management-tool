@@ -1,16 +1,14 @@
 /* tslint:disable */
-
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-import * as APITypes from "./API";
 
+import * as APITypes from "./API";
 type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationInput: InputType;
   __generatedMutationOutput: OutputType;
 };
 
-export const DemoFunction =
-  /* GraphQL */ `mutation DemoFunction($content: String) {
+export const DemoFunction = /* GraphQL */ `mutation DemoFunction($content: String) {
   DemoFunction(content: $content) {
     body
     headers
@@ -19,35 +17,9 @@ export const DemoFunction =
   }
 }
 ` as GeneratedMutation<
-    APITypes.DemoFunctionMutationVariables,
-    APITypes.DemoFunctionMutation
-  >;
-export const GetFoodTicket =
-  /* GraphQL */ `mutation GetFoodTicket($userID: String) {
-  GetFoodTicket(userID: $userID) {
-    headers
-    statusCode
-    value
-    __typename
-  }
-}
-` as GeneratedMutation<
-    APITypes.GetFoodTicketMutationVariables,
-    APITypes.GetFoodTicketMutation
-  >;
-export const VerifyFoodTicket =
-  /* GraphQL */ `mutation VerifyFoodTicket($userCode: String) {
-  VerifyFoodTicket(userCode: $userCode) {
-    headers
-    statusCode
-    value
-    __typename
-  }
-}
-` as GeneratedMutation<
-    APITypes.VerifyFoodTicketMutationVariables,
-    APITypes.VerifyFoodTicketMutation
-  >;
+  APITypes.DemoFunctionMutationVariables,
+  APITypes.DemoFunctionMutation
+>;
 export const createFoodEvent = /* GraphQL */ `mutation CreateFoodEvent(
   $condition: ModelFoodEventConditionInput
   $input: CreateFoodEventInput!

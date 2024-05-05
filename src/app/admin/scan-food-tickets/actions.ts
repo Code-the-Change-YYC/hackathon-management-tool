@@ -1,16 +1,11 @@
 "use server";
 
+import { getUserIDAndCode } from "@/amplify/function/utils/crytography";
+import { getGroupNumber, getGroupNumberFromTime, getUserTimeSlot } from "@/amplify/function/utils/food-groups";
 import client from "@/components/_Amplify/AmplifyBackendClient";
-import {
-  getUserIDAndCode,
-  isValidAuthenticationCode,
-} from "@/utils/cryptography";
+
 import { getLocalCalgaryTime } from "@/utils/date";
-import {
-  getGroupNumber,
-  getGroupNumberFromTime,
-  getUserTimeSlot,
-} from "@/utils/food";
+
 
 export async function verifyFoodTicket(userCode: string, eventID: string) {
   try {

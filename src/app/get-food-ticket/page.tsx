@@ -1,19 +1,16 @@
 "use client"
 // app/food/page.tsx
-import {
-  createAuthenticationCode,
-  createUserIDAndCode,
-} from "@/utils/cryptography";
-import { getLocalCalgaryTime } from "@/utils/date";
-import { getUserTimeSlot } from "@/utils/food";
 
-import * as mutations from "../../../mutations";
+
+import { getLocalCalgaryTime } from "@/utils/date";
 
 import { type Schema } from "@/amplify/data/resource";
 import { generateClient } from "aws-amplify/api";
 
 import { useEffect, useState } from "react";
 import { getCurrentUser } from 'aws-amplify/auth';
+import { createUserIDAndCode } from "@/amplify/function/utils/crytography";
+import { getUserTimeSlot } from "@/amplify/function/utils/food-groups";
 
 export default function FoodPage() {
   const client = generateClient<Schema>();
@@ -34,7 +31,12 @@ export default function FoodPage() {
         if (userId) {
           userID = userId;
 
-          const mac = await createAuthenticationCode(userID);
+          const mac = await client.graphql({
+            query: mutations.DemoFunction,
+            variables: {
+              content: "Echo me!",
+            },
+          });
           setUserVerificationCode(createUserIDAndCode(userID, mac))
         }
       } catch (err) {
@@ -47,23 +49,7 @@ export default function FoodPage() {
       const currentTime = getLocalCalgaryTime(); // Current local time
   
       // Sort the events by their start time
-      const sortedEvents = foodEvents.data.sort(
-        (a, b) => new Date(a.Start) - new Date(b.Start),
-      );
-  
-      // Find the event that has already started, between start and end times
-      let nextEvent = sortedEvents.find(
-        (event) =>
-          currentTime >= new Date(event.Start) &&
-          currentTime <= new Date(event.End),
-      );
-  
-      // find the next event if there is event as of now
-      if (nextEvent == undefined) {
-        nextEvent = sortedEvents.find(
-          (event) => new Date(event.Start) > currentTime,
-        );
-      }
+      let nextEvent = getNextEvent(foodEvents, currentTime);
   
       if (nextEvent) {
         setEventName(nextEvent.Name);
@@ -104,3 +90,24 @@ export default function FoodPage() {
     </div>
   );
 }
+
+function getNextEvent(foodEvents, currentTime: Date) {
+  const sortedEvents = foodEvents.data.sort(
+    (a, b) => new Date(a.Start) - new Date(b.Start)
+  );
+
+  // Find the event that has already started, between start and end times
+  let nextEvent = sortedEvents.find(
+    (event) => currentTime >= new Date(event.Start) &&
+      currentTime <= new Date(event.End)
+  );
+
+  // find the next event if there is event as of now
+  if (nextEvent == undefined) {
+    nextEvent = sortedEvents.find(
+      (event) => new Date(event.Start) > currentTime
+    );
+  }
+  return nextEvent;
+}
+

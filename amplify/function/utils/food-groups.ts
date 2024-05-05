@@ -1,14 +1,5 @@
-import { eventNames } from "process";
-import { start } from "repl";
 
-export function isUserInTimeSlot(
-  userID: string,
-  eventID: string,
-  groups: number,
-  startTime: Date,
-  endTime: Date,
-) {}
-
+//get a integer value from uuid
 function uuidToInteger(uuid: string) {
   const cleanedUuid = uuid.replace(/-/g, "").toUpperCase();
 
@@ -65,6 +56,7 @@ function getTimeFromGroupNumber(
       .split("at")[1]
   );
 }
+
 
 export function getGroupNumberFromTime(
   target: Date,

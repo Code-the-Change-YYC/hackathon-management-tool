@@ -1,6 +1,8 @@
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
+import { VerifyUserCode } from "@/amplify/function/VerifyUserCode/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { GetUserCode } from "../function/GetUserCode/resource";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -41,7 +43,7 @@ const schema = a.schema({
       Groups: a.integer(),
       Attended: a.hasMany("User", "MealId"),
     })
-    .authorization((allow) => [allow.owner(), allow.guest()]),
+  .authorization((allow) => [allow.owner(), allow.guest()]),
 
   GenericFunctionResponse: a.customType({
     body: a.json(),
@@ -63,6 +65,25 @@ const schema = a.schema({
     // allow all users to call this api for now
     .authorization((allow) => [allow.guest()])
     .function("demoFunctionKey"),
+
+    VerifyUserVerificationCode: a
+    .mutation()
+    .arguments({
+      userCode: a.string(),
+      eventID: a.string()
+    })
+    .returns(a.ref("GenericFunctionResponse"))
+    .authorization((allow) => [allow.guest()])
+    .handler(a.handler.function("verifyUserVerifcationCode")),
+
+    getUserVerificationCode: a
+    .mutation()
+    .arguments({
+      userId: a.string(),
+    })
+    .returns(a.ref("GenericFunctionResponse"))
+    .authorization((allow) => [allow.guest()])
+    .handler(a.handler.function("getUserVerifcationCode")),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -81,6 +102,8 @@ export const data = defineData({
   },
   functions: {
     demoFunctionKey: DemoFunction,
+    getUserVerifcationCode: GetUserCode,
+    verifyUserVerifcationCode: VerifyUserCode,
   },
 });
 
