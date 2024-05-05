@@ -9,8 +9,8 @@ const teams = [
 
 // added option for styles to customize the column widths
 const tableHeaders = [
-  { columnHeader: "Team Name", className: "w-1/2" },
-  { columnHeader: "Status", className: "" },
+  { columnHeader: "Team Name", className: "w-1/3" },
+  { columnHeader: "Status", className: "w-2/5" },
 ];
 
 const tableData = teams.map((team) => [team.teamName, team.status]);

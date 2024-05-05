@@ -1,5 +1,5 @@
 const FILTER_TILE_STYLES =
-  "bg-light-grey mt-8 p-4 rounded-md text-lg text-black w-4/5 max-w-[1500px]";
+  "bg-light-grey m-4 p-4 rounded-md border-awesomer-purple border text-lg text-black w-full max-w-[1500px]";
 const FILTER_HEADER_BAR_STYLES = "bg-white rounded-md";
 const FILTER_TILE_CONTENT_STYLES = "";
 const FILTER_CHECKBOX_COLUMN_STYLES =
@@ -20,7 +20,7 @@ const FilterSection = ({ topLabel, filterLabels }: FilterSectionProps) => {
     <div className="flex justify-center">
       <div className={FILTER_TILE_STYLES}>
         <div className={FILTER_HEADER_BAR_STYLES}>
-          <h1 className="m-2 p-4">Filters</h1>
+          <h1 className="m-2 p-4 text-2xl font-semibold">Filters</h1>
         </div>
         <div className={FILTER_TILE_CONTENT_STYLES}>
           <label className="ml-4">
