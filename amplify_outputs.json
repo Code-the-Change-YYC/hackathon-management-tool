@@ -1,12 +1,20 @@
 {
   "auth": {
-    "user_pool_id": "ca-central-1_eSybTRilc",
+    "user_pool_id": "ca-central-1_7nJ4dGrsO",
     "aws_region": "ca-central-1",
-    "user_pool_client_id": "3i3a24vvi7hb7um562er9jd752",
-    "identity_pool_id": "ca-central-1:51862f27-d927-4d32-95d2-f5af1ae8c89d",
-    "standard_required_attributes": ["email", "given_name", "family_name"],
-    "username_attributes": ["email"],
-    "user_verification_types": ["email"],
+    "user_pool_client_id": "4dc92hlsrtovef4gjc6sa378ic",
+    "identity_pool_id": "ca-central-1:426be5ee-c264-405c-86cd-0859fb1055c7",
+    "standard_required_attributes": [
+      "email",
+      "given_name",
+      "family_name"
+    ],
+    "username_attributes": [
+      "email"
+    ],
+    "user_verification_types": [
+      "email"
+    ],
     "password_policy": {
       "min_length": 8,
       "require_numbers": true,
@@ -17,9 +25,9 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://jnmds4tjvvenrl5mkuno6kjxxm.appsync-api.ca-central-1.amazonaws.com/graphql",
+    "url": "https://ppv66ae4zfa4xi55wq23rnrui4.appsync-api.ca-central-1.amazonaws.com/graphql",
     "aws_region": "ca-central-1",
-    "api_key": "da2-b5p6j4wta5hjvcaknwtezs4r34",
+    "api_key": "da2-pywvn4xlt5cb3ecdhfrjfacory",
     "default_authorization_type": "API_KEY",
     "authorization_types": [
       "AWS_LAMBDA",
@@ -105,7 +113,9 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": ["TeamId"]
+                "targetNames": [
+                  "TeamId"
+                ]
               }
             },
             "createdAt": {
@@ -138,12 +148,19 @@
                 "rules": [
                   {
                     "allow": "private",
-                    "operations": ["create", "update", "delete", "read"]
+                    "operations": [
+                      "create",
+                      "update",
+                      "delete",
+                      "read"
+                    ]
                   },
                   {
                     "allow": "public",
                     "provider": "iam",
-                    "operations": ["read"]
+                    "operations": [
+                      "read"
+                    ]
                   }
                 ]
               }
@@ -190,7 +207,9 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": ["TeamId"]
+                "associatedWith": [
+                  "TeamId"
+                ]
               }
             },
             "createdAt": {
@@ -223,12 +242,19 @@
                 "rules": [
                   {
                     "allow": "private",
-                    "operations": ["create", "update", "delete", "read"]
+                    "operations": [
+                      "create",
+                      "update",
+                      "delete",
+                      "read"
+                    ]
                   },
                   {
                     "allow": "public",
                     "provider": "iam",
-                    "operations": ["read"]
+                    "operations": [
+                      "read"
+                    ]
                   }
                 ]
               }

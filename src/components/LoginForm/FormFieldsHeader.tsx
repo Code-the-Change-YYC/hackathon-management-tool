@@ -11,7 +11,8 @@ export default function FormFieldsHeader({
   return (
     <div
       className={twMerge(
-        "relative flex w-full flex-col justify-center bg-white" + className,
+        "relative ml-4 mt-4 flex flex-col justify-center bg-white px-8" +
+          className,
       )}
     >
       <Image

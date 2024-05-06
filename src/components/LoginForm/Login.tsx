@@ -2,12 +2,17 @@
 
 import type { AuthUser } from "aws-amplify/auth";
 import { redirect } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import PersonalFormFields from "@/components/LoginForm/PersonalFormFields";
 import type { AuthenticatorProps } from "@aws-amplify/ui-react";
-import { Authenticator } from "@aws-amplify/ui-react";
+import {
+  Authenticator,
+  Button,
+  View,
+  useAuthenticator,
+} from "@aws-amplify/ui-react";
 import type { DefaultComponents } from "@aws-amplify/ui-react/dist/types/components/Authenticator/hooks/useCustomComponents/defaultComponents";
 import { type AuthContext } from "@aws-amplify/ui/dist/types";
 
@@ -21,7 +26,28 @@ export default function Login({ user }: { user?: AuthUser }) {
   }, [user]);
   const components: DefaultComponents = {
     SignUp: {
-      Header: () => <FormFieldsHeader className=" -mb-2 px-8 pt-4" />,
+      Header: () => <FormFieldsHeader />,
+    },
+    SignIn: {
+      Header: () => <FormFieldsHeader />,
+    },
+    Footer: () => {
+      const { toSignIn, toSignUp } = useAuthenticator();
+      const [signIn, setSignIn] = useState(true);
+      return (
+        <View textAlign="center">
+          <Button
+            fontWeight="normal"
+            onClick={() => {
+              signIn ? toSignIn() : toSignUp();
+              setSignIn(!signIn);
+            }}
+            size="small"
+          >
+            {signIn ? "Already have an account?" : "Sign in"}
+          </Button>
+        </View>
+      );
     },
   };
 
