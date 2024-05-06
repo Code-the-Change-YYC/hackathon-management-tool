@@ -1,4 +1,3 @@
-/* eslint-disable */
 "use client";
 
 import { generateClient } from "aws-amplify/api";
@@ -15,14 +14,6 @@ import {
 import { updateUser } from "./graphql/mutations";
 import { getUser } from "./graphql/queries";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-
-/* eslint-disable */
-
-/* eslint-disable */
-
-/* eslint-disable */
-
-/* eslint-disable */
 
 const client = generateClient();
 export default function UserUpdateForm(props) {

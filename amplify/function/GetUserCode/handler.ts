@@ -33,7 +33,6 @@ Amplify.configure(
   },
 );
 
-
 type ResolverArgs = { userId: string };
 
 type ResolverResult = {
@@ -46,8 +45,7 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, _) => {
-
-  let userID = event.arguments.userId
+  const userID = event.arguments.userId;
 
   const mac = await createAuthenticationCode(userID);
 
@@ -56,5 +54,4 @@ export const handler: AppSyncResolverHandler<
     statusCode: 200,
     headers: { "Content-Type": "application/json" },
   };
-  
 };

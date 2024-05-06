@@ -1,4 +1,3 @@
-
 //get a integer value from uuid
 function uuidToInteger(uuid: string) {
   const cleanedUuid = uuid.replace(/-/g, "").toUpperCase();
@@ -56,7 +55,6 @@ function getTimeFromGroupNumber(
       .split("at")[1]
   );
 }
-
 
 export function getGroupNumberFromTime(
   target: Date,

@@ -1,4 +1,3 @@
-/* eslint-disable */
 "use client";
 
 import { generateClient } from "aws-amplify/api";
@@ -9,14 +8,6 @@ import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { updateFoodEvent } from "./graphql/mutations";
 import { getFoodEvent } from "./graphql/queries";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-
-/* eslint-disable */
-
-/* eslint-disable */
-
-/* eslint-disable */
-
-/* eslint-disable */
 
 const client = generateClient();
 export default function FoodEventUpdateForm(props) {

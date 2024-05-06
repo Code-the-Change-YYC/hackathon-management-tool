@@ -3,10 +3,18 @@ import { generateClient } from "aws-amplify/data";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
 import type { Schema } from "@/amplify/data/resource";
-import { modelIntrospection } from "./amplifyconfiguration.json";
-import { getUserIDAndCode, isValidAuthenticationCode } from "../utils/crytography";
-import { getGroupNumber, getGroupNumberFromTime, getUserTimeSlot } from "../utils/food-groups";
+
+import {
+  getUserIDAndCode,
+  isValidAuthenticationCode,
+} from "../utils/crytography";
 import { getLocalCalgaryTime } from "../utils/date";
+import {
+  getGroupNumber,
+  getGroupNumberFromTime,
+  getUserTimeSlot,
+} from "../utils/food-groups";
+import { modelIntrospection } from "./amplifyconfiguration.json";
 
 const MAX_TEAM_MEMBERS = 6;
 Amplify.configure(
@@ -40,21 +48,20 @@ Amplify.configure(
 
 const dataClient = generateClient<Schema>();
 
-type ResolverArgs = { userCode: string, eventID: string };
+type ResolverArgs = { userCode: string; eventID: string };
 
 type ResolverResult = {
-  body: { canEat: boolean, description: string };
+  body: { canEat: boolean; description: string };
   statusCode: number;
   headers: { "Content-Type": string };
 };
 
-const header = { "Content-Type": "application/json" }
+const header = { "Content-Type": "application/json" };
 
 export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, _) => {
-  
   const { data: foodEvent, errors } = await dataClient.models.FoodEvent.get({
     id: event.arguments.eventID,
   });
@@ -66,7 +73,7 @@ export const handler: AppSyncResolverHandler<
         description: "Could not find the specified food event",
       },
       statusCode: 404,
-      headers: header
+      headers: header,
     };
   }
 
@@ -75,7 +82,7 @@ export const handler: AppSyncResolverHandler<
   // Check if the user has a meal with the same eventID
   if (foodEvent) {
     const hasUserInEvent = (await foodEvent.Attended()).data.some(
-      (user: { id: string; }) => user.id === userID,
+      (user: { id: string }) => user.id === userID,
     );
     if (hasUserInEvent)
       return {
@@ -84,7 +91,7 @@ export const handler: AppSyncResolverHandler<
           description: "User has already attended the event meal.",
         },
         statusCode: 409,
-        headers: header
+        headers: header,
       };
   }
 
@@ -93,12 +100,13 @@ export const handler: AppSyncResolverHandler<
 
   if (isValidCode == false) {
     return {
-      body: { 
+      body: {
         canEat: false,
-        description: "The code is not valid, likely inputted wrong or tampered with",
+        description:
+          "The code is not valid, likely inputted wrong or tampered with",
       },
       statusCode: 422,
-      headers: header
+      headers: header,
     };
   } else {
     //check if the user is in the right time slot, can still eat if not in the right timeslot
@@ -116,12 +124,12 @@ export const handler: AppSyncResolverHandler<
 
     if (expectedGroupNumber == actualGroupNumber) {
       return {
-        body: { 
+        body: {
           canEat: true,
           description: "valid code & correct timeslot",
         },
         statusCode: 200,
-        headers: header
+        headers: header,
       };
     } else {
       const actualTimeSlot = getUserTimeSlot(
@@ -132,14 +140,13 @@ export const handler: AppSyncResolverHandler<
         foodEvent.End,
       );
       return {
-        body: { 
+        body: {
           canEat: true,
-          description: `Person should be in timeslot ${actualTimeSlot}`,  
+          description: `Person should be in timeslot ${actualTimeSlot}`,
         },
         statusCode: 200,
-        headers: header
+        headers: header,
       };
     }
   }
 };
-
