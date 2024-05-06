@@ -24,8 +24,11 @@ const FORM_STYLES = "md:mx-10 flex flex-col";
 const client = generateClient<Schema>();
 
 const UserProfile = () => {
+  // const queryClient = useQueryClient();
+
   const { pending } = useFormStatus();
   // Queries
+
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["User"],
     initialDataUpdatedAt: 0,
@@ -37,6 +40,18 @@ const UserProfile = () => {
         })
       ).data,
   });
+
+  // const { mutateAsync } = useMutation({
+  //   mutationFn: async () =>
+  //     (
+  //       await client.models.User.update({
+  //         id: "123",
+  //       })
+  //     ).data,
+  //   onSuccess: () => {
+  //     queryClient.setQueryData(["User", 123], data);
+  //   },
+  // });
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [enableCancelSave, setEnableCancelSave] = useState<boolean>(false);
@@ -68,10 +83,13 @@ const UserProfile = () => {
     setIsEditing(false); // Exit edit mode
     setEnableCancelSave(false);
     console.log(formState); // Log the form state
-    console.log(pending); // Log the form status
   };
 
   const checkedIn = false; // Placeholder value for now
+
+  // function updateInputMutation(arg0: { updateInput: string }) {
+  //   throw new Error("Function not implemented.");
+  // }
 
   return (
     <div>
