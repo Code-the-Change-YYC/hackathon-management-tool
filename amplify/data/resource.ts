@@ -29,7 +29,6 @@ const schema = a
     Team: a
       .model({
         Name: a.string(),
-        id: a.string().required(),
         Members: a.hasMany("User", "TeamId"),
       })
       .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),

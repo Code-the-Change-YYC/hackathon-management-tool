@@ -1,9 +1,9 @@
 {
   "aws_project_region": "ca-central-1",
-  "aws_user_pools_id": "ca-central-1_qX1PiEe8O",
+  "aws_user_pools_id": "ca-central-1_U5VKsaQMz",
   "aws_cognito_region": "ca-central-1",
-  "aws_user_pools_web_client_id": "7t7nrj6737svuqo5a8bh51j73j",
-  "aws_cognito_identity_pool_id": "ca-central-1:ea90a2cf-aa6a-4eca-9996-4ac535522d5d",
+  "aws_user_pools_web_client_id": "1s2plfkjn6rphe265srsdv59tq",
+  "aws_cognito_identity_pool_id": "ca-central-1:29ec2ec2-39d6-4df4-a509-b236e6495864",
   "allowUnauthenticatedIdentities": "true",
   "aws_cognito_signup_attributes": [
     "EMAIL"
@@ -25,7 +25,7 @@
   },
   "aws_appsync_authenticationType": "API_KEY",
   "aws_appsync_region": "ca-central-1",
-  "aws_appsync_graphqlEndpoint": "https://treil66zg5c7vp57hdogt5leku.appsync-api.ca-central-1.amazonaws.com/graphql",
+  "aws_appsync_graphqlEndpoint": "https://iwsddh72dbaavmvbxamib7c3we.appsync-api.ca-central-1.amazonaws.com/graphql",
   "modelIntrospection": {
     "version": 1,
     "models": {
@@ -173,7 +173,7 @@
           "id": {
             "name": "id",
             "isArray": false,
-            "type": "String",
+            "type": "ID",
             "isRequired": true,
             "attributes": []
           },
@@ -223,14 +223,6 @@
           {
             "type": "model",
             "properties": {}
-          },
-          {
-            "type": "key",
-            "properties": {
-              "fields": [
-                "id"
-              ]
-            }
           },
           {
             "type": "auth",
@@ -336,6 +328,6 @@
       }
     }
   },
-  "aws_appsync_apiKey": "da2-kqouwsci4zanjkib3de2fsokoq",
+  "aws_appsync_apiKey": "da2-of3zifda7fcvjmofzpac7bduby",
   "aws_appsync_additionalAuthenticationTypes": "AWS_LAMBDA,AMAZON_COGNITO_USER_POOLS,AWS_IAM"
 }
