@@ -1,8 +1,6 @@
 import { Amplify } from "aws-amplify";
-import { generateClient } from "aws-amplify/data";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
-import { kmac128 } from "js-sha3";
 import { createAuthenticationCode } from "../utils/crytography";
 import { modelIntrospection } from "./amplifyconfiguration.json";
 

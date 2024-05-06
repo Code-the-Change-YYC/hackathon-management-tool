@@ -11,14 +11,14 @@ specify that owners, authenticated via your Auth resource can "create",
 "read", "update", and "delete" their own records. Public users,
 authenticated via an API key, can only "read" records.
 =========================================================================*/
-const schema = a.schema({
+const schema = a
+.schema({
   User: a
-    .model({
+  .model({
       FirstName: a.string(),
       LastName: a.string(),
       Email: a.string(),
-      MealId: a.id(),
-      Meals: a.belongsTo("FoodEvent", "MealId"),
+      Meals: a.boolean(),
       Institution: a.string(),
       Allergies: a.string(),
       CheckedIn: a.boolean(),
@@ -26,35 +26,35 @@ const schema = a.schema({
       Team: a.belongsTo("Team", "TeamId"),
     })
     .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
-  Team: a
+    Team: a
     .model({
       Name: a.string(),
-      Code: a.string(),
+      id: a.string().required(),
       Members: a.hasMany("User", "TeamId"),
     })
     .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
-
-  FoodEvent: a
-    .model({
-      Name: a.string(),
-      Description: a.string(),
-      Start: a.datetime(),
-      End: a.datetime(),
-      Groups: a.integer(),
-      Attended: a.hasMany("User", "MealId"),
-    })
-  .authorization((allow) => [allow.owner(), allow.guest()]),
-
-  GenericFunctionResponse: a.customType({
-    body: a.json(),
-    statusCode: a.integer(),
-    headers: a.json(),
-  }),
-
-  /**
+    FoodEvent: a
+      .model({
+        Name: a.string(),
+        Description: a.string(),
+        Start: a.datetime(),
+        End: a.datetime(),
+        Groups: a.integer(),
+        Attended: a.hasMany("User", "MealId"),
+      })
+    .authorization((allow) => [allow.owner(), allow.guest()]),
+  
+    
+    GenericFunctionResponse: a.customType({
+      body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
+    
+    /**
    * FUNCTION-RELATED APPSYNC RESOLVERS
-   */
-  DemoFunction: a
+    */
+   DemoFunction: a
     .mutation() // this should be set to .query for functions that only read data
     // arguments that this query accepts
     .arguments({
@@ -66,7 +66,7 @@ const schema = a.schema({
     .authorization((allow) => [allow.guest()])
     .function("demoFunctionKey"),
 
-    VerifyUserVerificationCode: a
+  verifyUserVerifcationCode: a
     .mutation()
     .arguments({
       userCode: a.string(),
@@ -76,7 +76,7 @@ const schema = a.schema({
     .authorization((allow) => [allow.guest()])
     .handler(a.handler.function("verifyUserVerifcationCode")),
 
-    getUserVerificationCode: a
+  getUserVerifcationCode: a
     .mutation()
     .arguments({
       userId: a.string(),
@@ -84,7 +84,10 @@ const schema = a.schema({
     .returns(a.ref("GenericFunctionResponse"))
     .authorization((allow) => [allow.guest()])
     .handler(a.handler.function("getUserVerifcationCode")),
-});
+})
+.authorization((allow) => [
+  allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
+]);;
 
 export type Schema = ClientSchema<typeof schema>;
 

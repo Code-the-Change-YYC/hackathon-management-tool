@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { getCurrentUser } from 'aws-amplify/auth';
 import { createUserIDAndCode } from "@/amplify/function/utils/crytography";
 import { getUserTimeSlot } from "@/amplify/function/utils/food-groups";
+import * as mutations from "@/graphql/mutations";
 
 export default function FoodPage() {
   const client = generateClient<Schema>();
@@ -29,14 +30,13 @@ export default function FoodPage() {
         const { username, userId, signInDetails } = await getCurrentUser();
   
         if (userId) {
-          userID = userId;
-
-          const mac = await client.graphql({
-            query: mutations.DemoFunction,
+          const response = await client.graphql({
+            query: mutations.getUserVerifcationCode,
             variables: {
-              content: "Echo me!",
+              userId: userId,
             },
           });
+          const mac = response.body["value"]
           setUserVerificationCode(createUserIDAndCode(userID, mac))
         }
       } catch (err) {
