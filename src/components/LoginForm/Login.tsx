@@ -33,7 +33,7 @@ export default function Login({ user }: { user?: AuthUser }) {
     },
     Footer: () => {
       const { toSignIn, toSignUp } = useAuthenticator();
-      const [signIn, setSignIn] = useState(true);
+      const [signIn, setSignIn] = useState(false);
       return (
         <View textAlign="center">
           <Button
@@ -44,7 +44,9 @@ export default function Login({ user }: { user?: AuthUser }) {
             }}
             size="small"
           >
-            {signIn ? "Already have an account?" : "Sign in"}
+            {signIn
+              ? "Already have an account?"
+              : "Don't have an account? Sign up"}
           </Button>
         </View>
       );
@@ -84,7 +86,7 @@ export default function Login({ user }: { user?: AuthUser }) {
     <Authenticator
       socialProviders={["google", "apple"]}
       // TODO: You could make this conditional based on sign up or login, so you can reuse everything you did for both. Login shouldn't need any overrides.
-      initialState="signUp"
+      initialState="signIn"
       signUpAttributes={[]}
       services={services}
       components={components}
