@@ -2,7 +2,9 @@
 
 // Enable landing page
 
-export const enableLandingPage = true;
+export const enableLandingPage =
+  process.env.NODE_ENV === "production" &&
+  process.env.NEXT_LANDING_PAGE_ENABLE === "TRUE";
 
 // Enable user profile
 
