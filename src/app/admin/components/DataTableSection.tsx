@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 const search_icon = "/svgs/admin/search_icon.svg";
+const exit_icon = "/svgs/admin/exit_icon.svg";
 
 const DATA_TABLE_SECTION_STYLES =
   "bg-light-grey border border-awesomer-purple m-4 p-4 rounded-md text-lg text-black w-full max-w-[1500px]";
@@ -28,19 +29,25 @@ const CHANGE_PAGE_BUTTON_TEXT_STYLING = "rounded-md bg-white p-2 px-8";
 interface DataTableProps {
   tableData: Array<Array<string>>;
   tableHeaders: Array<{ columnHeader: string; className: string }>;
+  showViewButton?: boolean;
 }
 
 const DataTableSection = (props: DataTableProps) => {
-  const { tableData, tableHeaders } = props;
+  const { tableData, tableHeaders, showViewButton = false } = props;
   const [editModes, setEditModes] = useState(
     Array(tableData.length).fill(false),
   );
   const [editedValues, setEditedValues] = useState(tableData);
+  const [showPopup, setShowPopup] = useState(false);
 
   const toggleEditMode = (index: number) => {
     const newEditModes = [...editModes];
     newEditModes[index] = !newEditModes[index];
     setEditModes(newEditModes);
+  };
+
+  const handleViewButtonClick = () => {
+    setShowPopup(true);
   };
 
   // need to change the way this is handled once connected to database
@@ -118,20 +125,19 @@ const DataTableSection = (props: DataTableProps) => {
                       )}
                     </td>
                   ))}
-                  <td className="min-w-[150px] p-3 text-center">
-                    {editModes[rowIndex] ? (
+                  <td className="min-w-[250px] p-3 text-center">
+                    <button
+                      className={EDIT_BUTTON_STYLES}
+                      onClick={() => toggleEditMode(rowIndex)}
+                    >
+                      {editModes[rowIndex] ? "Save" : "Edit"}
+                    </button>
+                    {showViewButton && (
                       <button
-                        className={EDIT_BUTTON_STYLES}
-                        onClick={() => toggleEditMode(rowIndex)}
+                        className="mr-6 text-awesome-purple"
+                        onClick={() => handleViewButtonClick()}
                       >
-                        Save
-                      </button>
-                    ) : (
-                      <button
-                        className={EDIT_BUTTON_STYLES}
-                        onClick={() => toggleEditMode(rowIndex)}
-                      >
-                        Edit
+                        View
                       </button>
                     )}
                     <button className="text-dark-pink">Delete</button>
@@ -148,6 +154,34 @@ const DataTableSection = (props: DataTableProps) => {
             </tbody>
           </table>
         </div>
+        {showPopup && (
+          <div className="fixed left-0 top-0 flex size-full items-center justify-center bg-black/40">
+            <div className="w-4/5 rounded-md bg-white p-4">
+              <div className="mb-2 flex justify-between">
+                <h1 className="text-3xl font-semibold">Team Name</h1>
+                <button className="mr-2" onClick={() => setShowPopup(false)}>
+                  <Image
+                    src={exit_icon}
+                    alt="Exit page icon"
+                    width={20}
+                    height={20}
+                  />
+                </button>
+              </div>
+              <div className="mb-8 rounded-md border border-awesomer-purple bg-light-grey p-2">
+                <table className="w-full border-separate border-spacing-2 text-left">
+                  <thead>
+                    <tr>
+                      <th className="w-1/2 rounded-md bg-white p-2">Members</th>
+                      <th className="rounded-md bg-white p-2">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="my-4 flex items-center justify-between">
           {/* replace dynamically */}
           <h2 className="text-lg">Showing 1 of 10 of 500 entries</h2>

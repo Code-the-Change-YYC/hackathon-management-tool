@@ -39,7 +39,11 @@ const TeamsTablePage = () => {
     <div>
       <FilterSection topLabel="Teams" filterLabels={filters} />
       {/* teams data tile */}
-      <DataTableSection tableData={tableData} tableHeaders={tableHeaders} />
+      <DataTableSection
+        tableData={tableData}
+        tableHeaders={tableHeaders}
+        showViewButton={true}
+      />
     </div>
   );
 };
