@@ -49,6 +49,7 @@ const DataTableSection = (props: DataTableProps) => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedMembersData, setSelectedMembersData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTeamName, setSelectedTeamName] = useState("");
 
   const toggleEditMode = (index: number) => {
     const newEditModes = [...editModes];
@@ -58,6 +59,7 @@ const DataTableSection = (props: DataTableProps) => {
 
   const handleViewButtonClick = (rowData: Array<string>, rowIndex: number) => {
     setSelectedMembersData(membersData[rowIndex]?.members || []);
+    setSelectedTeamName(rowData[0]);
     setShowPopup(true);
   };
 
@@ -180,6 +182,7 @@ const DataTableSection = (props: DataTableProps) => {
         {showPopup && (
           <Popup
             selectedMembersData={selectedMembersData}
+            teamName={selectedTeamName}
             onClose={() => setShowPopup(false)}
           />
         )}

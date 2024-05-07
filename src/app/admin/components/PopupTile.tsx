@@ -17,15 +17,16 @@ const POPUP_TILE_TABLE_CELL_STYLES = "rounded-md p-2";
 
 interface PopupProps {
   selectedMembersData: string[];
+  teamName: string;
   onClose: () => void;
 }
 
-const Popup = ({ selectedMembersData, onClose }: PopupProps) => {
+const Popup = ({ selectedMembersData, onClose, teamName }: PopupProps) => {
   return (
     <div className={POPUP_SECTION_STYLES}>
       <div className={POPUP_TILE_STYLES}>
         <div className={POPUP_TILE_HEADER_STYLES}>
-          <h1 className="text-3xl font-semibold">Team Name</h1>
+          <h1 className="text-3xl font-semibold">{teamName}&apos;s Team</h1>
           <button className="mr-2" onClick={onClose}>
             <Image
               src={exit_icon}
