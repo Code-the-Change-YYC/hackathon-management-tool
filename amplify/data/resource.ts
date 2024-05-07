@@ -59,7 +59,7 @@ const schema = a
         teamId: a.string(),
       })
       .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest()])
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
       .handler(a.handler.function("assignUsersToTeamsKey")),
   })
   .authorization((allow) => [
