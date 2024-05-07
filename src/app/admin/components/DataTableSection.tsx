@@ -48,6 +48,7 @@ const DataTableSection = (props: DataTableProps) => {
   const [editedValues, setEditedValues] = useState(tableData);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedMembersData, setSelectedMembersData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleEditMode = (index: number) => {
     const newEditModes = [...editModes];
@@ -71,6 +72,16 @@ const DataTableSection = (props: DataTableProps) => {
     setEditedValues(newEditedValues);
   };
 
+  const filteredData = tableData.filter((rowData) =>
+    rowData.some((cellData) =>
+      cellData.toLowerCase().includes(searchQuery.toLowerCase()),
+    ),
+  );
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
   return (
     <div className="flex justify-center">
       <div className={DATA_TABLE_SECTION_STYLES}>
@@ -84,6 +95,7 @@ const DataTableSection = (props: DataTableProps) => {
             type="text"
             placeholder="Search name"
             className={SEARCH_BAR_STYLES}
+            onChange={handleSearchChange}
           />
           <Image
             src={search_icon}
@@ -110,7 +122,7 @@ const DataTableSection = (props: DataTableProps) => {
               </tr>
             </thead>
             <tbody>
-              {tableData.map((rowData, rowIndex) => (
+              {filteredData.map((rowData, rowIndex) => (
                 <tr
                   key={rowIndex}
                   className={`${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
