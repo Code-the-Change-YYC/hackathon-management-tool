@@ -12,82 +12,66 @@ specify that owners, authenticated via your Auth resource can "create",
 "read", "update", and "delete" their own records. Public users,
 authenticated via an API key, can only "read" records.
 =========================================================================*/
-const schema = a
-  .schema({
-    User: a
-      .model({
-        FirstName: a.string(),
-        LastName: a.string(),
-        Email: a.string(),
-        Meals: a.boolean(),
-        Institution: a.string(),
-        Allergies: a.string(),
-        CheckedIn: a.boolean(),
-        TeamId: a.id(),
-        Team: a.belongsTo("Team", "TeamId"),
-      })
-      .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
-    Team: a
-      .model({
-        Name: a.string(),
-        id: a.string().required(),
-        Members: a.hasMany("User", "TeamId"),
-      })
-      .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
-    FoodEvent: a
-      .model({
-        Name: a.string(),
-        Description: a.string(),
-        Start: a.datetime(),
-        End: a.datetime(),
-        Groups: a.integer(),
-        Attended: a.hasMany("User", "MealId"),
-      })
-      .authorization((allow) => [allow.owner(), allow.guest()]),
+const schema = a.schema({
+  User: a
+    .model({
+      FirstName: a.string(),
+      LastName: a.string(),
+      Email: a.string(),
+      Meals: a.boolean(),
+      Institution: a.string(),
+      Allergies: a.string(),
+      CheckedIn: a.boolean(),
+      TeamId: a.id(),
+      Team: a.belongsTo("Team", "TeamId"),
+    })
+    .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
+  Team: a
+    .model({
+      Name: a.string(),
+      id: a.string().required(),
+      Members: a.hasMany("User", "TeamId"),
+    })
+    .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
+  FoodEvent: a
+    .model({
+      Name: a.string(),
+      Description: a.string(),
+      Start: a.datetime(),
+      End: a.datetime(),
+      Groups: a.integer(),
+      Attended: a.hasMany("User", "MealId"),
+    })
+    .authorization((allow) => [allow.owner(), allow.guest()]),
 
-    GenericFunctionResponse: a.customType({
-      body: a.json(),
-      statusCode: a.integer(),
-      headers: a.json(),
-    }),
+  GenericFunctionResponse: a.customType({
+    body: a.json(),
+    statusCode: a.integer(),
+    headers: a.json(),
+  }),
 
-    /**
-     * FUNCTION-RELATED APPSYNC RESOLVERS
-     */
-    DemoFunction: a
-      .mutation() // this should be set to .query for functions that only read data
-      // arguments that this query accepts
-      .arguments({
-        content: a.string(),
-      })
-      // return type of the query
-      .returns(a.ref("GenericFunctionResponse"))
-      // allow all users to call this api for now
-      .authorization((allow) => [allow.guest()])
-      .function("demoFunctionKey"),
+  /**
+   * FUNCTION-RELATED APPSYNC RESOLVERS
+   */
+  verifyUserVerifcationCode: a
+    .mutation()
+    .arguments({
+      userCode: a.string(),
+      eventID: a.string(),
+    })
+    .returns(a.ref("GenericFunctionResponse"))
+    .authorization((allow) => [allow.guest()])
+    .handler(a.handler.function("verifyUserVerifcationCode")),
 
-    verifyUserVerifcationCode: a
-      .mutation()
-      .arguments({
-        userCode: a.string(),
-        eventID: a.string(),
-      })
-      .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest()])
-      .handler(a.handler.function("verifyUserVerifcationCode")),
-
-    getUserVerifcationCode: a
-      .mutation()
-      .arguments({
-        userId: a.string(),
-      })
-      .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest()])
-      .handler(a.handler.function("getUserVerifcationCode")),
-  })
-  .authorization((allow) => [
-    allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
-  ]);
+  getUserVerifcationCode: a
+    .mutation()
+    .arguments({
+      userId: a.string(),
+    })
+    .returns(a.ref("GenericFunctionResponse"))
+    .authorization((allow) => [allow.guest()])
+    .handler(a.handler.function("getUserVerifcationCode")),
+});
 
 export type Schema = ClientSchema<typeof schema>;
 

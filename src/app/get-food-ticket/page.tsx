@@ -7,9 +7,8 @@ import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import { createUserIDAndCode } from "@/amplify/function/utils/crytography";
+import { getLocalCalgaryTime } from "@/amplify/function/utils/date";
 import { getUserTimeSlot } from "@/amplify/function/utils/food-groups";
-import * as mutations from "@/graphql/mutations";
-import { getLocalCalgaryTime } from "@/utils/date";
 
 export default function FoodPage() {
   const client = generateClient<Schema>();
@@ -27,14 +26,19 @@ export default function FoodPage() {
         const { username, userId, signInDetails } = await getCurrentUser();
 
         if (userId) {
-          const response = await client.graphql({
-            query: mutations.getUserVerifcationCode,
-            variables: {
-              userId: userId,
-            },
+          const response = await client.mutations.getUserVerifcationCode({
+            userId: userId,
           });
-          const mac = response.body["value"];
-          setUserVerificationCode(createUserIDAndCode(userID, mac));
+          const response_body = response.data?.body;
+
+          if (response_body) {
+            var json = JSON.parse(response_body as string);
+            let code = json["value"];
+            console.log(code);
+            setUserVerificationCode(createUserIDAndCode(userID, code));
+          } else {
+            setUserVerificationCode("Backend Server Error");
+          }
         }
       } catch (err) {
         console.log(err);
