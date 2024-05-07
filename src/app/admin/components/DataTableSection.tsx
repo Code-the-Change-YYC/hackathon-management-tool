@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { useState } from "react";
 
+import Popup from "@/app/admin/components/PopupTile";
+
 const search_icon = "/svgs/admin/search_icon.svg";
-const exit_icon = "/svgs/admin/exit_icon.svg";
 
 const DATA_TABLE_SECTION_STYLES =
   "bg-light-grey border border-awesomer-purple m-4 p-4 rounded-md text-lg text-black w-full max-w-[1500px]";
@@ -30,15 +31,23 @@ interface DataTableProps {
   tableData: Array<Array<string>>;
   tableHeaders: Array<{ columnHeader: string; className: string }>;
   showViewButton?: boolean;
+  membersData?: Array<any>;
 }
 
 const DataTableSection = (props: DataTableProps) => {
-  const { tableData, tableHeaders, showViewButton = false } = props;
+  const {
+    tableData,
+    tableHeaders,
+    showViewButton = false,
+    membersData = [],
+  } = props;
+
   const [editModes, setEditModes] = useState(
     Array(tableData.length).fill(false),
   );
   const [editedValues, setEditedValues] = useState(tableData);
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedMembersData, setSelectedMembersData] = useState([]);
 
   const toggleEditMode = (index: number) => {
     const newEditModes = [...editModes];
@@ -46,7 +55,8 @@ const DataTableSection = (props: DataTableProps) => {
     setEditModes(newEditModes);
   };
 
-  const handleViewButtonClick = () => {
+  const handleViewButtonClick = (rowData: Array<string>, rowIndex: number) => {
+    setSelectedMembersData(membersData[rowIndex]?.members || []);
     setShowPopup(true);
   };
 
@@ -72,7 +82,7 @@ const DataTableSection = (props: DataTableProps) => {
           </h1>
           <input
             type="text"
-            placeholder="Search user"
+            placeholder="Search name"
             className={SEARCH_BAR_STYLES}
           />
           <Image
@@ -135,7 +145,7 @@ const DataTableSection = (props: DataTableProps) => {
                     {showViewButton && (
                       <button
                         className="mr-6 text-awesome-purple"
-                        onClick={() => handleViewButtonClick()}
+                        onClick={() => handleViewButtonClick(rowData, rowIndex)}
                       >
                         View
                       </button>
@@ -154,33 +164,12 @@ const DataTableSection = (props: DataTableProps) => {
             </tbody>
           </table>
         </div>
+        {/* popup component for teams table ONLY */}
         {showPopup && (
-          <div className="fixed left-0 top-0 flex size-full items-center justify-center bg-black/40">
-            <div className="w-4/5 rounded-md bg-white p-4">
-              <div className="mb-2 flex justify-between">
-                <h1 className="text-3xl font-semibold">Team Name</h1>
-                <button className="mr-2" onClick={() => setShowPopup(false)}>
-                  <Image
-                    src={exit_icon}
-                    alt="Exit page icon"
-                    width={20}
-                    height={20}
-                  />
-                </button>
-              </div>
-              <div className="mb-8 rounded-md border border-awesomer-purple bg-light-grey p-2">
-                <table className="w-full border-separate border-spacing-2 text-left">
-                  <thead>
-                    <tr>
-                      <th className="w-1/2 rounded-md bg-white p-2">Members</th>
-                      <th className="rounded-md bg-white p-2">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+          <Popup
+            selectedMembersData={selectedMembersData}
+            onClose={() => setShowPopup(false)}
+          />
         )}
         <div className="my-4 flex items-center justify-between">
           {/* replace dynamically */}

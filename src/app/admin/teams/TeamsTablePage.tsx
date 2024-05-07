@@ -6,16 +6,22 @@ const teams = [
     teamName: "PickledBread",
     approveStatus: "Approved",
     checkinStatus: "Not Checked In",
+    members: ["John Doe", "Jane Smith"],
+    statuses: ["Active", "Inactive"],
   },
   {
     teamName: "EcoFlow",
     approveStatus: "Approved",
     checkinStatus: "Checked In",
+    members: ["Alice Johnson", "Bob Williams"],
+    statuses: ["Active", "Active"],
   },
   {
     teamName: "CatLovers",
     approveStatus: "Approved",
     checkinStatus: "Not Checked In",
+    members: ["Charlie Brown", "Lucy Johnson"],
+    statuses: ["Inactive", "Active"],
   },
 ];
 
@@ -43,6 +49,7 @@ const TeamsTablePage = () => {
         tableData={tableData}
         tableHeaders={tableHeaders}
         showViewButton={true}
+        membersData={teams}
       />
     </div>
   );
