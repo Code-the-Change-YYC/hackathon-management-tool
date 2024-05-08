@@ -41,8 +41,6 @@ const UserProfile = () => {
       ).data,
   });
 
-  console.log(data);
-
   // const { mutateAsync } = useMutation({
   //   mutationFn: async () =>
   //     (
@@ -57,7 +55,9 @@ const UserProfile = () => {
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [enableCancelSave, setEnableCancelSave] = useState<boolean>(false);
-  const [formState, setFormState] = useState<Schema["User"]["type"]>(data);
+  const [formState, setFormState] = useState<Schema["User"]["type"]>(
+    {} as Schema["User"]["type"],
+  );
 
   useEffect(() => {
     if (data) {
