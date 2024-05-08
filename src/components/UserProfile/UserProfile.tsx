@@ -41,6 +41,8 @@ const UserProfile = () => {
       ).data,
   });
 
+  console.log(data);
+
   // const { mutateAsync } = useMutation({
   //   mutationFn: async () =>
   //     (
@@ -57,9 +59,9 @@ const UserProfile = () => {
   const [enableCancelSave, setEnableCancelSave] = useState<boolean>(false);
   const [formState, setFormState] = useState<Schema["User"]["type"]>(data);
 
-  // useEffect(() => {
-  //   setFormState(data);
-  // }, [data, setFormState]);
+  useEffect(() => {
+    setFormState(data);
+  }, [data, setFormState]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -85,7 +87,7 @@ const UserProfile = () => {
     console.log(formState); // Log the form state
   };
 
-  const checkedIn = false; // Placeholder value for now
+  const checkedIn = data?.CheckedIn; // Placeholder value for now
 
   // function updateInputMutation(arg0: { updateInput: string }) {
   //   throw new Error("Function not implemented.");

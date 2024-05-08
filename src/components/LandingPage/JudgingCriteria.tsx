@@ -57,7 +57,7 @@ const JudgingCriteria = () => {
       <div>
         <h1 className="mb-10 text-2xl font-bold">
           Judging
-          <em className="text-[#7055FD]"> Criteria</em>
+          <em className="text-awesomer-purple"> Criteria</em>
         </h1>
         <ul className="flex flex-col">{listJudgingCriteria}</ul>
       </div>
