@@ -60,7 +60,9 @@ const UserProfile = () => {
   const [formState, setFormState] = useState<Schema["User"]["type"]>(data);
 
   useEffect(() => {
-    setFormState(data);
+    if (data) {
+      setFormState(data);
+    }
   }, [data, setFormState]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
