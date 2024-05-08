@@ -19,21 +19,22 @@ const schema = a.schema({
       Institution: a.string(),
       Allergies: a.string(),
       CheckedIn: a.boolean(),
-      Team: a.belongsTo("Team"),
+      teamId: a.id(),
+      team: a.belongsTo("Team", "teamId"),
     })
-    .authorization([
-      a.allow.private().to(["read", "create", "update"]),
-      a.allow.public().to(["read"]),
+    .authorization((allow) => [
+      allow.authenticated().to(["read", "create", "update"]),
+      allow.guest().to(["read"]),
     ]),
   Team: a
     .model({
       Name: a.string(),
       Code: a.string(),
-      Members: a.hasMany("User"),
+      Members: a.hasMany("User", "teamId"),
     })
-    .authorization([
-      a.allow.private().to(["read"]),
-      a.allow.public().to(["read"]),
+    .authorization((allow) => [
+      allow.authenticated().to(["read", "create", "update"]),
+      allow.guest().to(["read"]),
     ]),
   GenericFunctionResponse: a.customType({
     body: a.json(),
@@ -53,7 +54,7 @@ const schema = a.schema({
     // return type of the query
     .returns(a.ref("GenericFunctionResponse"))
     // allow all users to call this api for now
-    .authorization([a.allow.public()])
+    .authorization((allow) => [allow.guest()])
     .function("demoFunctionKey"),
 });
 
