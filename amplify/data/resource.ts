@@ -12,23 +12,30 @@ authenticated via an API key, can only "read" records.
 const schema = a.schema({
   User: a
     .model({
-      FirstName: a.string(),
-      LastName: a.string(),
-      Email: a.string(),
-      Meals: a.boolean(),
-      Institution: a.string(),
-      Allergies: a.string(),
-      CheckedIn: a.boolean(),
-      Team: a.belongsTo("Team"),
+      firstName: a.string(),
+      lastName: a.string(),
+      email: a.string(),
+      meals: a.boolean(),
+      institution: a.string(),
+      allergies: a.string(),
+      checkedIn: a.boolean(),
+      teamId: a.string(),
+      team: a.belongsTo("Team", "teamId"),
     })
-    .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+    .authorization((allow) => [
+      allow.owner(),
+      allow.authenticated().to(["read"]),
+    ]),
   Team: a
     .model({
-      Name: a.string(),
-      Code: a.string(),
-      Members: a.hasMany("User"),
+      name: a.string(),
+      id: a.id(),
+      members: a.hasMany("User", "teamId"),
     })
-    .authorization([a.allow.owner(), a.allow.public().to(["read"])]),
+    .authorization((allow) => [
+      allow.owner(),
+      allow.authenticated().to(["read"]),
+    ]),
   GenericFunctionResponse: a.customType({
     body: a.json(),
     statusCode: a.integer(),
@@ -47,8 +54,8 @@ const schema = a.schema({
     // return type of the query
     .returns(a.ref("GenericFunctionResponse"))
     // allow all users to call this api for now
-    .authorization([a.allow.public()])
-    .function("demoFunctionKey"),
+    .authorization((allow) => [allow.guest()])
+    .handler(a.handler.function(DemoFunction)),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -64,9 +71,6 @@ export const data = defineData({
     lambdaAuthorizationMode: {
       function: DemoAuthFunction,
     },
-  },
-  functions: {
-    demoFunctionKey: DemoFunction,
   },
 });
 
