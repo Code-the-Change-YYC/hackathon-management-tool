@@ -95,6 +95,10 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
+  // Please look into this error and how to access nested data using this page:
+  // https://docs.amplify.aws/react/build-a-backend/data/data-modeling/relationships/
+  // SPECIFICALLY: "Eagerly Load "has Many" Relationships" and "Lazy Load "has Many" Relationships"
+  // @ts-ignore
   const { data: members } = await team.data?.members();
 
   if (members.length >= MAX_TEAM_MEMBERS) {
@@ -107,7 +111,7 @@ export const handler: AppSyncResolverHandler<
 
   const result = await dataClient.models.User.update({
     id: userId,
-    TeamId: teamId,
+    teamId: teamId,
   });
 
   if (!result.errors) {
