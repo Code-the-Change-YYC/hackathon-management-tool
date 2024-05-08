@@ -10,28 +10,34 @@ specify that owners, authenticated via your Auth resource can "create",
 "read", "update", and "delete" their own records. Public users,
 authenticated via an API key, can only "read" records.
 =========================================================================*/
-
 const schema = a
   .schema({
     User: a
       .model({
-        FirstName: a.string(),
-        LastName: a.string(),
-        Email: a.string(),
-        Meals: a.boolean(),
-        Institution: a.string(),
-        Allergies: a.string(),
-        CheckedIn: a.boolean(),
-        TeamId: a.id(),
-        Team: a.belongsTo("Team", "TeamId"),
+        firstName: a.string(),
+        lastName: a.string(),
+        email: a.string(),
+        meals: a.boolean(),
+        institution: a.string(),
+        allergies: a.string(),
+        checkedIn: a.boolean(),
+        teamId: a.string(),
+        team: a.belongsTo("Team", "teamId"),
       })
-      .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
+      .authorization((allow) => [
+        allow.owner(),
+        allow.authenticated().to(["read"]),
+      ]),
     Team: a
       .model({
-        Name: a.string(),
-        Members: a.hasMany("User", "TeamId"),
+        name: a.string(),
+        id: a.id(),
+        members: a.hasMany("User", "teamId"),
       })
-      .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
+      .authorization((allow) => [
+        allow.owner(),
+        allow.authenticated().to(["read"]),
+      ]),
     GenericFunctionResponse: a.customType({
       body: a.json(),
       statusCode: a.integer(),
@@ -51,7 +57,8 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       // allow all users to call this api for now
       .authorization((allow) => [allow.guest()])
-      .function("demoFunctionKey"),
+      .handler(a.handler.function(DemoFunction)),
+
     AssignUsersToTeams: a
       .mutation()
       .arguments({
@@ -60,18 +67,17 @@ const schema = a
       })
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.guest(), allow.authenticated()])
-      .handler(a.handler.function("assignUsersToTeamsKey")),
+      .handler(a.handler.function(AssignUsersToTeams)),
   })
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
   ]);
-
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
+    defaultAuthorizationMode: "userPool",
     // API Key is used for a.allow.public() rules
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
@@ -79,10 +85,6 @@ export const data = defineData({
     lambdaAuthorizationMode: {
       function: DemoAuthFunction,
     },
-  },
-  functions: {
-    demoFunctionKey: DemoFunction,
-    assignUsersToTeamsKey: AssignUsersToTeams,
   },
 });
 
