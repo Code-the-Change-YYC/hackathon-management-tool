@@ -67,7 +67,7 @@ export const handler: AppSyncResolverHandler<
   const team = await dataClient.models.Team.get({ id: event.arguments.teamId }); // i think this is where the error is occurring
   console.log("after error");
   console.log(team);
-  const teamId = team.data.id;
+  const teamId = team.data?.id;
 
   if (teamId == null) {
     return {
@@ -77,7 +77,7 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  const userId = user.data.id;
+  const userId = user.data?.id;
 
   if (userId == null) {
     return {
@@ -87,7 +87,7 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  if (await user.data.Team()) {
+  if (await user.data?.team()) {
     return {
       body: { value: "Error: User is already part of a team" },
       statusCode: 400,
@@ -95,7 +95,7 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  const { data: members } = await team.data.Members();
+  const { data: members } = await team.data?.members();
 
   if (members.length >= MAX_TEAM_MEMBERS) {
     return {
