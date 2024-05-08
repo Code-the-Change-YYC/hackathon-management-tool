@@ -29,7 +29,7 @@ const schema = a.schema({
   Team: a
     .model({
       Name: a.string(),
-      Code: a.string(),
+      id: a.id(),
       Members: a.hasMany("User", "teamId"),
     })
     .authorization((allow) => [
@@ -55,7 +55,7 @@ const schema = a.schema({
     .returns(a.ref("GenericFunctionResponse"))
     // allow all users to call this api for now
     .authorization((allow) => [allow.guest()])
-    .function("demoFunctionKey"),
+    .handler(a.handler.function("demoFunctionKey")),
 });
 
 export type Schema = ClientSchema<typeof schema>;

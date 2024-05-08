@@ -30,19 +30,14 @@ const UserProfile = () => {
   // Queries
 
   const { data, isFetching } = useQuery({
-    initialData: {} as Schema["User"],
+    initialData: {} as Schema["User"]["type"],
     initialDataUpdatedAt: 0,
     queryKey: ["User", "123"],
     queryFn: async () =>
       (
-        await client.models.User.get(
-          {
-            id: "123",
-          },
-          {
-            selectionSet: ["id", "FirstName", "LastName", "Institution"],
-          },
-        )
+        await client.models.User.get({
+          id: "123",
+        })
       ).data,
   });
 
@@ -60,7 +55,7 @@ const UserProfile = () => {
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [enableCancelSave, setEnableCancelSave] = useState<boolean>(false);
-  const [formState, setFormState] = useState<Schema["User"]>(data);
+  const [formState, setFormState] = useState<Schema["User"]["type"]>(data);
 
   // useEffect(() => {
   //   setFormState(data);
