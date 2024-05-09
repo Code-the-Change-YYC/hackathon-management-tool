@@ -1,5 +1,9 @@
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import { twMerge } from "tailwind-merge";
+
+import ABOUT_THE_CHALLENGE_IMAGE from "@/images/landingpage/AboutTheChallenge.png";
+import PRIZES_IMAGE from "@/images/landingpage/prizes.png";
+import REQUIREMENTS_IMAGE from "@/images/landingpage/requirements.png";
 
 function SectionContainer({
   title,
@@ -10,7 +14,7 @@ function SectionContainer({
   fontColor,
 }: {
   title: React.ReactNode;
-  sectionImage: string;
+  sectionImage: string | StaticImageData;
   leftPosition?: boolean;
   blurb: string;
   bgColor?: string;
@@ -30,13 +34,15 @@ function SectionContainer({
       </div>
       <div
         className={twMerge(
-          "relative box-content hidden aspect-square w-2/3 min-w-48 max-w-96 rounded-lg md:block",
+          "relative box-content hidden aspect-square w-2/3 min-w-48 max-w-96 md:block",
           leftPosition && "order-first",
         )}
       >
         <Image
           src={sectionImage}
           alt="About the challenge image"
+          placeholder={typeof sectionImage === "string" ? undefined : "blur"}
+          className="rounded-3xl"
           fill
           sizes="(max-width: 600px) 50vw, (max-width: 1024px) 25vw, 1000px"
         />
@@ -47,7 +53,6 @@ function SectionContainer({
 
 export default function HackathonInformationContainer() {
   const CHALLENGE_QUOTES_SVG = "/svgs/landingPage/challenge_quotes.svg";
-  const ABOUT_THE_CHALLENGE_IMAGE = "/svgs/landingPage/about_the_challenge.svg";
   const ABOUT_THE_CHALLENGE_BLURB = `Hack the Change aims to inspire students across Canada to leverage technology to enact social change. We’re looking for creative and innovative solutions to existing problems, with the goal of coding a better tomorrow.`;
   const ABOUT_THE_CHALLENGE_TITLE = (
     <div className="flex flex-row flex-nowrap text-nowrap">
@@ -60,13 +65,12 @@ export default function HackathonInformationContainer() {
         width={20}
         height={20}
         alt="Challenge quotes"
-        className=" mb-4 ml-1"
+        className=" mb-4 ml-1 select-none"
       />
     </div>
   );
 
   const REQUIREMENTS_QUOTES_SVG = "/svgs/landingPage/requirements_quotes.svg";
-  const REQUIREMENTS_IMAGE = "/svgs/landingPage/requirements.svg";
   const REQUIREMENTS_BLURB = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eius cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
   const REQUIREMENTS_TITLE = (
     <div className="flex flex-row text-3xl font-semibold italic text-awesomer-purple">
@@ -75,14 +79,13 @@ export default function HackathonInformationContainer() {
         width={20}
         height={20}
         alt="Challenge quotes"
-        className=" mr-1 mt-2"
+        className=" mr-1 mt-2 select-none"
       />
       Requirements
     </div>
   );
 
   const PRIZES_QUOTES_SVG = "/svgs/landingPage/prizes_quotes.svg";
-  const PRIZES_IMAGE = "/svgs/landingPage/prizes.svg";
   const PRIZES_BLURB = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eius cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
   const PRIZES_TITLE = (
     <div className="flex flex-row text-3xl font-semibold italic text-[#00AA88]">
@@ -92,20 +95,20 @@ export default function HackathonInformationContainer() {
         width={20}
         height={20}
         alt="Challenge quotes"
-        className=" ml-1 mt-2"
+        className=" ml-1 mt-2 select-none"
       />
     </div>
   );
 
   return (
     <div className="relative overflow-hidden">
-      <div className=" hidden lg:block">
+      <div className=" pointer-events-none hidden select-none lg:block ">
         <Image
           src="/svgs/landingPage/vector_2.svg"
           alt=""
           width={140}
           height={80}
-          className="absolute  left-[-7rem]  top-[13rem]"
+          className="absolute  -left-28  top-52"
         />
         <Image
           src="/svgs/landingPage/vector_14.svg"
@@ -119,21 +122,21 @@ export default function HackathonInformationContainer() {
           alt=""
           width={1022}
           height={410}
-          className="absolute left-[20rem] top-[47rem] w-full max-w-[99rem]"
+          className="absolute left-80 top-[47rem] w-full max-w-[99rem]"
         />
         <Image
           src="/svgs/landingPage/vector_6.svg"
           alt=""
           width={430}
           height={320}
-          className="absolute top-[25rem] w-1/3 max-w-[32rem]"
+          className="absolute top-[25rem] w-1/3 max-w-lg"
         />
         <Image
           src="/svgs/landingPage/vector_10.svg"
           alt=""
           width={815}
           height={448}
-          className="absolute left-[15rem] top-[50rem] w-2/3 max-w-[80rem]"
+          className="absolute left-60 top-[50rem] w-2/3 max-w-7xl"
         />
 
         <Image
