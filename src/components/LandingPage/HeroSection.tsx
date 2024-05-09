@@ -9,7 +9,7 @@ import CountdownTimer from "@/components/LandingPage/CountdownTimer";
 const HERO_SECTION_CONTAINER =
   "relative flex flex-col justify-between md:py-15 md:px-24 lg:px-40 ";
 const HERO_SECTION_BACKGROUND =
-  "/images/landingPage/HeroSection/hero_section_background.png";
+  "/images/landingpage/HeroSection/hero_section_background.png";
 const HERO_HEADER_STYLE = {
   textShadow: `
 		-2px -2px 0 #7055FD, 
