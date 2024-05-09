@@ -37,4 +37,3 @@ next-env.d.ts
 # amplify
 .amplify
 amplifyconfiguration*
-src/featureFlags.tsx
