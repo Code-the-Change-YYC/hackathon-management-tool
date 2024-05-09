@@ -6,7 +6,7 @@ import { createServerRunner } from "@aws-amplify/adapter-nextjs";
 import { generateServerClientUsingCookies } from "@aws-amplify/adapter-nextjs/api";
 
 // eslint-disable-next-line no-restricted-imports
-import config from "../../amplifyconfiguration.json";
+import config from "../../../amplify_outputs.json";
 
 export const { runWithAmplifyServerContext } = createServerRunner({
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
