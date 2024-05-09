@@ -1,48 +1,40 @@
 "use client";
 
 import { generateClient } from "aws-amplify/data";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
+import TeamForm from "@/components/UserProfile/TeamForm";
 import { useQuery } from "@tanstack/react-query";
 
-const INPUT_STYLES =
-  "rounded-full border-4 placeholder-black border-white bg-[#FFFFFF] bg-white/30 ps-3 py-2 my-2 text-sm md:text-md backdrop-opacity-30";
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
-
-const FORM_STYLES = "md:mx-10 flex flex-col";
 
 const TEAM_INSTRUCTION_STYLES =
   "bg-pink bg-white/30 mx-10 my-10 rounded-3xl  border-4 border-white bg-[#FFFFFF] px-10 py-20 md:px-20 md:py-16";
 
 const client = generateClient<Schema>();
 
-const TeamProfile = () => {
-  const { data, isFetching } = useQuery({
-    initialData: {} as Schema["Team"],
-    initialDataUpdatedAt: 0,
-    queryKey: ["Team", 1234],
-    queryFn: async () =>
-      (
-        await client.models.Team.get({
-          id: "1234",
-        })
-      ).data,
-  });
+export interface TeamFormProp {
+  data: Schema["Team"]["type"];
+  setHasTeam: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-  const [formState, setFormState] = useState<Schema["Team"]>(data);
+const TeamProfile = () => {
   const [hasTeam, setHasTeam] = useState<boolean>(true);
 
-  const handleLeaveTeamClick = () => {
-    setHasTeam((prevHasTeam) => !prevHasTeam);
-    console.log(hasTeam);
-  };
-
-  useEffect(() => {
-    setFormState(data);
-  }, [data, setFormState]);
+  const { data, isFetching } = useQuery({
+    initialData: {} as Schema["Team"]["type"],
+    initialDataUpdatedAt: 0,
+    queryKey: ["Team", 1234],
+    queryFn: async () => {
+      const response = await client.models.Team.get({
+        id: "1234",
+      });
+      return response.data;
+    },
+  });
 
   return (
     <>
@@ -59,53 +51,9 @@ const TeamProfile = () => {
                 Team Details
               </h1>
             </div>
-            {hasTeam ? (
+            {hasTeam && data ? (
               <>
-                <form className={FORM_STYLES}>
-                  <label>Team ID</label>
-                  <input
-                    className={INPUT_STYLES}
-                    type="text"
-                    placeholder={formState.id ?? "Team ID"}
-                    disabled
-                  />
-                  <label>Team Name</label>
-                  <input
-                    className={INPUT_STYLES}
-                    type="text"
-                    placeholder={formState.Name ?? "Team Name"}
-                    disabled
-                  />
-                  <label>Team Members</label>
-                  <div className="flex flex-col">
-                    <input
-                      className={INPUT_STYLES}
-                      type="text"
-                      placeholder="Member 1"
-                      disabled
-                    />
-                    <input
-                      className={INPUT_STYLES}
-                      type="text"
-                      placeholder="Member 2"
-                      disabled
-                    />
-                    <input
-                      className={INPUT_STYLES}
-                      type="text"
-                      placeholder="Member 3"
-                      disabled
-                    />
-                  </div>
-                </form>
-                <div className="mb-10 mt-3 flex justify-end md:mx-10">
-                  <button
-                    className={`${BUTTON_STYLES} w-full md:w-auto`}
-                    onClick={handleLeaveTeamClick}
-                  >
-                    Leave Team
-                  </button>
-                </div>
+                <TeamForm data={data} setHasTeam={setHasTeam} />
               </>
             ) : (
               <div>
