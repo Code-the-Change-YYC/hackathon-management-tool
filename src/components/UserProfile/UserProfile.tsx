@@ -8,7 +8,7 @@ import { useFormStatus } from "react-dom";
 
 import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const INPUT_STYLES: string =
   "rounded-full  border-4 border-white bg-[#FFFFFF]  ps-3  py-2 my-2 text-sm md:text-md bg-white/30";
@@ -24,7 +24,7 @@ const FORM_STYLES = "md:mx-10 flex flex-col";
 const client = generateClient<Schema>();
 
 const UserProfile = () => {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const { pending } = useFormStatus();
   // Queries
@@ -41,17 +41,27 @@ const UserProfile = () => {
       ).data,
   });
 
-  // const { mutateAsync } = useMutation({
-  //   mutationFn: async () =>
-  //     (
-  //       await client.models.User.update({
-  //         id: "123",
-  //       })
-  //     ).data,
-  //   onSuccess: () => {
-  //     queryClient.setQueryData(["User", 123], data);
-  //   },
-  // });
+  const userMutation = useMutation({
+    //mutation takes parameters of input with User type
+    mutationFn: async (input: Schema["User"]["type"]) =>
+      (await client.models.User.update(input)).data,
+    onMutate: () => {
+      console.log("Mutate");
+    },
+
+    onError: () => {
+      console.log("Error");
+    },
+
+    onSuccess: () => {
+      queryClient.setQueryData(["User", 123], data);
+      console.log("success");
+    },
+
+    onSettled: () => {
+      console.log("settled");
+    },
+  });
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [enableCancelSave, setEnableCancelSave] = useState<boolean>(false);
@@ -86,6 +96,7 @@ const UserProfile = () => {
     e.preventDefault(); // Prevent default form submission behavior
     setIsEditing(false); // Exit edit mode
     setEnableCancelSave(false);
+    userMutation.mutate(formState);
     console.log(formState); // Log the form state
   };
 
