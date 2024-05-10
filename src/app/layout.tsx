@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import "react-toastify/dist/ReactToastify.css";
 
 import "@/app/globals.css";
 import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
@@ -13,7 +14,15 @@ const Omnes = localFont({
 });
 export const metadata: Metadata = {
   title: "Hack the Change",
-  description: "Hack the Change management tool",
+  description: "Hack the Change Participant Portal",
+  icons: [
+    {
+      rel: "icon",
+      type: "image/ico",
+      sizes: "32x32",
+      url: "/favicon.ico",
+    },
+  ],
 };
 
 function RootLayout({ children }: { children: React.ReactNode }) {

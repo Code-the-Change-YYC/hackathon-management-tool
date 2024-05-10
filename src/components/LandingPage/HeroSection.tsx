@@ -189,7 +189,7 @@ const HeroSection = () => {
         src={HERO_SECTION_BACKGROUND}
         alt="Landing page background"
         fill={true}
-        objectFit="cover"
+        style={{ objectFit: "cover" }}
       />
       <HeroSectionTile {...HeroSectionDetails} />
     </div>

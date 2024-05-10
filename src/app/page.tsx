@@ -5,9 +5,11 @@ import JudgeShowcase from "@/components/LandingPage/JudgeShowcase";
 import JudgingCriteria from "@/components/LandingPage/JudgingCriteria";
 import ThankSponsors from "@/components/LandingPage/ThanksSponsors";
 import PagePlaceholder from "@/components/PagePlaceholder";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 import { enableLandingPage } from "@/featureFlags";
 
-export default function Home() {
+const Home = () => {
   return (
     <main>
       {enableLandingPage ? (
@@ -24,4 +26,11 @@ export default function Home() {
       )}
     </main>
   );
-}
+};
+
+export default withAuthGuard(Home, [
+  UserType.Admin,
+  UserType.Guest,
+  UserType.Judge,
+  UserType.Participant,
+]);

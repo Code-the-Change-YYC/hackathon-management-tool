@@ -1,4 +1,4 @@
-import { getCurrentUser } from "aws-amplify/auth/server";
+import { fetchAuthSession } from "aws-amplify/auth/server";
 import { cookies } from "next/headers";
 
 import { type Schema } from "@/amplify/data/resource";
@@ -23,7 +23,7 @@ export async function AuthGetCurrentUserServer() {
   try {
     const currentUser = await runWithAmplifyServerContext({
       nextServerContext: { cookies },
-      operation: (contextSpec) => getCurrentUser(contextSpec),
+      operation: (contextSpec) => fetchAuthSession(contextSpec),
     });
     return currentUser;
   } catch (error) {
