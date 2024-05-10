@@ -18,8 +18,6 @@ export default function TeamForm({ data, setHasTeam }: TeamFormProp) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [formState, setFormState] = useState<Schema["Team"]["type"]>(data);
 
-  console.log(formState);
-
   return (
     <>
       {formState && (
@@ -41,24 +39,16 @@ export default function TeamForm({ data, setHasTeam }: TeamFormProp) {
             />
             <label>Team Members</label>
             <div className="flex flex-col">
-              <input
-                className={INPUT_STYLES}
-                type="text"
-                placeholder={"Member 1"}
-                disabled
-              />
-              <input
-                className={INPUT_STYLES}
-                type="text"
-                placeholder="Member 2"
-                disabled
-              />
-              <input
-                className={INPUT_STYLES}
-                type="text"
-                placeholder="Member 3"
-                disabled
-              />
+              {Array.isArray(formState.members) &&
+                formState.members.map((member: Schema["User"]["type"]) => (
+                  <input
+                    key={member.id}
+                    className={INPUT_STYLES}
+                    type="text"
+                    value={`${member.firstName} ${member.lastName}`}
+                    disabled
+                  />
+                ))}
             </div>
           </form>
           <div className="mb-10 mt-3 flex justify-end md:mx-10">
