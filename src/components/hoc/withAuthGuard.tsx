@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
-import React from "react";
+import type React from "react";
 
+import { UserType } from "@/components/contexts/UserContext";
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
-
-import { UserType } from "../contexts/UserContext";
 
 const withAuthGuard = (
   WrappedComponent: React.ComponentType<any>,
