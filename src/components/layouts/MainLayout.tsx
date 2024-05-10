@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import PagePlaceholder from "@/components/PagePlaceholder";
+import { enableLandingPage } from "@/featureFlags";
 
 interface Props {
   children: ReactNode | ReactNode[];
@@ -10,11 +12,17 @@ interface Props {
 export default function MainLayout({ children }: Props) {
   return (
     <>
-      <Header />
-      <main className="flex min-h-[70vh] flex-col items-center justify-between overflow-x-hidden">
-        {children}
-      </main>
-      <Footer />
+      {enableLandingPage ? (
+        <PagePlaceholder />
+      ) : (
+        <>
+          <Header />
+          <main className="flex min-h-screen flex-col items-center justify-between">
+            {children}
+          </main>
+          <Footer />
+        </>
+      )}
     </>
   );
 }

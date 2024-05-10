@@ -33,7 +33,7 @@ export default function FormFieldsHeader({
         <Flex direction={"column"}>
           <Flex>
             <Image
-              className="-mr-4"
+              className=" pointer-events-none -mr-4 select-none"
               src="/svgs/login/vector_112.svg"
               alt=""
               width={28}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 
 import "@/app/globals.css";
 import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
@@ -7,8 +7,10 @@ import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
 import MainLayout from "@/components/layouts/MainLayout";
 import "@aws-amplify/ui-react/styles.css";
 
-const inter = Inter({ subsets: ["latin"] });
-
+const Omnes = localFont({
+  src: "./fonts/Omnes Medium.ttf",
+  variable: "--font-omnes",
+});
 export const metadata: Metadata = {
   title: "Hack the Change",
   description: "Hack the Change management tool",
@@ -17,7 +19,7 @@ export const metadata: Metadata = {
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${Omnes.className}`}>
         <ConfigureAmplifyClientSide />
         {/* <UserContextProvider> */}
         <MainLayout>{children}</MainLayout>

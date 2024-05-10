@@ -12,29 +12,29 @@ authenticated via an API key, can only "read" records.
 const schema = a.schema({
   User: a
     .model({
-      FirstName: a.string(),
-      LastName: a.string(),
-      Email: a.string(),
-      Meals: a.boolean(),
-      Institution: a.string(),
-      Allergies: a.string(),
-      CheckedIn: a.boolean(),
-      TeamId: a.string(),
-      Team: a.belongsTo("Team", "TeamId"),
+      firstName: a.string(),
+      lastName: a.string(),
+      email: a.string(),
+      meals: a.boolean(),
+      institution: a.string(),
+      allergies: a.string(),
+      checkedIn: a.boolean(),
+      teamId: a.id(),
+      team: a.belongsTo("Team", "teamId"),
     })
     .authorization((allow) => [
-      allow.authenticated(),
-      allow.guest().to(["read"]),
+      allow.owner(),
+      allow.authenticated().to(["read"]),
     ]),
   Team: a
     .model({
-      Name: a.string(),
-      Code: a.string(),
-      Members: a.hasMany("User", "TeamId"),
+      name: a.string(),
+      id: a.id(),
+      members: a.hasMany("User", "teamId"),
     })
     .authorization((allow) => [
-      allow.authenticated(),
-      allow.guest().to(["read"]),
+      allow.owner(),
+      allow.authenticated().to(["read"]),
     ]),
   GenericFunctionResponse: a.customType({
     body: a.json(),
@@ -63,7 +63,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
+    defaultAuthorizationMode: "userPool",
     // API Key is used for a.allow.public() rules
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
@@ -71,9 +71,6 @@ export const data = defineData({
     lambdaAuthorizationMode: {
       function: DemoAuthFunction,
     },
-  },
-  functions: {
-    // demoFunctionKey: DemoFunction,
   },
 });
 
