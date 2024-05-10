@@ -1,8 +1,20 @@
+import { generateClient } from "aws-amplify/api";
+
+import type { Schema } from "@/amplify/data/resource";
 import FormFields from "@/components/LoginForm/FormFields";
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
+import type { CreateUserInput } from "@/graphql/API";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
+import { useMutation } from "@tanstack/react-query";
 
+const client = generateClient<Schema>();
 export default function PersonalFormFields() {
+  const mutation = useMutation({
+    mutationFn: (newUser: CreateUserInput) => {
+      console.log(newUser);
+      return client.models.User.create(newUser);
+    },
+  });
   const institutions = [
     "University of Calgary",
     "Mount Royal University",
@@ -18,14 +30,16 @@ export default function PersonalFormFields() {
       require_food: formData.get("require_food"),
       allergies: formData.get("allergies"),
     };
-    if (
-      data.first_name &&
-      data.last_name &&
-      data.require_food &&
-      data.allergies
-    ) {
+    if (data.first_name && data.last_name && data.require_food) {
       // Send data to backend
       console.log(data);
+      const myObj: CreateUserInput = {};
+      const returnValue = client.models.User.create(myObj);
+      console.log(
+        "rv",
+        returnValue.then((r) => console.log(r)),
+      );
+      // mutation.mutate({ data });
     }
   };
   return (
@@ -39,11 +53,21 @@ export default function PersonalFormFields() {
         <div className="flex flex-row justify-between gap-2 md:gap-12 ">
           <div className="flex w-1/2 flex-col gap-2">
             <Label htmlFor="first_name">* First Name:</Label>
-            <Input id="first_name" name="first_name" placeholder="First Name" />
+            <Input
+              required
+              id="first_name"
+              name="first_name"
+              placeholder="First Name"
+            />
           </div>
           <div className="flex w-1/2 flex-col gap-2">
             <Label htmlFor="last_name">* Last Name:</Label>
-            <Input id="last_name" name="last_name" placeholder="Last Name" />
+            <Input
+              required
+              id="last_name"
+              name="last_name"
+              placeholder="Last Name"
+            />
           </div>
         </div>
         <SelectField name="institution" label="Which institution do you go to?">
@@ -57,6 +81,7 @@ export default function PersonalFormFields() {
           ))}
         </SelectField>
         <SelectField
+          required
           name="require_food"
           label="* Do you want provided food at the hackathon?"
         >
@@ -69,11 +94,11 @@ export default function PersonalFormFields() {
         </SelectField>
         <Flex direction="column" gap="small">
           <Label htmlFor="allergies">
-            * If you wanted provided food, please indicate any allergies:
+            If you wanted provided food, please indicate any allergies:
           </Label>
           <Input id="allergies" name="allergies" placeholder="e.g. peanuts" />
         </Flex>
-        <FormFields />
+        <FormFields mutationStatus={mutation.status} />
       </form>
     </>
   );

@@ -7,7 +7,7 @@ import ThankSponsors from "@/components/LandingPage/ThanksSponsors";
 import PagePlaceholder from "@/components/PagePlaceholder";
 import { enableLandingPage } from "@/featureFlags";
 
-export default function Home() {
+const Home = () => {
   return (
     <main>
       {enableLandingPage ? (
@@ -24,4 +24,6 @@ export default function Home() {
       )}
     </main>
   );
-}
+};
+
+export default Home;
