@@ -39,11 +39,11 @@ const TeamProfile = () => {
   return (
     <>
       {isFetching ? (
-        <div className="flex h-screen w-full items-center justify-center bg-[#FFD7C5]">
+        <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
           <h1 className="text-2xl">Loading...</h1>
         </div>
       ) : (
-        <div className="flex w-full flex-col bg-[#FFD7C5]">
+        <div className="flex w-full flex-col bg-fuzzy-peach">
           <div className="px-10  md:px-16 md:py-10">
             <ProfileLinks />
             <div className="  mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">

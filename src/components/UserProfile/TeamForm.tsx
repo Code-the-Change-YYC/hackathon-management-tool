@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import { type TeamFormProp } from "@/components/UserProfile/TeamProfile";
@@ -17,13 +15,10 @@ export default function TeamForm({ data, setHasTeam }: TeamFormProp) {
     setHasTeam((prevHasTeam) => !prevHasTeam);
   };
 
-  const [formState, setFormState] = useState<Schema["Team"]["type"]>(
-    {} as Schema["Team"]["type"],
-  );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [formState, setFormState] = useState<Schema["Team"]["type"]>(data);
 
-  useEffect(() => {
-    setFormState(data);
-  }, []);
+  console.log(formState);
 
   return (
     <>
@@ -41,7 +36,7 @@ export default function TeamForm({ data, setHasTeam }: TeamFormProp) {
             <input
               className={INPUT_STYLES}
               type="text"
-              placeholder={formState.Name ?? "Team Name"}
+              placeholder={formState.name ?? "Team Name"}
               disabled
             />
             <label>Team Members</label>
@@ -49,7 +44,7 @@ export default function TeamForm({ data, setHasTeam }: TeamFormProp) {
               <input
                 className={INPUT_STYLES}
                 type="text"
-                placeholder="Member 1"
+                placeholder={"Member 1"}
                 disabled
               />
               <input
