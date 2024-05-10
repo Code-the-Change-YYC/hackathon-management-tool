@@ -29,9 +29,15 @@ const TeamProfile = () => {
     initialDataUpdatedAt: 0,
     queryKey: ["Team", 1234],
     queryFn: async () => {
-      const response = await client.models.Team.get({
-        id: "1234",
-      });
+      const response = await client.models.Team.get(
+        {
+          id: "123",
+        },
+        {
+          selectionSet: ["members.*", "id", "name"],
+        },
+      );
+      console.log(response.data);
       return response.data;
     },
   });
