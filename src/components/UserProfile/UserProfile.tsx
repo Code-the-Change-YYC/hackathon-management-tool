@@ -39,6 +39,7 @@ const UserProfile = () => {
           id: "123",
         })
       ).data,
+    // staleTime: Infinity,
   });
 
   const userMutation = useMutation({
@@ -53,9 +54,11 @@ const UserProfile = () => {
       console.log("Error");
     },
 
+    //When mutation is successful, re-fetch updated data using queryKey
     onSuccess: () => {
-      queryClient.setQueryData(["User", 123], data);
+      // queryClient.setQueryData(["User", "123"], data);
       console.log("success");
+      queryClient.invalidateQueries({ queryKey: ["User", "123"] });
     },
 
     onSettled: () => {
@@ -274,11 +277,7 @@ const UserProfile = () => {
                       className={BUTTON_STYLES}
                       disabled={pending}
                     >
-                      {pending ? (
-                        <div className="size-5 animate-spin rounded-full border-b-2 border-white"></div>
-                      ) : (
-                        "Save"
-                      )}
+                      {pending ? "Saving.." : "Save"}
                     </button>
                   </>
                 ) : (
