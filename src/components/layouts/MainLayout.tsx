@@ -17,7 +17,9 @@ export default function MainLayout({ children }: Props) {
       ) : (
         <>
           <Header />
-          <main>{children}</main>
+          <main className="flex min-h-screen flex-col items-center justify-between">
+            {children}
+          </main>
           <Footer />
         </>
       )}

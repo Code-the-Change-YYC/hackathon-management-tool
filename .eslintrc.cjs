@@ -3,18 +3,31 @@ const path = require("path");
 const prettierConfig = require("./prettier.config.cjs");
 
 const project = path.join(__dirname, "./tsconfig.json");
+const backend = path.join(__dirname, "./amplify/tsconfig.json");
 
 /** @type {import("eslint").Linter.Config} */
 const config = {
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
   overrides: [
     {
       extends: [
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        // "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:promise/recommended",
       ],
-      files: ["*.ts", "*.tsx"],
+      files: [
+        "./src/**/*.ts",
+        "./src/**/*.tsx",
+        "./amplify/**/*.ts",
+        "./amplify/**/*.tsx",
+      ],
       parserOptions: {
-        project,
+        project: {
+          include: [project, backend],
+        },
       },
       rules: {
         "no-unused-vars": "off",

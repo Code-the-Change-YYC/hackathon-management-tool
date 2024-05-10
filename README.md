@@ -1,4 +1,4 @@
-The prod branch has a CI/CD deployment available at: [https://prod.hackthechangeyyc.ca/](https://prod.hackthechangeyyc.ca/)
+The prod branch has a CI/CD deployment available at: [https://hackthechangeyyc.ca/](https://hackthechangeyyc.ca/)
 
 ## Getting Started
 
