@@ -89,7 +89,7 @@ const UserProfile = () => {
     console.log(formState); // Log the form state
   };
 
-  const checkedIn = data?.CheckedIn; // Placeholder value for now
+  const checkedIn = data?.checkedIn; // Placeholder value for now
 
   // function updateInputMutation(arg0: { updateInput: string }) {
   //   throw new Error("Function not implemented.");
@@ -143,12 +143,12 @@ const UserProfile = () => {
                   <input
                     className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                     type="text"
-                    placeholder={formState.FirstName ?? "First Name"}
+                    placeholder={formState.firstName ?? "First Name"}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       onChange(e)
                     }
-                    value={formState.FirstName ?? ""}
-                    name="FirstName"
+                    value={formState.firstName ?? ""}
+                    name="firstName"
                     disabled={!isEditing} // Disabled when not in edit mode
                   />
                 </div>
@@ -157,26 +157,26 @@ const UserProfile = () => {
                   <input
                     className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                     type="text"
-                    placeholder={formState.LastName ?? "Last Name"}
+                    placeholder={formState.lastName ?? "Last Name"}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       onChange(e)
                     }
-                    name="LastName"
-                    value={formState.LastName ?? ""}
+                    name="lastName"
+                    value={formState.lastName ?? ""}
                     disabled={!isEditing} // Disabled when not in edit mode
                   />
                 </div>
               </div>
-              <label>Email</label>
+              <label>email</label>
               <input
                 className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                 type="text"
-                placeholder={formState.Email ?? ""}
+                placeholder={formState.email ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onChange(e)
                 }
-                value={formState.Email ?? ""}
-                name="Email"
+                value={formState.email ?? ""}
+                name="email"
                 disabled // Should not be able to edit email
               />
               <label>Password</label>
@@ -191,19 +191,19 @@ const UserProfile = () => {
                 className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                 type="text"
                 placeholder={
-                  formState.Institution ?? "e.g. University of Calgary"
+                  formState.institution ?? "e.g. University of Calgary"
                 }
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onChange(e)
                 }
-                value={formState.Institution ?? ""}
+                value={formState.institution ?? ""}
                 name="Institution"
                 disabled={!isEditing} // Disabled when not in edit mode
               />
               <label>Do you want provided meals at the hackathon?</label>
               <select
                 className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
-                value={formState.Meals ? "Yes" : "No"}
+                value={formState.meals ? "Yes" : "No"}
                 onChange={(e) =>
                   setFormState((prevState) => ({
                     ...prevState,
@@ -215,19 +215,19 @@ const UserProfile = () => {
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
-              {formState.Meals && (
+              {formState.meals && (
                 <>
                   <label>Do you have any allergies?</label>
                   <input
                     className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
                     type="text"
                     placeholder={
-                      formState.Allergies ?? "e.g. Dairy, Nuts, etc."
+                      formState.allergies ?? "e.g. Dairy, Nuts, etc."
                     }
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       onChange(e)
                     }
-                    value={formState.Allergies ?? ""}
+                    value={formState.allergies ?? ""}
                     name="Allergies"
                     disabled={!isEditing} // Disabled when not in edit mode
                   />

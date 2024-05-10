@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "react-toastify/dist/ReactToastify.css";
 
+import Providers from "@/app/QueryProvider";
 import "@/app/globals.css";
 import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
 // import { UserContextProvider } from "@/components/contexts/UserContext";
 import MainLayout from "@/components/layouts/MainLayout";
 import "@aws-amplify/ui-react/styles.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const Omnes = localFont({
@@ -31,10 +31,14 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${Omnes.className}`}>
-        <ConfigureAmplifyClientSide />
-        {/* <UserContextProvider> */}
-        <MainLayout>{children}</MainLayout>
-        {/* </UserContextProvider> */}
+        <Providers>
+          <ConfigureAmplifyClientSide />
+
+          {/* <UserContextProvider> */}
+          <MainLayout>{children}</MainLayout>
+          {/* </UserContextProvider> */}
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Providers>
       </body>
     </html>
   );
