@@ -86,8 +86,8 @@ const JudgeShowcase = () => {
                 <Image
                   src={judge.judgeImg}
                   alt="Profile Picture"
-                  objectFit="cover"
-                  layout="fill"
+                  style={{ objectFit: "cover" }}
+                  fill
                 />
               </div>
               <div className="flex flex-col justify-center">

@@ -26,6 +26,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
@@ -36,4 +37,5 @@ next-env.d.ts
 
 # amplify
 .amplify
-amplifyconfiguration*
+/amplifyconfiguration.json
+/amplify_outputs.json

@@ -9,7 +9,7 @@ import CountdownTimer from "@/components/LandingPage/CountdownTimer";
 const HERO_SECTION_CONTAINER =
   "relative flex flex-col justify-between md:py-15 md:px-24 lg:px-40 ";
 const HERO_SECTION_BACKGROUND =
-  "/images/landingPage/HeroSection/hero_section_background.png";
+  "/images/landingpage/HeroSection/hero_section_background.png";
 const HERO_HEADER_STYLE = {
   textShadow: `
 		-2px -2px 0 #7055FD, 
@@ -114,15 +114,15 @@ const HeroSectionTile = (props: HeroSectionProps) => {
         >
           {" "}
           {eventName}
-          <span className="text-[#BAFBE4]"> {eventYear}</span>
+          <span className="text-pastel-green"> {eventYear}</span>
         </h1>
-        <strong className="text-1xl my-4 flex flex-wrap justify-center text-[#7055FD] opacity-95  md:text-center md:text-xl lg:px-40">
+        <strong className="text-1xl my-4 flex flex-wrap justify-center text-awesomer-purple opacity-95  md:text-center md:text-xl lg:px-40">
           {eventBlurb}
         </strong>
       </div>
       <div className={LINK_STYLES}>
         <Link href="/" legacyBehavior>
-          <div className=" mb-4 rounded-2xl border-4 border-white bg-[#7055FD] px-6 py-2 text-sm text-white  hover:opacity-70 md:mb-0 md:px-6">
+          <div className=" mb-4 rounded-2xl border-4 border-white bg-awesomer-purple px-6 py-2 text-sm text-white  hover:opacity-70 md:mb-0 md:px-6">
             Join Hackathon
           </div>
         </Link>
@@ -131,7 +131,10 @@ const HeroSectionTile = (props: HeroSectionProps) => {
         <p className="my-2">
           Already registered?
           <Link href="/" legacyBehavior>
-            <span className=" text-[#7055FD]  hover:opacity-70"> Sign in</span>
+            <span className=" text-awesomer-purple  hover:opacity-70">
+              {" "}
+              Sign in
+            </span>
           </Link>
         </p>
       </div>
@@ -146,10 +149,10 @@ const HeroSectionTile = (props: HeroSectionProps) => {
             className="absolute left-0 top-0 -mt-5 ms-3"
           ></Image>
           <div className={COUNTDOWN_CONTAINER}>
-            <div className="m-2 h-[24rem] rounded-3xl bg-[#BAFBE4] px-10 opacity-90 md:m-5">
+            <div className="m-2 h-96 rounded-3xl bg-pastel-green px-10 opacity-90 md:m-5">
               {hackathonTime ? (
                 <h1
-                  className="flex-wrap pt-14 text-4xl font-black text-[#7055FD] drop-shadow-lg md:pt-20 md:text-center md:text-5xl lg:pt-32"
+                  className="flex-wrap pt-14 text-4xl font-black text-awesomer-purple drop-shadow-lg md:pt-20 md:text-center md:text-5xl lg:pt-32"
                   style={HACKTIME_HEADER_STYLE}
                 >
                   {eventName} {eventYear}
@@ -158,7 +161,7 @@ const HeroSectionTile = (props: HeroSectionProps) => {
                 </h1>
               ) : (
                 <div>
-                  <h1 className="pt-10 text-center text-2xl font-bold text-[#7055FD]">
+                  <h1 className="pt-10 text-center text-2xl font-bold text-awesomer-purple">
                     {eventName} begins in ...{" "}
                   </h1>
                   <div className={TIMER_CONTAINER}>
@@ -186,7 +189,7 @@ const HeroSection = () => {
         src={HERO_SECTION_BACKGROUND}
         alt="Landing page background"
         fill={true}
-        objectFit="cover"
+        style={{ objectFit: "cover" }}
       />
       <HeroSectionTile {...HeroSectionDetails} />
     </div>
