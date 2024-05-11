@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Popup from "@/app/admin/components/PopupTile";
 
@@ -47,7 +47,12 @@ const DataTableSection = (props: DataTableProps) => {
   const [editModes, setEditModes] = useState(
     Array(tableData.length).fill(false),
   );
-  const [editedValues, setEditedValues] = useState(tableData);
+  const [editedValues, setEditedValues] = useState<string[][]>([]);
+
+  useEffect(() => {
+    setEditedValues(tableData);
+  }, [tableData]);
+
   const [showPopup, setShowPopup] = useState(false);
   const [selectedMembersData, setSelectedMembersData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -93,9 +98,9 @@ const DataTableSection = (props: DataTableProps) => {
     rowIndex: number,
     cellIndex: number,
   ) => {
-    const newEditedValues = [...editedValues];
+    const newEditedValues: string[][] = [...editedValues];
     newEditedValues[rowIndex][cellIndex] = value;
-    setEditedValues(newEditedValues);
+    setEditedValues(newEditedValues as string[][]);
   };
 
   const filteredData = currentPageData.filter((rowData) =>

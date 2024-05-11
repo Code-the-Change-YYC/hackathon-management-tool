@@ -88,8 +88,6 @@ const TeamsTablePage = () => {
       });
   }, []);
 
-  console.log(membersData);
-
   return (
     <div>
       <FilterSection topLabel="Teams" filterLabels={filters} />
