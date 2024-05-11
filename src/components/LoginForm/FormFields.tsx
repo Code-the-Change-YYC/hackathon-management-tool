@@ -3,7 +3,11 @@ import { signOut } from "aws-amplify/auth";
 import { Authenticator } from "@aws-amplify/ui-react";
 import type { MutationStatus } from "@tanstack/react-query";
 
-const FormFields = ({ mutationStatus }: { mutationStatus: MutationStatus }) => {
+const FormFields = ({
+  mutationStatus,
+}: {
+  mutationStatus?: MutationStatus;
+}) => {
   return (
     <>
       <div

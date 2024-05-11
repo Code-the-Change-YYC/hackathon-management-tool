@@ -3,18 +3,18 @@ import { generateClient } from "aws-amplify/api";
 import type { Schema } from "@/amplify/data/resource";
 import FormFields from "@/components/LoginForm/FormFields";
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
-import type { CreateUserInput } from "@/graphql/API";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
-import { useMutation } from "@tanstack/react-query";
+
+// import { useMutation } from "@tanstack/react-query";
 
 const client = generateClient<Schema>();
 export default function PersonalFormFields() {
-  const mutation = useMutation({
-    mutationFn: (newUser: CreateUserInput) => {
-      console.log(newUser);
-      return client.models.User.create(newUser);
-    },
-  });
+  // const mutation = useMutation({
+  //   mutationFn: (newUser: CreateUserInput) => {
+  //     console.log(newUser);
+  //     return client.models.User.create(newUser);
+  //   },
+  // });
   const institutions = [
     "University of Calgary",
     "Mount Royal University",
@@ -23,24 +23,28 @@ export default function PersonalFormFields() {
     "None",
   ];
   const submitForm = (formData: FormData) => {
-    const data = {
-      first_name: formData.get("first_name"),
-      last_name: formData.get("last_name"),
-      institution: formData.get("institution"),
-      require_food: formData.get("require_food"),
-      allergies: formData.get("allergies"),
+    const data: Schema["User"]["type"] = {
+      firstName: "string",
+      lastName: "string",
+      institution: "string",
+      meals: true,
+      allergies: "string",
+      team: "string",
+      id: "string",
+      createdAt: "string",
+      updatedAt: "string",
     };
-    if (data.first_name && data.last_name && data.require_food) {
-      // Send data to backend
-      console.log(data);
-      const myObj: CreateUserInput = {};
-      const returnValue = client.models.User.create(myObj);
-      console.log(
-        "rv",
-        returnValue.then((r) => console.log(r)),
-      );
-      // mutation.mutate({ data });
-    }
+    const returnValue = client.models.User.create(
+      data,
+      //   {
+      //   firstName: "string",
+      //   lastName: "string",
+      //   institution: "string",
+      //   meals: true,
+      //   allergies: "string",
+      // }
+    );
+    console.log(returnValue.then((r) => console.log(r)));
   };
   return (
     <>
@@ -98,7 +102,7 @@ export default function PersonalFormFields() {
           </Label>
           <Input id="allergies" name="allergies" placeholder="e.g. peanuts" />
         </Flex>
-        <FormFields mutationStatus={mutation.status} />
+        <FormFields />
       </form>
     </>
   );
