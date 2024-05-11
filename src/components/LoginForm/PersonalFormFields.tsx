@@ -23,13 +23,12 @@ export default function PersonalFormFields() {
     "None",
   ];
   const submitForm = (formData: FormData) => {
-    const data: Schema["User"]["type"] = {
-      firstName: "string",
-      lastName: "string",
+    const data = {
+      firstName: formData.get("first_name") as string,
+      lastName: "string", // .....
       institution: "string",
       meals: true,
       allergies: "string",
-      team: "string",
       id: "string",
       createdAt: "string",
       updatedAt: "string",
