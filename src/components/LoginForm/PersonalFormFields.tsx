@@ -60,8 +60,7 @@ export default function PersonalFormFields({
   if (data?.id) {
     router.push("/");
   }
-
-  if (!data)
+  if (!data?.id && !isPending)
     return (
       <form
         action={submitForm}

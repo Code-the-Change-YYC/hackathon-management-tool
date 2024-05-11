@@ -25,7 +25,7 @@ const FormFields = ({
           }
           className=" rounded-full border-4 border-white bg-awesomer-purple px-4 py-1 font-semibold text-white  shadow-lg hover:opacity-90 md:px-8 md:py-2"
         >
-          Sign up
+          {mutationStatus === "pending" ? "Loading" : "Sign up"}
         </button>
       </div>
     </div>
