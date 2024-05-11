@@ -1,9 +1,9 @@
 {
   "auth": {
-    "user_pool_id": "ca-central-1_4AQmFdaPi",
+    "user_pool_id": "ca-central-1_ypYyT3Az9",
     "aws_region": "ca-central-1",
-    "user_pool_client_id": "3gdekfikctmb6hhkm589s6vp3i",
-    "identity_pool_id": "ca-central-1:bd30686f-aae9-42f8-9f9b-d408c9b67281",
+    "user_pool_client_id": "1sd3ej5v8qnf691lt7p3g1n7j5",
+    "identity_pool_id": "ca-central-1:798fb62e-ddde-400f-94e2-4ec3a5e26b78",
     "standard_required_attributes": [
       "email"
     ],
@@ -23,13 +23,13 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://fl47zlecinaxlezjwirkupvqga.appsync-api.ca-central-1.amazonaws.com/graphql",
+    "url": "https://5o6vmf7iavbndolii7d4iqxlva.appsync-api.ca-central-1.amazonaws.com/graphql",
     "aws_region": "ca-central-1",
-    "api_key": "da2-wdu5kk3ytvau7ats3ljiijc2pq",
-    "default_authorization_type": "API_KEY",
+    "api_key": "da2-ae5jdzyzhjebjfw5zy4sskxs64",
+    "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
     "authorization_types": [
+      "API_KEY",
       "AWS_LAMBDA",
-      "AMAZON_COGNITO_USER_POOLS",
       "AWS_IAM"
     ],
     "model_introspection": {
@@ -45,64 +45,64 @@
               "isRequired": true,
               "attributes": []
             },
-            "FirstName": {
-              "name": "FirstName",
+            "firstName": {
+              "name": "firstName",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "LastName": {
-              "name": "LastName",
+            "lastName": {
+              "name": "lastName",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "Email": {
-              "name": "Email",
+            "email": {
+              "name": "email",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "Meals": {
-              "name": "Meals",
+            "meals": {
+              "name": "meals",
               "isArray": false,
               "type": "Boolean",
               "isRequired": false,
               "attributes": []
             },
-            "Institution": {
-              "name": "Institution",
+            "institution": {
+              "name": "institution",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "Allergies": {
-              "name": "Allergies",
+            "allergies": {
+              "name": "allergies",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "CheckedIn": {
-              "name": "CheckedIn",
+            "checkedIn": {
+              "name": "checkedIn",
               "isArray": false,
               "type": "Boolean",
               "isRequired": false,
               "attributes": []
             },
-            "TeamId": {
-              "name": "TeamId",
+            "teamId": {
+              "name": "teamId",
               "isArray": false,
               "type": "ID",
               "isRequired": false,
               "attributes": []
             },
-            "Team": {
-              "name": "Team",
+            "team": {
+              "name": "team",
               "isArray": false,
               "type": {
                 "model": "Team"
@@ -112,7 +112,7 @@
               "association": {
                 "connectionType": "BELONGS_TO",
                 "targetNames": [
-                  "TeamId"
+                  "teamId"
                 ]
               }
             },
@@ -157,8 +157,7 @@
                     ]
                   },
                   {
-                    "allow": "public",
-                    "provider": "iam",
+                    "allow": "private",
                     "operations": [
                       "read"
                     ]
@@ -179,19 +178,19 @@
             "id": {
               "name": "id",
               "isArray": false,
-              "type": "String",
+              "type": "ID",
               "isRequired": true,
               "attributes": []
             },
-            "Name": {
-              "name": "Name",
+            "name": {
+              "name": "name",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "Members": {
-              "name": "Members",
+            "members": {
+              "name": "members",
               "isArray": true,
               "type": {
                 "model": "User"
@@ -202,7 +201,7 @@
               "association": {
                 "connectionType": "HAS_MANY",
                 "associatedWith": [
-                  "TeamId"
+                  "teamId"
                 ]
               }
             },
@@ -255,8 +254,7 @@
                     ]
                   },
                   {
-                    "allow": "public",
-                    "provider": "iam",
+                    "allow": "private",
                     "operations": [
                       "read"
                     ]

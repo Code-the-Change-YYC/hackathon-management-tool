@@ -17,11 +17,17 @@ const POPUP_TILE_TABLE_CELL_STYLES = "rounded-md p-2";
 
 interface PopupProps {
   selectedMembersData: string[];
+  selectedMemberStatus: string | string[];
   teamName: string;
   onClose: () => void;
 }
 
-const Popup = ({ selectedMembersData, onClose, teamName }: PopupProps) => {
+const Popup = ({
+  selectedMembersData,
+  selectedMemberStatus,
+  onClose,
+  teamName,
+}: PopupProps) => {
   return (
     <div className={POPUP_SECTION_STYLES}>
       <div className={POPUP_TILE_STYLES}>
@@ -45,10 +51,12 @@ const Popup = ({ selectedMembersData, onClose, teamName }: PopupProps) => {
               </tr>
             </thead>
             <tbody>
-              {selectedMembersData.map((member) => (
+              {selectedMembersData.map((member, index) => (
                 <tr className="bg-white" key={member}>
                   <td className={POPUP_TILE_TABLE_CELL_STYLES}>{member}</td>
-                  <td className={POPUP_TILE_TABLE_CELL_STYLES}></td>
+                  <td className={POPUP_TILE_TABLE_CELL_STYLES}>
+                    {selectedMemberStatus[index]}
+                  </td>
                 </tr>
               ))}
             </tbody>

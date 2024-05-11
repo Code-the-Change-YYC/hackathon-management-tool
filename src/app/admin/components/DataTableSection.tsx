@@ -50,6 +50,7 @@ const DataTableSection = (props: DataTableProps) => {
   const [selectedMembersData, setSelectedMembersData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTeamName, setSelectedTeamName] = useState("");
+  const [selectedMemberStatus, setSelectedMemberStatus] = useState("");
 
   const toggleEditMode = (index: number) => {
     const newEditModes = [...editModes];
@@ -57,10 +58,17 @@ const DataTableSection = (props: DataTableProps) => {
     setEditModes(newEditModes);
   };
 
-  const handleViewButtonClick = (rowData: Array<string>, rowIndex: number) => {
-    setSelectedMembersData(membersData[rowIndex]?.members || []);
-    setSelectedTeamName(rowData[0]);
-    setShowPopup(true);
+  const handleViewButtonClick = (rowData: Array<string>) => {
+    const teamName = rowData[0]; // Assuming the team name is the first column
+    const team = membersData.find((team) => team.teamName === teamName);
+
+    if (team) {
+      const { members, membersStatus } = team;
+      setSelectedMembersData(members);
+      setSelectedTeamName(teamName);
+      setSelectedMemberStatus(membersStatus);
+      setShowPopup(true);
+    }
   };
 
   // need to change the way this is handled once connected to database
@@ -91,7 +99,8 @@ const DataTableSection = (props: DataTableProps) => {
         <div className={SEARCH_RESULTS_SECTION_STYLES}>
           {/* the 100 would be replaced dynamically */}
           <h1 className={SEARCH_RESULTS_TEXT_STYLES}>
-            Search Results (100 teams found)
+            Search Results ({filteredData.length}{" "}
+            {filteredData.length === 1 ? "record" : "records"} found)
           </h1>
           <input
             type="text"
@@ -159,7 +168,7 @@ const DataTableSection = (props: DataTableProps) => {
                     {showViewButton && (
                       <button
                         className="mr-6 text-awesome-purple"
-                        onClick={() => handleViewButtonClick(rowData, rowIndex)}
+                        onClick={() => handleViewButtonClick(rowData)}
                       >
                         View
                       </button>
@@ -182,6 +191,7 @@ const DataTableSection = (props: DataTableProps) => {
         {showPopup && (
           <Popup
             selectedMembersData={selectedMembersData}
+            selectedMemberStatus={selectedMemberStatus}
             teamName={selectedTeamName}
             onClose={() => setShowPopup(false)}
           />
