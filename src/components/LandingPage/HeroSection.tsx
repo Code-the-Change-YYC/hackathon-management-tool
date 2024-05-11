@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import CountdownTimer from "@/components/LandingPage/CountdownTimer";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 
 const HERO_SECTION_CONTAINER =
   "relative flex flex-col justify-between md:py-15 md:px-24 lg:px-40 ";
@@ -105,6 +106,7 @@ const HeroSectionTile = (props: HeroSectionProps) => {
     return () => clearInterval(interval);
   }, []);
 
+  const { authStatus } = useAuthenticator();
   return (
     <div className={HERO_TILE_STYLES}>
       <div>
@@ -121,24 +123,35 @@ const HeroSectionTile = (props: HeroSectionProps) => {
         </strong>
       </div>
       <div className={LINK_STYLES}>
-        <Link href="/" legacyBehavior>
-          <div className=" mb-4 rounded-2xl border-4 border-white bg-awesomer-purple px-6 py-2 text-sm text-white  hover:opacity-70 md:mb-0 md:px-6">
-            Join Hackathon
-          </div>
-        </Link>
-      </div>
-      <div className={LINK_STYLES}>
-        <p className="my-2">
-          Already registered?
-          <Link href="/" legacyBehavior>
-            <span className=" text-awesomer-purple  hover:opacity-70">
-              {" "}
-              Sign in
-            </span>
+        {authStatus === "authenticated" ? (
+          <Link href="/participant/profile" legacyBehavior>
+            <div className=" mb-4 rounded-2xl border-4 border-white bg-awesomer-purple px-6 py-2 text-sm text-white  hover:opacity-70 md:mb-0 md:px-6">
+              Go to Profile
+            </div>
           </Link>
-        </p>
+        ) : (
+          <Link href="/login" legacyBehavior>
+            <div className=" mb-4 rounded-2xl border-4 border-white bg-awesomer-purple px-6 py-2 text-sm text-white  hover:opacity-70 md:mb-0 md:px-6">
+              Join Hackathon
+            </div>
+          </Link>
+        )}
       </div>
-
+      {authStatus === "authenticated" ? (
+        ""
+      ) : (
+        <div className={LINK_STYLES}>
+          <p className="my-2">
+            Already registered?
+            <Link href="/login" legacyBehavior>
+              <span className=" text-awesomer-purple  hover:opacity-70">
+                {" "}
+                Sign in
+              </span>
+            </Link>
+          </p>
+        </div>
+      )}
       <div className={WEBPAGE_CONTAINER}>
         <div className="relative rounded-t-md border-t-[30px] border-white">
           <Image
