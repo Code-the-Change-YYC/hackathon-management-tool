@@ -12,6 +12,7 @@ authenticated via an API key, can only "read" records.
 const schema = a.schema({
   User: a
     .model({
+      id: a.id().required(),
       firstName: a.string(),
       lastName: a.string(),
       email: a.string(),
