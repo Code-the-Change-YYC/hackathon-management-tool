@@ -5,6 +5,8 @@ import Popup from "@/app/admin/components/PopupTile";
 
 const search_icon = "/svgs/admin/search_icon.svg";
 
+const entries_per_page = 10;
+
 const DATA_TABLE_SECTION_STYLES =
   "bg-light-grey border border-awesomer-purple m-4 p-4 rounded-md text-lg text-black w-full max-w-[1500px]";
 
@@ -51,6 +53,20 @@ const DataTableSection = (props: DataTableProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTeamName, setSelectedTeamName] = useState("");
   const [selectedMemberStatus, setSelectedMemberStatus] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(tableData.length / entries_per_page);
+  const startIndex = (currentPage - 1) * entries_per_page;
+  const endIndex = Math.min(startIndex + entries_per_page, tableData.length);
+  const currentPageData = tableData.slice(startIndex, endIndex);
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
 
   const toggleEditMode = (index: number) => {
     const newEditModes = [...editModes];
@@ -82,7 +98,7 @@ const DataTableSection = (props: DataTableProps) => {
     setEditedValues(newEditedValues);
   };
 
-  const filteredData = tableData.filter((rowData) =>
+  const filteredData = currentPageData.filter((rowData) =>
     rowData.some((cellData) =>
       cellData.toLowerCase().includes(searchQuery.toLowerCase()),
     ),
@@ -90,6 +106,7 @@ const DataTableSection = (props: DataTableProps) => {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+    setCurrentPage(1);
   };
 
   return (
@@ -198,11 +215,25 @@ const DataTableSection = (props: DataTableProps) => {
         )}
         <div className="my-4 flex items-center justify-between">
           {/* replace dynamically */}
-          <h2 className="text-lg">Showing 1 of 10 of 500 entries</h2>
+          <h2 className="text-lg">
+            Showing {currentPage} of {totalPages} of {tableData.length} entries
+          </h2>
           <div className="flex text-sm text-awesomer-purple">
             <p className={CHANGE_PAGE_BUTTON_TEXT_STYLING}>Previous</p>
-            <button className={CHANGE_PAGE_BUTTON_STYLING}>&lt;</button>
-            <button className={CHANGE_PAGE_BUTTON_STYLING}>&gt;</button>
+            <button
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+              className={CHANGE_PAGE_BUTTON_STYLING}
+            >
+              &lt;
+            </button>
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className={CHANGE_PAGE_BUTTON_STYLING}
+            >
+              &gt;
+            </button>
             <p className={CHANGE_PAGE_BUTTON_TEXT_STYLING}>Next</p>
           </div>
         </div>
