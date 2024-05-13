@@ -8,14 +8,12 @@ import { useFormStatus } from "react-dom";
 
 import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
-import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import {
   QueryClient,
   useMutation,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
 const INPUT_STYLES: string =
   "rounded-full  border-4 border-white bg-[#FFFFFF]  ps-3  py-2 my-2 text-sm md:text-md bg-white/30";
@@ -51,8 +49,11 @@ const UserProfile = () => {
 
   const userMutation = useMutation({
     //mutation takes parameters of input with User type
-    mutationFn: async (input: Schema["User"]["type"]) =>
-      (await client.models.User.update(input)).data,
+    mutationFn: async (input: Schema["User"]["type"]) => {
+      const { createdAt, updatedAt, team, teamId, owner, ...extractedFields } =
+        input;
+      await client.models.User.update(extractedFields);
+    },
     onMutate: () => {
       console.log("Mutate");
     },
