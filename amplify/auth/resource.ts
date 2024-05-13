@@ -1,4 +1,4 @@
-import { defineAuth } from "@aws-amplify/backend";
+import { defineAuth, secret } from "@aws-amplify/backend";
 
 /**
  * Define and configure your auth resource
@@ -9,6 +9,30 @@ export const auth = defineAuth({
   groups: ["Admin", "Participant", "Judge"],
   loginWith: {
     email: true,
+
+    externalProviders: {
+      google: {
+        clientId: secret("GOOGLE_CLIENT_ID"),
+        clientSecret: secret("GOOGLE_CLIENT_SECRET"),
+      },
+      signInWithApple: {
+        clientId: secret("APPLE_CLIENT_ID"),
+        teamId: secret("APPLE_TEAM_ID"),
+        keyId: secret("APPLE_KEY_ID"),
+        privateKey: secret("APPLE_PRIVATE_KEY"),
+        scopes: ["name", "email"],
+      },
+      callbackUrls: [
+        "http://localhost:3000",
+        "https://hackthechangeyyc.ca",
+        "https://staging.hackthechangeyyc.ca",
+      ],
+      logoutUrls: [
+        "http://localhost:3000/logout",
+        "https://hackthechangeyyc.ca/logout",
+        "https://staging.hackthechangeyyc.ca/logout",
+      ],
+    },
     // add social providers
     // externalProviders: {
     /**
