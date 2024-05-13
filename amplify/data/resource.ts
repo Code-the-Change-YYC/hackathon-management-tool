@@ -2,6 +2,8 @@ import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/reso
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
+import { PreSignUp } from "../auth/PreSignUp/resource";
+
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
 adding a new "isDone" field as a boolean. The authorization rules below
@@ -9,54 +11,56 @@ specify that owners, authenticated via your Auth resource can "create",
 "read", "update", and "delete" their own records. Public users,
 authenticated via an API key, can only "read" records.
 =========================================================================*/
-const schema = a.schema({
-  User: a
-    .model({
-      firstName: a.string(),
-      lastName: a.string(),
-      email: a.string(),
-      meals: a.boolean(),
-      institution: a.string(),
-      allergies: a.string(),
-      checkedIn: a.boolean(),
-      teamId: a.id(),
-      team: a.belongsTo("Team", "teamId"),
-    })
-    .authorization((allow) => [
-      allow.owner(),
-      allow.authenticated().to(["read"]),
-    ]),
-  Team: a
-    .model({
-      name: a.string(),
-      id: a.id(),
-      members: a.hasMany("User", "teamId"),
-    })
-    .authorization((allow) => [
-      allow.owner(),
-      allow.authenticated().to(["read"]),
-    ]),
-  GenericFunctionResponse: a.customType({
-    body: a.json(),
-    statusCode: a.integer(),
-    headers: a.json(),
-  }),
+const schema = a
+  .schema({
+    User: a
+      .model({
+        firstName: a.string(),
+        lastName: a.string(),
+        email: a.string(),
+        meals: a.boolean(),
+        institution: a.string(),
+        allergies: a.string(),
+        checkedIn: a.boolean(),
+        teamId: a.id(),
+        team: a.belongsTo("Team", "teamId"),
+      })
+      .authorization((allow) => [
+        allow.owner(),
+        allow.authenticated().to(["read"]),
+      ]),
+    Team: a
+      .model({
+        name: a.string(),
+        id: a.id(),
+        members: a.hasMany("User", "teamId"),
+      })
+      .authorization((allow) => [
+        allow.owner(),
+        allow.authenticated().to(["read"]),
+      ]),
+    GenericFunctionResponse: a.customType({
+      body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
 
-  /**
-   * FUNCTION-RELATED APPSYNC RESOLVERS
-   */
-  DemoFunction: a
-    .mutation() // this should be set to .query for functions that only read data
-    // arguments that this query accepts
-    .arguments({
-      content: a.string(),
-    })
-    // return type of the query
-    .returns(a.ref("GenericFunctionResponse"))
-    // allow all users to call this api for now
-    .authorization((allow) => [allow.guest()])
-    .handler(a.handler.function(DemoFunction)),
-});
+    /**
+     * FUNCTION-RELATED APPSYNC RESOLVERS
+     */
+    DemoFunction: a
+      .mutation() // this should be set to .query for functions that only read data
+      // arguments that this query accepts
+      .arguments({
+        content: a.string(),
+      })
+      // return type of the query
+      .returns(a.ref("GenericFunctionResponse"))
+      // allow all users to call this api for now
+      .authorization((allow) => [allow.guest()])
+      .handler(a.handler.function(DemoFunction)),
+  })
+  .authorization((allow) => [allow.resource(PreSignUp).to(["mutate"])]);
 
 export type Schema = ClientSchema<typeof schema>;
 

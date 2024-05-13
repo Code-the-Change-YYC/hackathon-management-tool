@@ -7,9 +7,4 @@ const LoginPage = () => {
   return <Login />;
 };
 
-export default withAuthGuard(LoginPage, [
-  UserType.Admin,
-  UserType.Guest,
-  UserType.Judge,
-  UserType.Participant,
-]);
+export default LoginPage;
