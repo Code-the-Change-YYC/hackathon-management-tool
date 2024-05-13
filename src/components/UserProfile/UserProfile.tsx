@@ -8,7 +8,14 @@ import { useFormStatus } from "react-dom";
 
 import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
 const INPUT_STYLES: string =
   "rounded-full  border-4 border-white bg-[#FFFFFF]  ps-3  py-2 my-2 text-sm md:text-md bg-white/30";
@@ -57,8 +64,11 @@ const UserProfile = () => {
     //When mutation is successful, re-fetch updated data using queryKey
     onSuccess: () => {
       // queryClient.setQueryData(["User", "123"], data);
+      queryClient.invalidateQueries({
+        queryKey: ["User", "123"],
+        // refetchType: "active",
+      });
       console.log("success");
-      queryClient.invalidateQueries({ queryKey: ["User", "123"] });
     },
 
     onSettled: () => {
