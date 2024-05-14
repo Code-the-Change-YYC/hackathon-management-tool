@@ -3,7 +3,7 @@ import UserProfile from "@/components/UserProfile/UserProfile";
 
 export default function Profile() {
   return (
-    <main>
+    <main className="w-full">
       <ProfileHeader />
       <UserProfile />
     </main>

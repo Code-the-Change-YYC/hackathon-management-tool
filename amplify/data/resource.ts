@@ -23,8 +23,8 @@ const schema = a.schema({
       team: a.belongsTo("Team", "teamId"),
     })
     .authorization((allow) => [
-      allow.owner(),
-      allow.authenticated().to(["read", "create", "update", "delete"]),
+      allow.owner().to(["read", "update"]),
+      allow.authenticated().to(["read"]),
     ]),
   Team: a
     .model({
@@ -33,8 +33,8 @@ const schema = a.schema({
       members: a.hasMany("User", "teamId"),
     })
     .authorization((allow) => [
-      allow.owner(),
-      allow.authenticated().to(["read", "create", "update", "delete"]),
+      allow.owner().to(["read", "update"]),
+      allow.authenticated().to(["read"]),
     ]),
   GenericFunctionResponse: a.customType({
     body: a.json(),
