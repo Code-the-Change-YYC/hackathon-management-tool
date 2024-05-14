@@ -201,37 +201,47 @@ const DataTableSection = (props: DataTableProps) => {
                   ))}
                   <td className="min-w-[250px] p-3 text-center">
                     {editModes[rowIndex] ? (
-                      <button
-                        className={EDIT_BUTTON_STYLES}
-                        onClick={() => handleSaveButtonClick(rowIndex)}
-                      >
-                        Save
-                      </button>
+                      <>
+                        <button
+                          className={EDIT_BUTTON_STYLES}
+                          onClick={() => handleSaveButtonClick(rowIndex)}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className="text-dark-pink"
+                          onClick={() => toggleEditMode(rowIndex)}
+                        >
+                          Cancel
+                        </button>
+                      </>
                     ) : (
-                      <button
-                        className={EDIT_BUTTON_STYLES}
-                        onClick={() => toggleEditMode(rowIndex)}
-                      >
-                        Edit
-                      </button>
+                      <>
+                        <button
+                          className={EDIT_BUTTON_STYLES}
+                          onClick={() => toggleEditMode(rowIndex)}
+                        >
+                          Edit
+                        </button>
+                        {/* ONLY FOR TEAMS DATA */}
+                        {showViewButton && (
+                          <button
+                            className="mr-6 text-awesome-purple"
+                            onClick={() => handleViewButtonClick(rowData)}
+                          >
+                            View
+                          </button>
+                        )}
+                        <button
+                          className="text-dark-pink"
+                          onClick={() =>
+                            handleDeleteButton(teamData[rowIndex].teamId)
+                          }
+                        >
+                          Delete
+                        </button>
+                      </>
                     )}
-                    {showViewButton && (
-                      <button
-                        className="mr-6 text-awesome-purple"
-                        onClick={() => handleViewButtonClick(rowData)}
-                      >
-                        View
-                      </button>
-                    )}
-                    {/* ONLY FOR TEAMS DATA */}
-                    <button
-                      className="text-dark-pink"
-                      onClick={() =>
-                        handleDeleteButton(teamData[rowIndex].teamId)
-                      }
-                    >
-                      Delete
-                    </button>
                   </td>
                 </tr>
               ))}
