@@ -3,6 +3,7 @@ import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAut
 import { VerifyUserCode } from "@/amplify/function/VerifyUserCode/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
+import { PreSignUp } from "../auth/PreSignUp/resource";
 import { GetUserCode } from "../function/GetUserCode/resource";
 
 /*== STEP 1 ===============================================================
@@ -12,76 +13,75 @@ specify that owners, authenticated via your Auth resource can "create",
 "read", "update", and "delete" their own records. Public users,
 authenticated via an API key, can only "read" records.
 =========================================================================*/
-const schema = a.schema({
-  User: a
-    .model({
-      FirstName: a.string(),
-      LastName: a.string(),
-      Email: a.string(),
-      Meals: a.boolean(),
-      Institution: a.string(),
-      Allergies: a.string(),
-      CheckedIn: a.boolean(),
-      TeamId: a.id(),
-      MealId: a.id(),
-      Meal: a.belongsTo("FoodEvent", "MealId"),
-      Team: a.belongsTo("Team", "TeamId"),
-    })
-    .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
-  Team: a
-    .model({
-      Name: a.string(),
-      id: a.string().required(),
-      Members: a.hasMany("User", "TeamId"),
-    })
-    .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
-  FoodEvent: a
-    .model({
-      id: a.id().required(),
-      Name: a.string(),
-      Description: a.string(),
-      Start: a.datetime(),
-      End: a.datetime(),
-      Groups: a.integer(),
-      Attended: a.hasMany("User", "MealId"),
-    })
-    .authorization((allow) => [allow.owner(), allow.guest()]),
+const schema = a
+  .schema({
+    User: a
+      .model({
+        firstName: a.string(),
+        lastName: a.string(),
+        email: a.string(),
+        meals: a.boolean(),
+        institution: a.string(),
+        allergies: a.string(),
+        checkedIn: a.boolean(),
+        teamId: a.id(),
+        team: a.belongsTo("Team", "teamId"),
+      })
+      .authorization((allow) => [
+        allow.owner(),
+        allow.authenticated().to(["read"]),
+      ]),
+    FoodEvent: a
+      .model({
+        id: a.id().required(),
+        name: a.string(),
+        description: a.string(),
+        start: a.datetime(),
+        end: a.datetime(),
+        groups: a.integer(),
+        attended: a.hasMany("User", "MealId"),
+      })
+      .authorization((allow) => [allow.owner(), allow.guest()]),
 
-  GenericFunctionResponse: a.customType({
-    body: a.json(),
-    statusCode: a.integer(),
-    headers: a.json(),
-  }),
+    Team: a
+      .model({
+        name: a.string(),
+        id: a.id(),
+        members: a.hasMany("User", "teamId"),
+      })
+      .authorization((allow) => [
+        allow.owner(),
+        allow.authenticated().to(["read"]),
+      ]),
+    GenericFunctionResponse: a.customType({
+      body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
 
-  /**
-   * FUNCTION-RELATED APPSYNC RESOLVERS
-   */
-  verifyUserVerifcationCode: a
-    .mutation()
-    .arguments({
-      userCode: a.string(),
-      eventID: a.string(),
-    })
-    .returns(a.ref("GenericFunctionResponse"))
-    .authorization((allow) => [allow.guest(), allow.authenticated()])
-    .handler(a.handler.function("verifyUserVerifcationCode")),
-
-  getUserVerifcationCode: a
-    .mutation()
-    .arguments({
-      userId: a.string(),
-    })
-    .returns(a.ref("GenericFunctionResponse"))
-    .authorization((allow) => [allow.guest(), allow.authenticated()])
-    .handler(a.handler.function("getUserVerifcationCode")),
-});
+    /**
+     * FUNCTION-RELATED APPSYNC RESOLVERS
+     */
+    DemoFunction: a
+      .mutation() // this should be set to .query for functions that only read data
+      // arguments that this query accepts
+      .arguments({
+        content: a.string(),
+      })
+      // return type of the query
+      .returns(a.ref("GenericFunctionResponse"))
+      // allow all users to call this api for now
+      .authorization((allow) => [allow.guest()])
+      .handler(a.handler.function(DemoFunction)),
+  })
+  .authorization((allow) => [allow.resource(PreSignUp).to(["mutate"])]);
 
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
+    defaultAuthorizationMode: "userPool",
     // API Key is used for a.allow.public() rules
     apiKeyAuthorizationMode: {
       expiresInDays: 30,

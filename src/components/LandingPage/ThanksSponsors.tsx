@@ -114,8 +114,8 @@ const ThankSponsors = () => {
                   <Image
                     src={sponsor.sponsorImg}
                     alt="Sponsor Image"
-                    objectFit="cover"
-                    layout="fill"
+                    style={{ objectFit: "cover" }}
+                    fill
                   />
                 </a>
               </div>
