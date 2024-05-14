@@ -34,6 +34,7 @@ interface DataTableProps {
   tableHeaders: Array<{ columnHeader: string; className: string }>;
   showViewButton?: boolean;
   teamData?: Array<any>;
+  tableDataMutation: any;
 }
 
 const DataTableSection = (props: DataTableProps) => {
@@ -42,6 +43,7 @@ const DataTableSection = (props: DataTableProps) => {
     tableHeaders,
     showViewButton = false,
     teamData = [],
+    tableDataMutation,
   } = props;
 
   const [editModes, setEditModes] = useState(
@@ -50,7 +52,10 @@ const DataTableSection = (props: DataTableProps) => {
   const [editedValues, setEditedValues] = useState<string[][]>([]);
 
   useEffect(() => {
-    setEditedValues(tableData);
+    if (tableData.length > 0) {
+      const formattedEditedValues = tableData.map((rowData) => [...rowData]);
+      setEditedValues(formattedEditedValues);
+    }
   }, [tableData]);
 
   const [showViewPopup, setShowViewPopup] = useState(false);
@@ -75,12 +80,6 @@ const DataTableSection = (props: DataTableProps) => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
   };
 
-  const toggleEditMode = (index: number) => {
-    const newEditModes = [...editModes];
-    newEditModes[index] = !newEditModes[index];
-    setEditModes(newEditModes);
-  };
-
   const handleViewButtonClick = (rowData: Array<string>) => {
     const teamName = rowData[0];
     const team = teamData.find((team) => team.teamName === teamName);
@@ -94,15 +93,30 @@ const DataTableSection = (props: DataTableProps) => {
     }
   };
 
-  // need to change the way this is handled once connected to database
+  // ONLY WORKS FOR TEAM DATA
+  const handleSaveButtonClick = (index: number) => {
+    const editedTeamName = editedValues[index][0];
+    const teamId = teamData[index].teamId;
+
+    tableDataMutation.mutate({ id: teamId, name: editedTeamName });
+
+    toggleEditMode(index);
+  };
+
+  const toggleEditMode = (index: number) => {
+    const newEditModes = [...editModes];
+    newEditModes[index] = !newEditModes[index];
+    setEditModes(newEditModes);
+  };
+
   const handleInputChange = (
     value: string,
     rowIndex: number,
     cellIndex: number,
   ) => {
-    const newEditedValues: string[][] = [...editedValues];
+    const newEditedValues = [...editedValues];
     newEditedValues[rowIndex][cellIndex] = value;
-    setEditedValues(newEditedValues as string[][]);
+    setEditedValues(newEditedValues);
   };
 
   const filteredData = currentPageData.filter((rowData) =>
@@ -120,13 +134,11 @@ const DataTableSection = (props: DataTableProps) => {
     setShowDeletePopup(true);
     setRecordToDeleteId(recordId);
   };
-
   return (
     <div className="flex justify-center">
       <div className={DATA_TABLE_SECTION_STYLES}>
         {/* search results bar */}
         <div className={SEARCH_RESULTS_SECTION_STYLES}>
-          {/* the 100 would be replaced dynamically */}
           <h1 className={SEARCH_RESULTS_TEXT_STYLES}>
             Search Results ({filteredData.length}{" "}
             {filteredData.length === 1 ? "record" : "records"} found)
@@ -149,7 +161,6 @@ const DataTableSection = (props: DataTableProps) => {
           <table className={DATA_TABLE_CONTENT_STYLES}>
             <thead className="bg-dark-grey">
               <tr className="bg-awesome-purple text-white">
-                {/* Corrected mapping with return statement */}
                 {tableHeaders.map((header, index) => (
                   <th
                     className={`${DATA_TABLE_HEADER_CELL_STYLES} ${header.className}`}
@@ -169,10 +180,12 @@ const DataTableSection = (props: DataTableProps) => {
                 >
                   {rowData.map((cellData, cellIndex) => (
                     <td className={DATA_TABLE_CELL_STYLES} key={cellIndex}>
-                      {editModes[rowIndex] ? (
+                      {/* ONLY FOR TEAMS DATA */}
+                      {editModes[rowIndex] && cellIndex === 0 ? (
                         <input
                           type="text"
-                          value={editedValues[rowIndex][cellIndex]}
+                          value={editedValues[rowIndex][0]}
+                          className={EDIT_MODE_TEXT_INPUT_STYLES}
                           onChange={(e) =>
                             handleInputChange(
                               e.target.value,
@@ -180,7 +193,6 @@ const DataTableSection = (props: DataTableProps) => {
                               cellIndex,
                             )
                           }
-                          className={EDIT_MODE_TEXT_INPUT_STYLES}
                         />
                       ) : (
                         cellData
@@ -188,12 +200,21 @@ const DataTableSection = (props: DataTableProps) => {
                     </td>
                   ))}
                   <td className="min-w-[250px] p-3 text-center">
-                    <button
-                      className={EDIT_BUTTON_STYLES}
-                      onClick={() => toggleEditMode(rowIndex)}
-                    >
-                      {editModes[rowIndex] ? "Save" : "Edit"}
-                    </button>
+                    {editModes[rowIndex] ? (
+                      <button
+                        className={EDIT_BUTTON_STYLES}
+                        onClick={() => handleSaveButtonClick(rowIndex)}
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        className={EDIT_BUTTON_STYLES}
+                        onClick={() => toggleEditMode(rowIndex)}
+                      >
+                        Edit
+                      </button>
+                    )}
                     {showViewButton && (
                       <button
                         className="mr-6 text-awesome-purple"
@@ -202,7 +223,7 @@ const DataTableSection = (props: DataTableProps) => {
                         View
                       </button>
                     )}
-                    {/* this needs to change to accomodate deleting users */}
+                    {/* ONLY FOR TEAMS DATA */}
                     <button
                       className="text-dark-pink"
                       onClick={() =>
