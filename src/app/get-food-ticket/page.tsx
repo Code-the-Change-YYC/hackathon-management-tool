@@ -29,6 +29,7 @@ export default function FoodPage() {
           const response = await client.mutations.getUserVerifcationCode({
             userId: userId,
           });
+          console.log(response);
           const response_body = response.data?.body;
 
           if (response_body) {
@@ -41,6 +42,7 @@ export default function FoodPage() {
           }
         }
       } catch (err) {
+        console.log("shit");
         console.log(err);
       }
     }

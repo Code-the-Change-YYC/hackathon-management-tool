@@ -62,7 +62,8 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, _) => {
-  const { data: foodEvent, errors } = await dataClient.models.FoodEvent.get({
+  const { data, errors } = await dataClient.models.FoodEvent.get({
+    // @ts-ignore
     id: event.arguments.eventID,
   });
 
@@ -80,8 +81,8 @@ export const handler: AppSyncResolverHandler<
   const [userID, mac] = getUserIDAndCode(event.arguments.userCode);
 
   // Check if the user has a meal with the same eventID
-  if (foodEvent) {
-    const hasUserInEvent = (await foodEvent.Attended()).data.some(
+  if (data.type) {
+    const hasUserInEvent = (await data.type.Attended()).data.some(
       (user: { id: string }) => user.id === userID,
     );
     if (hasUserInEvent)
@@ -112,14 +113,14 @@ export const handler: AppSyncResolverHandler<
     //check if the user is in the right time slot, can still eat if not in the right timeslot
     const expectedGroupNumber = getGroupNumberFromTime(
       getLocalCalgaryTime(),
-      foodEvent.Groups,
-      foodEvent?.Start,
-      foodEvent?.End,
+      data.type.Groups,
+      data.type.Start as string,
+      data.type.End as string,
     );
     const actualGroupNumber = getGroupNumber(
       userID,
-      foodEvent.id,
-      foodEvent.Groups,
+      data.type.id,
+      data.type.Groups,
     );
 
     if (expectedGroupNumber == actualGroupNumber) {
@@ -134,10 +135,10 @@ export const handler: AppSyncResolverHandler<
     } else {
       const actualTimeSlot = getUserTimeSlot(
         userID,
-        foodEvent.id,
-        foodEvent.Groups,
-        foodEvent.Start,
-        foodEvent.End,
+        data.type.id,
+        data.type.Groups,
+        data.type.Start as string,
+        data.type.End as string,
       );
       return {
         body: {

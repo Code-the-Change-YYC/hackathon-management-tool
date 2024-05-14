@@ -23,6 +23,8 @@ const schema = a.schema({
       Allergies: a.string(),
       CheckedIn: a.boolean(),
       TeamId: a.id(),
+      MealId: a.id(),
+      Meal: a.belongsTo("FoodEvent", "MealId"),
       Team: a.belongsTo("Team", "TeamId"),
     })
     .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
@@ -35,6 +37,7 @@ const schema = a.schema({
     .authorization((allow) => [allow.owner(), allow.guest().to(["read"])]),
   FoodEvent: a
     .model({
+      id: a.id().required(),
       Name: a.string(),
       Description: a.string(),
       Start: a.datetime(),
@@ -60,7 +63,7 @@ const schema = a.schema({
       eventID: a.string(),
     })
     .returns(a.ref("GenericFunctionResponse"))
-    .authorization((allow) => [allow.guest()])
+    .authorization((allow) => [allow.guest(), allow.authenticated()])
     .handler(a.handler.function("verifyUserVerifcationCode")),
 
   getUserVerifcationCode: a
@@ -69,7 +72,7 @@ const schema = a.schema({
       userId: a.string(),
     })
     .returns(a.ref("GenericFunctionResponse"))
-    .authorization((allow) => [allow.guest()])
+    .authorization((allow) => [allow.guest(), allow.authenticated()])
     .handler(a.handler.function("getUserVerifcationCode")),
 });
 
