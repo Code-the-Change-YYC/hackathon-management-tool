@@ -33,7 +33,7 @@ interface DataTableProps {
   tableData: Array<Array<string>>;
   tableHeaders: Array<{ columnHeader: string; className: string }>;
   showViewButton?: boolean;
-  membersData?: Array<any>;
+  teamData?: Array<any>;
 }
 
 const DataTableSection = (props: DataTableProps) => {
@@ -41,7 +41,7 @@ const DataTableSection = (props: DataTableProps) => {
     tableData,
     tableHeaders,
     showViewButton = false,
-    membersData = [],
+    teamData = [],
   } = props;
 
   const [editModes, setEditModes] = useState(
@@ -83,7 +83,7 @@ const DataTableSection = (props: DataTableProps) => {
 
   const handleViewButtonClick = (rowData: Array<string>) => {
     const teamName = rowData[0];
-    const team = membersData.find((team) => team.teamName === teamName);
+    const team = teamData.find((team) => team.teamName === teamName);
 
     if (team) {
       const { members, membersStatus } = team;
@@ -119,7 +119,6 @@ const DataTableSection = (props: DataTableProps) => {
   const handleDeleteButton = async (recordId: string) => {
     setShowDeletePopup(true);
     setRecordToDeleteId(recordId);
-    console.log("Record to delete", recordId);
   };
 
   return (
@@ -203,10 +202,11 @@ const DataTableSection = (props: DataTableProps) => {
                         View
                       </button>
                     )}
+                    {/* this needs to change to accomodate deleting users */}
                     <button
                       className="text-dark-pink"
                       onClick={() =>
-                        handleDeleteButton(membersData[rowIndex].teamId)
+                        handleDeleteButton(teamData[rowIndex].teamId)
                       }
                     >
                       Delete

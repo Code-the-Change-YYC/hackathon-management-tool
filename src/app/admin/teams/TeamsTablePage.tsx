@@ -18,7 +18,7 @@ const filters = [{ label: "Approved" }, { label: "Checked-in" }];
 const client = generateClient<Schema>();
 
 const TeamsTablePage = () => {
-  const [membersData, setMembersData] = useState<
+  const [teamData, setTeamData] = useState<
     Array<{
       teamName: string;
       checkinStatus: string;
@@ -27,14 +27,15 @@ const TeamsTablePage = () => {
       teamId: string;
     }>
   >([]);
+
   const [tableData, setTableData] = useState<Array<Array<string>>>([]);
 
   useEffect(() => {
     const fetchTeamData = async () => {
-      const teamsData = await client.models.Team.list();
+      const teamsResponse = await client.models.Team.list();
       const formattedData = [];
 
-      for (const team of teamsData.data) {
+      for (const team of teamsResponse.data) {
         const membersResponse = await team.members();
         const members = membersResponse.data;
 
@@ -69,7 +70,7 @@ const TeamsTablePage = () => {
 
     fetchTeamData()
       .then((data) => {
-        setMembersData(
+        setTeamData(
           data as Array<{
             teamName: string;
             checkinStatus: string;
@@ -97,7 +98,7 @@ const TeamsTablePage = () => {
         tableData={tableData}
         tableHeaders={tableHeaders}
         showViewButton={true}
-        membersData={membersData}
+        teamData={teamData}
       />
     </div>
   );
