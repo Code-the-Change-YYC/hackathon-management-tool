@@ -53,7 +53,9 @@ const DataTableSection = (props: DataTableProps) => {
     setEditedValues(tableData);
   }, [tableData]);
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [showViewPopup, setShowViewPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [recordToDeleteId, setRecordToDeleteId] = useState("");
   const [selectedMembersData, setSelectedMembersData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTeamName, setSelectedTeamName] = useState("");
@@ -80,7 +82,7 @@ const DataTableSection = (props: DataTableProps) => {
   };
 
   const handleViewButtonClick = (rowData: Array<string>) => {
-    const teamName = rowData[0]; // Assuming the team name is the first column
+    const teamName = rowData[0];
     const team = membersData.find((team) => team.teamName === teamName);
 
     if (team) {
@@ -88,7 +90,7 @@ const DataTableSection = (props: DataTableProps) => {
       setSelectedMembersData(members);
       setSelectedTeamName(teamName);
       setSelectedMemberStatus(membersStatus);
-      setShowPopup(true);
+      setShowViewPopup(true);
     }
   };
 
@@ -112,6 +114,12 @@ const DataTableSection = (props: DataTableProps) => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
+  };
+
+  const handleDeleteButton = async (recordId: string) => {
+    setShowDeletePopup(true);
+    setRecordToDeleteId(recordId);
+    console.log("Record to delete", recordId);
   };
 
   return (
@@ -195,7 +203,14 @@ const DataTableSection = (props: DataTableProps) => {
                         View
                       </button>
                     )}
-                    <button className="text-dark-pink">Delete</button>
+                    <button
+                      className="text-dark-pink"
+                      onClick={() =>
+                        handleDeleteButton(membersData[rowIndex].teamId)
+                      }
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -210,12 +225,25 @@ const DataTableSection = (props: DataTableProps) => {
           </table>
         </div>
         {/* popup component for teams table ONLY */}
-        {showPopup && (
+        {showViewPopup && (
           <Popup
             selectedMembersData={selectedMembersData}
             selectedMemberStatus={selectedMemberStatus}
             teamName={selectedTeamName}
-            onClose={() => setShowPopup(false)}
+            popupType="view"
+            recordToDelete=""
+            onClose={() => setShowViewPopup(false)}
+          />
+        )}
+        {/* popup component to confirm deletion of record */}
+        {showDeletePopup && (
+          <Popup
+            selectedMembersData={[]}
+            selectedMemberStatus={[]}
+            teamName=""
+            popupType="delete"
+            recordToDelete={recordToDeleteId}
+            onClose={() => setShowDeletePopup(false)}
           />
         )}
         <div className="my-4 flex items-center justify-between">

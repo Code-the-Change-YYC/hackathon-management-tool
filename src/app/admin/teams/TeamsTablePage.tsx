@@ -24,6 +24,7 @@ const TeamsTablePage = () => {
       checkinStatus: string;
       members: string[];
       membersStatus: string[];
+      teamId: string;
     }>
   >([]);
   const [tableData, setTableData] = useState<Array<Array<string>>>([]);
@@ -58,6 +59,7 @@ const TeamsTablePage = () => {
           checkinStatus: teamCheckinStatus,
           members: memberNames,
           membersStatus: memberStatus,
+          teamId: team.id,
         };
 
         formattedData.push(teamData);
@@ -73,6 +75,7 @@ const TeamsTablePage = () => {
             checkinStatus: string;
             members: string[];
             membersStatus: string[];
+            teamId: string;
           }>,
         );
 
@@ -87,7 +90,6 @@ const TeamsTablePage = () => {
         console.error("Error fetching team data:", error);
       });
   }, []);
-
   return (
     <div>
       <FilterSection topLabel="Teams" filterLabels={filters} />
