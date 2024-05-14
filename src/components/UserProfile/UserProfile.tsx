@@ -15,7 +15,6 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
@@ -50,8 +49,11 @@ const UserProfile = () => {
 
   const userMutation = useMutation({
     //mutation takes parameters of input with User type
-    mutationFn: async (input: Schema["User"]["type"]) =>
-      (await client.models.User.update(input)).data,
+    mutationFn: async (input: Schema["User"]["type"]) => {
+      const { createdAt, updatedAt, team, teamId, owner, ...extractedFields } =
+        input;
+      await client.models.User.update(extractedFields);
+    },
     onMutate: () => {
       console.log("Mutate");
     },
