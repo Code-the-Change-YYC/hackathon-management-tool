@@ -26,6 +26,8 @@ const schema = a
         checkedIn: a.boolean(),
         teamId: a.id(),
         team: a.belongsTo("Team", "teamId"),
+        mealId: a.id(),
+        meal: a.belongsTo("FoodEvent", "mealId"),
       })
       .authorization((allow) => [
         allow.owner(),
@@ -49,12 +51,12 @@ const schema = a
     FoodEvent: a
       .model({
         id: a.id().required(),
-        Name: a.string(),
-        Description: a.string(),
-        Start: a.datetime(),
-        End: a.datetime(),
-        Groups: a.integer(),
-        Attended: a.hasMany("User", "MealId"),
+        name: a.string(),
+        description: a.string(),
+        start: a.datetime(),
+        end: a.datetime(),
+        groups: a.integer(),
+        attended: a.hasMany("User", "mealId"),
       })
       .authorization((allow) => [allow.owner(), allow.guest()]),
 
@@ -91,8 +93,22 @@ const schema = a
       // allow all users to call this api for now
       .authorization((allow) => [allow.guest()])
       .handler(a.handler.function(DemoFunction)),
+
+    VerifyUserCode: a
+      .query()
+      .arguments({
+        userCode: a.string(),
+        eventId: a.string(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      // allow all users to call this api for now
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(VerifyUserCode)),
   })
-  .authorization((allow) => [allow.resource(PreSignUp).to(["mutate"])]);
+  .authorization((allow) => [
+    allow.resource(PreSignUp).to(["mutate"]),
+    allow.resource(VerifyUserCode).to(["query", "mutate"]),
+  ]);
 
 export type Schema = ClientSchema<typeof schema>;
 

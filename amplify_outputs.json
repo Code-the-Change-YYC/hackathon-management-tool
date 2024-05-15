@@ -1,9 +1,9 @@
 {
   "auth": {
-    "user_pool_id": "ca-central-1_csXxlh9Ug",
+    "user_pool_id": "ca-central-1_Chxm9csbr",
     "aws_region": "ca-central-1",
-    "user_pool_client_id": "7re4t4h090bgher44tu7fo39sl",
-    "identity_pool_id": "ca-central-1:835de640-996c-460a-bfe5-6f6ac3d4beb5",
+    "user_pool_client_id": "6rsnk77p3baf5osek1mfdheluq",
+    "identity_pool_id": "ca-central-1:dd1d8914-4e61-4190-aea6-c762f952d1bd",
     "standard_required_attributes": [
       "email"
     ],
@@ -23,13 +23,13 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://6rjiytkuvnbflbwfuckvcb2gxm.appsync-api.ca-central-1.amazonaws.com/graphql",
+    "url": "https://imifxu5qzfbrdavo23derdusru.appsync-api.ca-central-1.amazonaws.com/graphql",
     "aws_region": "ca-central-1",
-    "api_key": "da2-f2mko6hyxzdubgkc3ys5yxvs6y",
-    "default_authorization_type": "API_KEY",
+    "api_key": "da2-7cxdhvpcovaexoobanxeq6xze4",
+    "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
     "authorization_types": [
+      "API_KEY",
       "AWS_LAMBDA",
-      "AMAZON_COGNITO_USER_POOLS",
       "AWS_IAM"
     ],
     "model_introspection": {
@@ -45,86 +45,64 @@
               "isRequired": true,
               "attributes": []
             },
-            "FirstName": {
-              "name": "FirstName",
+            "firstName": {
+              "name": "firstName",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "LastName": {
-              "name": "LastName",
+            "lastName": {
+              "name": "lastName",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "Email": {
-              "name": "Email",
+            "email": {
+              "name": "email",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "Meals": {
-              "name": "Meals",
+            "meals": {
+              "name": "meals",
               "isArray": false,
               "type": "Boolean",
               "isRequired": false,
               "attributes": []
             },
-            "Institution": {
-              "name": "Institution",
+            "institution": {
+              "name": "institution",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "Allergies": {
-              "name": "Allergies",
+            "allergies": {
+              "name": "allergies",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "CheckedIn": {
-              "name": "CheckedIn",
+            "checkedIn": {
+              "name": "checkedIn",
               "isArray": false,
               "type": "Boolean",
               "isRequired": false,
               "attributes": []
             },
-            "TeamId": {
-              "name": "TeamId",
+            "teamId": {
+              "name": "teamId",
               "isArray": false,
               "type": "ID",
               "isRequired": false,
               "attributes": []
             },
-            "MealId": {
-              "name": "MealId",
-              "isArray": false,
-              "type": "ID",
-              "isRequired": false,
-              "attributes": []
-            },
-            "Meal": {
-              "name": "Meal",
-              "isArray": false,
-              "type": {
-                "model": "FoodEvent"
-              },
-              "isRequired": false,
-              "attributes": [],
-              "association": {
-                "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "MealId"
-                ]
-              }
-            },
-            "Team": {
-              "name": "Team",
+            "team": {
+              "name": "team",
               "isArray": false,
               "type": {
                 "model": "Team"
@@ -134,7 +112,29 @@
               "association": {
                 "connectionType": "BELONGS_TO",
                 "targetNames": [
-                  "TeamId"
+                  "teamId"
+                ]
+              }
+            },
+            "mealId": {
+              "name": "mealId",
+              "isArray": false,
+              "type": "ID",
+              "isRequired": false,
+              "attributes": []
+            },
+            "meal": {
+              "name": "meal",
+              "isArray": false,
+              "type": {
+                "model": "FoodEvent"
+              },
+              "isRequired": false,
+              "attributes": [],
+              "association": {
+                "connectionType": "BELONGS_TO",
+                "targetNames": [
+                  "mealId"
                 ]
               }
             },
@@ -179,8 +179,7 @@
                     ]
                   },
                   {
-                    "allow": "public",
-                    "provider": "iam",
+                    "allow": "private",
                     "operations": [
                       "read"
                     ]
@@ -201,19 +200,19 @@
             "id": {
               "name": "id",
               "isArray": false,
-              "type": "String",
+              "type": "ID",
               "isRequired": true,
               "attributes": []
             },
-            "Name": {
-              "name": "Name",
+            "name": {
+              "name": "name",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "Members": {
-              "name": "Members",
+            "members": {
+              "name": "members",
               "isArray": true,
               "type": {
                 "model": "User"
@@ -224,7 +223,7 @@
               "association": {
                 "connectionType": "HAS_MANY",
                 "associatedWith": [
-                  "TeamId"
+                  "teamId"
                 ]
               }
             },
@@ -277,8 +276,7 @@
                     ]
                   },
                   {
-                    "allow": "public",
-                    "provider": "iam",
+                    "allow": "private",
                     "operations": [
                       "read"
                     ]
@@ -303,43 +301,43 @@
               "isRequired": true,
               "attributes": []
             },
-            "Name": {
-              "name": "Name",
+            "name": {
+              "name": "name",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "Description": {
-              "name": "Description",
+            "description": {
+              "name": "description",
               "isArray": false,
               "type": "String",
               "isRequired": false,
               "attributes": []
             },
-            "Start": {
-              "name": "Start",
+            "start": {
+              "name": "start",
               "isArray": false,
               "type": "AWSDateTime",
               "isRequired": false,
               "attributes": []
             },
-            "End": {
-              "name": "End",
+            "end": {
+              "name": "end",
               "isArray": false,
               "type": "AWSDateTime",
               "isRequired": false,
               "attributes": []
             },
-            "Groups": {
-              "name": "Groups",
+            "groups": {
+              "name": "groups",
               "isArray": false,
               "type": "Int",
               "isRequired": false,
               "attributes": []
             },
-            "Attended": {
-              "name": "Attended",
+            "attended": {
+              "name": "attended",
               "isArray": true,
               "type": {
                 "model": "User"
@@ -350,7 +348,7 @@
               "association": {
                 "connectionType": "HAS_MANY",
                 "associatedWith": [
-                  "MealId"
+                  "mealId"
                 ]
               }
             },
@@ -452,6 +450,30 @@
           }
         }
       },
+      "queries": {
+        "VerifyUserCode": {
+          "name": "VerifyUserCode",
+          "isArray": false,
+          "type": {
+            "nonModel": "GenericFunctionResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "userCode": {
+              "name": "userCode",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "eventId": {
+              "name": "eventId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            }
+          }
+        }
+      },
       "mutations": {
         "verifyUserVerifcationCode": {
           "name": "verifyUserVerifcationCode",
@@ -485,6 +507,22 @@
           "arguments": {
             "userId": {
               "name": "userId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            }
+          }
+        },
+        "DemoFunction": {
+          "name": "DemoFunction",
+          "isArray": false,
+          "type": {
+            "nonModel": "GenericFunctionResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "content": {
+              "name": "content",
               "isArray": false,
               "type": "String",
               "isRequired": false
