@@ -1,8 +1,9 @@
 /* tslint:disable */
+
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
 import * as APITypes from "./API";
+
 type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryInput: InputType;
   __generatedQueryOutput: OutputType;
@@ -13,8 +14,11 @@ export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
     createdAt
     id
     members {
+      items {
+          id
+          __typename
+      }
       nextToken
-      __typename
     }
     name
     owner
