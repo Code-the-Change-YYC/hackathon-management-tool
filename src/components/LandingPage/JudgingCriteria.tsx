@@ -6,7 +6,7 @@ const judgingCriteriaStyles =
 const itemStyles =
   "flex justify-start p-4 lg:px-10 lg:text-[1.0rem] items-start";
 
-const checkMarkSvg = "/svgs/judgingCriteria/check_mark_bkg.svg";
+const checkMarkSvg = "/svgs/landingPage/check_mark_bkg.svg";
 
 export const JUDGING_CRITERIA = [
   {
@@ -57,7 +57,7 @@ const JudgingCriteria = () => {
       <div>
         <h1 className="mb-10 text-2xl font-bold">
           Judging
-          <em className="text-[#7055FD]"> Criteria</em>
+          <em className="text-awesomer-purple"> Criteria</em>
         </h1>
         <ul className="flex flex-col">{listJudgingCriteria}</ul>
       </div>

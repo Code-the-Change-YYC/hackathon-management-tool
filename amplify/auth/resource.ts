@@ -1,11 +1,17 @@
 import { defineAuth } from "@aws-amplify/backend";
 
+import { PreSignUp } from "./PreSignUp/resource";
+
 /**
  * Define and configure your auth resource
  * When used alongside data, it is automatically configured as an auth provider for data
  * @see https://docs.amplify.aws/gen2/build-a-backend/auth
  */
 export const auth = defineAuth({
+  groups: ["Admin", "Participant", "Judge"],
+  triggers: {
+    preSignUp: PreSignUp,
+  },
   loginWith: {
     email: true,
     // add social providers
