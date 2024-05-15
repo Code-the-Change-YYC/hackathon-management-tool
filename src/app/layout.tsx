@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Providers from "@/app/QueryProvider";
 import "@/app/globals.css";
 import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
+import { UserContextProvider } from "@/components/contexts/UserContext";
 // import { UserContextProvider } from "@/components/contexts/UserContext";
 import MainLayout from "@/components/layouts/MainLayout";
 import "@aws-amplify/ui-react/styles.css";
@@ -33,10 +34,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       <body className={`${Omnes.className}`}>
         <Providers>
           <ConfigureAmplifyClientSide />
-
-          {/* <UserContextProvider> */}
-          <MainLayout>{children}</MainLayout>
-          {/* </UserContextProvider> */}
+          <UserContextProvider>
+            <MainLayout>{children}</MainLayout>
+          </UserContextProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </Providers>
       </body>
