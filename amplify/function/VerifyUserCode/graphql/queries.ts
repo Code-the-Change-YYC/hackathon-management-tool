@@ -1,14 +1,16 @@
 /* tslint:disable */
+
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
 import * as APITypes from "./API";
+
 type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryInput: InputType;
   __generatedQueryOutput: OutputType;
 };
 
-export const VerifyUserCode = /* GraphQL */ `query VerifyUserCode($eventId: String, $userCode: String) {
+export const VerifyUserCode =
+  /* GraphQL */ `query VerifyUserCode($eventId: String, $userCode: String) {
   VerifyUserCode(eventId: $eventId, userCode: $userCode) {
     body
     headers
@@ -17,9 +19,9 @@ export const VerifyUserCode = /* GraphQL */ `query VerifyUserCode($eventId: Stri
   }
 }
 ` as GeneratedQuery<
-  APITypes.VerifyUserCodeQueryVariables,
-  APITypes.VerifyUserCodeQuery
->;
+    APITypes.VerifyUserCodeQueryVariables,
+    APITypes.VerifyUserCodeQuery
+  >;
 export const getFoodEvent = /* GraphQL */ `query GetFoodEvent($id: ID!) {
   getFoodEvent(id: $id) {
     attended {

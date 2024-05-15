@@ -1,14 +1,16 @@
 /* tslint:disable */
+
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
 import * as APITypes from "./API";
+
 type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationInput: InputType;
   __generatedMutationOutput: OutputType;
 };
 
-export const DemoFunction = /* GraphQL */ `mutation DemoFunction($content: String) {
+export const DemoFunction =
+  /* GraphQL */ `mutation DemoFunction($content: String) {
   DemoFunction(content: $content) {
     body
     headers
@@ -17,9 +19,9 @@ export const DemoFunction = /* GraphQL */ `mutation DemoFunction($content: Strin
   }
 }
 ` as GeneratedMutation<
-  APITypes.DemoFunctionMutationVariables,
-  APITypes.DemoFunctionMutation
->;
+    APITypes.DemoFunctionMutationVariables,
+    APITypes.DemoFunctionMutation
+  >;
 export const createFoodEvent = /* GraphQL */ `mutation CreateFoodEvent(
   $condition: ModelFoodEventConditionInput
   $input: CreateFoodEventInput!
@@ -202,7 +204,8 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
   APITypes.DeleteUserMutationVariables,
   APITypes.DeleteUserMutation
 >;
-export const getUserVerifcationCode = /* GraphQL */ `mutation GetUserVerifcationCode($userId: String) {
+export const getUserVerifcationCode =
+  /* GraphQL */ `mutation GetUserVerifcationCode($userId: String) {
   getUserVerifcationCode(userId: $userId) {
     body
     headers
@@ -211,9 +214,9 @@ export const getUserVerifcationCode = /* GraphQL */ `mutation GetUserVerifcation
   }
 }
 ` as GeneratedMutation<
-  APITypes.GetUserVerifcationCodeMutationVariables,
-  APITypes.GetUserVerifcationCodeMutation
->;
+    APITypes.GetUserVerifcationCodeMutationVariables,
+    APITypes.GetUserVerifcationCodeMutation
+  >;
 export const updateFoodEvent = /* GraphQL */ `mutation UpdateFoodEvent(
   $condition: ModelFoodEventConditionInput
   $input: UpdateFoodEventInput!
@@ -305,7 +308,8 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
   APITypes.UpdateUserMutationVariables,
   APITypes.UpdateUserMutation
 >;
-export const verifyUserVerifcationCode = /* GraphQL */ `mutation VerifyUserVerifcationCode($eventID: String, $userCode: String) {
+export const verifyUserVerifcationCode =
+  /* GraphQL */ `mutation VerifyUserVerifcationCode($eventID: String, $userCode: String) {
   verifyUserVerifcationCode(eventID: $eventID, userCode: $userCode) {
     body
     headers
@@ -314,6 +318,6 @@ export const verifyUserVerifcationCode = /* GraphQL */ `mutation VerifyUserVerif
   }
 }
 ` as GeneratedMutation<
-  APITypes.VerifyUserVerifcationCodeMutationVariables,
-  APITypes.VerifyUserVerifcationCodeMutation
->;
+    APITypes.VerifyUserVerifcationCodeMutationVariables,
+    APITypes.VerifyUserVerifcationCodeMutation
+  >;
