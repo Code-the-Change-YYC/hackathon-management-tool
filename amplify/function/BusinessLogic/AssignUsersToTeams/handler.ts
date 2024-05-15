@@ -3,7 +3,9 @@ import { generateClient } from "aws-amplify/data";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
 import type { Schema } from "../../../data/resource";
-import { modelIntrospection } from "./amplifyconfiguration.json";
+import type { ModelUserConnection } from "./graphql/API";
+import { updateUser } from "./graphql/mutations";
+import { getTeam, getUser } from "./graphql/queries";
 
 const MAX_TEAM_MEMBERS = 6;
 Amplify.configure(
@@ -13,7 +15,6 @@ Amplify.configure(
         endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string,
         region: process.env.AWS_REGION,
         defaultAuthMode: "iam",
-        modelIntrospection: modelIntrospection as never,
       },
     },
   },
@@ -35,7 +36,9 @@ Amplify.configure(
   },
 );
 
-const dataClient = generateClient<Schema>();
+const client = generateClient<Schema>({
+  authMode: "iam",
+});
 
 type ResolverArgs = { userId: string; teamId: string };
 
@@ -60,16 +63,30 @@ export const handler: AppSyncResolverHandler<
   //   };
   // }
 
-  const user = await dataClient.models.User.get({ id: event.arguments.userId });
+  // const user = await dataClient.models.User.get({ id: event.arguments.userId });
+  const user = (
+    await client.graphql({
+      query: getUser,
+      variables: {
+        id: event.arguments.userId,
+      },
+    })
+  ).data.getUser;
   console.log(user);
   console.log(event.arguments.teamId);
   console.log("before error");
-  const team = await dataClient.models.Team.get({ id: event.arguments.teamId }); // i think this is where the error is occurring
+  const team = (
+    await client.graphql({
+      query: getTeam,
+      variables: {
+        id: event.arguments.teamId,
+      },
+    })
+  ).data.getTeam;
   console.log("after error");
   console.log(team);
-  const teamId = team.data?.id;
 
-  if (teamId == null) {
+  if (team == null) {
     return {
       body: { value: "Error: Team does not exist" },
       statusCode: 404,
@@ -77,9 +94,7 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  const userId = user.data?.id;
-
-  if (userId == null) {
+  if (user == null) {
     return {
       body: { value: "Error: User does not exist" },
       statusCode: 404,
@@ -87,7 +102,7 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  if (await user.data?.team()) {
+  if (await user.team) {
     return {
       body: { value: "Error: User is already part of a team" },
       statusCode: 400,
@@ -98,8 +113,8 @@ export const handler: AppSyncResolverHandler<
   // Please look into this error and how to access nested data using this page:
   // https://docs.amplify.aws/react/build-a-backend/data/data-modeling/relationships/
   // SPECIFICALLY: "Eagerly Load "has Many" Relationships" and "Lazy Load "has Many" Relationships"
-  // @ts-ignore
-  const { data: members } = await team.data?.members();
+  const membersConnection = (await team.members) as ModelUserConnection;
+  const members = await membersConnection.items;
 
   if (members.length >= MAX_TEAM_MEMBERS) {
     return {
@@ -109,9 +124,14 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
-  const result = await dataClient.models.User.update({
-    id: userId,
-    teamId: teamId,
+  const result = await client.graphql({
+    query: updateUser,
+    variables: {
+      input: {
+        id: user.id,
+        teamId: team.id,
+      },
+    },
   });
 
   if (!result.errors) {
