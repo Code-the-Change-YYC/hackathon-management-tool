@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
@@ -43,15 +44,16 @@ export default function Login() {
       );
     },
   };
-
+  const pathname = usePathname();
   const services: AuthContext["services"] = {};
   const formFields: AuthenticatorProps["formFields"] = {
     signUp: {},
   };
+
   return (
     <Authenticator
       socialProviders={["google", "apple"]}
-      initialState="signIn"
+      initialState={pathname === "/login" ? "signIn" : "signUp"}
       signUpAttributes={[]}
       services={services}
       components={components}

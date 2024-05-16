@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
 import { Flex } from "@aws-amplify/ui-react";
@@ -8,6 +9,7 @@ export default function FormFieldsHeader({
 }: {
   className?: string;
 }) {
+  const pathName = usePathname();
   return (
     <div
       className={twMerge(
@@ -33,13 +35,15 @@ export default function FormFieldsHeader({
         <Flex direction={"column"}>
           <Flex>
             <Image
-              className=" pointer-events-none -mr-4 select-none"
+              className=" pointer-events-none -mr-2 select-none"
               src="/svgs/login/vector_112.svg"
               alt=""
               width={28}
               height={21}
             />
-            <div className=" text-nowrap">Individual Registration</div>
+            <div className=" text-nowrap text-black">
+              {pathName === "/register" ? "Individual Registration" : "Login"}
+            </div>
           </Flex>
           <Image
             src="/svgs/login/vector_113.svg"
