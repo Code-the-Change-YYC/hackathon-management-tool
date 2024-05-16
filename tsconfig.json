@@ -20,8 +20,7 @@
     "incremental": true,
     "paths": {
       "@/*": [
-        "./src/*",
-
+        "./src/*"
       ],
       "@/amplify/*": [
         "./amplify/*"
@@ -33,7 +32,12 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "./src/**/*.ts", "./src/**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

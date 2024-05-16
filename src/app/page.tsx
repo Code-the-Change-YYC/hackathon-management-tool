@@ -1,12 +1,15 @@
 import AboutEventTile from "@/components/LandingPage/AboutEventTile";
+import HackathonInformationContainer from "@/components/LandingPage/HackathonInformationContainer";
 import HeroSection from "@/components/LandingPage/HeroSection";
 import JudgeShowcase from "@/components/LandingPage/JudgeShowcase";
 import JudgingCriteria from "@/components/LandingPage/JudgingCriteria";
 import ThankSponsors from "@/components/LandingPage/ThanksSponsors";
 import PagePlaceholder from "@/components/PagePlaceholder";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 import { enableLandingPage } from "@/featureFlags";
 
-export default function Home() {
+const Home = () => {
   return (
     <main>
       {enableLandingPage ? (
@@ -15,6 +18,7 @@ export default function Home() {
         <>
           <HeroSection />
           <AboutEventTile />
+          <HackathonInformationContainer />
           <JudgingCriteria />
           <JudgeShowcase />
           <ThankSponsors />
@@ -22,4 +26,11 @@ export default function Home() {
       )}
     </main>
   );
-}
+};
+
+export default withAuthGuard(Home, [
+  UserType.Admin,
+  UserType.Guest,
+  UserType.Judge,
+  UserType.Participant,
+]);

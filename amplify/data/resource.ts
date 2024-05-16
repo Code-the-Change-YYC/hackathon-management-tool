@@ -3,6 +3,8 @@ import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/reso
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
+import { PreSignUp } from "../auth/PreSignUp/resource";
+
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
 adding a new "isDone" field as a boolean. The authorization rules below
@@ -21,7 +23,7 @@ const schema = a
         institution: a.string(),
         allergies: a.string(),
         checkedIn: a.boolean(),
-        teamId: a.string(),
+        teamId: a.id(),
         team: a.belongsTo("Team", "teamId"),
       })
       .authorization((allow) => [
@@ -58,7 +60,6 @@ const schema = a
       // allow all users to call this api for now
       .authorization((allow) => [allow.guest()])
       .handler(a.handler.function(DemoFunction)),
-
     AssignUsersToTeams: a
       .mutation()
       .arguments({
@@ -71,6 +72,7 @@ const schema = a
   })
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
+    allow.resource(PreSignUp).to(["mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;
 
