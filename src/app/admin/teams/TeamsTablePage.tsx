@@ -15,6 +15,7 @@ const LOADING_SCREEN_STYLES =
 const tableHeaders = [
   { columnHeader: "Team Name", className: "w-2/5" },
   { columnHeader: "Check-in Status", className: "w-1/4" },
+  { columnHeader: "Approved Status", className: "w-1/4" },
 ];
 
 const filters = [{ label: "Approved" }, { label: "Checked-in" }];
@@ -28,6 +29,7 @@ const TeamsTablePage = () => {
       checkinStatus: string;
       members: string[];
       membersStatus: string[];
+      approveStatus: string;
       teamId: string;
     }>
   >([]);
@@ -40,7 +42,7 @@ const TeamsTablePage = () => {
     queryKey: ["Teams"],
     queryFn: async () => {
       const response = await client.models.Team.list({
-        selectionSet: ["members.*", "id", "name"],
+        selectionSet: ["members.*", "id", "name", "approved"],
       });
       return response.data;
     },
@@ -61,6 +63,7 @@ const TeamsTablePage = () => {
         membersStatus: team.members.map((member) =>
           member.checkedIn ? "Checked In" : "Not Checked In",
         ),
+        approveStatus: team.approved ? "Approved" : "Not Approved",
         teamId: team.id ?? "",
       }));
 
@@ -74,6 +77,7 @@ const TeamsTablePage = () => {
       const displayedData = filteredData.map((cellData) => [
         cellData.teamName,
         cellData.checkinStatus,
+        cellData.approveStatus,
       ]);
       setTableData(displayedData);
     }
@@ -82,10 +86,9 @@ const TeamsTablePage = () => {
   const queryClient = useQueryClient();
   const tableDataMutation = useMutation({
     mutationFn: async (updatedData: any) => {
-      console.log("Updating data:", updatedData); // Log the data being sent to the mutation
+      console.log("Updating data:", updatedData);
       try {
-        const response = await client.models.Team.update(updatedData); // Update the data on the server
-        console.log("Response from server:", response); // Log the response from the server
+        const response = await client.models.Team.update(updatedData);
         return response.data;
       } catch (error) {
         console.error("Error updating table data:", error);
@@ -100,32 +103,6 @@ const TeamsTablePage = () => {
       console.error("Error updating table data:", error);
     },
   });
-
-  // const tableDataMutation = useMutation({
-  //   mutationFn: async (input: {
-  //     id: string;
-  //     owner?: string;
-  //     name?: string;
-  //   }) => {
-  //     try {
-  //       const updatedTableData = await client.models.Team.update(input);
-  //       console.log("Updated table data:", updatedTableData.data);
-  //       return updatedTableData.data;
-  //     } catch (error) {
-  //       console.error("Error updating table data:", error);
-  //       // Rethrow the error to be caught by the onError handler
-  //       throw error;
-  //     }
-  //   },
-  //   onSuccess: (data) => {
-  //     // Invalidate the specific query key
-  //     queryClient.invalidateQueries({ queryKey: ["Teams"] });
-  //     console.log("Table data updated successfully:", data);
-  //   },
-  //   onError: (error) => {
-  //     console.error("Error updating table data:", error);
-  //   },
-  // });
 
   return (
     <div>

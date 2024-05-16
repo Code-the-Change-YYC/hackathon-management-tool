@@ -96,9 +96,14 @@ const DataTableSection = (props: DataTableProps) => {
   // ONLY WORKS FOR TEAM DATA
   const handleSaveButtonClick = (index: number) => {
     const editedTeamName = editedValues[index][0];
+    const approvalStatus = editedValues[index][2] === "Approved";
     const teamId = teamData[index].teamId;
 
-    tableDataMutation.mutate({ id: teamId, name: editedTeamName });
+    tableDataMutation.mutate({
+      id: teamId,
+      name: editedTeamName,
+      approved: approvalStatus,
+    });
 
     toggleEditMode(index);
   };
@@ -181,19 +186,38 @@ const DataTableSection = (props: DataTableProps) => {
                   {rowData.map((cellData, cellIndex) => (
                     <td className={DATA_TABLE_CELL_STYLES} key={cellIndex}>
                       {/* ONLY FOR TEAMS DATA */}
-                      {editModes[rowIndex] && cellIndex === 0 ? (
-                        <input
-                          type="text"
-                          value={editedValues[rowIndex][0]}
-                          className={EDIT_MODE_TEXT_INPUT_STYLES}
-                          onChange={(e) =>
-                            handleInputChange(
-                              e.target.value,
-                              rowIndex,
-                              cellIndex,
-                            )
-                          }
-                        />
+                      {editModes[rowIndex] ? (
+                        cellIndex === 0 ? (
+                          <input
+                            type="text"
+                            value={editedValues[rowIndex][cellIndex]}
+                            className={EDIT_MODE_TEXT_INPUT_STYLES}
+                            onChange={(e) =>
+                              handleInputChange(
+                                e.target.value,
+                                rowIndex,
+                                cellIndex,
+                              )
+                            }
+                          />
+                        ) : cellIndex === 2 ? (
+                          <select
+                            value={editedValues[rowIndex][cellIndex]}
+                            className={EDIT_MODE_TEXT_INPUT_STYLES}
+                            onChange={(e) =>
+                              handleInputChange(
+                                e.target.value,
+                                rowIndex,
+                                cellIndex,
+                              )
+                            }
+                          >
+                            <option value="Approved">Approved</option>
+                            <option value="Not Approved">Not Approved</option>
+                          </select>
+                        ) : (
+                          cellData
+                        )
                       ) : (
                         cellData
                       )}
