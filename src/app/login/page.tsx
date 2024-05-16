@@ -5,8 +5,8 @@ import Login from "@/components/LoginForm/Login";
 
 const LoginPage = () => {
   return (
-    <div className=" flex min-h-screen w-full flex-col items-center overflow-hidden bg-awesomer-purple pt-6">
-      <div className=" flex min-h-[80vh] w-11/12 max-w-screen-2xl flex-col items-center overflow-hidden md:w-9/12 ">
+    <div className=" flex w-full flex-1 flex-col items-center overflow-hidden bg-awesomer-purple pt-6">
+      <div className=" flex  w-11/12 max-w-screen-2xl flex-1 flex-col items-center overflow-hidden md:w-9/12 ">
         <Header />
         <Login />
       </div>
