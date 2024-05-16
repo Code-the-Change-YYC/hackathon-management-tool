@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import type { Schema } from "@/amplify/data/resource";
-import FormFields from "@/components/LoginForm/FormFields";
+import FormFieldButtons from "@/components/LoginForm/FormFieldButtons";
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -18,7 +18,7 @@ export default function PersonalFormFields({
   const router = useRouter();
   const userMutation = useMutation({
     mutationFn: async (input: Schema["User"]["type"]) => {
-      (await client.models.User.create(input)).data;
+      (await client.models.User.update(input)).data;
     },
     onSuccess: () => {
       // TODO: ADD TOAST
@@ -144,7 +144,7 @@ export default function PersonalFormFields({
             onChange={(e) => updateForm(e)}
           />
         </Flex>
-        <FormFields mutationStatus={userMutation.status} />
+        <FormFieldButtons mutationStatus={userMutation.status} />
       </form>
     );
 }

@@ -3,7 +3,7 @@ import { signOut } from "aws-amplify/auth";
 import { Authenticator } from "@aws-amplify/ui-react";
 import type { MutationStatus } from "@tanstack/react-query";
 
-const FormFields = ({
+const FormFieldButtons = ({
   mutationStatus,
 }: {
   mutationStatus?: MutationStatus;
@@ -31,4 +31,4 @@ const FormFields = ({
     </div>
   );
 };
-export default FormFields;
+export default FormFieldButtons;
