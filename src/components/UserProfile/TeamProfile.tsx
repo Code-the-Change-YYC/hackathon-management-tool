@@ -1,11 +1,12 @@
 "use client";
 
 import { generateClient } from "aws-amplify/data";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 import TeamForm from "@/components/UserProfile/TeamForm";
+import { UserContext } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 
 const BUTTON_STYLES =
@@ -22,23 +23,38 @@ export interface TeamFormProp {
 }
 
 const TeamProfile = () => {
-  const [hasTeam, setHasTeam] = useState<boolean>(true);
+  const [hasTeam, setHasTeam] = useState<boolean>(false);
+
+  const userId = useContext(UserContext).currentUser.userSub as string;
 
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["Team"]["type"],
     initialDataUpdatedAt: 0,
-    queryKey: ["Team", 1234],
+    queryKey: ["Team", userId],
     queryFn: async () => {
-      const response = await client.models.Team.get(
+      const userResponse = await client.models.User.get({
+        id: userId,
+      });
+
+      const userTeamId = userResponse.data?.teamId as string;
+
+      if (!userTeamId) {
+        return;
+      }
+
+      const teamResponse = await client.models.Team.get(
         {
-          id: "123",
+          id: userTeamId,
         },
         {
           selectionSet: ["members.*", "id", "name"],
         },
       );
-      console.log(response.data);
-      return response.data;
+      if ((teamResponse.data?.id as string) === userTeamId) {
+        setHasTeam(true);
+      }
+      console.log(teamResponse.data);
+      return teamResponse.data;
     },
   });
 

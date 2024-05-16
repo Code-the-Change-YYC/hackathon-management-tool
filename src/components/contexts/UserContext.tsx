@@ -4,8 +4,7 @@ import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession } from "aws-amplify/auth";
 import { type ReactNode, createContext, useEffect, useState } from "react";
 
-import { Schema } from "@/amplify/data/resource";
-import { useQuery } from "@tanstack/react-query";
+import { type Schema } from "@/amplify/data/resource";
 
 interface Props {
   children: ReactNode | ReactNode[];
@@ -36,7 +35,7 @@ interface IUserReturn {
 
 const client = generateClient<Schema>();
 
-const UserContext = createContext<IUserReturn>({} as IUserReturn);
+export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 
 export function UserContextProvider({ children }: Props) {
   const [currentUser, setCurrentUser] = useState<IUser>({

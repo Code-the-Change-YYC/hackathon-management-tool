@@ -2,19 +2,13 @@
 
 import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 import UserForm from "@/components/UserProfile/UserForm";
-import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
-import {
-  QueryClient,
-  UseMutationResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { UserContext } from "@/components/contexts/UserContext";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
@@ -35,13 +29,16 @@ const UserProfile = () => {
   const queryClient = useQueryClient();
   // Queries
 
+  const userId = useContext(UserContext).currentUser.userSub as string;
+
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["User"]["type"],
     initialDataUpdatedAt: 0,
-    queryKey: ["User", "12345"],
+    queryKey: ["User", userId],
     queryFn: async () => {
-      const response = await client.models.User.get({ id: "12345" });
-      console.log(response.data);
+      const response = await client.models.User.get({
+        id: userId,
+      });
       return response.data;
     },
     // staleTime: Infinity,
@@ -50,8 +47,19 @@ const UserProfile = () => {
   const userMutation = useMutation({
     //mutation takes parameters of input with User type
     mutationFn: async (input: Schema["User"]["type"]) => {
-      const { createdAt, updatedAt, team, teamId, owner, ...extractedFields } =
-        input;
+      const {
+        createdAt,
+        updatedAt,
+        team,
+        teamId,
+        owner,
+        institution,
+        email,
+        meals,
+        checkedIn,
+        ...extractedFields
+      } = input;
+      console.log(extractedFields);
       await client.models.User.update(extractedFields);
     },
     onMutate: () => {
@@ -66,7 +74,7 @@ const UserProfile = () => {
     onSuccess: () => {
       // queryClient.setQueryData(["User", "123"], data);
       queryClient.invalidateQueries({
-        queryKey: ["User", "12345"],
+        queryKey: ["User", userId],
         // refetchType: "active",
       });
       console.log("success");
