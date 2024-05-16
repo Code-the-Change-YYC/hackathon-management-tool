@@ -71,7 +71,7 @@ export default function PersonalFormFields({
     return <div>Error, please try again later.</div>;
   }
   if (data?.id) {
-    // router.push("/");
+    router.push("/");
   }
   if (!data?.id && !isPending)
     return (
