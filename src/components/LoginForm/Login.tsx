@@ -1,21 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import PersonalFormFields from "@/components/LoginForm/PersonalFormFields";
 import type { AuthenticatorProps } from "@aws-amplify/ui-react";
-import {
-  Authenticator,
-  Button,
-  View,
-  useAuthenticator,
-} from "@aws-amplify/ui-react";
+import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
 import type { DefaultComponents } from "@aws-amplify/ui-react/dist/types/components/Authenticator/hooks/useCustomComponents/defaultComponents";
 import { type AuthContext } from "@aws-amplify/ui/dist/types";
 
 export default function Login() {
+  const pathname = usePathname();
   const components: DefaultComponents = {
     SignUp: {
       Header: () => <FormFieldsHeader />,
@@ -25,31 +21,25 @@ export default function Login() {
     },
     Footer: () => {
       const { toSignIn, toSignUp } = useAuthenticator();
-      const [signIn, setSignIn] = useState(false);
       return (
-        <View textAlign="center">
-          <Button
-            fontWeight="normal"
-            onClick={() => {
-              signIn ? toSignIn() : toSignUp();
-              setSignIn(!signIn);
-            }}
-            size="small"
-          >
-            {signIn
-              ? "Already have an account?"
-              : "Don't have an account? Sign up"}
-          </Button>
-        </View>
+        <Link
+          className="flex w-full justify-center py-4 text-center hover:underline"
+          href={pathname === "/login" ? "/register" : "/login"}
+          onClick={() => {
+            pathname === "/login" ? toSignUp() : toSignIn();
+          }}
+        >
+          {pathname === "/register"
+            ? "Already have an account?"
+            : "Don't have an account? Sign up"}
+        </Link>
       );
     },
   };
-  const pathname = usePathname();
   const services: AuthContext["services"] = {};
   const formFields: AuthenticatorProps["formFields"] = {
     signUp: {},
   };
-
   return (
     <Authenticator
       socialProviders={["google", "apple"]}
