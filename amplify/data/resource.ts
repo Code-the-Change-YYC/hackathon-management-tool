@@ -26,6 +26,8 @@ const schema = a
         checkedIn: a.boolean(),
         teamId: a.id(),
         team: a.belongsTo("Team", "teamId"),
+        mealId: a.id(),
+        meal: a.belongsTo("FoodEvent", "mealId"),
       })
       .authorization((allow) => [
         allow.owner(),
@@ -62,6 +64,25 @@ const schema = a
     /**
      * FUNCTION-RELATED APPSYNC RESOLVERS
      */
+    verifyUserVerifcationCode: a
+      .mutation()
+      .arguments({
+        userCode: a.string(),
+        eventID: a.string(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function("verifyUserVerifcationCode")),
+
+    getUserVerifcationCode: a
+      .mutation()
+      .arguments({
+        userId: a.string(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function("getUserVerifcationCode")),
+
     DemoFunction: a
       .mutation() // this should be set to .query for functions that only read data
       // arguments that this query accepts
@@ -73,8 +94,22 @@ const schema = a
       // allow all users to call this api for now
       .authorization((allow) => [allow.guest()])
       .handler(a.handler.function(DemoFunction)),
+
+    VerifyUserCode: a
+      .query()
+      .arguments({
+        userCode: a.string(),
+        eventId: a.string(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      // allow all users to call this api for now
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(VerifyUserCode)),
   })
-  .authorization((allow) => [allow.resource(PreSignUp).to(["mutate"])]);
+  .authorization((allow) => [
+    allow.resource(PreSignUp).to(["mutate"]),
+    allow.resource(VerifyUserCode).to(["query", "mutate"]),
+  ]);
 
 export type Schema = ClientSchema<typeof schema>;
 

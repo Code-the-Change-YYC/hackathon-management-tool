@@ -3,17 +3,19 @@
 import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
 
-import type { FoodEventCreateFormInputValues } from "@/../ui-components/FoodEventCreateForm";
 import FoodEventCreateForm from "@/../ui-components/FoodEventCreateForm";
 import { type Schema } from "@/amplify/data/resource";
+
+type FoodEvent = Schema["FoodEvent"]["type"];
 
 export default function AdminFoodTickets() {
   const client = generateClient<Schema>();
 
-  const [foodData, setFoodData] = useState(null); // Use useState to manage foodData
+  const [foodData, setFoodData] = useState<FoodEvent[]>(); // Use useState to manage foodData
 
   useEffect(() => {
     async function fetchData() {
+      console.log(foodData);
       const { data, errors } = await client.models.FoodEvent.list();
       if (!errors) {
         setFoodData(data); // Update state with fetched data
@@ -29,25 +31,11 @@ export default function AdminFoodTickets() {
     console.log(foodData);
   }, [foodData]);
 
-  async function createFoodEvent(fields: FoodEventCreateFormInputValues) {
-    const { errors, data: newTodo } = await client.models.FoodEvent.create({
-      Name: fields.Name || "Meal",
-      Description: fields.Description || "No Description Provided...",
-      Start: fields.Start,
-      End: fields.End,
-      Groups: fields.Groups || 1,
-    });
-
-    if (errors) {
-      console.log(errors);
-    }
-  }
-
   async function deleteFoodEvent(eventID: string) {
     const toBeDeletedFoodEvent = {
       id: eventID,
     };
-    const { data: deletedTodo, errors } =
+    const { errors } =
       await client.models.FoodEvent.delete(toBeDeletedFoodEvent);
 
     if (errors) {
@@ -57,10 +45,10 @@ export default function AdminFoodTickets() {
 
   return (
     <div>
-      <FoodEventCreateForm onSubmit={createFoodEvent}></FoodEventCreateForm>
+      <FoodEventCreateForm />
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
-        {foodData !== null &&
-          foodData.map((event) => (
+        {foodData !== undefined &&
+          foodData.map((event: FoodEvent) => (
             <div
               key={event.id}
               className="w-auto rounded-lg bg-white p-6 shadow-md"
@@ -68,17 +56,18 @@ export default function AdminFoodTickets() {
               <button onClick={() => deleteFoodEvent(event.id)}>
                 Delete this event
               </button>
-              ;<h3 className="text-lg font-semibold">{event.Name}</h3>
-              <p className="text-sm text-gray-600">{event.Description}</p>
+              ;<h3 className="text-lg font-semibold">{event.name}</h3>
+              <p className="text-sm text-gray-600">{event.description}</p>
               <p className="text-sm">
                 <strong>Start:</strong>{" "}
-                {new Date(event?.Start).toLocaleString()}
+                {event.start ? new Date(event.start).toLocaleString() : ""}
               </p>
               <p className="text-sm">
-                <strong>End:</strong> {new Date(event?.End).toLocaleString()}
+                <strong>End:</strong>
+                {event.end ? new Date(event.end).toLocaleString() : ""}
               </p>
               <p className="text-sm">
-                <strong>Groups:</strong> {event.Groups}
+                <strong>Groups:</strong> {event.groups}
               </p>
               <p className="text-sm">
                 <strong>Created At:</strong>{" "}

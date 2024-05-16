@@ -1,6 +1,6 @@
-import type * as React from "react";
+import * as React from "react";
 
-import type {
+import {
   GridProps,
   SwitchFieldProps,
   TextFieldProps,
@@ -25,34 +25,34 @@ export declare type ValidationFunction<T> = (
   validationResponse: ValidationResponse,
 ) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UserCreateFormInputValues = {
-  FirstName?: string;
-  LastName?: string;
-  Email?: string;
-  Institution?: string;
-  Allergies?: string;
-  CheckedIn?: boolean;
-  owner?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  meals?: boolean;
+  institution?: string;
+  allergies?: string;
+  checkedIn?: boolean;
 };
 export declare type UserCreateFormValidationValues = {
-  FirstName?: ValidationFunction<string>;
-  LastName?: ValidationFunction<string>;
-  Email?: ValidationFunction<string>;
-  Institution?: ValidationFunction<string>;
-  Allergies?: ValidationFunction<string>;
-  CheckedIn?: ValidationFunction<boolean>;
-  owner?: ValidationFunction<string>;
+  firstName?: ValidationFunction<string>;
+  lastName?: ValidationFunction<string>;
+  email?: ValidationFunction<string>;
+  meals?: ValidationFunction<boolean>;
+  institution?: ValidationFunction<string>;
+  allergies?: ValidationFunction<string>;
+  checkedIn?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type UserCreateFormOverridesProps = {
   UserCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-  FirstName?: PrimitiveOverrideProps<TextFieldProps>;
-  LastName?: PrimitiveOverrideProps<TextFieldProps>;
-  Email?: PrimitiveOverrideProps<TextFieldProps>;
-  Institution?: PrimitiveOverrideProps<TextFieldProps>;
-  Allergies?: PrimitiveOverrideProps<TextFieldProps>;
-  CheckedIn?: PrimitiveOverrideProps<SwitchFieldProps>;
-  owner?: PrimitiveOverrideProps<TextFieldProps>;
+  firstName?: PrimitiveOverrideProps<TextFieldProps>;
+  lastName?: PrimitiveOverrideProps<TextFieldProps>;
+  email?: PrimitiveOverrideProps<TextFieldProps>;
+  meals?: PrimitiveOverrideProps<SwitchFieldProps>;
+  institution?: PrimitiveOverrideProps<TextFieldProps>;
+  allergies?: PrimitiveOverrideProps<TextFieldProps>;
+  checkedIn?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type UserCreateFormProps = React.PropsWithChildren<
   {

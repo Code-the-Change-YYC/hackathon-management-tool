@@ -12,32 +12,25 @@ export const DemoFunction = /* GraphQL */ `
     }
   }
 `;
-export const GetFoodTicket = /* GraphQL */ `
-  mutation GetFoodTicket($userID: String) {
-    GetFoodTicket(userID: $userID) {
-      headers
-      statusCode
-      value
-      __typename
-    }
-  }
-`;
 export const createFoodEvent = /* GraphQL */ `
   mutation CreateFoodEvent(
     $condition: ModelFoodEventConditionInput
     $input: CreateFoodEventInput!
   ) {
     createFoodEvent(condition: $condition, input: $input) {
-      Description
-      End
-      Groups
-      Name
-      Start
+      attended {
+        nextToken
+        __typename
+      }
       createdAt
+      description
+      end
+      groups
       id
+      name
       owner
+      start
       updatedAt
-      userMealsId
       __typename
     }
   }
@@ -48,14 +41,13 @@ export const createTeam = /* GraphQL */ `
     $input: CreateTeamInput!
   ) {
     createTeam(condition: $condition, input: $input) {
-      Code
-      Members {
+      createdAt
+      id
+      members {
         nextToken
         __typename
       }
-      Name
-      createdAt
-      id
+      name
       owner
       updatedAt
       __typename
@@ -68,29 +60,38 @@ export const createUser = /* GraphQL */ `
     $input: CreateUserInput!
   ) {
     createUser(condition: $condition, input: $input) {
-      Allergies
-      CheckedIn
-      Email
-      FirstName
-      Institution
-      LastName
-      Meals {
-        nextToken
+      allergies
+      checkedIn
+      createdAt
+      email
+      firstName
+      id
+      institution
+      lastName
+      meal {
+        createdAt
+        description
+        end
+        groups
+        id
+        name
+        owner
+        start
+        updatedAt
         __typename
       }
-      Team {
-        Code
-        Name
+      mealId
+      meals
+      owner
+      team {
         createdAt
         id
+        name
         owner
         updatedAt
         __typename
       }
-      createdAt
-      id
-      owner
-      teamMembersId
+      teamId
       updatedAt
       __typename
     }
@@ -102,16 +103,19 @@ export const deleteFoodEvent = /* GraphQL */ `
     $input: DeleteFoodEventInput!
   ) {
     deleteFoodEvent(condition: $condition, input: $input) {
-      Description
-      End
-      Groups
-      Name
-      Start
+      attended {
+        nextToken
+        __typename
+      }
       createdAt
+      description
+      end
+      groups
       id
+      name
       owner
+      start
       updatedAt
-      userMealsId
       __typename
     }
   }
@@ -122,14 +126,13 @@ export const deleteTeam = /* GraphQL */ `
     $input: DeleteTeamInput!
   ) {
     deleteTeam(condition: $condition, input: $input) {
-      Code
-      Members {
+      createdAt
+      id
+      members {
         nextToken
         __typename
       }
-      Name
-      createdAt
-      id
+      name
       owner
       updatedAt
       __typename
@@ -142,30 +145,49 @@ export const deleteUser = /* GraphQL */ `
     $input: DeleteUserInput!
   ) {
     deleteUser(condition: $condition, input: $input) {
-      Allergies
-      CheckedIn
-      Email
-      FirstName
-      Institution
-      LastName
-      Meals {
-        nextToken
+      allergies
+      checkedIn
+      createdAt
+      email
+      firstName
+      id
+      institution
+      lastName
+      meal {
+        createdAt
+        description
+        end
+        groups
+        id
+        name
+        owner
+        start
+        updatedAt
         __typename
       }
-      Team {
-        Code
-        Name
+      mealId
+      meals
+      owner
+      team {
         createdAt
         id
+        name
         owner
         updatedAt
         __typename
       }
-      createdAt
-      id
-      owner
-      teamMembersId
+      teamId
       updatedAt
+      __typename
+    }
+  }
+`;
+export const getUserVerifcationCode = /* GraphQL */ `
+  mutation GetUserVerifcationCode($userId: String) {
+    getUserVerifcationCode(userId: $userId) {
+      body
+      headers
+      statusCode
       __typename
     }
   }
@@ -176,16 +198,19 @@ export const updateFoodEvent = /* GraphQL */ `
     $input: UpdateFoodEventInput!
   ) {
     updateFoodEvent(condition: $condition, input: $input) {
-      Description
-      End
-      Groups
-      Name
-      Start
+      attended {
+        nextToken
+        __typename
+      }
       createdAt
+      description
+      end
+      groups
       id
+      name
       owner
+      start
       updatedAt
-      userMealsId
       __typename
     }
   }
@@ -196,14 +221,13 @@ export const updateTeam = /* GraphQL */ `
     $input: UpdateTeamInput!
   ) {
     updateTeam(condition: $condition, input: $input) {
-      Code
-      Members {
+      createdAt
+      id
+      members {
         nextToken
         __typename
       }
-      Name
-      createdAt
-      id
+      name
       owner
       updatedAt
       __typename
@@ -216,30 +240,49 @@ export const updateUser = /* GraphQL */ `
     $input: UpdateUserInput!
   ) {
     updateUser(condition: $condition, input: $input) {
-      Allergies
-      CheckedIn
-      Email
-      FirstName
-      Institution
-      LastName
-      Meals {
-        nextToken
+      allergies
+      checkedIn
+      createdAt
+      email
+      firstName
+      id
+      institution
+      lastName
+      meal {
+        createdAt
+        description
+        end
+        groups
+        id
+        name
+        owner
+        start
+        updatedAt
         __typename
       }
-      Team {
-        Code
-        Name
+      mealId
+      meals
+      owner
+      team {
         createdAt
         id
+        name
         owner
         updatedAt
         __typename
       }
-      createdAt
-      id
-      owner
-      teamMembersId
+      teamId
       updatedAt
+      __typename
+    }
+  }
+`;
+export const verifyUserVerifcationCode = /* GraphQL */ `
+  mutation VerifyUserVerifcationCode($eventID: String, $userCode: String) {
+    verifyUserVerifcationCode(eventID: $eventID, userCode: $userCode) {
+      body
+      headers
+      statusCode
       __typename
     }
   }

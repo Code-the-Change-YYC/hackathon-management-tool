@@ -2,19 +2,32 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const VerifyUserCode = /* GraphQL */ `
+  query VerifyUserCode($eventId: String, $userCode: String) {
+    VerifyUserCode(eventId: $eventId, userCode: $userCode) {
+      body
+      headers
+      statusCode
+      __typename
+    }
+  }
+`;
 export const getFoodEvent = /* GraphQL */ `
   query GetFoodEvent($id: ID!) {
     getFoodEvent(id: $id) {
-      Description
-      End
-      Groups
-      Name
-      Start
+      attended {
+        nextToken
+        __typename
+      }
       createdAt
+      description
+      end
+      groups
       id
+      name
       owner
+      start
       updatedAt
-      userMealsId
       __typename
     }
   }
@@ -22,14 +35,13 @@ export const getFoodEvent = /* GraphQL */ `
 export const getTeam = /* GraphQL */ `
   query GetTeam($id: ID!) {
     getTeam(id: $id) {
-      Code
-      Members {
+      createdAt
+      id
+      members {
         nextToken
         __typename
       }
-      Name
-      createdAt
-      id
+      name
       owner
       updatedAt
       __typename
@@ -39,29 +51,38 @@ export const getTeam = /* GraphQL */ `
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
-      Allergies
-      CheckedIn
-      Email
-      FirstName
-      Institution
-      LastName
-      Meals {
-        nextToken
+      allergies
+      checkedIn
+      createdAt
+      email
+      firstName
+      id
+      institution
+      lastName
+      meal {
+        createdAt
+        description
+        end
+        groups
+        id
+        name
+        owner
+        start
+        updatedAt
         __typename
       }
-      Team {
-        Code
-        Name
+      mealId
+      meals
+      owner
+      team {
         createdAt
         id
+        name
         owner
         updatedAt
         __typename
       }
-      createdAt
-      id
-      owner
-      teamMembersId
+      teamId
       updatedAt
       __typename
     }
@@ -83,16 +104,15 @@ export const listFoodEvents = /* GraphQL */ `
       sortDirection: $sortDirection
     ) {
       items {
-        Description
-        End
-        Groups
-        Name
-        Start
         createdAt
+        description
+        end
+        groups
         id
+        name
         owner
+        start
         updatedAt
-        userMealsId
         __typename
       }
       nextToken
@@ -116,10 +136,9 @@ export const listTeams = /* GraphQL */ `
       sortDirection: $sortDirection
     ) {
       items {
-        Code
-        Name
         createdAt
         id
+        name
         owner
         updatedAt
         __typename
@@ -132,29 +151,23 @@ export const listTeams = /* GraphQL */ `
 export const listUsers = /* GraphQL */ `
   query ListUsers(
     $filter: ModelUserFilterInput
-    $id: ID
     $limit: Int
     $nextToken: String
-    $sortDirection: ModelSortDirection
   ) {
-    listUsers(
-      filter: $filter
-      id: $id
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        Allergies
-        CheckedIn
-        Email
-        FirstName
-        Institution
-        LastName
+        allergies
+        checkedIn
         createdAt
+        email
+        firstName
         id
+        institution
+        lastName
+        mealId
+        meals
         owner
-        teamMembersId
+        teamId
         updatedAt
         __typename
       }

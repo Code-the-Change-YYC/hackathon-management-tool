@@ -14,9 +14,9 @@ import {
   getGroupNumberFromTime,
   getUserTimeSlot,
 } from "../utils/food-groups";
-import { modelIntrospection } from "./amplifyconfiguration.json";
+import type { ModelUserConnection, User } from "./graphql/API";
+import { getFoodEvent } from "./graphql/queries";
 
-const MAX_TEAM_MEMBERS = 6;
 Amplify.configure(
   {
     API: {
@@ -24,7 +24,6 @@ Amplify.configure(
         endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string,
         region: process.env.AWS_REGION,
         defaultAuthMode: "iam",
-        modelIntrospection: modelIntrospection as never,
       },
     },
   },
@@ -46,7 +45,9 @@ Amplify.configure(
   },
 );
 
-const dataClient = generateClient<Schema>();
+const client = generateClient<Schema>({
+  authMode: "iam",
+});
 
 type ResolverArgs = { userCode: string; eventID: string };
 
@@ -62,12 +63,18 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, _) => {
-  const { data, errors } = await dataClient.models.FoodEvent.get({
-    // @ts-ignore
-    id: event.arguments.eventID,
+  // const { data, errors } = await client.models.FoodEvent.get({
+  //   id: event.arguments.eventID,
+  // });
+
+  const { data, errors } = await client.graphql({
+    query: getFoodEvent,
+    variables: {
+      id: event.arguments.eventID,
+    },
   });
 
-  if (errors) {
+  if (errors || !data.getFoodEvent) {
     return {
       body: {
         canEat: false,
@@ -78,28 +85,29 @@ export const handler: AppSyncResolverHandler<
     };
   }
 
+  const foodEvent = data.getFoodEvent;
   const [userID, mac] = getUserIDAndCode(event.arguments.userCode);
 
   // Check if the user has a meal with the same eventID
-  if (data.type) {
-    const hasUserInEvent = (await data.type.Attended()).data.some(
-      (user: { id: string }) => user.id === userID,
-    );
-    if (hasUserInEvent)
-      return {
-        body: {
-          canEat: false,
-          description: "User has already attended the event meal.",
-        },
-        statusCode: 409,
-        headers: header,
-      };
-  }
+  // TODO: Readd this when Ana learns how to do this in Amplify
+  const attended = foodEvent.attended as ModelUserConnection;
+  const hasUserInEvent = attended.items.some(
+    (item: User | null) => item !== null && item.id === userID,
+  );
+  if (hasUserInEvent)
+    return {
+      body: {
+        canEat: false,
+        description: "User has already attended the event meal.",
+      },
+      statusCode: 409,
+      headers: header,
+    };
 
   //Make sure their code is a valid one that has not been tampered with
   const isValidCode = await isValidAuthenticationCode(userID, mac);
 
-  if (isValidCode == false) {
+  if (isValidCode === false) {
     return {
       body: {
         canEat: false,
@@ -113,17 +121,17 @@ export const handler: AppSyncResolverHandler<
     //check if the user is in the right time slot, can still eat if not in the right timeslot
     const expectedGroupNumber = getGroupNumberFromTime(
       getLocalCalgaryTime(),
-      data.type.Groups,
-      data.type.Start as string,
-      data.type.End as string,
+      foodEvent.groups,
+      foodEvent.start as string,
+      foodEvent.end as string,
     );
     const actualGroupNumber = getGroupNumber(
       userID,
-      data.type.id,
-      data.type.Groups,
+      foodEvent.id,
+      foodEvent.groups,
     );
 
-    if (expectedGroupNumber == actualGroupNumber) {
+    if (expectedGroupNumber === actualGroupNumber) {
       return {
         body: {
           canEat: true,
@@ -135,10 +143,10 @@ export const handler: AppSyncResolverHandler<
     } else {
       const actualTimeSlot = getUserTimeSlot(
         userID,
-        data.type.id,
-        data.type.Groups,
-        data.type.Start as string,
-        data.type.End as string,
+        foodEvent.id,
+        foodEvent.groups,
+        foodEvent.start as string,
+        foodEvent.end as string,
       );
       return {
         body: {

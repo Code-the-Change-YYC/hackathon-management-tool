@@ -1,13 +1,16 @@
 "use server";
 
-import { getUserIDAndCode } from "@/amplify/function/utils/crytography";
+import {
+  getUserIDAndCode,
+  isValidAuthenticationCode,
+} from "@/amplify/function/utils/crytography";
+import { getLocalCalgaryTime } from "@/amplify/function/utils/date";
 import {
   getGroupNumber,
   getGroupNumberFromTime,
   getUserTimeSlot,
 } from "@/amplify/function/utils/food-groups";
 import client from "@/components/_Amplify/AmplifyBackendClient";
-import { getLocalCalgaryTime } from "@/utils/date";
 
 export async function verifyFoodTicket(userCode: string, eventID: string) {
   try {
@@ -26,7 +29,7 @@ export async function verifyFoodTicket(userCode: string, eventID: string) {
 
     // Check if the user has a meal with the same eventID
     if (foodEvent) {
-      const hasUserInEvent = (await foodEvent.Attended()).data.some(
+      const hasUserInEvent = (await foodEvent.attended()).data.some(
         (user) => user.id === userID,
       );
       if (hasUserInEvent)
@@ -34,12 +37,15 @@ export async function verifyFoodTicket(userCode: string, eventID: string) {
           canEat: false,
           description: "User has already attended the event meal.",
         };
+    } else {
+      console.error("Food event does not exist");
+      return { canEat: false, description: "Food event does not exist" };
     }
 
     //Make sure their code is a valid one that has not been tampered with
     const isValidCode = await isValidAuthenticationCode(userID, mac);
 
-    if (isValidCode == false) {
+    if (isValidCode === false) {
       return {
         canEat: false,
         description:
@@ -49,17 +55,17 @@ export async function verifyFoodTicket(userCode: string, eventID: string) {
       //check if the user is in the right time slot, can still eat if not in the right timeslot
       const expectedGroupNumber = getGroupNumberFromTime(
         getLocalCalgaryTime(),
-        foodEvent.Groups,
-        foodEvent?.Start,
-        foodEvent?.End,
+        foodEvent?.groups,
+        foodEvent.start,
+        foodEvent.end,
       );
       const actualGroupNumber = getGroupNumber(
         userID,
         foodEvent.id,
-        foodEvent.Groups,
+        foodEvent.groups,
       );
 
-      if (expectedGroupNumber == actualGroupNumber) {
+      if (expectedGroupNumber === actualGroupNumber) {
         return {
           canEat: true,
           description: "Person is in the right place and time!",
@@ -68,9 +74,9 @@ export async function verifyFoodTicket(userCode: string, eventID: string) {
         const actualTimeSlot = getUserTimeSlot(
           userID,
           foodEvent.id,
-          foodEvent.Groups,
-          foodEvent.Start,
-          foodEvent.End,
+          foodEvent.groups,
+          foodEvent.start,
+          foodEvent.end,
         );
         return {
           canEat: true,

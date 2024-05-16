@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { Auth, DataStore, Hub } from "aws-amplify";
+import { fetchUserAttributes, signOut } from "aws-amplify/auth";
+import { DataStore } from "aws-amplify/datastore";
+import { Hub } from "aws-amplify/utils";
 import * as React from "react";
 
 export const UI_CHANNEL = "ui";
@@ -474,7 +476,7 @@ export const useAuthSignOutAction = (options) => async () => {
       EVENT_ACTION_AUTH_SIGNOUT,
       AMPLIFY_SYMBOL,
     );
-    await Auth.signOut(options);
+    await signOut(options);
     Hub.dispatch(
       UI_CHANNEL,
       {
@@ -495,6 +497,60 @@ export const useAuthSignOutAction = (options) => async () => {
       AMPLIFY_SYMBOL,
     );
   }
+};
+export const useAuth = () => {
+  const [result, setResult] = React.useState({
+    error: undefined,
+    isLoading: true,
+    user: undefined,
+  });
+  const fetchCurrentUserAttributes = React.useCallback(async () => {
+    setResult((prevResult) => ({ ...prevResult, isLoading: true }));
+    try {
+      const attributes = await fetchUserAttributes();
+      setResult({ user: { attributes }, isLoading: false });
+    } catch (error) {
+      setResult({ error, isLoading: false });
+    }
+  }, []);
+  const handleAuth = React.useCallback(
+    ({ payload }) => {
+      switch (payload.event) {
+        case "signedIn":
+        case "signUp":
+        case "tokenRefresh":
+        case "autoSignIn": {
+          fetchCurrentUserAttributes();
+          break;
+        }
+        case "signedOut": {
+          setResult({ user: undefined, isLoading: false });
+          break;
+        }
+        case "tokenRefresh_failure":
+        case "signIn_failure": {
+          setResult({ error: payload.data, isLoading: false });
+          break;
+        }
+        case "autoSignIn_failure": {
+          setResult({ error: new Error(payload.message), isLoading: false });
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    },
+    [fetchCurrentUserAttributes],
+  );
+  React.useEffect(() => {
+    const unsubscribe = Hub.listen("auth", handleAuth, "useAuth");
+    fetchCurrentUserAttributes();
+    return unsubscribe;
+  }, [handleAuth, fetchCurrentUserAttributes]);
+  return {
+    ...result,
+  };
 };
 export const validateField = (value, validations) => {
   for (const validation of validations) {

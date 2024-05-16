@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use client";
 
 import { generateClient } from "aws-amplify/api";
@@ -8,6 +9,10 @@ import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { updateTeam } from "./graphql/mutations";
 import { getTeam } from "./graphql/queries";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
+
+/* eslint-disable */
+
+/* eslint-disable */
 
 const client = generateClient();
 export default function TeamUpdateForm(props) {
@@ -23,21 +28,15 @@ export default function TeamUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    Name: "",
-    Code: "",
-    owner: "",
+    name: "",
   };
-  const [Name, setName] = React.useState(initialValues.Name);
-  const [Code, setCode] = React.useState(initialValues.Code);
-  const [owner, setOwner] = React.useState(initialValues.owner);
+  const [name, setName] = React.useState(initialValues.name);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = teamRecord
       ? { ...initialValues, ...teamRecord }
       : initialValues;
-    setName(cleanValues.Name);
-    setCode(cleanValues.Code);
-    setOwner(cleanValues.owner);
+    setName(cleanValues.name);
     setErrors({});
   };
   const [teamRecord, setTeamRecord] = React.useState(teamModelProp);
@@ -57,9 +56,7 @@ export default function TeamUpdateForm(props) {
   }, [idProp, teamModelProp]);
   React.useEffect(resetStateValues, [teamRecord]);
   const validations = {
-    Name: [],
-    Code: [],
-    owner: [],
+    name: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -87,9 +84,7 @@ export default function TeamUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          Name: Name ?? null,
-          Code: Code ?? null,
-          owner: owner ?? null,
+          name: name ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -145,79 +140,25 @@ export default function TeamUpdateForm(props) {
         label="Name"
         isRequired={false}
         isReadOnly={false}
-        value={Name}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Name: value,
-              Code,
-              owner,
+              name: value,
             };
             const result = onChange(modelFields);
-            value = result?.Name ?? value;
+            value = result?.name ?? value;
           }
-          if (errors.Name?.hasError) {
-            runValidationTasks("Name", value);
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
           }
           setName(value);
         }}
-        onBlur={() => runValidationTasks("Name", Name)}
-        errorMessage={errors.Name?.errorMessage}
-        hasError={errors.Name?.hasError}
-        {...getOverrideProps(overrides, "Name")}
-      ></TextField>
-      <TextField
-        label="Code"
-        isRequired={false}
-        isReadOnly={false}
-        value={Code}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Name,
-              Code: value,
-              owner,
-            };
-            const result = onChange(modelFields);
-            value = result?.Code ?? value;
-          }
-          if (errors.Code?.hasError) {
-            runValidationTasks("Code", value);
-          }
-          setCode(value);
-        }}
-        onBlur={() => runValidationTasks("Code", Code)}
-        errorMessage={errors.Code?.errorMessage}
-        hasError={errors.Code?.hasError}
-        {...getOverrideProps(overrides, "Code")}
-      ></TextField>
-      <TextField
-        label="Owner"
-        isRequired={false}
-        isReadOnly={false}
-        value={owner}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Name,
-              Code,
-              owner: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.owner ?? value;
-          }
-          if (errors.owner?.hasError) {
-            runValidationTasks("owner", value);
-          }
-          setOwner(value);
-        }}
-        onBlur={() => runValidationTasks("owner", owner)}
-        errorMessage={errors.owner?.errorMessage}
-        hasError={errors.owner?.hasError}
-        {...getOverrideProps(overrides, "owner")}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
       ></TextField>
       <Flex
         justifyContent="space-between"

@@ -1,8 +1,8 @@
-import type * as React from "react";
+import * as React from "react";
 
-import type { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 
-import type { FoodEvent } from "./graphql/types";
+import { FoodEvent } from "./graphql/types";
 
 export declare type EscapeHatchProps = {
   [elementHierarchy: string]: Record<string, unknown>;
@@ -23,31 +23,28 @@ export declare type ValidationFunction<T> = (
   validationResponse: ValidationResponse,
 ) => ValidationResponse | Promise<ValidationResponse>;
 export declare type FoodEventUpdateFormInputValues = {
-  Name?: string;
-  Description?: string;
-  Start?: string;
-  End?: string;
-  Groups?: number;
-  owner?: string;
+  name?: string;
+  description?: string;
+  start?: string;
+  end?: string;
+  groups?: number;
 };
 export declare type FoodEventUpdateFormValidationValues = {
-  Name?: ValidationFunction<string>;
-  Description?: ValidationFunction<string>;
-  Start?: ValidationFunction<string>;
-  End?: ValidationFunction<string>;
-  Groups?: ValidationFunction<number>;
-  owner?: ValidationFunction<string>;
+  name?: ValidationFunction<string>;
+  description?: ValidationFunction<string>;
+  start?: ValidationFunction<string>;
+  end?: ValidationFunction<string>;
+  groups?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type FoodEventUpdateFormOverridesProps = {
   FoodEventUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-  Name?: PrimitiveOverrideProps<TextFieldProps>;
-  Description?: PrimitiveOverrideProps<TextFieldProps>;
-  Start?: PrimitiveOverrideProps<TextFieldProps>;
-  End?: PrimitiveOverrideProps<TextFieldProps>;
-  Groups?: PrimitiveOverrideProps<TextFieldProps>;
-  owner?: PrimitiveOverrideProps<TextFieldProps>;
+  name?: PrimitiveOverrideProps<TextFieldProps>;
+  description?: PrimitiveOverrideProps<TextFieldProps>;
+  start?: PrimitiveOverrideProps<TextFieldProps>;
+  end?: PrimitiveOverrideProps<TextFieldProps>;
+  groups?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type FoodEventUpdateFormProps = React.PropsWithChildren<
   {

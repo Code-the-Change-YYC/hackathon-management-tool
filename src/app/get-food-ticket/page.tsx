@@ -10,6 +10,8 @@ import { createUserIDAndCode } from "@/amplify/function/utils/crytography";
 import { getLocalCalgaryTime } from "@/amplify/function/utils/date";
 import { getUserTimeSlot } from "@/amplify/function/utils/food-groups";
 
+type FoodEvent = Schema["FoodEvent"]["type"];
+
 export default function FoodPage() {
   const client = generateClient<Schema>();
 
@@ -23,7 +25,7 @@ export default function FoodPage() {
   useEffect(() => {
     async function fetchCurrentAuthenticatedUser() {
       try {
-        const { username, userId, signInDetails } = await getCurrentUser();
+        const { userId } = await getCurrentUser();
 
         if (userId) {
           const response = await client.mutations.getUserVerifcationCode({
@@ -33,8 +35,8 @@ export default function FoodPage() {
           const response_body = response.data?.body;
 
           if (response_body) {
-            var json = JSON.parse(response_body as string);
-            let code = json["value"];
+            const json = JSON.parse(response_body as string);
+            const code = json["value"];
             console.log(code);
             setUserVerificationCode(createUserIDAndCode(userID, code));
           } else {
@@ -48,23 +50,23 @@ export default function FoodPage() {
     }
 
     async function fetchUserNextFoodEvent() {
-      const foodEvents = await client.models.FoodEvent.list();
+      const foodEvents = (await client.models.FoodEvent.list()).data;
       const currentTime = getLocalCalgaryTime(); // Current local time
 
       // Sort the events by their start time
       const nextEvent = getNextEvent(foodEvents, currentTime);
 
       if (nextEvent) {
-        setEventName(nextEvent.Name);
-        setEventDescription(nextEvent.Description);
+        setEventName(nextEvent.name ? nextEvent.name : "");
+        setEventDescription(nextEvent.description ? nextEvent.description : "");
 
         if (userID) {
           const userTimeSlot = getUserTimeSlot(
             userID,
             nextEvent.id,
-            nextEvent?.Groups,
-            nextEvent.Start,
-            nextEvent.End,
+            nextEvent?.groups,
+            nextEvent.start,
+            nextEvent.end,
           );
           setTimeSlot(userTimeSlot);
         }
@@ -93,22 +95,22 @@ export default function FoodPage() {
   );
 }
 
-function getNextEvent(foodEvents, currentTime: Date) {
-  const sortedEvents = foodEvents.data.sort(
-    (a, b) => new Date(a.Start) - new Date(b.Start),
+function getNextEvent(foodEvents: FoodEvent[], currentTime: Date) {
+  const sortedEvents = foodEvents.sort(
+    (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
   );
 
   // Find the event that has already started, between start and end times
   let nextEvent = sortedEvents.find(
     (event) =>
-      currentTime >= new Date(event.Start) &&
-      currentTime <= new Date(event.End),
+      currentTime >= new Date(event.start) &&
+      currentTime <= new Date(event.end),
   );
 
   // find the next event if there is event as of now
-  if (nextEvent == undefined) {
+  if (nextEvent === undefined) {
     nextEvent = sortedEvents.find(
-      (event) => new Date(event.Start) > currentTime,
+      (event) => new Date(event.start) > currentTime,
     );
   }
   return nextEvent;

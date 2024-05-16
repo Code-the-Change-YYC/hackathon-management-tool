@@ -1,8 +1,8 @@
-import type * as React from "react";
+import * as React from "react";
 
-import type { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 
-import type { Team } from "./graphql/types";
+import { Team } from "./graphql/types";
 
 export declare type EscapeHatchProps = {
   [elementHierarchy: string]: Record<string, unknown>;
@@ -23,22 +23,16 @@ export declare type ValidationFunction<T> = (
   validationResponse: ValidationResponse,
 ) => ValidationResponse | Promise<ValidationResponse>;
 export declare type TeamUpdateFormInputValues = {
-  Name?: string;
-  Code?: string;
-  owner?: string;
+  name?: string;
 };
 export declare type TeamUpdateFormValidationValues = {
-  Name?: ValidationFunction<string>;
-  Code?: ValidationFunction<string>;
-  owner?: ValidationFunction<string>;
+  name?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type TeamUpdateFormOverridesProps = {
   TeamUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-  Name?: PrimitiveOverrideProps<TextFieldProps>;
-  Code?: PrimitiveOverrideProps<TextFieldProps>;
-  owner?: PrimitiveOverrideProps<TextFieldProps>;
+  name?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TeamUpdateFormProps = React.PropsWithChildren<
   {

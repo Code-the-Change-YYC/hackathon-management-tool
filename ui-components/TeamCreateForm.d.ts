@@ -1,6 +1,6 @@
-import type * as React from "react";
+import * as React from "react";
 
-import type { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 
 export declare type EscapeHatchProps = {
   [elementHierarchy: string]: Record<string, unknown>;
@@ -21,22 +21,16 @@ export declare type ValidationFunction<T> = (
   validationResponse: ValidationResponse,
 ) => ValidationResponse | Promise<ValidationResponse>;
 export declare type TeamCreateFormInputValues = {
-  Name?: string;
-  Code?: string;
-  owner?: string;
+  name?: string;
 };
 export declare type TeamCreateFormValidationValues = {
-  Name?: ValidationFunction<string>;
-  Code?: ValidationFunction<string>;
-  owner?: ValidationFunction<string>;
+  name?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
 export declare type TeamCreateFormOverridesProps = {
   TeamCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-  Name?: PrimitiveOverrideProps<TextFieldProps>;
-  Code?: PrimitiveOverrideProps<TextFieldProps>;
-  owner?: PrimitiveOverrideProps<TextFieldProps>;
+  name?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TeamCreateFormProps = React.PropsWithChildren<
   {

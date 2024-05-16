@@ -2,7 +2,6 @@ import { Amplify } from "aws-amplify";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
 import { createAuthenticationCode } from "../utils/crytography";
-import { modelIntrospection } from "./amplifyconfiguration.json";
 
 Amplify.configure(
   {
@@ -11,7 +10,6 @@ Amplify.configure(
         endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string,
         region: process.env.AWS_REGION,
         defaultAuthMode: "iam",
-        modelIntrospection: modelIntrospection as never,
       },
     },
   },

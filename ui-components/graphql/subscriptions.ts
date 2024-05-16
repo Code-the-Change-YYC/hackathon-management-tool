@@ -8,16 +8,19 @@ export const onCreateFoodEvent = /* GraphQL */ `
     $owner: String
   ) {
     onCreateFoodEvent(filter: $filter, owner: $owner) {
-      Description
-      End
-      Groups
-      Name
-      Start
+      attended {
+        nextToken
+        __typename
+      }
       createdAt
+      description
+      end
+      groups
       id
+      name
       owner
+      start
       updatedAt
-      userMealsId
       __typename
     }
   }
@@ -28,14 +31,13 @@ export const onCreateTeam = /* GraphQL */ `
     $owner: String
   ) {
     onCreateTeam(filter: $filter, owner: $owner) {
-      Code
-      Members {
+      createdAt
+      id
+      members {
         nextToken
         __typename
       }
-      Name
-      createdAt
-      id
+      name
       owner
       updatedAt
       __typename
@@ -48,29 +50,38 @@ export const onCreateUser = /* GraphQL */ `
     $owner: String
   ) {
     onCreateUser(filter: $filter, owner: $owner) {
-      Allergies
-      CheckedIn
-      Email
-      FirstName
-      Institution
-      LastName
-      Meals {
-        nextToken
+      allergies
+      checkedIn
+      createdAt
+      email
+      firstName
+      id
+      institution
+      lastName
+      meal {
+        createdAt
+        description
+        end
+        groups
+        id
+        name
+        owner
+        start
+        updatedAt
         __typename
       }
-      Team {
-        Code
-        Name
+      mealId
+      meals
+      owner
+      team {
         createdAt
         id
+        name
         owner
         updatedAt
         __typename
       }
-      createdAt
-      id
-      owner
-      teamMembersId
+      teamId
       updatedAt
       __typename
     }
@@ -82,16 +93,19 @@ export const onDeleteFoodEvent = /* GraphQL */ `
     $owner: String
   ) {
     onDeleteFoodEvent(filter: $filter, owner: $owner) {
-      Description
-      End
-      Groups
-      Name
-      Start
+      attended {
+        nextToken
+        __typename
+      }
       createdAt
+      description
+      end
+      groups
       id
+      name
       owner
+      start
       updatedAt
-      userMealsId
       __typename
     }
   }
@@ -102,14 +116,13 @@ export const onDeleteTeam = /* GraphQL */ `
     $owner: String
   ) {
     onDeleteTeam(filter: $filter, owner: $owner) {
-      Code
-      Members {
+      createdAt
+      id
+      members {
         nextToken
         __typename
       }
-      Name
-      createdAt
-      id
+      name
       owner
       updatedAt
       __typename
@@ -122,29 +135,38 @@ export const onDeleteUser = /* GraphQL */ `
     $owner: String
   ) {
     onDeleteUser(filter: $filter, owner: $owner) {
-      Allergies
-      CheckedIn
-      Email
-      FirstName
-      Institution
-      LastName
-      Meals {
-        nextToken
+      allergies
+      checkedIn
+      createdAt
+      email
+      firstName
+      id
+      institution
+      lastName
+      meal {
+        createdAt
+        description
+        end
+        groups
+        id
+        name
+        owner
+        start
+        updatedAt
         __typename
       }
-      Team {
-        Code
-        Name
+      mealId
+      meals
+      owner
+      team {
         createdAt
         id
+        name
         owner
         updatedAt
         __typename
       }
-      createdAt
-      id
-      owner
-      teamMembersId
+      teamId
       updatedAt
       __typename
     }
@@ -156,16 +178,19 @@ export const onUpdateFoodEvent = /* GraphQL */ `
     $owner: String
   ) {
     onUpdateFoodEvent(filter: $filter, owner: $owner) {
-      Description
-      End
-      Groups
-      Name
-      Start
+      attended {
+        nextToken
+        __typename
+      }
       createdAt
+      description
+      end
+      groups
       id
+      name
       owner
+      start
       updatedAt
-      userMealsId
       __typename
     }
   }
@@ -176,14 +201,13 @@ export const onUpdateTeam = /* GraphQL */ `
     $owner: String
   ) {
     onUpdateTeam(filter: $filter, owner: $owner) {
-      Code
-      Members {
+      createdAt
+      id
+      members {
         nextToken
         __typename
       }
-      Name
-      createdAt
-      id
+      name
       owner
       updatedAt
       __typename
@@ -196,29 +220,38 @@ export const onUpdateUser = /* GraphQL */ `
     $owner: String
   ) {
     onUpdateUser(filter: $filter, owner: $owner) {
-      Allergies
-      CheckedIn
-      Email
-      FirstName
-      Institution
-      LastName
-      Meals {
-        nextToken
+      allergies
+      checkedIn
+      createdAt
+      email
+      firstName
+      id
+      institution
+      lastName
+      meal {
+        createdAt
+        description
+        end
+        groups
+        id
+        name
+        owner
+        start
+        updatedAt
         __typename
       }
-      Team {
-        Code
-        Name
+      mealId
+      meals
+      owner
+      team {
         createdAt
         id
+        name
         owner
         updatedAt
         __typename
       }
-      createdAt
-      id
-      owner
-      teamMembersId
+      teamId
       updatedAt
       __typename
     }
