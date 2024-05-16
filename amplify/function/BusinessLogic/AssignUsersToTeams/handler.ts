@@ -52,97 +52,86 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, _) => {
-  // let team;
-  // try {
-  //   team = await dataClient.models.Team.get({ id: event.arguments.teamId });
-  // } catch (err) {
-  //   return {
-  //     body: { value: "Error: Team does not exist" },
-  //     statusCode: 404,
-  //     headers: { "Content-Type": "application/json" },
-  //   };
-  // }
+  try {
+    const user = (
+      await client.graphql({
+        query: getUser,
+        variables: {
+          id: event.arguments.userId,
+        },
+      })
+    ).data.getUser;
 
-  // const user = await dataClient.models.User.get({ id: event.arguments.userId });
-  const user = (
-    await client.graphql({
-      query: getUser,
+    const team = (
+      await client.graphql({
+        query: getTeam,
+        variables: {
+          id: event.arguments.teamId,
+        },
+      })
+    ).data.getTeam;
+
+    if (team == null) {
+      return {
+        body: { value: "Error: Team does not exist" },
+        statusCode: 404,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
+
+    if (user == null) {
+      return {
+        body: { value: "Error: User does not exist" },
+        statusCode: 404,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
+
+    if (await user.team) {
+      return {
+        body: { value: "Error: User is already part of a team" },
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
+
+    const membersConnection = (await team.members) as ModelUserConnection;
+    const members = await membersConnection.items;
+
+    if (members.length >= MAX_TEAM_MEMBERS) {
+      return {
+        body: { value: "Error: Team is full" },
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
+
+    const result = await client.graphql({
+      query: updateUser,
       variables: {
-        id: event.arguments.userId,
+        input: {
+          id: user.id,
+          teamId: team.id,
+        },
       },
-    })
-  ).data.getUser;
-  console.log(user);
-  console.log(event.arguments.teamId);
-  console.log("before error");
-  const team = (
-    await client.graphql({
-      query: getTeam,
-      variables: {
-        id: event.arguments.teamId,
-      },
-    })
-  ).data.getTeam;
-  console.log("after error");
-  console.log(team);
+    });
 
-  if (team == null) {
+    if (!result.errors) {
+      return {
+        body: { value: `Success` },
+        statusCode: 200,
+        headers: { "Content-Type": "application/json" },
+      };
+    } else {
+      return {
+        body: { value: `Error while updating database` },
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
+  } catch {
     return {
-      body: { value: "Error: Team does not exist" },
-      statusCode: 404,
-      headers: { "Content-Type": "application/json" },
-    };
-  }
-
-  if (user == null) {
-    return {
-      body: { value: "Error: User does not exist" },
-      statusCode: 404,
-      headers: { "Content-Type": "application/json" },
-    };
-  }
-
-  if (await user.team) {
-    return {
-      body: { value: "Error: User is already part of a team" },
-      statusCode: 400,
-      headers: { "Content-Type": "application/json" },
-    };
-  }
-
-  // Please look into this error and how to access nested data using this page:
-  // https://docs.amplify.aws/react/build-a-backend/data/data-modeling/relationships/
-  // SPECIFICALLY: "Eagerly Load "has Many" Relationships" and "Lazy Load "has Many" Relationships"
-  const membersConnection = (await team.members) as ModelUserConnection;
-  const members = await membersConnection.items;
-
-  if (members.length >= MAX_TEAM_MEMBERS) {
-    return {
-      body: { value: "Error: Team is full" },
-      statusCode: 400,
-      headers: { "Content-Type": "application/json" },
-    };
-  }
-
-  const result = await client.graphql({
-    query: updateUser,
-    variables: {
-      input: {
-        id: user.id,
-        teamId: team.id,
-      },
-    },
-  });
-
-  if (!result.errors) {
-    return {
-      body: { value: `Success` },
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-    };
-  } else {
-    return {
-      body: { value: `Error while updating database` },
+      body: { value: `Unhandled Internal Server Error` },
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
     };
