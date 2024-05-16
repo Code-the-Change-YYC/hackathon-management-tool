@@ -1,8 +1,6 @@
+/* eslint-disable */
 "use client";
-
-import { generateClient } from "aws-amplify/api";
 import * as React from "react";
-
 import {
   Button,
   Flex,
@@ -10,11 +8,10 @@ import {
   SwitchField,
   TextField,
 } from "@aws-amplify/ui-react";
-
-import { updateUser } from "./graphql/mutations";
-import { getUser } from "./graphql/queries";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-
+import { generateClient } from "aws-amplify/api";
+import { getUser } from "./graphql/queries";
+import { updateUser } from "./graphql/mutations";
 const client = generateClient();
 export default function UserUpdateForm(props) {
   const {
@@ -29,35 +26,35 @@ export default function UserUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    FirstName: "",
-    LastName: "",
-    Email: "",
-    Institution: "",
-    Allergies: "",
-    CheckedIn: false,
-    owner: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    meals: false,
+    institution: "",
+    allergies: "",
+    checkedIn: false,
   };
-  const [FirstName, setFirstName] = React.useState(initialValues.FirstName);
-  const [LastName, setLastName] = React.useState(initialValues.LastName);
-  const [Email, setEmail] = React.useState(initialValues.Email);
-  const [Institution, setInstitution] = React.useState(
-    initialValues.Institution,
+  const [firstName, setFirstName] = React.useState(initialValues.firstName);
+  const [lastName, setLastName] = React.useState(initialValues.lastName);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [meals, setMeals] = React.useState(initialValues.meals);
+  const [institution, setInstitution] = React.useState(
+    initialValues.institution
   );
-  const [Allergies, setAllergies] = React.useState(initialValues.Allergies);
-  const [CheckedIn, setCheckedIn] = React.useState(initialValues.CheckedIn);
-  const [owner, setOwner] = React.useState(initialValues.owner);
+  const [allergies, setAllergies] = React.useState(initialValues.allergies);
+  const [checkedIn, setCheckedIn] = React.useState(initialValues.checkedIn);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = userRecord
       ? { ...initialValues, ...userRecord }
       : initialValues;
-    setFirstName(cleanValues.FirstName);
-    setLastName(cleanValues.LastName);
-    setEmail(cleanValues.Email);
-    setInstitution(cleanValues.Institution);
-    setAllergies(cleanValues.Allergies);
-    setCheckedIn(cleanValues.CheckedIn);
-    setOwner(cleanValues.owner);
+    setFirstName(cleanValues.firstName);
+    setLastName(cleanValues.lastName);
+    setEmail(cleanValues.email);
+    setMeals(cleanValues.meals);
+    setInstitution(cleanValues.institution);
+    setAllergies(cleanValues.allergies);
+    setCheckedIn(cleanValues.checkedIn);
     setErrors({});
   };
   const [userRecord, setUserRecord] = React.useState(userModelProp);
@@ -77,18 +74,18 @@ export default function UserUpdateForm(props) {
   }, [idProp, userModelProp]);
   React.useEffect(resetStateValues, [userRecord]);
   const validations = {
-    FirstName: [],
-    LastName: [],
-    Email: [],
-    Institution: [],
-    Allergies: [],
-    CheckedIn: [],
-    owner: [],
+    firstName: [],
+    lastName: [],
+    email: [],
+    meals: [],
+    institution: [],
+    allergies: [],
+    checkedIn: [],
   };
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue,
+    getDisplayValue
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -111,29 +108,29 @@ export default function UserUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          FirstName: FirstName ?? null,
-          LastName: LastName ?? null,
-          Email: Email ?? null,
-          Institution: Institution ?? null,
-          Allergies: Allergies ?? null,
-          CheckedIn: CheckedIn ?? null,
-          owner: owner ?? null,
+          firstName: firstName ?? null,
+          lastName: lastName ?? null,
+          email: email ?? null,
+          meals: meals ?? null,
+          institution: institution ?? null,
+          allergies: allergies ?? null,
+          checkedIn: checkedIn ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item),
-                ),
+                  runValidationTasks(fieldName, item)
+                )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName]),
+              runValidationTasks(fieldName, modelFields[fieldName])
             );
             return promises;
-          }, []),
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -173,212 +170,212 @@ export default function UserUpdateForm(props) {
         label="First name"
         isRequired={false}
         isReadOnly={false}
-        value={FirstName}
+        value={firstName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              FirstName: value,
-              LastName,
-              Email,
-              Institution,
-              Allergies,
-              CheckedIn,
-              owner,
+              firstName: value,
+              lastName,
+              email,
+              meals,
+              institution,
+              allergies,
+              checkedIn,
             };
             const result = onChange(modelFields);
-            value = result?.FirstName ?? value;
+            value = result?.firstName ?? value;
           }
-          if (errors.FirstName?.hasError) {
-            runValidationTasks("FirstName", value);
+          if (errors.firstName?.hasError) {
+            runValidationTasks("firstName", value);
           }
           setFirstName(value);
         }}
-        onBlur={() => runValidationTasks("FirstName", FirstName)}
-        errorMessage={errors.FirstName?.errorMessage}
-        hasError={errors.FirstName?.hasError}
-        {...getOverrideProps(overrides, "FirstName")}
+        onBlur={() => runValidationTasks("firstName", firstName)}
+        errorMessage={errors.firstName?.errorMessage}
+        hasError={errors.firstName?.hasError}
+        {...getOverrideProps(overrides, "firstName")}
       ></TextField>
       <TextField
         label="Last name"
         isRequired={false}
         isReadOnly={false}
-        value={LastName}
+        value={lastName}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              FirstName,
-              LastName: value,
-              Email,
-              Institution,
-              Allergies,
-              CheckedIn,
-              owner,
+              firstName,
+              lastName: value,
+              email,
+              meals,
+              institution,
+              allergies,
+              checkedIn,
             };
             const result = onChange(modelFields);
-            value = result?.LastName ?? value;
+            value = result?.lastName ?? value;
           }
-          if (errors.LastName?.hasError) {
-            runValidationTasks("LastName", value);
+          if (errors.lastName?.hasError) {
+            runValidationTasks("lastName", value);
           }
           setLastName(value);
         }}
-        onBlur={() => runValidationTasks("LastName", LastName)}
-        errorMessage={errors.LastName?.errorMessage}
-        hasError={errors.LastName?.hasError}
-        {...getOverrideProps(overrides, "LastName")}
+        onBlur={() => runValidationTasks("lastName", lastName)}
+        errorMessage={errors.lastName?.errorMessage}
+        hasError={errors.lastName?.hasError}
+        {...getOverrideProps(overrides, "lastName")}
       ></TextField>
       <TextField
         label="Email"
         isRequired={false}
         isReadOnly={false}
-        value={Email}
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              FirstName,
-              LastName,
-              Email: value,
-              Institution,
-              Allergies,
-              CheckedIn,
-              owner,
+              firstName,
+              lastName,
+              email: value,
+              meals,
+              institution,
+              allergies,
+              checkedIn,
             };
             const result = onChange(modelFields);
-            value = result?.Email ?? value;
+            value = result?.email ?? value;
           }
-          if (errors.Email?.hasError) {
-            runValidationTasks("Email", value);
+          if (errors.email?.hasError) {
+            runValidationTasks("email", value);
           }
           setEmail(value);
         }}
-        onBlur={() => runValidationTasks("Email", Email)}
-        errorMessage={errors.Email?.errorMessage}
-        hasError={errors.Email?.hasError}
-        {...getOverrideProps(overrides, "Email")}
+        onBlur={() => runValidationTasks("email", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, "email")}
       ></TextField>
+      <SwitchField
+        label="Meals"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={meals}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              firstName,
+              lastName,
+              email,
+              meals: value,
+              institution,
+              allergies,
+              checkedIn,
+            };
+            const result = onChange(modelFields);
+            value = result?.meals ?? value;
+          }
+          if (errors.meals?.hasError) {
+            runValidationTasks("meals", value);
+          }
+          setMeals(value);
+        }}
+        onBlur={() => runValidationTasks("meals", meals)}
+        errorMessage={errors.meals?.errorMessage}
+        hasError={errors.meals?.hasError}
+        {...getOverrideProps(overrides, "meals")}
+      ></SwitchField>
       <TextField
         label="Institution"
         isRequired={false}
         isReadOnly={false}
-        value={Institution}
+        value={institution}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              FirstName,
-              LastName,
-              Email,
-              Institution: value,
-              Allergies,
-              CheckedIn,
-              owner,
+              firstName,
+              lastName,
+              email,
+              meals,
+              institution: value,
+              allergies,
+              checkedIn,
             };
             const result = onChange(modelFields);
-            value = result?.Institution ?? value;
+            value = result?.institution ?? value;
           }
-          if (errors.Institution?.hasError) {
-            runValidationTasks("Institution", value);
+          if (errors.institution?.hasError) {
+            runValidationTasks("institution", value);
           }
           setInstitution(value);
         }}
-        onBlur={() => runValidationTasks("Institution", Institution)}
-        errorMessage={errors.Institution?.errorMessage}
-        hasError={errors.Institution?.hasError}
-        {...getOverrideProps(overrides, "Institution")}
+        onBlur={() => runValidationTasks("institution", institution)}
+        errorMessage={errors.institution?.errorMessage}
+        hasError={errors.institution?.hasError}
+        {...getOverrideProps(overrides, "institution")}
       ></TextField>
       <TextField
         label="Allergies"
         isRequired={false}
         isReadOnly={false}
-        value={Allergies}
+        value={allergies}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              FirstName,
-              LastName,
-              Email,
-              Institution,
-              Allergies: value,
-              CheckedIn,
-              owner,
+              firstName,
+              lastName,
+              email,
+              meals,
+              institution,
+              allergies: value,
+              checkedIn,
             };
             const result = onChange(modelFields);
-            value = result?.Allergies ?? value;
+            value = result?.allergies ?? value;
           }
-          if (errors.Allergies?.hasError) {
-            runValidationTasks("Allergies", value);
+          if (errors.allergies?.hasError) {
+            runValidationTasks("allergies", value);
           }
           setAllergies(value);
         }}
-        onBlur={() => runValidationTasks("Allergies", Allergies)}
-        errorMessage={errors.Allergies?.errorMessage}
-        hasError={errors.Allergies?.hasError}
-        {...getOverrideProps(overrides, "Allergies")}
+        onBlur={() => runValidationTasks("allergies", allergies)}
+        errorMessage={errors.allergies?.errorMessage}
+        hasError={errors.allergies?.hasError}
+        {...getOverrideProps(overrides, "allergies")}
       ></TextField>
       <SwitchField
         label="Checked in"
         defaultChecked={false}
         isDisabled={false}
-        isChecked={CheckedIn}
+        isChecked={checkedIn}
         onChange={(e) => {
           let value = e.target.checked;
           if (onChange) {
             const modelFields = {
-              FirstName,
-              LastName,
-              Email,
-              Institution,
-              Allergies,
-              CheckedIn: value,
-              owner,
+              firstName,
+              lastName,
+              email,
+              meals,
+              institution,
+              allergies,
+              checkedIn: value,
             };
             const result = onChange(modelFields);
-            value = result?.CheckedIn ?? value;
+            value = result?.checkedIn ?? value;
           }
-          if (errors.CheckedIn?.hasError) {
-            runValidationTasks("CheckedIn", value);
+          if (errors.checkedIn?.hasError) {
+            runValidationTasks("checkedIn", value);
           }
           setCheckedIn(value);
         }}
-        onBlur={() => runValidationTasks("CheckedIn", CheckedIn)}
-        errorMessage={errors.CheckedIn?.errorMessage}
-        hasError={errors.CheckedIn?.hasError}
-        {...getOverrideProps(overrides, "CheckedIn")}
+        onBlur={() => runValidationTasks("checkedIn", checkedIn)}
+        errorMessage={errors.checkedIn?.errorMessage}
+        hasError={errors.checkedIn?.hasError}
+        {...getOverrideProps(overrides, "checkedIn")}
       ></SwitchField>
-      <TextField
-        label="Owner"
-        isRequired={false}
-        isReadOnly={false}
-        value={owner}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              FirstName,
-              LastName,
-              Email,
-              Institution,
-              Allergies,
-              CheckedIn,
-              owner: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.owner ?? value;
-          }
-          if (errors.owner?.hasError) {
-            runValidationTasks("owner", value);
-          }
-          setOwner(value);
-        }}
-        onBlur={() => runValidationTasks("owner", owner)}
-        errorMessage={errors.owner?.errorMessage}
-        hasError={errors.owner?.hasError}
-        {...getOverrideProps(overrides, "owner")}
-      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

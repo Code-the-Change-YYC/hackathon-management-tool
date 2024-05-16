@@ -23,7 +23,7 @@ export default function FoodPage() {
   useEffect(() => {
     async function fetchCurrentAuthenticatedUser() {
       try {
-        const { username, userId, signInDetails } = await getCurrentUser();
+        const { userId } = await getCurrentUser();
 
         if (userId) {
           const response = await client.mutations.getUserVerifcationCode({
@@ -33,8 +33,8 @@ export default function FoodPage() {
           const response_body = response.data?.body;
 
           if (response_body) {
-            var json = JSON.parse(response_body as string);
-            let code = json["value"];
+            const json = JSON.parse(response_body as string);
+            const code = json["value"];
             console.log(code);
             setUserVerificationCode(createUserIDAndCode(userID, code));
           } else {

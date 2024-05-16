@@ -1,14 +1,11 @@
+/* eslint-disable */
 "use client";
-
-import { generateClient } from "aws-amplify/api";
 import * as React from "react";
-
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-
-import { updateFoodEvent } from "./graphql/mutations";
-import { getFoodEvent } from "./graphql/queries";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-
+import { generateClient } from "aws-amplify/api";
+import { getFoodEvent } from "./graphql/queries";
+import { updateFoodEvent } from "./graphql/mutations";
 const client = generateClient();
 export default function FoodEventUpdateForm(props) {
   const {
@@ -23,32 +20,29 @@ export default function FoodEventUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    Name: "",
-    Description: "",
-    Start: "",
-    End: "",
-    Groups: "",
-    owner: "",
+    name: "",
+    description: "",
+    start: "",
+    end: "",
+    groups: "",
   };
-  const [Name, setName] = React.useState(initialValues.Name);
-  const [Description, setDescription] = React.useState(
-    initialValues.Description,
+  const [name, setName] = React.useState(initialValues.name);
+  const [description, setDescription] = React.useState(
+    initialValues.description
   );
-  const [Start, setStart] = React.useState(initialValues.Start);
-  const [End, setEnd] = React.useState(initialValues.End);
-  const [Groups, setGroups] = React.useState(initialValues.Groups);
-  const [owner, setOwner] = React.useState(initialValues.owner);
+  const [start, setStart] = React.useState(initialValues.start);
+  const [end, setEnd] = React.useState(initialValues.end);
+  const [groups, setGroups] = React.useState(initialValues.groups);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = foodEventRecord
       ? { ...initialValues, ...foodEventRecord }
       : initialValues;
-    setName(cleanValues.Name);
-    setDescription(cleanValues.Description);
-    setStart(cleanValues.Start);
-    setEnd(cleanValues.End);
-    setGroups(cleanValues.Groups);
-    setOwner(cleanValues.owner);
+    setName(cleanValues.name);
+    setDescription(cleanValues.description);
+    setStart(cleanValues.start);
+    setEnd(cleanValues.end);
+    setGroups(cleanValues.groups);
     setErrors({});
   };
   const [foodEventRecord, setFoodEventRecord] =
@@ -69,17 +63,16 @@ export default function FoodEventUpdateForm(props) {
   }, [idProp, foodEventModelProp]);
   React.useEffect(resetStateValues, [foodEventRecord]);
   const validations = {
-    Name: [],
-    Description: [],
-    Start: [],
-    End: [],
-    Groups: [],
-    owner: [],
+    name: [],
+    description: [],
+    start: [],
+    end: [],
+    groups: [],
   };
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue,
+    getDisplayValue
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -119,28 +112,27 @@ export default function FoodEventUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          Name: Name ?? null,
-          Description: Description ?? null,
-          Start: Start ?? null,
-          End: End ?? null,
-          Groups: Groups ?? null,
-          owner: owner ?? null,
+          name: name ?? null,
+          description: description ?? null,
+          start: start ?? null,
+          end: end ?? null,
+          groups: groups ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item),
-                ),
+                  runValidationTasks(fieldName, item)
+                )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName]),
+              runValidationTasks(fieldName, modelFields[fieldName])
             );
             return promises;
-          }, []),
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -180,121 +172,117 @@ export default function FoodEventUpdateForm(props) {
         label="Name"
         isRequired={false}
         isReadOnly={false}
-        value={Name}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Name: value,
-              Description,
-              Start,
-              End,
-              Groups,
-              owner,
+              name: value,
+              description,
+              start,
+              end,
+              groups,
             };
             const result = onChange(modelFields);
-            value = result?.Name ?? value;
+            value = result?.name ?? value;
           }
-          if (errors.Name?.hasError) {
-            runValidationTasks("Name", value);
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
           }
           setName(value);
         }}
-        onBlur={() => runValidationTasks("Name", Name)}
-        errorMessage={errors.Name?.errorMessage}
-        hasError={errors.Name?.hasError}
-        {...getOverrideProps(overrides, "Name")}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
         label="Description"
         isRequired={false}
         isReadOnly={false}
-        value={Description}
+        value={description}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Name,
-              Description: value,
-              Start,
-              End,
-              Groups,
-              owner,
+              name,
+              description: value,
+              start,
+              end,
+              groups,
             };
             const result = onChange(modelFields);
-            value = result?.Description ?? value;
+            value = result?.description ?? value;
           }
-          if (errors.Description?.hasError) {
-            runValidationTasks("Description", value);
+          if (errors.description?.hasError) {
+            runValidationTasks("description", value);
           }
           setDescription(value);
         }}
-        onBlur={() => runValidationTasks("Description", Description)}
-        errorMessage={errors.Description?.errorMessage}
-        hasError={errors.Description?.hasError}
-        {...getOverrideProps(overrides, "Description")}
+        onBlur={() => runValidationTasks("description", description)}
+        errorMessage={errors.description?.errorMessage}
+        hasError={errors.description?.hasError}
+        {...getOverrideProps(overrides, "description")}
       ></TextField>
       <TextField
         label="Start"
         isRequired={false}
         isReadOnly={false}
         type="datetime-local"
-        value={Start && convertToLocal(new Date(Start))}
+        value={start && convertToLocal(new Date(start))}
         onChange={(e) => {
           let value =
             e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
-              Name,
-              Description,
-              Start: value,
-              End,
-              Groups,
-              owner,
+              name,
+              description,
+              start: value,
+              end,
+              groups,
             };
             const result = onChange(modelFields);
-            value = result?.Start ?? value;
+            value = result?.start ?? value;
           }
-          if (errors.Start?.hasError) {
-            runValidationTasks("Start", value);
+          if (errors.start?.hasError) {
+            runValidationTasks("start", value);
           }
           setStart(value);
         }}
-        onBlur={() => runValidationTasks("Start", Start)}
-        errorMessage={errors.Start?.errorMessage}
-        hasError={errors.Start?.hasError}
-        {...getOverrideProps(overrides, "Start")}
+        onBlur={() => runValidationTasks("start", start)}
+        errorMessage={errors.start?.errorMessage}
+        hasError={errors.start?.hasError}
+        {...getOverrideProps(overrides, "start")}
       ></TextField>
       <TextField
         label="End"
         isRequired={false}
         isReadOnly={false}
         type="datetime-local"
-        value={End && convertToLocal(new Date(End))}
+        value={end && convertToLocal(new Date(end))}
         onChange={(e) => {
           let value =
             e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
-              Name,
-              Description,
-              Start,
-              End: value,
-              Groups,
-              owner,
+              name,
+              description,
+              start,
+              end: value,
+              groups,
             };
             const result = onChange(modelFields);
-            value = result?.End ?? value;
+            value = result?.end ?? value;
           }
-          if (errors.End?.hasError) {
-            runValidationTasks("End", value);
+          if (errors.end?.hasError) {
+            runValidationTasks("end", value);
           }
           setEnd(value);
         }}
-        onBlur={() => runValidationTasks("End", End)}
-        errorMessage={errors.End?.errorMessage}
-        hasError={errors.End?.hasError}
-        {...getOverrideProps(overrides, "End")}
+        onBlur={() => runValidationTasks("end", end)}
+        errorMessage={errors.end?.errorMessage}
+        hasError={errors.end?.hasError}
+        {...getOverrideProps(overrides, "end")}
       ></TextField>
       <TextField
         label="Groups"
@@ -302,61 +290,31 @@ export default function FoodEventUpdateForm(props) {
         isReadOnly={false}
         type="number"
         step="any"
-        value={Groups}
+        value={groups}
         onChange={(e) => {
           let value = isNaN(parseInt(e.target.value))
             ? e.target.value
             : parseInt(e.target.value);
           if (onChange) {
             const modelFields = {
-              Name,
-              Description,
-              Start,
-              End,
-              Groups: value,
-              owner,
+              name,
+              description,
+              start,
+              end,
+              groups: value,
             };
             const result = onChange(modelFields);
-            value = result?.Groups ?? value;
+            value = result?.groups ?? value;
           }
-          if (errors.Groups?.hasError) {
-            runValidationTasks("Groups", value);
+          if (errors.groups?.hasError) {
+            runValidationTasks("groups", value);
           }
           setGroups(value);
         }}
-        onBlur={() => runValidationTasks("Groups", Groups)}
-        errorMessage={errors.Groups?.errorMessage}
-        hasError={errors.Groups?.hasError}
-        {...getOverrideProps(overrides, "Groups")}
-      ></TextField>
-      <TextField
-        label="Owner"
-        isRequired={false}
-        isReadOnly={false}
-        value={owner}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Name,
-              Description,
-              Start,
-              End,
-              Groups,
-              owner: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.owner ?? value;
-          }
-          if (errors.owner?.hasError) {
-            runValidationTasks("owner", value);
-          }
-          setOwner(value);
-        }}
-        onBlur={() => runValidationTasks("owner", owner)}
-        errorMessage={errors.owner?.errorMessage}
-        hasError={errors.owner?.hasError}
-        {...getOverrideProps(overrides, "owner")}
+        onBlur={() => runValidationTasks("groups", groups)}
+        errorMessage={errors.groups?.errorMessage}
+        hasError={errors.groups?.hasError}
+        {...getOverrideProps(overrides, "groups")}
       ></TextField>
       <Flex
         justifyContent="space-between"

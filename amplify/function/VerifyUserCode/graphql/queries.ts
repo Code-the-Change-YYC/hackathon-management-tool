@@ -26,7 +26,10 @@ export const getFoodEvent = /* GraphQL */ `query GetFoodEvent($id: ID!) {
   getFoodEvent(id: $id) {
     attended {
       nextToken
-      __typename
+      items {
+        id
+        __typename
+      }
     }
     createdAt
     description

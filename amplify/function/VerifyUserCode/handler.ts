@@ -14,6 +14,7 @@ import {
   getGroupNumberFromTime,
   getUserTimeSlot,
 } from "../utils/food-groups";
+import type { ModelUserConnection, User } from "./graphql/API";
 import { getFoodEvent } from "./graphql/queries";
 
 Amplify.configure(
@@ -89,10 +90,10 @@ export const handler: AppSyncResolverHandler<
 
   // Check if the user has a meal with the same eventID
   // TODO: Readd this when Ana learns how to do this in Amplify
-  // const hasUserInEvent = foodEvent.attended?.data.some(
-  //   (user: { id: string }) => user.id === userID,
-  // );
-  const hasUserInEvent = false;
+  const attended = foodEvent.attended as ModelUserConnection;
+  const hasUserInEvent = attended.items.some(
+    (item: User | null) => item !== null && item.id === userID,
+  );
   if (hasUserInEvent)
     return {
       body: {
