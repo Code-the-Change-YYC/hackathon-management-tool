@@ -2,6 +2,7 @@
 
 import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession } from "aws-amplify/auth";
+import { useContext } from "react";
 import { type ReactNode, createContext, useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
@@ -78,6 +79,6 @@ export function UserContextProvider({ children }: Props) {
   );
 }
 
-// export function useUser(): IUserReturn {
-//   return useContext(UserContext);
-// }
+export function useUser(): IUserReturn {
+  return useContext(UserContext);
+}

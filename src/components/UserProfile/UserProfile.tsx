@@ -2,12 +2,12 @@
 
 import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 import UserForm from "@/components/UserProfile/UserForm";
-import { UserContext } from "@/components/contexts/UserContext";
+import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const BUTTON_STYLES =
@@ -29,7 +29,7 @@ const UserProfile = () => {
   const queryClient = useQueryClient();
   // Queries
 
-  const userId = useContext(UserContext).currentUser.userSub as string;
+  const userId = useUser().currentUser.userSub as string;
 
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["User"]["type"],
@@ -47,18 +47,8 @@ const UserProfile = () => {
   const userMutation = useMutation({
     //mutation takes parameters of input with User type
     mutationFn: async (input: Schema["User"]["type"]) => {
-      const {
-        createdAt,
-        updatedAt,
-        team,
-        teamId,
-        owner,
-        institution,
-        email,
-        meals,
-        checkedIn,
-        ...extractedFields
-      } = input;
+      const { createdAt, updatedAt, team, teamId, owner, ...extractedFields } =
+        input;
       console.log(extractedFields);
       await client.models.User.update(extractedFields);
     },

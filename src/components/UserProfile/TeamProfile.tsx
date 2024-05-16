@@ -1,12 +1,12 @@
 "use client";
 
 import { generateClient } from "aws-amplify/data";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 import TeamForm from "@/components/UserProfile/TeamForm";
-import { UserContext } from "@/components/contexts/UserContext";
+import { useUser } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 
 const BUTTON_STYLES =
@@ -25,7 +25,7 @@ export interface TeamFormProp {
 const TeamProfile = () => {
   const [hasTeam, setHasTeam] = useState<boolean>(false);
 
-  const userId = useContext(UserContext).currentUser.userSub as string;
+  const userId = useUser().currentUser.userSub as string;
 
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["Team"]["type"],
