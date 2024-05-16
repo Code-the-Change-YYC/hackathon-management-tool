@@ -319,14 +319,14 @@
               "name": "start",
               "isArray": false,
               "type": "AWSDateTime",
-              "isRequired": false,
+              "isRequired": true,
               "attributes": []
             },
             "end": {
               "name": "end",
               "isArray": false,
               "type": "AWSDateTime",
-              "isRequired": false,
+              "isRequired": true,
               "attributes": []
             },
             "groups": {

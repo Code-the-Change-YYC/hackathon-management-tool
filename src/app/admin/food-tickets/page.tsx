@@ -48,7 +48,7 @@ export default function AdminFoodTickets() {
       <FoodEventCreateForm />
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
         {foodData !== undefined &&
-          foodData.map((event: any) => (
+          foodData.map((event: FoodEvent) => (
             <div
               key={event.id}
               className="w-auto rounded-lg bg-white p-6 shadow-md"
@@ -56,17 +56,18 @@ export default function AdminFoodTickets() {
               <button onClick={() => deleteFoodEvent(event.id)}>
                 Delete this event
               </button>
-              ;<h3 className="text-lg font-semibold">{event.Name}</h3>
-              <p className="text-sm text-gray-600">{event.Description}</p>
+              ;<h3 className="text-lg font-semibold">{event.name}</h3>
+              <p className="text-sm text-gray-600">{event.description}</p>
               <p className="text-sm">
                 <strong>Start:</strong>{" "}
-                {new Date(event?.Start).toLocaleString()}
+                {event.start ? new Date(event.start).toLocaleString() : ""}
               </p>
               <p className="text-sm">
-                <strong>End:</strong> {new Date(event?.End).toLocaleString()}
+                <strong>End:</strong>
+                {event.end ? new Date(event.end).toLocaleString() : ""}
               </p>
               <p className="text-sm">
-                <strong>Groups:</strong> {event.Groups}
+                <strong>Groups:</strong> {event.groups}
               </p>
               <p className="text-sm">
                 <strong>Created At:</strong>{" "}

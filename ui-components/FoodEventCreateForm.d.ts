@@ -1,51 +1,68 @@
 import * as React from "react";
+
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+
 export declare type EscapeHatchProps = {
-    [elementHierarchy: string]: Record<string, unknown>;
+  [elementHierarchy: string]: Record<string, unknown>;
 } | null;
 export declare type VariantValues = {
-    [key: string]: string;
+  [key: string]: string;
 };
 export declare type Variant = {
-    variantValues: VariantValues;
-    overrides: EscapeHatchProps;
+  variantValues: VariantValues;
+  overrides: EscapeHatchProps;
 };
 export declare type ValidationResponse = {
-    hasError: boolean;
-    errorMessage?: string;
+  hasError: boolean;
+  errorMessage?: string;
 };
-export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
+export declare type ValidationFunction<T> = (
+  value: T,
+  validationResponse: ValidationResponse,
+) => ValidationResponse | Promise<ValidationResponse>;
 export declare type FoodEventCreateFormInputValues = {
-    name?: string;
-    description?: string;
-    start?: string;
-    end?: string;
-    groups?: number;
+  name?: string;
+  description?: string;
+  start?: string;
+  end?: string;
+  groups?: number;
 };
 export declare type FoodEventCreateFormValidationValues = {
-    name?: ValidationFunction<string>;
-    description?: ValidationFunction<string>;
-    start?: ValidationFunction<string>;
-    end?: ValidationFunction<string>;
-    groups?: ValidationFunction<number>;
+  name?: ValidationFunction<string>;
+  description?: ValidationFunction<string>;
+  start?: ValidationFunction<string>;
+  end?: ValidationFunction<string>;
+  groups?: ValidationFunction<number>;
 };
-export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> &
+  React.DOMAttributes<HTMLDivElement>;
 export declare type FoodEventCreateFormOverridesProps = {
-    FoodEventCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    name?: PrimitiveOverrideProps<TextFieldProps>;
-    description?: PrimitiveOverrideProps<TextFieldProps>;
-    start?: PrimitiveOverrideProps<TextFieldProps>;
-    end?: PrimitiveOverrideProps<TextFieldProps>;
-    groups?: PrimitiveOverrideProps<TextFieldProps>;
+  FoodEventCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+  name?: PrimitiveOverrideProps<TextFieldProps>;
+  description?: PrimitiveOverrideProps<TextFieldProps>;
+  start?: PrimitiveOverrideProps<TextFieldProps>;
+  end?: PrimitiveOverrideProps<TextFieldProps>;
+  groups?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type FoodEventCreateFormProps = React.PropsWithChildren<{
+export declare type FoodEventCreateFormProps = React.PropsWithChildren<
+  {
     overrides?: FoodEventCreateFormOverridesProps | undefined | null;
-} & {
+  } & {
     clearOnSuccess?: boolean;
-    onSubmit?: (fields: FoodEventCreateFormInputValues) => FoodEventCreateFormInputValues;
+    onSubmit?: (
+      fields: FoodEventCreateFormInputValues,
+    ) => FoodEventCreateFormInputValues;
     onSuccess?: (fields: FoodEventCreateFormInputValues) => void;
-    onError?: (fields: FoodEventCreateFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: FoodEventCreateFormInputValues) => FoodEventCreateFormInputValues;
+    onError?: (
+      fields: FoodEventCreateFormInputValues,
+      errorMessage: string,
+    ) => void;
+    onChange?: (
+      fields: FoodEventCreateFormInputValues,
+    ) => FoodEventCreateFormInputValues;
     onValidate?: FoodEventCreateFormValidationValues;
-} & React.CSSProperties>;
-export default function FoodEventCreateForm(props: FoodEventCreateFormProps): React.ReactElement;
+  } & React.CSSProperties
+>;
+export default function FoodEventCreateForm(
+  props: FoodEventCreateFormProps,
+): React.ReactElement;

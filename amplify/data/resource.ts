@@ -53,8 +53,8 @@ const schema = a
         id: a.id().required(),
         name: a.string(),
         description: a.string(),
-        start: a.datetime(),
-        end: a.datetime(),
+        start: a.datetime().required(),
+        end: a.datetime().required(),
         groups: a.integer(),
         attended: a.hasMany("User", "mealId"),
       })

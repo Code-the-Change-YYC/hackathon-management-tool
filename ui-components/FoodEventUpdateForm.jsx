@@ -1,11 +1,17 @@
 /* eslint-disable */
 "use client";
-import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { fetchByPath, getOverrideProps, validateField } from "./utils";
+
 import { generateClient } from "aws-amplify/api";
-import { getFoodEvent } from "./graphql/queries";
+import * as React from "react";
+
+import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+
 import { updateFoodEvent } from "./graphql/mutations";
+import { getFoodEvent } from "./graphql/queries";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
+
+/* eslint-disable */
+
 const client = generateClient();
 export default function FoodEventUpdateForm(props) {
   const {
@@ -28,7 +34,7 @@ export default function FoodEventUpdateForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
-    initialValues.description
+    initialValues.description,
   );
   const [start, setStart] = React.useState(initialValues.start);
   const [end, setEnd] = React.useState(initialValues.end);
@@ -72,7 +78,7 @@ export default function FoodEventUpdateForm(props) {
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue
+    getDisplayValue,
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -123,16 +129,16 @@ export default function FoodEventUpdateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
-                )
+                  runValidationTasks(fieldName, item),
+                ),
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(fieldName, modelFields[fieldName]),
             );
             return promises;
-          }, [])
+          }, []),
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
