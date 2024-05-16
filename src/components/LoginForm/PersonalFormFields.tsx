@@ -1,6 +1,7 @@
 import { generateClient } from "aws-amplify/api";
 import type { AuthUser } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import type { Schema } from "@/amplify/data/resource";
 import FormFields from "@/components/LoginForm/FormFields";
@@ -31,18 +32,23 @@ export default function PersonalFormFields({
     "Other",
     "None",
   ];
-  // Not really typesafe, but it's for a hackathon...
-  const submitForm = (formData: FormData) => {
-    const data = Object.fromEntries(formData.entries());
-    const newUserDetails = {
-      ...data,
-      id: user?.userId,
-      email: user?.signInDetails?.loginId,
-      meals: data.meals === "yes" ? true : false,
-    } as Schema["User"]["type"];
-    try {
-      userMutation.mutate(newUserDetails);
-    } catch (e) {}
+  const [formState, setFormState] = useState<Schema["User"]["type"]>(
+    {} as Schema["User"]["type"],
+  );
+  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    userMutation.mutate(formState);
+  };
+  const updateForm = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setFormState((prevState) => ({ ...prevState, [name]: value }));
+  };
+  const updateSelectInput = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    const { name, value } = e.target;
+    if (name === "meals") {
+      setFormState((prevState) => ({ ...prevState, [name]: value === "yes" }));
+    }
+    setFormState((prevState) => ({ ...prevState, [name]: value }));
   };
   const { isPending, isError, data } = useQuery({
     queryKey: ["user", user?.userId],
@@ -51,19 +57,26 @@ export default function PersonalFormFields({
     },
   });
   if (isPending) {
-    // TODO: Add loading spinner
-    return <div>Loading...</div>;
+    return (
+      // These are mandatory divs for the loading spinner
+      <div className="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    );
   }
   if (isError) {
     return <div>Error, please try again later.</div>;
   }
   if (data?.id) {
-    router.push("/");
+    // router.push("/");
   }
   if (!data?.id && !isPending)
     return (
       <form
-        action={submitForm}
+        onSubmit={submitForm}
         className="relative flex w-full flex-col justify-center gap-4 rounded-3xl bg-white p-4 md:p-8"
       >
         <FormFieldsHeader className={" -ml-4 -mt-0 p-0"} />
@@ -75,6 +88,8 @@ export default function PersonalFormFields({
               id="firstName"
               name="firstName"
               placeholder="First Name"
+              value={formState?.firstName ?? ""}
+              onChange={(e) => updateForm(e)}
             />
           </div>
           <div className="flex w-1/2 flex-col gap-2">
@@ -84,10 +99,17 @@ export default function PersonalFormFields({
               id="lastName"
               name="lastName"
               placeholder="Last Name"
+              value={formState?.lastName ?? ""}
+              onChange={(e) => updateForm(e)}
             />
           </div>
         </div>
-        <SelectField name="institution" label="Which institution do you go to?">
+        <SelectField
+          name="institution"
+          label="Which institution do you go to?"
+          value={formState?.institution ?? "Select Insitution"}
+          onChange={(e) => updateSelectInput(e)}
+        >
           <option selected disabled>
             Select Insitution
           </option>
@@ -101,6 +123,8 @@ export default function PersonalFormFields({
           required
           name="meals"
           label="* Do you want provided food at the hackathon?"
+          value={(formState?.meals as unknown as string) ?? "Select an option"}
+          onChange={(e) => updateSelectInput(e)}
         >
           <option selected disabled>
             Select an option
@@ -112,7 +136,13 @@ export default function PersonalFormFields({
           <Label htmlFor="allergies">
             If you wanted provided food, please indicate any allergies:
           </Label>
-          <Input id="allergies" name="allergies" placeholder="e.g. peanuts" />
+          <Input
+            id="allergies"
+            name="allergies"
+            placeholder="e.g. peanuts"
+            value={formState?.allergies ?? ""}
+            onChange={(e) => updateForm(e)}
+          />
         </Flex>
         <FormFields mutationStatus={userMutation.status} />
       </form>
