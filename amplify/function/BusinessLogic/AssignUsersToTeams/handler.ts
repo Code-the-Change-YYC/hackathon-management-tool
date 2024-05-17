@@ -87,7 +87,7 @@ export const handler: AppSyncResolverHandler<
       };
     }
 
-    if (await user.team) {
+    if (user.team) {
       return {
         body: { value: "Error: User is already part of a team" },
         statusCode: 400,
@@ -95,8 +95,7 @@ export const handler: AppSyncResolverHandler<
       };
     }
 
-    const membersConnection = (await team.members) as ModelUserConnection;
-    const members = await membersConnection.items;
+    const members = (team.members as ModelUserConnection).items;
 
     if (members.length >= MAX_TEAM_MEMBERS) {
       return {

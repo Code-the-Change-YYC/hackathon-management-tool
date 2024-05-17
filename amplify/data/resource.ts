@@ -63,8 +63,8 @@ const schema = a
     AssignUsersToTeams: a
       .mutation()
       .arguments({
-        userId: a.string(),
-        teamId: a.string(),
+        userId: a.string().required(),
+        teamId: a.string().required(),
       })
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.guest(), allow.authenticated()])
