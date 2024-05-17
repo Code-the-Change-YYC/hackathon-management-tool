@@ -1,6 +1,6 @@
+import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
-import { PreSignUp } from "@/auth/PreSignUp/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 /*== STEP 1 ===============================================================
