@@ -8,7 +8,7 @@ import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 import UserForm from "@/components/UserProfile/UserForm";
 import { useUser } from "@/components/contexts/UserContext";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
@@ -26,9 +26,6 @@ export interface UserFormProp {
 }
 
 const UserProfile = () => {
-  const queryClient = useQueryClient();
-  // Queries
-
   const userId = useUser().currentUser.userSub as string;
 
   const { data, isFetching } = useQuery({
@@ -41,7 +38,6 @@ const UserProfile = () => {
       });
       return response.data;
     },
-    // staleTime: Infinity,
   });
 
   const userMutation = useMutation({
@@ -51,27 +47,6 @@ const UserProfile = () => {
         input;
       console.log(extractedFields);
       await client.models.User.update(extractedFields);
-    },
-    onMutate: () => {
-      console.log("Mutate");
-    },
-
-    onError: () => {
-      console.log("Error");
-    },
-
-    //When mutation is successful, re-fetch updated data using queryKey
-    onSuccess: () => {
-      // queryClient.setQueryData(["User", "123"], data);
-      queryClient.invalidateQueries({
-        queryKey: ["User", userId],
-        // refetchType: "active",
-      });
-      console.log("success");
-    },
-
-    onSettled: () => {
-      console.log("settled");
     },
   });
 
@@ -85,10 +60,6 @@ const UserProfile = () => {
       setEnableCancelSave(true);
     }
   };
-
-  // function updateInputMutation(arg0: { updateInput: string }) {
-  //   throw new Error("Function not implemented.");
-  // }
 
   const checkedIn = false;
 
