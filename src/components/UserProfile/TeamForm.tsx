@@ -10,9 +10,14 @@ const BUTTON_STYLES =
 
 const FORM_STYLES = "md:mx-10 flex flex-col";
 
-export default function TeamForm({ data, setHasTeam }: TeamFormProp) {
+export default function TeamForm({
+  data,
+  setHasTeam,
+  teamMutation,
+}: TeamFormProp) {
   const handleLeaveTeamClick = () => {
     setHasTeam((prevHasTeam) => !prevHasTeam);
+    teamMutation.mutate(formState);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

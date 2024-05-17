@@ -7,7 +7,7 @@ import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 import TeamForm from "@/components/UserProfile/TeamForm";
 import { useUser } from "@/components/contexts/UserContext";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
@@ -20,9 +20,11 @@ const client = generateClient<Schema>();
 export interface TeamFormProp {
   data: Schema["Team"]["type"];
   setHasTeam: React.Dispatch<React.SetStateAction<boolean>>;
+  teamMutation: any;
 }
 
 const TeamProfile = () => {
+  const queryClient = useQueryClient();
   const [hasTeam, setHasTeam] = useState<boolean>(false);
 
   const userId = useUser().currentUser.userSub as string;
@@ -58,6 +60,26 @@ const TeamProfile = () => {
     },
   });
 
+  const teamMutation = useMutation({
+    mutationFn: async (input: Schema["User"]["type"]) => {
+      await client.models.User.update({ id: userId, teamId: null });
+    },
+
+    onMutate: () => {
+      console.log("Mutate");
+    },
+    onError: () => {
+      console.log("Error");
+    },
+    onSuccess: () => {
+      console.log("Success");
+      queryClient.invalidateQueries({
+        queryKey: ["User", userId],
+      });
+      setHasTeam(false);
+    },
+  });
+
   return (
     <>
       {isFetching ? (
@@ -75,13 +97,17 @@ const TeamProfile = () => {
             </div>
             {hasTeam && data ? (
               <>
-                <TeamForm data={data} setHasTeam={setHasTeam} />
+                <TeamForm
+                  data={data}
+                  setHasTeam={setHasTeam}
+                  teamMutation={teamMutation}
+                />
               </>
             ) : (
               <div>
                 <p className="mx-10">
-                  Oops, looks like you’re not in a team yet, looking to joining
-                  a team?
+                  Oops, looks like you’re not in a team yet. Are you looking to
+                  join a team?
                 </p>
                 <div className={TEAM_INSTRUCTION_STYLES}>
                   <h1 className="mb-10 text-3xl font-bold">
