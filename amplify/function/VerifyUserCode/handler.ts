@@ -13,6 +13,7 @@ import {
   getGroupNumber,
   getGroupNumberFromTime,
   getUserTimeSlot,
+  uuidToInteger,
 } from "../utils/food-groups";
 import type { ModelUserConnection, User } from "./graphql/API";
 import { getFoodEvent } from "./graphql/queries";
@@ -49,7 +50,10 @@ const client = generateClient<Schema>({
   authMode: "iam",
 });
 
-type ResolverArgs = { userCode: string; eventID: string };
+type ResolverArgs = {
+  userCode: string;
+  eventID: string;
+};
 
 type ResolverResult = {
   body: { canEat: boolean; description: string };
@@ -63,10 +67,6 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, _) => {
-  // const { data, errors } = await client.models.FoodEvent.get({
-  //   id: event.arguments.eventID,
-  // });
-
   const { data, errors } = await client.graphql({
     query: getFoodEvent,
     variables: {
@@ -88,8 +88,6 @@ export const handler: AppSyncResolverHandler<
   const foodEvent = data.getFoodEvent;
   const [userID, mac] = getUserIDAndCode(event.arguments.userCode);
 
-  // Check if the user has a meal with the same eventID
-  // TODO: Readd this when Ana learns how to do this in Amplify
   const attended = foodEvent.attended as ModelUserConnection;
   const hasUserInEvent = attended.items.some(
     (item: User | null) => item !== null && item.id === userID,
@@ -105,7 +103,11 @@ export const handler: AppSyncResolverHandler<
     };
 
   //Make sure their code is a valid one that has not been tampered with
-  const isValidCode = await isValidAuthenticationCode(userID, mac);
+  const isValidCode = await isValidAuthenticationCode(
+    userID,
+    mac,
+    process.env.USER_VERIFICATION_KEY,
+  );
 
   if (isValidCode === false) {
     return {
@@ -119,19 +121,21 @@ export const handler: AppSyncResolverHandler<
     };
   } else {
     //check if the user is in the right time slot, can still eat if not in the right timeslot
-    const expectedGroupNumber = getGroupNumberFromTime(
+    const currentGroupNumber = getGroupNumberFromTime(
       getLocalCalgaryTime(),
       foodEvent.groups,
-      foodEvent.start as string,
-      foodEvent.end as string,
+      foodEvent.start || "",
+      foodEvent.end || "",
     );
-    const actualGroupNumber = getGroupNumber(
+
+    const userGroupNumber = getGroupNumber(
       userID,
       foodEvent.id,
       foodEvent.groups,
     );
-
-    if (expectedGroupNumber === actualGroupNumber) {
+    console.log("current group from time" + currentGroupNumber);
+    console.log("User number" + userGroupNumber);
+    if (currentGroupNumber === userGroupNumber) {
       return {
         body: {
           canEat: true,
@@ -145,9 +149,10 @@ export const handler: AppSyncResolverHandler<
         userID,
         foodEvent.id,
         foodEvent.groups,
-        foodEvent.start as string,
-        foodEvent.end as string,
+        foodEvent.start || "",
+        foodEvent.end || "",
       );
+
       return {
         body: {
           canEat: true,

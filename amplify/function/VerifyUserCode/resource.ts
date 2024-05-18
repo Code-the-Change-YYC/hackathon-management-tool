@@ -1,3 +1,7 @@
-import { defineFunction } from "@aws-amplify/backend";
+import { defineFunction, secret } from "@aws-amplify/backend";
 
-export const VerifyUserCode = defineFunction({});
+export const VerifyUserCode = defineFunction({
+  environment: {
+    USER_VERIFICATION_KEY: secret("USER_VERIFICATION_KEY"),
+  },
+});

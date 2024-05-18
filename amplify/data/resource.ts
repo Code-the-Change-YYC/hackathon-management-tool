@@ -41,7 +41,7 @@ const schema = a
         start: a.datetime(),
         end: a.datetime(),
         groups: a.integer(),
-        attended: a.hasMany("User", "MealId"),
+        attended: a.hasMany("User", "mealId"),
       })
       .authorization((allow) => [allow.owner(), allow.guest()]),
 

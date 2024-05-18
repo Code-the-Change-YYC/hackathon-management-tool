@@ -7,7 +7,10 @@ import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import { createUserIDAndCode } from "@/amplify/function/utils/crytography";
-import { getLocalCalgaryTime } from "@/amplify/function/utils/date";
+import {
+  getCalgaryTime,
+  getLocalCalgaryTime,
+} from "@/amplify/function/utils/date";
 import { getUserTimeSlot } from "@/amplify/function/utils/food-groups";
 
 type FoodEvent = Schema["FoodEvent"]["type"];
@@ -20,8 +23,6 @@ export default function FoodPage() {
   const [eventDescription, setEventDescription] = useState("");
   const [timeSlot, setTimeSlot] = useState("");
 
-  const userID: string = "";
-
   useEffect(() => {
     async function fetchCurrentAuthenticatedUser() {
       try {
@@ -31,20 +32,19 @@ export default function FoodPage() {
           const response = await client.mutations.getUserVerifcationCode({
             userId: userId,
           });
-          console.log(response);
           const response_body = response.data?.body;
 
           if (response_body) {
             const json = JSON.parse(response_body as string);
             const code = json["value"];
-            console.log(code);
-            setUserVerificationCode(createUserIDAndCode(userID, code));
+
+            const verificationCode = createUserIDAndCode(userId, code);
+            setUserVerificationCode(verificationCode);
           } else {
             setUserVerificationCode("Backend Server Error");
           }
         }
       } catch (err) {
-        console.log("shit");
         console.log(err);
       }
     }
@@ -54,24 +54,28 @@ export default function FoodPage() {
       const currentTime = getLocalCalgaryTime(); // Current local time
 
       // Sort the events by their start time
-      const nextEvent = getNextEvent(foodEvents, currentTime);
+      const nextFoodEvent = getNextEvent(foodEvents, currentTime);
 
-      if (nextEvent) {
-        setEventName(nextEvent.name ? nextEvent.name : "");
-        setEventDescription(nextEvent.description ? nextEvent.description : "");
+      if (nextFoodEvent) {
+        setEventName(nextFoodEvent.name ? nextFoodEvent.name : "");
+        setEventDescription(
+          nextFoodEvent.description ? nextFoodEvent.description : "",
+        );
 
-        if (userID) {
+        const { userId } = await getCurrentUser();
+        if (userId) {
           const userTimeSlot = getUserTimeSlot(
-            userID,
-            nextEvent.id,
-            nextEvent?.groups,
-            nextEvent.start,
-            nextEvent.end,
+            userId,
+            nextFoodEvent.id,
+            nextFoodEvent?.groups,
+            nextFoodEvent.start || "",
+            nextFoodEvent.end || "",
           );
+
           setTimeSlot(userTimeSlot);
         }
       } else {
-        console.log("No upcoming food events.");
+        setEventName("No upcoming food events.");
       }
     }
 
@@ -81,36 +85,34 @@ export default function FoodPage() {
 
   return (
     <div className="mx-auto text-center">
-      {eventName && (
-        <>
-          <h1>{eventName}</h1>
-          <p>{eventDescription}</p>
-          <p>your time slot for food is: {timeSlot}</p>
+      <h1>{eventName}</h1>
+      <p>{eventDescription}</p>
+      <p>your time slot for food is: {timeSlot}</p>
 
-          <br></br>
-          <a> {userVerificationCode}</a>
-        </>
-      )}
+      <br></br>
+      <a> {userVerificationCode}</a>
     </div>
   );
 }
 
 function getNextEvent(foodEvents: FoodEvent[], currentTime: Date) {
   const sortedEvents = foodEvents.sort(
-    (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
+    (a, b) =>
+      getCalgaryTime(a.start || "").getTime() -
+      getCalgaryTime(b.start || "").getTime(),
   );
 
   // Find the event that has already started, between start and end times
   let nextEvent = sortedEvents.find(
     (event) =>
-      currentTime >= new Date(event.start) &&
-      currentTime <= new Date(event.end),
+      currentTime >= getCalgaryTime(event.start || "") &&
+      currentTime <= getCalgaryTime(event.end || ""),
   );
 
-  // find the next event if there is event as of now
+  // find the next event if there is no event as of now
   if (nextEvent === undefined) {
     nextEvent = sortedEvents.find(
-      (event) => new Date(event.start) > currentTime,
+      (event) => getCalgaryTime(event.start || "") > currentTime,
     );
   }
   return nextEvent;

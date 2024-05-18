@@ -4,12 +4,12 @@ import type { FoodEventCreateFormInputValues } from "@/../ui-components/FoodEven
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
 export async function createFoodEvent(fields: FoodEventCreateFormInputValues) {
-  const { errors, data: newTodo } = await client.models.FoodEvent.create({
-    Name: fields.Name || "Meal",
-    Description: fields.Description || "No Description Provided...",
-    Start: fields.Start,
-    End: fields.End,
-    Groups: fields.Groups || 1,
+  const { errors } = await client.models.FoodEvent.create({
+    name: fields.name || "Meal",
+    description: fields.description || "No Description Provided...",
+    start: fields.start,
+    end: fields.end,
+    groups: fields.groups || 1,
   });
 
   if (errors) {
@@ -21,8 +21,7 @@ export async function deleteFoodEvent(eventID: string) {
   const toBeDeletedFoodEvent = {
     id: eventID,
   };
-  const { data: deletedTodo, errors } =
-    await client.models.FoodEvent.delete(toBeDeletedFoodEvent);
+  const { errors } = await client.models.FoodEvent.delete(toBeDeletedFoodEvent);
 
   if (errors) {
     console.log(errors);

@@ -60,22 +60,24 @@ export default function AdminFoodTickets() {
               <p className="text-sm text-gray-600">{event.description}</p>
               <p className="text-sm">
                 <strong>Start:</strong>{" "}
-                {event.start ? new Date(event.start).toLocaleString() : ""}
+                {event.start
+                  ? getCalgaryTime(event.start).toLocaleString()
+                  : ""}
               </p>
               <p className="text-sm">
                 <strong>End:</strong>
-                {event.end ? new Date(event.end).toLocaleString() : ""}
+                {event.end ? getCalgaryTime(event.end).toLocaleString() : ""}
               </p>
               <p className="text-sm">
                 <strong>Groups:</strong> {event.groups}
               </p>
               <p className="text-sm">
                 <strong>Created At:</strong>{" "}
-                {new Date(event.createdAt).toLocaleString()}
+                {getCalgaryTime(event.createdAt).toLocaleString()}
               </p>
               <p className="text-sm">
                 <strong>Updated At:</strong>{" "}
-                {new Date(event.updatedAt).toLocaleString()}
+                {getCalgaryTime(event.updatedAt).toLocaleString()}
               </p>
             </div>
           ))}

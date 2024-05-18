@@ -3,20 +3,25 @@ import { kmac128 } from "js-sha3";
 export async function isValidAuthenticationCode(
   message: string,
   mac: string,
+  key: string | undefined,
 ): Promise<boolean> {
-  const expectedMAC = await createAuthenticationCode(message);
+  const expectedMAC = await createAuthenticationCode(message, key);
   const isValid = expectedMAC === mac;
   return isValid;
 }
 
 export async function createAuthenticationCode(
   message: string,
+  key: string | undefined,
 ): Promise<string> {
+  if (!key) {
+    key = "";
+  }
   const messageCode = kmac128(
-    "key",
+    key,
     message,
     256,
-    "customization, food ticket :)",
+    "customization, food ticket :)", //this is to customize the hash so that it is more unique
   );
   return messageCode;
 }

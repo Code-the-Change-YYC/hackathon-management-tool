@@ -8,3 +8,14 @@ export function getLocalCalgaryTime() {
 
   return calgaryDateObject;
 }
+
+export function getCalgaryTime(time: string | number | Date) {
+  const now = new Date(time);
+  const calgaryTimeString = now.toLocaleString("en-US", {
+    timeZone: "America/Edmonton",
+  });
+
+  const calgaryDateObject = new Date(calgaryTimeString);
+
+  return calgaryDateObject;
+}

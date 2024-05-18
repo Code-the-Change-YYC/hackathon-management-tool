@@ -45,7 +45,10 @@ export const handler: AppSyncResolverHandler<
 > = async (event, _) => {
   const userID = event.arguments.userId;
 
-  const mac = await createAuthenticationCode(userID);
+  const mac = await createAuthenticationCode(
+    userID,
+    process.env.USER_VERIFICATION_KEY,
+  );
 
   return {
     body: { value: mac },
