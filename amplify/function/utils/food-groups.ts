@@ -1,6 +1,8 @@
 import { getCalgaryTime } from "./date";
 
-//get a integer value from uuid
+/**
+ * get a integer value from uuid
+ */
 export function uuidToInteger(uuid: string) {
   const cleanedUuid = uuid.replace("/-/", "").toUpperCase();
 
@@ -17,7 +19,9 @@ export function uuidToInteger(uuid: string) {
   return result;
 }
 
-// Return the start time for the specific group
+/**
+ *  Return the start and end calgary time time for a specific group
+ */
 export function getTimeFromGroupNumber(
   groupNumber: number,
   groups: number | undefined | null,
@@ -46,7 +50,7 @@ export function getTimeFromGroupNumber(
     day: "2-digit",
     hour: "numeric",
     minute: "numeric",
-    timeZone: "America/Edmonton",
+    timeZone: "America/Edmonton", // Make sure this is here, we want calgary time
     hour12: true,
   };
 
@@ -58,6 +62,10 @@ export function getTimeFromGroupNumber(
   );
 }
 
+/**
+ * Get the group number (the order which groups can get food) for a user from time
+ * Useful for times when we need to get the current expected group and time slot from the local calgary time
+ */
 export function getGroupNumberFromTime(
   target: Date,
   groups: number | undefined | null,
@@ -66,18 +74,12 @@ export function getGroupNumberFromTime(
 ): number {
   // Ensure groups is a number and default to 1 if not
   if (groups === undefined || groups == null) groups = 1;
-  console.log("pooo");
-  console.log(target);
-  console.log(groups);
-  console.log(startTime);
-  console.log(endTime);
   const start = getCalgaryTime(startTime);
   const end = getCalgaryTime(endTime);
 
   const totalDuration = Math.abs(end.getTime() - start.getTime());
   const groupDuration = totalDuration / groups;
-  console.log(totalDuration);
-  console.log(groupDuration);
+
   // If the time is before the start time or after the end time, return an invalid group
   if (target < start || target > end) {
     return -1;
@@ -87,25 +89,25 @@ export function getGroupNumberFromTime(
   const timeFromStart = Math.abs(target.getTime() - start.getTime());
   const groupNumber = Math.floor(timeFromStart / groupDuration);
 
-  console.log(timeFromStart);
-  console.log("output from getGroupNumberFromTime " + groupNumber);
-
   return groupNumber;
 }
 
+/**
+ * gets the group number (the order which groups can get food) for a user
+ */
 export function getGroupNumber(
   userID: string,
   eventID: string,
   groups: number | undefined | null,
 ) {
   if (groups === undefined || groups == null) groups = 1;
-  console.log("UUID and Integer " + userID + " " + uuidToInteger(userID));
-  console.log(
-    "output from GetGroupNumber " + Math.abs(uuidToInteger(userID) % groups),
-  );
-  return Math.abs(uuidToInteger(userID) % groups);
+
+  return Math.abs((uuidToInteger(userID) + uuidToInteger(eventID)) % groups);
 }
 
+/**
+ *   get the time which a user can eat
+ */
 export function getUserTimeSlot(
   userID: string,
   eventID: string,
@@ -116,9 +118,6 @@ export function getUserTimeSlot(
   if (groups === undefined || groups == null) groups = 1;
 
   const userGroupNumber = getGroupNumber(userID, eventID, groups);
-  console.log(userGroupNumber);
-  console.log(
-    getTimeFromGroupNumber(userGroupNumber, groups, startTime, endTime),
-  );
+
   return getTimeFromGroupNumber(userGroupNumber, groups, startTime, endTime);
 }

@@ -45,7 +45,6 @@ export const handler: PreSignUpTriggerHandler = async (event) => {
     id: event.userName,
     email: event.request.userAttributes.email,
     checkedIn: false,
-    meals: false,
     allergies: "",
     institution: "",
   })

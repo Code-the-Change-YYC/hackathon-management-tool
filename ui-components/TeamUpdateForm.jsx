@@ -1,21 +1,11 @@
 /* eslint-disable */
 "use client";
-
-import { generateClient } from "aws-amplify/api";
 import * as React from "react";
-
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-
-import { updateTeam } from "./graphql/mutations";
-import { getTeam } from "./graphql/queries";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-
-/* eslint-disable */
-
-/* eslint-disable */
-
-/* eslint-disable */
-
+import { generateClient } from "aws-amplify/api";
+import { getTeam } from "./graphql/queries";
+import { updateTeam } from "./graphql/mutations";
 const client = generateClient();
 export default function TeamUpdateForm(props) {
   const {
@@ -63,7 +53,7 @@ export default function TeamUpdateForm(props) {
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue,
+    getDisplayValue
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -93,16 +83,16 @@ export default function TeamUpdateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item),
-                ),
+                  runValidationTasks(fieldName, item)
+                )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName]),
+              runValidationTasks(fieldName, modelFields[fieldName])
             );
             return promises;
-          }, []),
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;

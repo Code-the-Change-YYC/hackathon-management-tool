@@ -28,6 +28,10 @@ It will take around 2-3 minutes for the backend to load. The sandbox is up when 
 
 `✨ Total time: 17.27s`
 
+### Updates to data models
+
+After updating a data model, deploy a sandbox so that amplify_outputs.json is updated. This should automatically update the graphql files: `mutations.ts, queries.ts, subscriptions.ts`.
+
 ## Running the Frontend
 
 ```bash
@@ -44,6 +48,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Resources
 
+**TypeScript Practices**
+https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-typescript-iac/typescript-best-practices.html
+
+**Understanding AWS Amplify:**
 https://docs.amplify.aws/react/start/
 
 > Note that we are using AWS Amplify v1.0
@@ -67,3 +75,5 @@ Make sure to set these variables in your local dev sandbox and the production en
 **Food Ticket Generation**: admins can make a food event, example: breakfast, lunch, dinner. Filling in details such as the name, description, start and end times, and the number of groups. Groups are how the food event will be split into multiple sections/intervals of people to ensure not everyone rushes for food at once.
 
 **Food Ticket Code**: clients, (or hackathoners), will call a url to get their authentication code. The code is as follows: [their uuid]:[the MAC of their user ID]. MAC Stands for Message Authentication Code. We use the SHA-256 Hash function with a secret key set in _secrets_, called "USER_VERIFICATION_KEY". This code serves the purpose of providing their uuid to us admins when we scan their QR code, and we use the MAC to ensure that the user ID is not tampered with.
+
+**Food Ticket Scanning**: Admins will scan the usercode, and check the MAC to make sure it is not tampered with. They will check for other conditions to make sure that they can eat: the foodevent id being valid, the user not having attended the food event before, and they are in the right time slot. If they are in the wrong timeslot, they can still eat, but will notify the scanner of this. The scanned user will automatically be marked as having eaten at the event.

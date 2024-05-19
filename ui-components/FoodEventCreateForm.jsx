@@ -1,20 +1,10 @@
 /* eslint-disable */
 "use client";
-
-import { generateClient } from "aws-amplify/api";
 import * as React from "react";
-
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-
-import { createFoodEvent } from "./graphql/mutations";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
-
-/* eslint-disable */
-
-/* eslint-disable */
-
-/* eslint-disable */
-
+import { generateClient } from "aws-amplify/api";
+import { createFoodEvent } from "./graphql/mutations";
 const client = generateClient();
 export default function FoodEventCreateForm(props) {
   const {
@@ -36,7 +26,7 @@ export default function FoodEventCreateForm(props) {
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
-    initialValues.description,
+    initialValues.description
   );
   const [start, setStart] = React.useState(initialValues.start);
   const [end, setEnd] = React.useState(initialValues.end);
@@ -51,16 +41,16 @@ export default function FoodEventCreateForm(props) {
     setErrors({});
   };
   const validations = {
-    name: [],
+    name: [{ type: "Required" }],
     description: [],
-    start: [],
-    end: [],
-    groups: [],
+    start: [{ type: "Required" }],
+    end: [{ type: "Required" }],
+    groups: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue,
+    getDisplayValue
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -111,16 +101,16 @@ export default function FoodEventCreateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item),
-                ),
+                  runValidationTasks(fieldName, item)
+                )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName]),
+              runValidationTasks(fieldName, modelFields[fieldName])
             );
             return promises;
-          }, []),
+          }, [])
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;
@@ -160,7 +150,7 @@ export default function FoodEventCreateForm(props) {
     >
       <TextField
         label="Name"
-        isRequired={false}
+        isRequired={true}
         isReadOnly={false}
         value={name}
         onChange={(e) => {
@@ -216,7 +206,7 @@ export default function FoodEventCreateForm(props) {
       ></TextField>
       <TextField
         label="Start"
-        isRequired={false}
+        isRequired={true}
         isReadOnly={false}
         type="datetime-local"
         value={start && convertToLocal(new Date(start))}
@@ -246,7 +236,7 @@ export default function FoodEventCreateForm(props) {
       ></TextField>
       <TextField
         label="End"
-        isRequired={false}
+        isRequired={true}
         isReadOnly={false}
         type="datetime-local"
         value={end && convertToLocal(new Date(end))}
@@ -276,7 +266,7 @@ export default function FoodEventCreateForm(props) {
       ></TextField>
       <TextField
         label="Groups"
-        isRequired={false}
+        isRequired={true}
         isReadOnly={false}
         type="number"
         step="any"

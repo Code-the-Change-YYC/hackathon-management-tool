@@ -81,7 +81,6 @@ export const createUser = /* GraphQL */ `
         __typename
       }
       mealId
-      meals
       owner
       team {
         createdAt
@@ -166,7 +165,6 @@ export const deleteUser = /* GraphQL */ `
         __typename
       }
       mealId
-      meals
       owner
       team {
         createdAt
@@ -178,16 +176,6 @@ export const deleteUser = /* GraphQL */ `
       }
       teamId
       updatedAt
-      __typename
-    }
-  }
-`;
-export const getUserVerifcationCode = /* GraphQL */ `
-  mutation GetUserVerifcationCode($userId: String) {
-    getUserVerifcationCode(userId: $userId) {
-      body
-      headers
-      statusCode
       __typename
     }
   }
@@ -261,7 +249,6 @@ export const updateUser = /* GraphQL */ `
         __typename
       }
       mealId
-      meals
       owner
       team {
         createdAt
@@ -273,16 +260,6 @@ export const updateUser = /* GraphQL */ `
       }
       teamId
       updatedAt
-      __typename
-    }
-  }
-`;
-export const verifyUserVerifcationCode = /* GraphQL */ `
-  mutation VerifyUserVerifcationCode($eventID: String, $userCode: String) {
-    verifyUserVerifcationCode(eventID: $eventID, userCode: $userCode) {
-      body
-      headers
-      statusCode
       __typename
     }
   }

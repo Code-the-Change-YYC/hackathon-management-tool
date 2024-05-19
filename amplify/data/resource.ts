@@ -17,31 +17,44 @@ const schema = a
   .schema({
     User: a
       .model({
+        id: a.id().required(),
         firstName: a.string(),
         lastName: a.string(),
         email: a.string(),
-        meals: a.boolean(),
         institution: a.string(),
         allergies: a.string(),
         checkedIn: a.boolean(),
         teamId: a.id(),
         team: a.belongsTo("Team", "teamId"),
-        mealId: a.id(),
-        meal: a.belongsTo("FoodEvent", "mealId"),
+        attendedEvents: a.hasMany("UserFoodEventAttendance", "userId"),
       })
       .authorization((allow) => [
         allow.owner(),
         allow.authenticated().to(["read"]),
       ]),
+    //for handling a many to many relationship of users and food events
+    UserFoodEventAttendance: a
+      .model({
+        id: a.id().required(),
+        userId: a.id(),
+        foodEventId: a.id(),
+        user: a.belongsTo("User", "userId"),
+        foodEvent: a.belongsTo("FoodEvent", "foodEventId"),
+      })
+      .authorization((allow) => [
+        allow.owner(),
+        allow.authenticated().to(["read"]),
+      ]),
+
     FoodEvent: a
       .model({
         id: a.id().required(),
-        name: a.string(),
+        name: a.string().required(),
         description: a.string(),
-        start: a.datetime(),
-        end: a.datetime(),
-        groups: a.integer(),
-        attended: a.hasMany("User", "mealId"),
+        start: a.datetime().required(),
+        end: a.datetime().required(),
+        groups: a.integer().required(),
+        attended: a.hasMany("UserFoodEventAttendance", "foodEventId"),
       })
       .authorization((allow) => [allow.owner(), allow.guest()]),
 
@@ -64,25 +77,6 @@ const schema = a
     /**
      * FUNCTION-RELATED APPSYNC RESOLVERS
      */
-    verifyUserVerifcationCode: a
-      .mutation()
-      .arguments({
-        userCode: a.string(),
-        eventID: a.string(),
-      })
-      .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest(), allow.authenticated()])
-      .handler(a.handler.function("verifyUserVerifcationCode")),
-
-    getUserVerifcationCode: a
-      .mutation()
-      .arguments({
-        userId: a.string(),
-      })
-      .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest(), allow.authenticated()])
-      .handler(a.handler.function("getUserVerifcationCode")),
-
     DemoFunction: a
       .mutation() // this should be set to .query for functions that only read data
       // arguments that this query accepts
@@ -95,11 +89,19 @@ const schema = a
       .authorization((allow) => [allow.guest()])
       .handler(a.handler.function(DemoFunction)),
 
+    getUserVerificationCode: a
+      .query()
+      .arguments({
+        userId: a.string(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(GetUserCode)),
+
     VerifyUserCode: a
       .query()
       .arguments({
         userCode: a.string(),
-        eventId: a.string(),
       })
       .returns(a.ref("GenericFunctionResponse"))
       // allow all users to call this api for now
@@ -127,8 +129,8 @@ export const data = defineData({
   },
   functions: {
     demoFunctionKey: DemoFunction,
-    getUserVerifcationCode: GetUserCode,
-    verifyUserVerifcationCode: VerifyUserCode,
+    getUserVerificationCode: GetUserCode,
+    verifyUserCode: VerifyUserCode,
   },
 });
 

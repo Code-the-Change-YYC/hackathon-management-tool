@@ -15,7 +15,6 @@ export default function ScanFoodTickets() {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(foodData);
       const { data, errors } = await client.models.FoodEvent.list();
       if (!errors) {
         setFoodData(data); // Update state with fetched data

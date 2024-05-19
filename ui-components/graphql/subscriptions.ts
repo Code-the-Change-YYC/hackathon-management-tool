@@ -71,7 +71,6 @@ export const onCreateUser = /* GraphQL */ `
         __typename
       }
       mealId
-      meals
       owner
       team {
         createdAt
@@ -156,7 +155,6 @@ export const onDeleteUser = /* GraphQL */ `
         __typename
       }
       mealId
-      meals
       owner
       team {
         createdAt
@@ -241,7 +239,6 @@ export const onUpdateUser = /* GraphQL */ `
         __typename
       }
       mealId
-      meals
       owner
       team {
         createdAt

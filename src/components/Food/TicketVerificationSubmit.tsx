@@ -14,13 +14,14 @@ export default function TicketVerification() {
     event.preventDefault();
     // Handle the submission logic here
 
-    console.log(await verifyFoodTicket(inputUserCode, inputEventIDValue));
-    const { canEat, description, debugging } = await verifyFoodTicket(
+    const { canEat, description } = await verifyFoodTicket(
       inputUserCode,
       inputEventIDValue,
+      true,
+      0,
     );
     setCanEatBoolean(canEat);
-    setEatDescription(description + debugging);
+    setEatDescription(description);
   };
 
   return (

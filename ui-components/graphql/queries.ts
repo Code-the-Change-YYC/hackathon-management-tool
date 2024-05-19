@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const VerifyUserCode = /* GraphQL */ `
-  query VerifyUserCode($eventId: String, $userCode: String) {
-    VerifyUserCode(eventId: $eventId, userCode: $userCode) {
+  query VerifyUserCode($userCode: String) {
+    VerifyUserCode(userCode: $userCode) {
       body
       headers
       statusCode
@@ -72,7 +72,6 @@ export const getUser = /* GraphQL */ `
         __typename
       }
       mealId
-      meals
       owner
       team {
         createdAt
@@ -84,6 +83,16 @@ export const getUser = /* GraphQL */ `
       }
       teamId
       updatedAt
+      __typename
+    }
+  }
+`;
+export const getUserVerificationCode = /* GraphQL */ `
+  query GetUserVerificationCode($userId: String) {
+    getUserVerificationCode(userId: $userId) {
+      body
+      headers
+      statusCode
       __typename
     }
   }
@@ -151,10 +160,18 @@ export const listTeams = /* GraphQL */ `
 export const listUsers = /* GraphQL */ `
   query ListUsers(
     $filter: ModelUserFilterInput
+    $id: ID
     $limit: Int
     $nextToken: String
+    $sortDirection: ModelSortDirection
   ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listUsers(
+      filter: $filter
+      id: $id
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
       items {
         allergies
         checkedIn
@@ -165,7 +182,6 @@ export const listUsers = /* GraphQL */ `
         institution
         lastName
         mealId
-        meals
         owner
         teamId
         updatedAt

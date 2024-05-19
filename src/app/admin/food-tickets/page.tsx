@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 
 import FoodEventCreateForm from "@/../ui-components/FoodEventCreateForm";
 import { type Schema } from "@/amplify/data/resource";
+import { getCalgaryTime } from "@/amplify/function/utils/date";
+
+import { deleteFoodEvent } from "./actions";
 
 type FoodEvent = Schema["FoodEvent"]["type"];
 
@@ -15,7 +18,6 @@ export default function AdminFoodTickets() {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(foodData);
       const { data, errors } = await client.models.FoodEvent.list();
       if (!errors) {
         setFoodData(data); // Update state with fetched data
@@ -26,22 +28,6 @@ export default function AdminFoodTickets() {
 
     fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log(foodData);
-  }, [foodData]);
-
-  async function deleteFoodEvent(eventID: string) {
-    const toBeDeletedFoodEvent = {
-      id: eventID,
-    };
-    const { errors } =
-      await client.models.FoodEvent.delete(toBeDeletedFoodEvent);
-
-    if (errors) {
-      console.log(errors);
-    }
-  }
 
   return (
     <div>
@@ -56,7 +42,7 @@ export default function AdminFoodTickets() {
               <button onClick={() => deleteFoodEvent(event.id)}>
                 Delete this event
               </button>
-              ;<h3 className="text-lg font-semibold">{event.name}</h3>
+              <h3 className="text-lg font-semibold">{event.name}</h3>
               <p className="text-sm text-gray-600">{event.description}</p>
               <p className="text-sm">
                 <strong>Start:</strong>{" "}
