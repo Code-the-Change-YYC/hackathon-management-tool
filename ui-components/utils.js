@@ -1,8 +1,9 @@
 /* eslint-disable */
-import * as React from "react";
 import { fetchUserAttributes, signOut } from "aws-amplify/auth";
 import { DataStore } from "aws-amplify/datastore";
 import { Hub } from "aws-amplify/utils";
+import * as React from "react";
+
 export const UI_CHANNEL = "ui";
 export const UI_EVENT_TYPE_ACTIONS = "actions";
 export const CATEGORY_AUTH = "auth";
@@ -55,7 +56,7 @@ export const useStateMutationAction = (initialState) => {
           data: { prevState, newState },
         },
         EVENT_ACTION_CORE_STATE_MUTATION,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
       setState(newState);
       Hub.dispatch(
@@ -65,10 +66,10 @@ export const useStateMutationAction = (initialState) => {
           data: { prevState, newState },
         },
         EVENT_ACTION_CORE_STATE_MUTATION,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
     },
-    [state]
+    [state],
   );
   return [state, setNewState];
 };
@@ -92,7 +93,7 @@ export const useNavigateAction = (options) => {
         return () => {
           // eslint-disable-next-line no-console
           console.warn(
-            'Please provide a valid navigate type. Available types are "url", "anchor" and "reload".'
+            'Please provide a valid navigate type. Available types are "url", "anchor" and "reload".',
           );
         };
     }
@@ -105,7 +106,7 @@ export const useNavigateAction = (options) => {
         data: options,
       },
       EVENT_ACTION_CORE_NAVIGATE,
-      AMPLIFY_SYMBOL
+      AMPLIFY_SYMBOL,
     );
     run();
     Hub.dispatch(
@@ -115,7 +116,7 @@ export const useNavigateAction = (options) => {
         data: options,
       },
       EVENT_ACTION_CORE_NAVIGATE,
-      AMPLIFY_SYMBOL
+      AMPLIFY_SYMBOL,
     );
   };
   return navigateAction;
@@ -125,13 +126,13 @@ export const findChildOverrides = (overrides, elementHierarchy) => {
     return null;
   }
   const filteredOverrides = Object.entries(overrides).filter((m) =>
-    m[0].startsWith(elementHierarchy)
+    m[0].startsWith(elementHierarchy),
   );
   return Object.assign(
     {},
     ...Array.from(filteredOverrides, ([k, v]) => ({
       [k.replace(elementHierarchy, "")]: v,
-    }))
+    })),
   );
 };
 export const getOverrideProps = (overrides, elementHierarchy) => {
@@ -147,7 +148,7 @@ export const getOverrideProps = (overrides, elementHierarchy) => {
 export function getOverridesFromVariants(variants, props) {
   const variantValueKeys = [
     ...new Set(
-      variants.flatMap((variant) => Object.keys(variant.variantValues))
+      variants.flatMap((variant) => Object.keys(variant.variantValues)),
     ),
   ];
   const variantValuesFromProps = Object.keys(props)
@@ -163,7 +164,7 @@ export function getOverridesFromVariants(variants, props) {
       Object.keys(variantValues).length ===
         Object.keys(variantValuesFromProps).length &&
       Object.entries(variantValues).every(
-        ([key, value]) => variantValuesFromProps[key] === value
+        ([key, value]) => variantValuesFromProps[key] === value,
       )
     );
   });
@@ -183,13 +184,13 @@ export const mergeVariantsAndOverrides = (variants, overrides) => {
   }
   const overrideKeys = new Set(Object.keys(overrides));
   const sharedKeys = Object.keys(variants).filter((variantKey) =>
-    overrideKeys.has(variantKey)
+    overrideKeys.has(variantKey),
   );
   const merged = Object.fromEntries(
     sharedKeys.map((sharedKey) => [
       sharedKey,
       { ...variants[sharedKey], ...overrides[sharedKey] },
-    ])
+    ]),
   );
   return {
     ...variants,
@@ -269,7 +270,7 @@ export const useDataStoreCreateAction = ({
           data: { fields },
         },
         EVENT_ACTION_DATASTORE_CREATE,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
       const item = await DataStore.save(new model(fields));
       Hub.dispatch(
@@ -279,7 +280,7 @@ export const useDataStoreCreateAction = ({
           data: { fields, item },
         },
         EVENT_ACTION_DATASTORE_CREATE,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
     } catch (error) {
       Hub.dispatch(
@@ -292,7 +293,7 @@ export const useDataStoreCreateAction = ({
           },
         },
         EVENT_ACTION_DATASTORE_CREATE,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
     }
   };
@@ -317,7 +318,7 @@ export const useDataStoreUpdateAction = ({
           data: { fields, id },
         },
         EVENT_ACTION_DATASTORE_UPDATE,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
       const original = await DataStore.query(model, id);
       if (!original) {
@@ -326,7 +327,7 @@ export const useDataStoreUpdateAction = ({
       const item = await DataStore.save(
         model.copyOf(original, (updated) => {
           Object.assign(updated, fields);
-        })
+        }),
       );
       Hub.dispatch(
         UI_CHANNEL,
@@ -335,7 +336,7 @@ export const useDataStoreUpdateAction = ({
           data: { fields, id, item },
         },
         EVENT_ACTION_DATASTORE_UPDATE,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
     } catch (error) {
       Hub.dispatch(
@@ -349,7 +350,7 @@ export const useDataStoreUpdateAction = ({
           },
         },
         EVENT_ACTION_DATASTORE_UPDATE,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
     }
   };
@@ -365,7 +366,7 @@ export const useDataStoreDeleteAction =
           data: { id },
         },
         EVENT_ACTION_DATASTORE_DELETE,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
       await DataStore.delete(model, id);
       Hub.dispatch(
@@ -375,7 +376,7 @@ export const useDataStoreDeleteAction =
           data: { id },
         },
         EVENT_ACTION_DATASTORE_DELETE,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
     } catch (error) {
       Hub.dispatch(
@@ -385,7 +386,7 @@ export const useDataStoreDeleteAction =
           data: { id, errorMessage: getErrorMessage(error) },
         },
         EVENT_ACTION_DATASTORE_DELETE,
-        AMPLIFY_SYMBOL
+        AMPLIFY_SYMBOL,
       );
     }
   };
@@ -399,14 +400,14 @@ export const createDataStorePredicate = (predicateObject) => {
   } = predicateObject;
   if (Array.isArray(groupAnd)) {
     const predicates = groupAnd.map((condition) =>
-      createDataStorePredicate(condition)
+      createDataStorePredicate(condition),
     );
     return (p) =>
       p.and((model) => predicates.map((predicate) => predicate(model)));
   }
   if (Array.isArray(groupOr)) {
     const predicates = groupOr.map((condition) =>
-      createDataStorePredicate(condition)
+      createDataStorePredicate(condition),
     );
     return (p) =>
       p.or((model) => predicates.map((predicate) => predicate(model)));
@@ -429,10 +430,10 @@ export const useDataStoreCollection = ({ model, criteria, pagination }) => {
     const subscription = DataStore.observeQuery(
       model,
       criteria,
-      pagination
+      pagination,
     ).subscribe(
       (snapshot) => setResult({ items: snapshot.items, isLoading: false }),
-      (error) => setResult({ items: [], error, isLoading: false })
+      (error) => setResult({ items: [], error, isLoading: false }),
     );
     if (subscription) {
       return () => subscription.unsubscribe();
@@ -473,7 +474,7 @@ export const useAuthSignOutAction = (options) => async () => {
         data: { options },
       },
       EVENT_ACTION_AUTH_SIGNOUT,
-      AMPLIFY_SYMBOL
+      AMPLIFY_SYMBOL,
     );
     await signOut(options);
     Hub.dispatch(
@@ -483,7 +484,7 @@ export const useAuthSignOutAction = (options) => async () => {
         data: { options },
       },
       EVENT_ACTION_AUTH_SIGNOUT,
-      AMPLIFY_SYMBOL
+      AMPLIFY_SYMBOL,
     );
   } catch (error) {
     Hub.dispatch(
@@ -493,7 +494,7 @@ export const useAuthSignOutAction = (options) => async () => {
         data: { options, errorMessage: getErrorMessage(error) },
       },
       EVENT_ACTION_AUTH_SIGNOUT,
-      AMPLIFY_SYMBOL
+      AMPLIFY_SYMBOL,
     );
   }
 };
@@ -540,7 +541,7 @@ export const useAuth = () => {
         }
       }
     },
-    [fetchCurrentUserAttributes]
+    [fetchCurrentUserAttributes],
   );
   React.useEffect(() => {
     const unsubscribe = Hub.listen("auth", handleAuth, "useAuth");
@@ -728,18 +729,18 @@ const checkValidation = (value, validation) => {
   }
 };
 const monthToShortMon = {
-  "1": "Jan",
-  "2": "Feb",
-  "3": "Mar",
-  "4": "Apr",
-  "5": "May",
-  "6": "Jun",
-  "7": "Jul",
-  "8": "Aug",
-  "9": "Sep",
-  "10": "Oct",
-  "11": "Nov",
-  "12": "Dec",
+  1: "Jan",
+  2: "Feb",
+  3: "Mar",
+  4: "Apr",
+  5: "May",
+  6: "Jun",
+  7: "Jul",
+  8: "Aug",
+  9: "Sep",
+  10: "Oct",
+  11: "Nov",
+  12: "Dec",
 };
 const invalidDateStr = "Invalid Date";
 export function formatDate(date, dateFormat) {
@@ -784,7 +785,7 @@ export function formatTime(time, timeFormat) {
   const splitSeconds = splitTime[2].split(".");
   validTime.setSeconds(
     Number.parseInt(splitSeconds[0], 10),
-    Number.parseInt(splitSeconds[1], 10)
+    Number.parseInt(splitSeconds[1], 10),
   );
   if (validTime.toString() === invalidDateStr) {
     return time;

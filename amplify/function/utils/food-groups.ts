@@ -1,5 +1,7 @@
 import { getCalgaryTime } from "./date";
 
+// Functions to help with determining food groups and order
+
 /**
  * get a integer value from uuid
  */

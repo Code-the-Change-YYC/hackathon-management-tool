@@ -17,8 +17,6 @@ export default function TicketVerification() {
     const { canEat, description } = await verifyFoodTicket(
       inputUserCode,
       inputEventIDValue,
-      true,
-      0,
     );
     setCanEatBoolean(canEat);
     setEatDescription(description);

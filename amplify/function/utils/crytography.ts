@@ -1,5 +1,6 @@
 import { kmac128 } from "js-sha3";
 
+//Functions to help with the creation and verification of a Message Authentication Code
 export async function isValidAuthenticationCode(
   message: string,
   mac: string,

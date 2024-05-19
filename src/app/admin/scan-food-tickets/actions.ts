@@ -1,5 +1,7 @@
 "use server";
 
+import validator from "validator";
+
 import { getUserIDAndCode } from "@/amplify/function/utils/crytography";
 import { getLocalCalgaryTime } from "@/amplify/function/utils/date";
 import {
@@ -19,51 +21,49 @@ export async function verifyFoodTicket(
   canEat: boolean;
   description: string;
 }> {
-  try {
-    const [userID] = getUserIDAndCode(userCode);
+  const [userID] = getUserIDAndCode(userCode);
 
-    const response = await client.queries.VerifyUserCode({
-      userCode: userCode,
-    });
-    const response_body = response.data?.body;
-    const json = JSON.parse(response_body as string);
+  const response = await client.queries.VerifyUserCode({
+    userCode: userCode,
+  });
+  const response_body = response.data?.body;
+  const json = JSON.parse(response_body as string);
 
-    const valid = json["valid"];
-    if (!valid) return { canEat: false, description: "Not a valid code" };
+  const valid = json["valid"];
+  if (!valid) return { canEat: false, description: "Not a valid code" };
 
-    const { data: foodEvent, errors } = await client.models.FoodEvent.get({
-      id: eventID,
-    });
-
-    //If food event does not exist or errors when finding
-    if (!foodEvent || errors) {
-      return {
-        canEat: false,
-        description: "Could not find the specified food event",
-      };
-    }
-    // User has already at the event
-    if (await hasAlreadyAteAtFoodEvent(userID, eventID)) {
-      return {
-        canEat: false,
-        description: "Person has already ate at this event",
-      };
-    }
-    // If the user is not in the correct time, they will still eat anyways, we will just let the scanner know that they should be at a different time
-    const { description } = await isCorrectTimeSlot(
-      userID,
-      foodEvent,
-      timeSlot,
-    );
-
-    if (automaticMarking) {
-      await setUserAsAttendedAtFoodEvent(userID, eventID);
-    }
-    return { canEat: true, description: description };
-  } catch (error) {
-    console.error("Error verifying food ticket:", error);
-    return { canEat: false, description: "error: " + error };
+  if (!validator.isUUID(eventID)) {
+    return {
+      canEat: false,
+      description: "Not a valid food event ID, must be a UUID",
+    };
   }
+
+  const { data: foodEvent, errors } = await client.models.FoodEvent.get({
+    id: eventID,
+  });
+
+  //If food event does not exist or errors when finding
+  if (!foodEvent || errors) {
+    return {
+      canEat: false,
+      description: "Could not find the specified food event",
+    };
+  }
+  // User has already at the event
+  if (await hasAlreadyAteAtFoodEvent(userID, eventID)) {
+    return {
+      canEat: false,
+      description: "Person has already ate at this event",
+    };
+  }
+  // If the user is not in the correct time, they will still eat anyways, we will just let the scanner know that they should be at a different time
+  const { description } = await isCorrectTimeSlot(userID, foodEvent, timeSlot);
+
+  if (automaticMarking) {
+    await setUserAsAttendedAtFoodEvent(userID, eventID);
+  }
+  return { canEat: true, description: description };
 }
 
 //Marks user as eaten at a food event (CURRENTLY NOT IN USAGE, BUT MAY BE USEFUL FOR THE FUTURE)
