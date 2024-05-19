@@ -56,6 +56,10 @@ https://docs.amplify.aws/react/start/
 
 > Note that we are using AWS Amplify v1.0
 
+**Common Troubleshooting**
+
+- If you have a `HTTP error 431` and cannot load onto the frontend, try clearing your header cookies.
+
 ## Secrets
 
 Make sure to set these variables in your local dev sandbox and the production environment.
