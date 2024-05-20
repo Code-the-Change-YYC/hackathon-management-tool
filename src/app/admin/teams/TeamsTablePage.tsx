@@ -103,6 +103,9 @@ const TeamsTablePage = () => {
         );
       }
 
+      // Sort the filtered data alphabetically based on team name (first column)
+      newFilteredData.sort((a, b) => a[0].localeCompare(b[0]));
+
       setFilteredData(newFilteredData);
     };
 

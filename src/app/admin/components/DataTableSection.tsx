@@ -66,11 +66,26 @@ const DataTableSection = (props: DataTableProps) => {
   const [selectedTeamName, setSelectedTeamName] = useState("");
   const [selectedMemberStatus, setSelectedMemberStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPageData, setCurrentPageData] =
+    useState<Array<Array<string>>>(tableData);
 
-  const totalPages = Math.ceil(tableData.length / entries_per_page);
+  const filteredData = tableData.filter((rowData) =>
+    rowData.some((cellData) =>
+      cellData.toLowerCase().includes(searchQuery.toLowerCase()),
+    ),
+  );
+
   const startIndex = (currentPage - 1) * entries_per_page;
-  const endIndex = Math.min(startIndex + entries_per_page, tableData.length);
-  const currentPageData = tableData.slice(startIndex, endIndex);
+  const endIndex = Math.min(startIndex + entries_per_page, filteredData.length);
+
+  useEffect(() => {
+    const totalPages = Math.ceil(tableData.length / entries_per_page);
+    const currentPageData = filteredData.slice(startIndex, endIndex);
+
+    setTotalPages(totalPages);
+    setCurrentPageData(currentPageData);
+  }, [filteredData]);
 
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -128,12 +143,6 @@ const DataTableSection = (props: DataTableProps) => {
     setEditedValues(newEditedValues);
   };
 
-  const filteredData = currentPageData.filter((rowData) =>
-    rowData.some((cellData) =>
-      cellData.toLowerCase().includes(searchQuery.toLowerCase()),
-    ),
-  );
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
@@ -150,8 +159,14 @@ const DataTableSection = (props: DataTableProps) => {
         {/* search results bar */}
         <div className={SEARCH_RESULTS_SECTION_STYLES}>
           <h1 className={SEARCH_RESULTS_TEXT_STYLES}>
-            Search Results ({filteredData.length}{" "}
-            {filteredData.length === 1 ? "record" : "records"} found)
+            Search Results (
+            {searchQuery === "" ? tableData.length : filteredData.length}{" "}
+            {searchQuery === ""
+              ? tableData.length === 1
+                ? "record"
+                : "records"
+              : "records"}{" "}
+            found)
           </h1>
           <input
             type="text"
@@ -183,7 +198,7 @@ const DataTableSection = (props: DataTableProps) => {
               </tr>
             </thead>
             <tbody>
-              {filteredData.map((rowData, rowIndex) => (
+              {currentPageData.map((rowData, rowIndex) => (
                 <tr
                   key={rowIndex}
                   className={`${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
