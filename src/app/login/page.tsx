@@ -1,6 +1,8 @@
 // app/login/page.tsx
 import Login from "@/components/_Amplify/Login";
 
-export default function LoginPage() {
+const LoginPage = () => {
   return <Login />;
-}
+};
+
+export default LoginPage;

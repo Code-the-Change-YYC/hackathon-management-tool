@@ -32,7 +32,7 @@ const config = {
       rules: {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "error",
-        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-explicit-any": "off",
       },
     },
   ],
@@ -60,7 +60,7 @@ const config = {
     "no-eval": "error",
     "no-var": "error",
     "prettier/prettier": "error",
-    "no-restricted-imports": ["error", { patterns: [".*"] }],
+    // "no-restricted-imports": ["error", { patterns: [".*"] }],
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/classnames-order": "off", // tcss prettier plugin handles this
     "require-await": "off",

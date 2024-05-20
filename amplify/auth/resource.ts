@@ -1,3 +1,4 @@
+import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { defineAuth } from "@aws-amplify/backend";
 
 /**
@@ -6,6 +7,10 @@ import { defineAuth } from "@aws-amplify/backend";
  * @see https://docs.amplify.aws/gen2/build-a-backend/auth
  */
 export const auth = defineAuth({
+  groups: ["Admin", "Participant", "Judge"],
+  triggers: {
+    preSignUp: PreSignUp,
+  },
   loginWith: {
     email: true,
     // add social providers
