@@ -34,7 +34,9 @@ const TeamsTablePage = () => {
     }>
   >([]);
 
-  const [tableData, setTableData] = useState<Array<Array<string>>>([]);
+  const [tableData, setTableData] = useState<string[][]>([]);
+  const [filteredData, setFilteredData] = useState<string[][]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   const { data, isFetching } = useQuery({
     initialData: [],
@@ -67,21 +69,49 @@ const TeamsTablePage = () => {
         teamId: team.id ?? "",
       }));
 
-      const filteredData = formattedData.map((item) => ({
+      const removeNullData = formattedData.map((item) => ({
         ...item,
         members: item.members.filter((member) => member !== null) as string[],
       }));
 
-      setTeamData(filteredData);
+      setTeamData(removeNullData);
 
-      const displayedData = filteredData.map((cellData) => [
+      const displayedData = removeNullData.map((cellData) => [
         cellData.teamName,
         cellData.checkinStatus,
         cellData.approveStatus,
       ]);
+
       setTableData(displayedData);
+      setFilteredData(displayedData);
     }
   }, [data]);
+
+  useEffect(() => {
+    const applyFilters = () => {
+      let newFilteredData = tableData;
+
+      if (selectedFilters.includes("Approved")) {
+        newFilteredData = newFilteredData.filter(
+          (row) => row[2] === "Approved",
+        );
+      }
+
+      if (selectedFilters.includes("Checked-in")) {
+        newFilteredData = newFilteredData.filter(
+          (row) => row[1] === "Checked In",
+        );
+      }
+
+      setFilteredData(newFilteredData);
+    };
+
+    applyFilters();
+  }, [selectedFilters, tableData]);
+
+  const handleFilterChange = (filters: string[]) => {
+    setSelectedFilters(filters);
+  };
 
   const queryClient = useQueryClient();
   const tableDataMutation = useMutation({
@@ -112,9 +142,13 @@ const TeamsTablePage = () => {
         </div>
       ) : (
         <>
-          <FilterSection topLabel="Teams" filterLabels={filters} />
+          <FilterSection
+            topLabel="Teams"
+            filterLabels={filters}
+            onFilterChange={handleFilterChange}
+          />
           <DataTableSection
-            tableData={tableData}
+            tableData={filteredData}
             tableHeaders={tableHeaders}
             showViewButton={true}
             teamData={teamData}
