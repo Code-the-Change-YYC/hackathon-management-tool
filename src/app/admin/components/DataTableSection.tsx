@@ -93,11 +93,12 @@ const DataTableSection = (props: DataTableProps) => {
     }
   };
 
-  // ONLY WORKS FOR TEAM DATA
   const handleSaveButtonClick = (index: number) => {
-    const editedTeamName = editedValues[index][0];
-    const approvalStatus = editedValues[index][2] === "Approved";
-    const teamId = teamData[index].teamId;
+    const actualIndex = startIndex + index;
+
+    const editedTeamName = editedValues[actualIndex][0];
+    const approvalStatus = editedValues[actualIndex][2] === "Approved";
+    const teamId = teamData[actualIndex].teamId;
 
     tableDataMutation.mutate({
       id: teamId,
@@ -109,8 +110,10 @@ const DataTableSection = (props: DataTableProps) => {
   };
 
   const toggleEditMode = (index: number) => {
+    const actualIndex = startIndex + index;
+
     const newEditModes = [...editModes];
-    newEditModes[index] = !newEditModes[index];
+    newEditModes[actualIndex] = !newEditModes[actualIndex];
     setEditModes(newEditModes);
   };
 
@@ -119,8 +122,9 @@ const DataTableSection = (props: DataTableProps) => {
     rowIndex: number,
     cellIndex: number,
   ) => {
+    const actualIndex = startIndex + rowIndex;
     const newEditedValues = [...editedValues];
-    newEditedValues[rowIndex][cellIndex] = value;
+    newEditedValues[actualIndex][cellIndex] = value;
     setEditedValues(newEditedValues);
   };
 
@@ -139,6 +143,7 @@ const DataTableSection = (props: DataTableProps) => {
     setShowDeletePopup(true);
     setRecordToDeleteId(recordId);
   };
+
   return (
     <div className="flex justify-center">
       <div className={DATA_TABLE_SECTION_STYLES}>
@@ -186,11 +191,13 @@ const DataTableSection = (props: DataTableProps) => {
                   {rowData.map((cellData, cellIndex) => (
                     <td className={DATA_TABLE_CELL_STYLES} key={cellIndex}>
                       {/* ONLY FOR TEAMS DATA */}
-                      {editModes[rowIndex] ? (
+                      {editModes[startIndex + rowIndex] ? (
                         cellIndex === 0 ? (
                           <input
                             type="text"
-                            value={editedValues[rowIndex][cellIndex]}
+                            value={
+                              editedValues[startIndex + rowIndex][cellIndex]
+                            }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
                             onChange={(e) =>
                               handleInputChange(
@@ -202,7 +209,9 @@ const DataTableSection = (props: DataTableProps) => {
                           />
                         ) : cellIndex === 2 ? (
                           <select
-                            value={editedValues[rowIndex][cellIndex]}
+                            value={
+                              editedValues[startIndex + rowIndex][cellIndex]
+                            }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
                             onChange={(e) =>
                               handleInputChange(
@@ -224,7 +233,7 @@ const DataTableSection = (props: DataTableProps) => {
                     </td>
                   ))}
                   <td className="min-w-[250px] p-3 text-center">
-                    {editModes[rowIndex] ? (
+                    {editModes[startIndex + rowIndex] ? (
                       <>
                         <button
                           className={EDIT_BUTTON_STYLES}
@@ -259,7 +268,9 @@ const DataTableSection = (props: DataTableProps) => {
                         <button
                           className="text-dark-pink"
                           onClick={() =>
-                            handleDeleteButton(teamData[rowIndex].teamId)
+                            handleDeleteButton(
+                              teamData[startIndex + rowIndex].teamId,
+                            )
                           }
                         >
                           Delete
