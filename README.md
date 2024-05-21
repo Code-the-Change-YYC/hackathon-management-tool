@@ -24,7 +24,7 @@ https://docs.amplify.aws/gen2/start/account-setup/
 npx ampx sandbox
 ```
 
-It will take around 2-3 minutes for the backend to load. The sandbox is up when you see the given message in the console:
+It will take around 2-3 minutes for the backend to deploy. The sandbox is up when you see the given message in the console:
 
 `✨ Total time: 17.27s`
 
