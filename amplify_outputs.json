@@ -87,6 +87,13 @@
               "isRequired": false,
               "attributes": []
             },
+            "willEatMeals": {
+              "name": "willEatMeals",
+              "isArray": false,
+              "type": "Boolean",
+              "isRequired": false,
+              "attributes": []
+            },
             "teamId": {
               "name": "teamId",
               "isArray": false,
@@ -417,12 +424,8 @@
                     ]
                   },
                   {
-                    "allow": "public",
-                    "provider": "iam",
+                    "allow": "private",
                     "operations": [
-                      "create",
-                      "update",
-                      "delete",
                       "read"
                     ]
                   }

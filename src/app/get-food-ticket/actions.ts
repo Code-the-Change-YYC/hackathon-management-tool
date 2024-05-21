@@ -3,7 +3,7 @@
 import { type Schema } from "@/amplify/data/resource";
 import {
   getCalgaryTime,
-  getLocalCalgaryTime,
+  getCurrentCalgaryTime,
 } from "@/amplify/function/utils/date";
 import {
   getGroupNumber,
@@ -28,7 +28,7 @@ export async function getFoodEventDetails(userID: string): Promise<{
 }> {
   const foodEvents = (await client.models.FoodEvent.list()).data;
 
-  const currentTime = getLocalCalgaryTime(); // Current local time
+  const currentTime = getCurrentCalgaryTime(); // Current local time
   const nextFoodEvent = getNextEvent(foodEvents, currentTime);
 
   if (nextFoodEvent) {

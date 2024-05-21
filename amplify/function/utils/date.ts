@@ -1,6 +1,6 @@
 //Function to help with creating dates and timezones with Calgary
 
-export function getLocalCalgaryTime() {
+export function getCurrentCalgaryTime() {
   const now = new Date();
   const calgaryTimeString = now.toLocaleString("en-US", {
     timeZone: "America/Edmonton",

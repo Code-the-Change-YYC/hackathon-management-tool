@@ -42,19 +42,6 @@ export default function FoodPage() {
     fetchData();
   }, []);
 
-  return (
-    <div className="mx-auto text-center">
-      <h1>{eventName}</h1>
-      <p>{eventDescription}</p>
-      <p>{eventTimeRange}</p>
-      <p>your time slot for food is: {userTimeSlot}</p>
-      <p>{queueInfo}</p>
-
-      <br></br>
-      <a> {userCode}</a>
-    </div>
-  );
-
   // Needs to be on client side since we need the authenticated client and their ID
   async function fetchCurrentAuthenticatedUser() {
     try {
@@ -86,4 +73,17 @@ export default function FoodPage() {
       setUserCode("Backend Server Error");
     }
   }
+
+  return (
+    <div className="mx-auto text-center">
+      <h1>{eventName}</h1>
+      <p>{eventDescription}</p>
+      <p>{eventTimeRange}</p>
+      <p>your time slot for food is: {userTimeSlot}</p>
+      <p>{queueInfo}</p>
+
+      <br></br>
+      <a> {userCode}</a>
+    </div>
+  );
 }

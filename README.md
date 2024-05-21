@@ -54,7 +54,7 @@ https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-type
 **Understanding AWS Amplify:**
 https://docs.amplify.aws/react/start/
 
-> Note that we are using AWS Amplify v1.0
+> Note that we are using AWS Amplify gen 2 v1.0
 
 **Common Troubleshooting**
 

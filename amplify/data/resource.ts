@@ -25,6 +25,7 @@ const schema = a
         institution: a.string(),
         allergies: a.string(),
         checkedIn: a.boolean(),
+        willEatMeals: a.boolean(),
         teamId: a.id(),
         team: a.belongsTo("Team", "teamId"),
         attendedEvents: a.hasMany("UserFoodEventAttendance", "userId"),
@@ -57,7 +58,10 @@ const schema = a
         groups: a.integer().required(),
         attended: a.hasMany("UserFoodEventAttendance", "foodEventId"),
       })
-      .authorization((allow) => [allow.owner(), allow.guest()]),
+      .authorization((allow) => [
+        allow.owner(),
+        allow.authenticated().to(["read"]),
+      ]),
 
     Team: a
       .model({
@@ -96,7 +100,7 @@ const schema = a
         userId: a.string(),
       })
       .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(GetUserCode)),
 
     VerifyUserCode: a
@@ -106,7 +110,7 @@ const schema = a
       })
       .returns(a.ref("GenericFunctionResponse"))
       // allow all users to call this api for now
-      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(VerifyUserCode)),
 
     AssignUsersToTeams: a
@@ -116,7 +120,7 @@ const schema = a
         teamId: a.string().required(),
       })
       .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(AssignUsersToTeams)),
   })
   .authorization((allow) => [
@@ -137,11 +141,6 @@ export const data = defineData({
     lambdaAuthorizationMode: {
       function: DemoAuthFunction,
     },
-  },
-  functions: {
-    demoFunctionKey: DemoFunction,
-    getUserVerificationCode: GetUserCode,
-    verifyUserCode: VerifyUserCode,
   },
 });
 

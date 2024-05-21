@@ -3,7 +3,7 @@
 import validator from "validator";
 
 import { getUserIDAndCode } from "@/amplify/function/utils/crytography";
-import { getLocalCalgaryTime } from "@/amplify/function/utils/date";
+import { getCurrentCalgaryTime } from "@/amplify/function/utils/date";
 import {
   getGroupNumber,
   getGroupNumberFromTime,
@@ -66,8 +66,6 @@ export async function verifyFoodTicket(
   return { canEat: true, description: description };
 }
 
-//Marks user as eaten at a food event (CURRENTLY NOT IN USAGE, BUT MAY BE USEFUL FOR THE FUTURE)
-export async function markUserEatenAtFoodEvent() {}
 // check if the user has already ate at the food event.
 async function hasAlreadyAteAtFoodEvent(userID: string, foodEventID: string) {
   try {
@@ -99,7 +97,7 @@ async function isCorrectTimeSlot(
   let currentGroupNumber = timeSlot;
   if (timeSlot === -1) {
     currentGroupNumber = getGroupNumberFromTime(
-      getLocalCalgaryTime(),
+      getCurrentCalgaryTime(),
       foodEvent.groups,
       foodEvent.start || "",
       foodEvent.end || "",

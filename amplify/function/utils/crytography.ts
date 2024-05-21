@@ -7,8 +7,7 @@ export async function isValidAuthenticationCode(
   key: string | undefined,
 ): Promise<boolean> {
   const expectedMAC = await createAuthenticationCode(message, key);
-  const isValid = expectedMAC === mac;
-  return isValid;
+  return expectedMAC === mac;
 }
 
 export async function createAuthenticationCode(
