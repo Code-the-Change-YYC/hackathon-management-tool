@@ -6,7 +6,8 @@ import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
 const listOfRoles = ["Participant", "Judge"] as const;
 
 const DROPDOWN_STYLES =
-  "bg-light-grey mt-8  p-4 rounded-md text-lg text-black w-4/5 max-w-[1500px]";
+  "bg-light-grey border border-awesomer-purple m-4 p-4 rounded-md text-lg text-black w-full max-w-[1500px]";
+// "bg-light-grey mt-8  p-4 rounded-md text-lg text-black w-4/5 max-w-[1500px]";
 const DROPDOWN_HEADER_BAR_STYLES = "bg-white rounded-md p-10";
 const DROPDOWN_CONTENT_STYLES =
   "relative flex flex-col items-center w-[340px] h-[100px] rounded ";

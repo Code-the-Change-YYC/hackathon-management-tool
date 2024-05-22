@@ -4,15 +4,9 @@
     "aws_region": "ca-central-1",
     "user_pool_client_id": "e5ust07g0gpb65lqh8emj0ijo",
     "identity_pool_id": "ca-central-1:16374f2b-b048-4f9f-886a-3bd6c2ade397",
-    "standard_required_attributes": [
-      "email"
-    ],
-    "username_attributes": [
-      "email"
-    ],
-    "user_verification_types": [
-      "email"
-    ],
+    "standard_required_attributes": ["email"],
+    "username_attributes": ["email"],
+    "user_verification_types": ["email"],
     "password_policy": {
       "min_length": 8,
       "require_numbers": true,
@@ -27,11 +21,7 @@
     "aws_region": "ca-central-1",
     "api_key": "da2-sdju3nx4tzfh5m45ut3q3k7cdm",
     "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
-    "authorization_types": [
-      "API_KEY",
-      "AWS_LAMBDA",
-      "AWS_IAM"
-    ],
+    "authorization_types": ["API_KEY", "AWS_LAMBDA", "AWS_IAM"],
     "model_introspection": {
       "version": 1,
       "models": {
@@ -111,9 +101,7 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "teamId"
-                ]
+                "targetNames": ["teamId"]
               }
             },
             "createdAt": {
@@ -149,18 +137,11 @@
                     "ownerField": "owner",
                     "allow": "owner",
                     "identityClaim": "cognito:username",
-                    "operations": [
-                      "create",
-                      "update",
-                      "delete",
-                      "read"
-                    ]
+                    "operations": ["create", "update", "delete", "read"]
                   },
                   {
                     "allow": "private",
-                    "operations": [
-                      "read"
-                    ]
+                    "operations": ["read"]
                   }
                 ]
               }
@@ -200,9 +181,7 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "teamId"
-                ]
+                "associatedWith": ["teamId"]
               }
             },
             "createdAt": {
@@ -232,9 +211,7 @@
             {
               "type": "key",
               "properties": {
-                "fields": [
-                  "id"
-                ]
+                "fields": ["id"]
               }
             },
             {
@@ -246,18 +223,11 @@
                     "ownerField": "owner",
                     "allow": "owner",
                     "identityClaim": "cognito:username",
-                    "operations": [
-                      "create",
-                      "update",
-                      "delete",
-                      "read"
-                    ]
+                    "operations": ["create", "update", "delete", "read"]
                   },
                   {
                     "allow": "private",
-                    "operations": [
-                      "read"
-                    ]
+                    "operations": ["read"]
                   }
                 ]
               }

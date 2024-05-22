@@ -304,6 +304,32 @@ const DataTableSection = (props: DataTableProps) => {
               </tr>
             </tbody>
           </table>
+          <div className="my-4 flex items-center justify-between">
+            {/* replace dynamically */}
+            <h2 className="text-lg">
+              Showing 1 to 10 of 100 entries
+              {/* Showing {currentPage} of {totalPages} of {tableData.length}{" "}
+              entries */}
+            </h2>
+            <div className="flex text-sm text-awesomer-purple">
+              <p className={CHANGE_PAGE_BUTTON_TEXT_STYLING}>Previous</p>
+              <button
+                // onClick={handlePreviousPage}
+                // disabled={currentPage === 1}
+                className={CHANGE_PAGE_BUTTON_STYLING}
+              >
+                &lt;
+              </button>
+              <button
+                // onClick={handleNextPage}
+                // disabled={currentPage === totalPages}
+                className={CHANGE_PAGE_BUTTON_STYLING}
+              >
+                &gt;
+              </button>
+              <p className={CHANGE_PAGE_BUTTON_TEXT_STYLING}>Next</p>
+            </div>
+          </div>
         </div>
         {/* popup component for teams table ONLY */}
         {showViewPopup && (
