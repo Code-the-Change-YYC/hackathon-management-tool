@@ -116,14 +116,15 @@ const UserTablePage = () => {
 
       //Create an array to display the data in the Data Table
 
-      const displayData = formattedData.map((cellData) => [
+      const displayedData = removeNullData.map((cellData) => [
         cellData.lastName,
         cellData.firstName,
-        cellData.email,
         cellData.role,
         cellData.team,
+        cellData.email,
       ]);
-      setTableData(displayData);
+
+      setTableData(displayedData);
     }
   }, [data]);
 
