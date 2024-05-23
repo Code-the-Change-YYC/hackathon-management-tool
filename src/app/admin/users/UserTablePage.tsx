@@ -90,7 +90,7 @@ const UserTablePage = () => {
     queryKey: ["Users"],
     queryFn: async () => {
       const response = await client.models.User.list({
-        selectionSet: ["LastName", "FirstName", "Team.Name", "Email"], // need role - ask Ideen
+        selectionSet: ["lastName", "firstName", "team.name", "email"], // need role - ask Ideen
       });
       console.log(response.data);
       return response.data;
@@ -100,11 +100,11 @@ const UserTablePage = () => {
   useEffect(() => {
     if (data) {
       const formattedData = data.map((user) => ({
-        lastName: user.LastName ?? "",
-        firstName: user.FirstName ?? "",
+        lastName: user.lastName ?? "",
+        firstName: user.firstName ?? "",
         role: "Participant" ?? "Judge" ?? "", // need role - ask Ideen? OR user.role ?? "Participant" ?? "Judge" ?? "",
-        team: user.Team.Name ?? "",
-        email: user.Email ?? "",
+        team: user.team.name ?? "",
+        email: user.email ?? "",
       }));
 
       //Create an array to
