@@ -1,6 +1,7 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
+import { GenerateTeamCode } from "@/amplify/function/BusinessLogic/GenerateTeamCode/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
@@ -72,6 +73,7 @@ const schema = a
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
+    allow.resource(GenerateTeamCode).to(["query"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;
 
