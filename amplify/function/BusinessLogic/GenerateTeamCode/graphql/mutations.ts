@@ -8,7 +8,7 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
-export const AssignUsersToTeams = /* GraphQL */ `mutation AssignUsersToTeams($teamId: String, $userId: String) {
+export const AssignUsersToTeams = /* GraphQL */ `mutation AssignUsersToTeams($teamId: String!, $userId: String!) {
   AssignUsersToTeams(teamId: $teamId, userId: $userId) {
     body
     headers

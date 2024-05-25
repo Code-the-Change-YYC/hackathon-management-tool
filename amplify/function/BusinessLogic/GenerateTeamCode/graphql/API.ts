@@ -128,7 +128,7 @@ export type ModelUserFilterInput = {
   not?: ModelUserFilterInput | null,
   or?: Array< ModelUserFilterInput | null > | null,
   owner?: ModelStringInput | null,
-  teamId?: ModelStringInput | null,
+  teamId?: ModelIDInput | null,
   updatedAt?: ModelStringInput | null,
 };
 
@@ -174,7 +174,7 @@ export type ModelUserConditionInput = {
   not?: ModelUserConditionInput | null,
   or?: Array< ModelUserConditionInput | null > | null,
   owner?: ModelStringInput | null,
-  teamId?: ModelStringInput | null,
+  teamId?: ModelIDInput | null,
   updatedAt?: ModelStringInput | null,
 };
 
@@ -268,7 +268,7 @@ export type ModelSubscriptionUserFilterInput = {
   meals?: ModelSubscriptionBooleanInput | null,
   or?: Array< ModelSubscriptionUserFilterInput | null > | null,
   owner?: ModelStringInput | null,
-  teamId?: ModelSubscriptionStringInput | null,
+  teamId?: ModelSubscriptionIDInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
 };
 
@@ -378,8 +378,8 @@ export type ListUsersQuery = {
 };
 
 export type AssignUsersToTeamsMutationVariables = {
-  teamId?: string | null,
-  userId?: string | null,
+  teamId: string,
+  userId: string,
 };
 
 export type AssignUsersToTeamsMutation = {
