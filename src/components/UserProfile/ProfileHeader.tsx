@@ -1,4 +1,11 @@
+"use client";
+
+import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
+
+import { type Schema } from "@/amplify/data/resource";
+import { useUser } from "@/components/contexts/UserContext";
+import { useQuery } from "@tanstack/react-query";
 
 const CONTAINER_STYLES = "flex h-60 items-center justify-center bg-[#FF6B54]";
 const PROFILE_CONTAINER =
@@ -12,8 +19,28 @@ const LEFT_SQUIGGLE_STYLES =
 const RIGHT_SQUIGGLE_STYLES =
   "absolute right-0 ml-1 mt-2 md:right-0 md:h-56 md:w-60  lg:right-20 lg:block lg:size-1/3";
 
+const client = generateClient<Schema>();
+
 export default function ProfileHeader() {
-  return (
+  const userId = useUser().currentUser.userSub as string;
+
+  const { data, isFetching } = useQuery({
+    initialData: {} as Schema["User"]["type"],
+    initialDataUpdatedAt: 0,
+    queryKey: ["User", userId],
+    queryFn: async () => {
+      const response = await client.models.User.get({
+        id: userId,
+      });
+      return response.data;
+    },
+  });
+
+  return isFetching || !data ? (
+    <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
+      <h1 className="text-2xl">Loading...</h1>
+    </div>
+  ) : (
     <div className={CONTAINER_STYLES}>
       <div className={PROFILE_CONTAINER}>
         <Image
@@ -33,7 +60,10 @@ export default function ProfileHeader() {
           className={LEFT_SQUIGGLE_STYLES}
         />
         <h1 className="flex text-center text-xl font-extrabold text-white md:text-4xl">
-          Hello, <span className="italic">Full Name!</span>
+          Hello,&nbsp;
+          <span className="italic">
+            {data?.firstName} {data.lastName}
+          </span>
         </h1>
         <Image
           src="/images/userProfile/Squiggly_Right.svg"

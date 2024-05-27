@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { type Schema } from "@/amplify/data/resource";
 import { type TeamFormProp } from "@/components/UserProfile/TeamProfile";
 
@@ -10,42 +8,36 @@ const BUTTON_STYLES =
 
 const FORM_STYLES = "md:mx-10 flex flex-col";
 
-export default function TeamForm({
-  data,
-  setHasTeam,
-  teamMutation,
-}: TeamFormProp) {
+export default function TeamForm({ data, teamMutation }: TeamFormProp) {
   const handleLeaveTeamClick = () => {
-    setHasTeam((prevHasTeam) => !prevHasTeam);
-    teamMutation.mutate(formState);
+    teamMutation.mutate(data);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [formState, setFormState] = useState<Schema["Team"]["type"]>(data);
 
   return (
     <>
-      {formState && (
+      {data && (
         <>
           <form className={FORM_STYLES}>
             <label>Team ID</label>
             <input
               className={INPUT_STYLES}
               type="text"
-              placeholder={formState.id ?? "Team ID"}
+              placeholder={data.id ?? "Team ID"}
               disabled
             />
             <label>Team Name</label>
             <input
               className={INPUT_STYLES}
               type="text"
-              placeholder={formState.name ?? "Team Name"}
+              placeholder={data.name ?? "Team Name"}
               disabled
             />
             <label>Team Members</label>
             <div className="flex flex-col">
-              {Array.isArray(formState.members) &&
-                formState.members.map((member: Schema["User"]["type"]) => (
+              {Array.isArray(data.members) &&
+                data.members.map((member: Schema["User"]["type"]) => (
                   <input
                     key={member.id}
                     className={INPUT_STYLES}

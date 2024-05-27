@@ -1,7 +1,6 @@
 "use client";
 
 import { generateClient } from "aws-amplify/data";
-import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import ProfileLinks from "@/components/UserProfile/ProfileLinks";
@@ -19,13 +18,11 @@ const client = generateClient<Schema>();
 
 export interface TeamFormProp {
   data: Schema["Team"]["type"];
-  setHasTeam: React.Dispatch<React.SetStateAction<boolean>>;
   teamMutation: any;
 }
 
 const TeamProfile = () => {
   const queryClient = useQueryClient();
-  const [hasTeam, setHasTeam] = useState<boolean>(false);
 
   const userId = useUser().currentUser.userSub as string;
 
@@ -41,7 +38,7 @@ const TeamProfile = () => {
       const userTeamId = userResponse.data?.teamId as string;
 
       if (!userTeamId) {
-        return;
+        return {} as Schema["Team"]["type"];
       }
 
       const teamResponse = await client.models.Team.get(
@@ -52,31 +49,18 @@ const TeamProfile = () => {
           selectionSet: ["members.*", "id", "name"],
         },
       );
-      if ((teamResponse.data?.id as string) === userTeamId) {
-        setHasTeam(true);
-      }
-      console.log(teamResponse.data);
       return teamResponse.data;
     },
   });
 
   const teamMutation = useMutation({
-    mutationFn: async (input: Schema["User"]["type"]) => {
+    mutationFn: async () => {
       await client.models.User.update({ id: userId, teamId: null });
     },
-
-    onMutate: () => {
-      console.log("Mutate");
-    },
-    onError: () => {
-      console.log("Error");
-    },
     onSuccess: () => {
-      console.log("Success");
       queryClient.invalidateQueries({
-        queryKey: ["User", userId],
+        queryKey: ["Team", userId],
       });
-      setHasTeam(false);
     },
   });
 
@@ -95,13 +79,9 @@ const TeamProfile = () => {
                 Team Details
               </h1>
             </div>
-            {hasTeam && data ? (
+            {data?.id ? (
               <>
-                <TeamForm
-                  data={data}
-                  setHasTeam={setHasTeam}
-                  teamMutation={teamMutation}
-                />
+                <TeamForm data={data} teamMutation={teamMutation} />
               </>
             ) : (
               <div>

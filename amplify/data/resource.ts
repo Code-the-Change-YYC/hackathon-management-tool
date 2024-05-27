@@ -19,7 +19,11 @@ const schema = a.schema({
       institution: a.string(),
       allergies: a.string(),
       checkedIn: a.boolean(),
-      teamId: a.id(),
+      teamId: a
+        .id()
+        .authorization((allow) =>
+          allow.owner().to(["read", "update", "delete"]),
+        ),
       team: a.belongsTo("Team", "teamId"),
     })
     .authorization((allow) => [

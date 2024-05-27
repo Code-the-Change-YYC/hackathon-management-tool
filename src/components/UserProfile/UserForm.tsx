@@ -78,7 +78,7 @@ export default function UserForm({
       </div>
       <label>Email</label>
       <input
-        className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+        className={`${INPUT_STYLES} ${TEXT_COLOR_GRAY}`}
         type="text"
         placeholder={formState.email ?? ""}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -90,7 +90,7 @@ export default function UserForm({
       <input
         className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
         type="password"
-        placeholder="Password"
+        placeholder="••••••••"
         disabled={!isEditing} // Disabled when not in edit mode
       />
       <label>Institution</label>
@@ -100,7 +100,7 @@ export default function UserForm({
         placeholder={formState.institution ?? "e.g. University of Calgary"}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
         value={formState.institution ?? ""}
-        name="Institution"
+        name="institution"
         disabled={!isEditing} // Disabled when not in edit mode
       />
       <label>Do you want provided meals at the hackathon?</label>
@@ -110,7 +110,7 @@ export default function UserForm({
         onChange={(e) =>
           setFormState((prevState) => ({
             ...prevState,
-            Meals: e.target.value === "Yes",
+            meals: e.target.value === "Yes",
           }))
         }
         disabled={!isEditing} // Disabled when not in edit mode
@@ -127,7 +127,7 @@ export default function UserForm({
             placeholder={formState.allergies ?? "e.g. Dairy, Nuts, etc."}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
             value={formState.allergies ?? ""}
-            name="Allergies"
+            name="allergies"
             disabled={!isEditing} // Disabled when not in edit mode
           />
         </>
@@ -138,7 +138,7 @@ export default function UserForm({
         on hackathon day
       </p>
       <input
-        className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+        className={`${INPUT_STYLES} ${TEXT_COLOR_GRAY}`}
         type="text"
         value={checkedIn ? "Yes" : "No"}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}

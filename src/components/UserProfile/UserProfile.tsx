@@ -45,7 +45,6 @@ const UserProfile = () => {
     mutationFn: async (input: Schema["User"]["type"]) => {
       const { createdAt, updatedAt, team, teamId, owner, ...extractedFields } =
         input;
-      console.log(extractedFields);
       await client.models.User.update(extractedFields);
     },
   });
