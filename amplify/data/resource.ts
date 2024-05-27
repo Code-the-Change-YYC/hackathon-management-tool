@@ -33,6 +33,7 @@ const schema = a
       .model({
         name: a.string(),
         id: a.id(),
+        approved: a.boolean(),
         members: a.hasMany("User", "teamId"),
       })
       .authorization((allow) => [

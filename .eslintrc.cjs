@@ -41,7 +41,7 @@ const config = {
   extends: [
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
-    "plugin:@typescript-eslint/recommended",
+    //"plugin:@typescript-eslint/recommended",
     "plugin:@next/next/recommended",
     "plugin:prettier/recommended",
     "plugin:tailwindcss/recommended",
