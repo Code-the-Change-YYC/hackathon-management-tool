@@ -59,7 +59,6 @@ const UserProfile = () => {
       setEnableCancelSave(true);
     }
   };
-
   const checkedIn = false;
 
   return (

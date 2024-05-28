@@ -1,3 +1,5 @@
+import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
+import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
@@ -34,6 +36,7 @@ const schema = a.schema({
     .model({
       name: a.string(),
       id: a.id(),
+      approved: a.boolean(),
       members: a.hasMany("User", "teamId"),
     })
     .authorization((allow) => [
@@ -62,6 +65,35 @@ const schema = a.schema({
     .handler(a.handler.function(DemoFunction)),
 });
 
+
+    /**
+     * FUNCTION-RELATED APPSYNC RESOLVERS
+     */
+    DemoFunction: a
+      .mutation() // this should be set to .query for functions that only read data
+      // arguments that this query accepts
+      .arguments({
+        content: a.string(),
+      })
+      // return type of the query
+      .returns(a.ref("GenericFunctionResponse"))
+      // allow all users to call this api for now
+      .authorization((allow) => [allow.guest()])
+      .handler(a.handler.function(DemoFunction)),
+    AssignUsersToTeams: a
+      .mutation()
+      .arguments({
+        userId: a.string().required(),
+        teamId: a.string().required(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(AssignUsersToTeams)),
+  })
+  .authorization((allow) => [
+    allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
+    allow.resource(PreSignUp).to(["mutate"]),
+  ]);
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
@@ -83,7 +115,7 @@ Go to your frontend source code. From your client-side code, generate a
 Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
 WORK IN THE FRONTEND CODE FILE.)
 
-Using JavaScript or Next.js React Server Components, Middleware, Server 
+Using JavaScript or Next.js React Server Components, Middleware, Server
 Actions or Pages Router? Review how to generate Data clients for those use
 cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
 =========================================================================*/
