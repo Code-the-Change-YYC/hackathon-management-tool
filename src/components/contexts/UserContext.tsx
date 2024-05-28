@@ -1,4 +1,5 @@
 "use client";
+
 import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession } from "aws-amplify/auth";
 import { useContext } from "react";
