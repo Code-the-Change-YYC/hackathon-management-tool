@@ -29,8 +29,12 @@ const CHANGE_PAGE_BUTTON_STYLING =
   "rounded-md border border-awesomer-purple bg-white px-6 hover:bg-awesomer-purple hover:text-white";
 const CHANGE_PAGE_BUTTON_TEXT_STYLING = "rounded-md bg-white p-2 px-8";
 
+// const search_icon = "/svgs/admin/search_icon.svg";
+
+const entries_per_page = 10;
+
 interface DataTableProps {
-  tableData: Array<Array<string | JSX.Element>>;
+  tableData: Array<Array<string>>;
   tableHeaders: Array<{ columnHeader: string; className: string }>;
   showViewButton?: boolean;
   teamData?: Array<any>;
@@ -304,25 +308,36 @@ const DataTableSection = (props: DataTableProps) => {
               </tr>
             </tbody>
           </table>
+          {/* popup component to confirm deletion of record */}
+          {showDeletePopup && (
+            <Popup
+              selectedMembersData={[]}
+              selectedMemberStatus={[]}
+              teamName=""
+              popupType="delete"
+              recordToDelete={recordToDeleteId}
+              onClose={() => setShowDeletePopup(false)}
+            />
+          )}
+          {/* pagination */}
           <div className="my-4 flex items-center justify-between">
             {/* replace dynamically */}
             <h2 className="text-lg">
-              Showing 1 to 10 of 100 entries
-              {/* Showing {currentPage} of {totalPages} of {tableData.length}{" "}
-              entries */}
+              Showing {currentPage} of {totalPages} of {tableData.length}{" "}
+              entries
             </h2>
             <div className="flex text-sm text-awesomer-purple">
               <p className={CHANGE_PAGE_BUTTON_TEXT_STYLING}>Previous</p>
               <button
-                // onClick={handlePreviousPage}
-                // disabled={currentPage === 1}
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
                 className={CHANGE_PAGE_BUTTON_STYLING}
               >
                 &lt;
               </button>
               <button
-                // onClick={handleNextPage}
-                // disabled={currentPage === totalPages}
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
                 className={CHANGE_PAGE_BUTTON_STYLING}
               >
                 &gt;
