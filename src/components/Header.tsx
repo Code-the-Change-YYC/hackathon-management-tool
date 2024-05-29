@@ -32,7 +32,7 @@ export default function Header() {
 
       <div className="flex w-48 justify-end">
         {isSignedIn && (
-          <Link href="/">
+          <Link href="/participant/profile">
             <Image
               src={
                 // This is temporary. replace with user profile image

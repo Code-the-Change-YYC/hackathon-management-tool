@@ -22,11 +22,15 @@ const schema = a
         institution: a.string(),
         allergies: a.string(),
         checkedIn: a.boolean(),
-        teamId: a.id(),
+        teamId: a
+          .id()
+          .authorization((allow) =>
+            allow.owner().to(["read", "update", "delete"]),
+          ),
         team: a.belongsTo("Team", "teamId"),
       })
       .authorization((allow) => [
-        allow.owner(),
+        allow.owner().to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
     Team: a
@@ -37,7 +41,7 @@ const schema = a
         members: a.hasMany("User", "teamId"),
       })
       .authorization((allow) => [
-        allow.owner(),
+        allow.owner().to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
     GenericFunctionResponse: a.customType({
@@ -60,6 +64,7 @@ const schema = a
       // allow all users to call this api for now
       .authorization((allow) => [allow.guest()])
       .handler(a.handler.function(DemoFunction)),
+
     AssignUsersToTeams: a
       .mutation()
       .arguments({
@@ -70,6 +75,7 @@ const schema = a
       .authorization((allow) => [allow.guest(), allow.authenticated()])
       .handler(a.handler.function(AssignUsersToTeams)),
   })
+
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
