@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { useUser } from "@/components/contexts/UserContext";
+import { UserType, useUser } from "@/components/contexts/UserContext";
 
 const headerContainerStyles =
   "flex flex-row items-center justify-between text-awesomer-purple h-36 bg-white px-8";
@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <div className={headerContainerStyles}>
       <div className="flex w-48 font-semibold">
-        {user.type === "Participant" ? (
+        {user.type === UserType.Participant ? (
           <>
             {user.completedProfile ? (
               <>
@@ -30,7 +30,7 @@ export default function Header() {
               <Link href="/login">Join Hackathon</Link>
             )}
           </>
-        ) : user.type === "Admin" ? (
+        ) : user.type === UserType.Admin ? (
           <Link href="/admin/teams">Admin Dashboard</Link>
         ) : (
           <Link href="/">Judge Dashboard</Link>
