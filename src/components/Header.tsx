@@ -19,7 +19,7 @@ export default function Header() {
             {user.completedProfile ? (
               <>
                 {user.teamId ? (
-                  <Link href="/participant/register">Join Team</Link>
+                  <Link href="/participant/register">Join a Team</Link>
                 ) : (
                   <Link href="/participant/profile/team-details">
                     View Team
