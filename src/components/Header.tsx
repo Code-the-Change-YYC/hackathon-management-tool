@@ -14,26 +14,26 @@ export default function Header() {
   return (
     <div className={headerContainerStyles}>
       <div className="flex w-48 font-semibold">
-        {user.type === UserType.Participant ? (
+        {user.completedProfile ? (
           <>
-            {user.completedProfile ? (
+            {user.type === UserType.Participant ? (
               <>
                 {user.teamId ? (
-                  <Link href="/participant/register">Join a Team</Link>
-                ) : (
                   <Link href="/participant/profile/team-details">
                     View Team
                   </Link>
+                ) : (
+                  <Link href="/participant/register">Join a Team</Link>
                 )}
               </>
+            ) : user.type === UserType.Admin ? (
+              <Link href="/admin/teams">Admin Dashboard</Link>
             ) : (
-              <Link href="/login">Join Hackathon</Link>
+              <Link href="/judge/dashboard">Judge Dashboard</Link>
             )}
           </>
-        ) : user.type === UserType.Admin ? (
-          <Link href="/admin/teams">Admin Dashboard</Link>
         ) : (
-          <Link href="/">Judge Dashboard</Link>
+          <Link href="/login">Join Hackathon</Link>
         )}
       </div>
 
