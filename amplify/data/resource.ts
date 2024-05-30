@@ -89,7 +89,7 @@ const schema = a
         teamId: a.string().required(),
       })
       .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .authorization((allow) => [allow.group("Admin")])
       .handler(a.handler.function(AssignUsersToTeams)),
     CreateTeamWithCode: a
       .mutation()
