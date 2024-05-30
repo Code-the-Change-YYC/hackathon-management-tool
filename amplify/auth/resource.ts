@@ -11,6 +11,9 @@ import { PostConfirmation } from "./PostConfirmation/resource";
 
 export const auth = defineAuth({
   groups: ["Admin", "Participant", "Judge"],
+  access: (allow) => [
+    allow.resource(AssignUsersToTeams).to(["addUserToGroup"]),
+  ],
   triggers: {
     preSignUp: PreSignUp,
     postConfirmation: PostConfirmation,
