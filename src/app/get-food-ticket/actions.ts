@@ -1,13 +1,11 @@
 "use server";
 
+import { DateTime } from "luxon";
+
 import { type Schema } from "@/amplify/data/resource";
 import {
-  getCalgaryTime,
-  getCurrentCalgaryTime,
-} from "@/amplify/function/utils/date";
-import {
-  getGroupNumber,
-  getUserTimeSlot,
+  getGroupPosition,
+  getTimeForGroupPosition,
 } from "@/amplify/function/utils/food-groups";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
@@ -27,39 +25,37 @@ export async function getFoodEventDetails(userID: string): Promise<{
   timeslot: string;
 }> {
   const foodEvents = (await client.models.FoodEvent.list()).data;
-
-  const currentTime = getCurrentCalgaryTime(); // Current local time
+  console.log(process.env.TIME_ZONE);
+  const currentTime = DateTime.now().setZone(process.env.TIME_ZONE).toJSDate(); // Current local time in the time zone
   const nextFoodEvent = getNextEvent(foodEvents, currentTime);
 
   if (nextFoodEvent) {
     if (userID) {
-      const userTimeSlot = getUserTimeSlot(
+      const userGroupPosition = getGroupPosition(
         userID,
         nextFoodEvent.id,
-        nextFoodEvent?.groups,
-        nextFoodEvent.start || "",
-        nextFoodEvent.end || "",
+        nextFoodEvent.groups,
       );
-      const userGroup = getGroupNumber(
-        userID,
-        nextFoodEvent.id,
-        nextFoodEvent?.groups,
+
+      const userTimeSlot = getTimeForGroupPosition(
+        userGroupPosition,
+        nextFoodEvent.groups,
+        nextFoodEvent.start,
+        nextFoodEvent.end,
       );
 
       const eventDuration =
-        getCalgaryTime(nextFoodEvent.start) +
-        " to " +
-        getCalgaryTime(nextFoodEvent.end);
+        new Date(nextFoodEvent.start) + " to " + new Date(nextFoodEvent.end);
 
       return {
         queuePosition:
           "You are in position number " +
-          (userGroup + 1) +
+          (userGroupPosition + 1) +
           " out of " +
-          nextFoodEvent?.groups +
+          nextFoodEvent.groups +
           " groups",
-        eventName: nextFoodEvent.name || "",
-        eventDescription: nextFoodEvent.description || "",
+        eventName: nextFoodEvent.name,
+        eventDescription: nextFoodEvent.description,
         eventTime: eventDuration,
         timeslot: userTimeSlot,
       };
@@ -80,22 +76,20 @@ export async function getFoodEventDetails(userID: string): Promise<{
 function getNextEvent(foodEvents: FoodEvent[], currentTime: Date) {
   // Sort the events by their start time
   const sortedEvents = foodEvents.sort(
-    (a, b) =>
-      getCalgaryTime(a.start || "").getTime() -
-      getCalgaryTime(b.start || "").getTime(),
+    (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
   );
 
   // Find the event that has already started, between start and end times
   let foundFoodEvent = sortedEvents.find(
     (event) =>
-      currentTime >= getCalgaryTime(event.start || "") &&
-      currentTime <= getCalgaryTime(event.end || ""),
+      currentTime >= new Date(event.start) &&
+      currentTime <= new Date(event.end),
   );
 
   // find the next event if there is no event as of now
   if (foundFoodEvent === undefined) {
     foundFoodEvent = sortedEvents.find(
-      (event) => getCalgaryTime(event.start || "") > currentTime,
+      (event) => new Date(event.start) > currentTime,
     );
   }
   return foundFoodEvent;

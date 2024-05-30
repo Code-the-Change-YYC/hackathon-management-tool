@@ -1,13 +1,13 @@
 "use server";
 
+import { DateTime } from "luxon";
 import validator from "validator";
 
 import { getUserIDAndCode } from "@/amplify/function/utils/crytography";
-import { getCurrentCalgaryTime } from "@/amplify/function/utils/date";
 import {
-  getGroupNumber,
-  getGroupNumberFromTime,
-  getUserTimeSlot,
+  getGroupPosition,
+  getGroupPositionForTime,
+  getTimeForGroupPosition,
 } from "@/amplify/function/utils/food-groups";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
@@ -23,14 +23,16 @@ export async function verifyFoodTicket(
 }> {
   const [userID] = getUserIDAndCode(userCode);
 
-  const response = await client.queries.VerifyUserCode({
-    userCode: userCode,
-  });
-  const response_body = response.data?.body;
-  const json = JSON.parse(response_body as string);
+  const { data, errors: verificationErrors } =
+    await client.queries.VerifyUserCode({
+      userCode: userCode,
+    });
 
-  const valid = json["valid"];
-  if (!valid) return { canEat: false, description: "Not a valid code" };
+  if (!data || verificationErrors)
+    return { canEat: false, description: "Cannot call the backend" };
+
+  if (data.statusCode !== 200)
+    return { canEat: false, description: "Not a valid code" };
 
   if (!validator.isUUID(eventID)) {
     return {
@@ -39,15 +41,17 @@ export async function verifyFoodTicket(
     };
   }
 
-  const { data: foodEvent, errors } = await client.models.FoodEvent.get({
-    id: eventID,
-  });
+  const { data: foodEvent, errors: foodEventErrors } =
+    await client.models.FoodEvent.get({
+      id: eventID,
+    });
 
   //If food event does not exist or errors when finding
-  if (!foodEvent || errors) {
+  if (!foodEvent || foodEventErrors) {
     return {
       canEat: false,
-      description: "Could not find the specified food event",
+      description:
+        "Could not find the specified food event, had trouble calling food event",
     };
   }
   // User has already at the event
@@ -60,6 +64,7 @@ export async function verifyFoodTicket(
   // If the user is not in the correct time, they will still eat anyways, we will just let the scanner know that they should be at a different time
   const { description } = await isCorrectTimeSlot(userID, foodEvent, timeSlot);
 
+  //Mark user as eaten automatically
   if (automaticMarking) {
     await setUserAsAttendedAtFoodEvent(userID, eventID);
   }
@@ -68,24 +73,16 @@ export async function verifyFoodTicket(
 
 // check if the user has already ate at the food event.
 async function hasAlreadyAteAtFoodEvent(userID: string, foodEventID: string) {
-  try {
-    // Query the UserFoodEventAttendance records for the given user and food event
-    const attendanceRecords = await client.models.UserFoodEventAttendance.list({
-      filter: {
-        userId: { eq: userID },
-        foodEventId: { eq: foodEventID },
-      },
-    });
+  // Query the UserFoodEventAttendance records for the given user and food event
+  const attendanceRecords = await client.models.UserFoodEventAttendance.list({
+    filter: {
+      userId: { eq: userID },
+      foodEventId: { eq: foodEventID },
+    },
+  });
 
-    // Check if any records exist, indicating the user has attended the event
-    return attendanceRecords.data.length > 0;
-  } catch (error) {
-    console.error(
-      "Error checking if user has already attended the food event:",
-      error,
-    );
-    throw error;
-  }
+  // Check if any records exist, indicating the user has attended the event
+  return attendanceRecords.data.length > 0;
 }
 
 // Check if the user is in the correct time slot
@@ -94,33 +91,32 @@ async function isCorrectTimeSlot(
   foodEvent: any, //FIXME: if you know how to get around this, please fix it
   timeSlot: number = -1, //by default will be automatic, unless a specific timeslot was chosen
 ) {
-  let currentGroupNumber = timeSlot;
+  let currentGroupPosition = timeSlot;
   if (timeSlot === -1) {
-    currentGroupNumber = getGroupNumberFromTime(
-      getCurrentCalgaryTime(),
+    currentGroupPosition = getGroupPositionForTime(
+      DateTime.now().setZone(process.env.TIME_ZONE).toJSDate(),
       foodEvent.groups,
-      foodEvent.start || "",
-      foodEvent.end || "",
+      foodEvent.start,
+      foodEvent.end,
     );
   }
 
-  const userGroupNumber = getGroupNumber(
+  const userGroupPosition = getGroupPosition(
     userID,
     foodEvent.id,
     foodEvent.groups,
   );
 
-  if (currentGroupNumber === userGroupNumber) {
+  if (currentGroupPosition === userGroupPosition) {
     return {
       description: "valid code & correct timeslot",
     };
   } else {
-    const actualTimeSlot = getUserTimeSlot(
-      userID,
-      foodEvent.id,
+    const actualTimeSlot = getTimeForGroupPosition(
+      userGroupPosition,
       foodEvent.groups,
-      foodEvent.start || "",
-      foodEvent.end || "",
+      foodEvent.start,
+      foodEvent.end,
     );
 
     return {
@@ -134,18 +130,11 @@ async function setUserAsAttendedAtFoodEvent(
   userID: string,
   foodEventID: string,
 ) {
-  try {
-    // Create a new UserFoodEventAttendance record to represent the user's attendance
-    const attendanceRecord = await client.models.UserFoodEventAttendance.create(
-      {
-        userId: userID,
-        foodEventId: foodEventID,
-      },
-    );
+  // Create a new UserFoodEventAttendance record to represent the user's attendance
+  const attendanceRecord = await client.models.UserFoodEventAttendance.create({
+    userId: userID,
+    foodEventId: foodEventID,
+  });
 
-    return attendanceRecord;
-  } catch (error) {
-    console.error("Error setting user as attended at food event:", error);
-    throw error;
-  }
+  return attendanceRecord;
 }

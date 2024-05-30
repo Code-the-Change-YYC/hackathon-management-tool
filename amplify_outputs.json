@@ -1,9 +1,9 @@
 {
   "auth": {
-    "user_pool_id": "ca-central-1_d0XHx5glL",
+    "user_pool_id": "ca-central-1_d4ebDykYV",
     "aws_region": "ca-central-1",
-    "user_pool_client_id": "6p99sf4b6h1io3v7hr0r44gjkt",
-    "identity_pool_id": "ca-central-1:f6d55274-a260-46c3-8379-cdc248fa5b34",
+    "user_pool_client_id": "5k1isqnenhb1vusakhnd9jfp10",
+    "identity_pool_id": "ca-central-1:efd92a3f-4f92-47ca-92de-5485672a2a08",
     "standard_required_attributes": [
       "email"
     ],
@@ -23,9 +23,9 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://rtxsgs7hhfgvhep7qxxvwf4lba.appsync-api.ca-central-1.amazonaws.com/graphql",
+    "url": "https://gzqjm7hmyfcrdaq2hz7sikwpc4.appsync-api.ca-central-1.amazonaws.com/graphql",
     "aws_region": "ca-central-1",
-    "api_key": "da2-x2zyrcmoirffnp4xkb3nnqmqqq",
+    "api_key": "da2-327d6ttayzaylgtfc2zp6na4te",
     "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
     "authorization_types": [
       "API_KEY",
@@ -335,7 +335,7 @@
               "name": "description",
               "isArray": false,
               "type": "String",
-              "isRequired": false,
+              "isRequired": true,
               "attributes": []
             },
             "start": {
@@ -564,6 +564,25 @@
               "attributes": []
             }
           }
+        },
+        "StatusCodeFunctionResponse": {
+          "name": "StatusCodeFunctionResponse",
+          "fields": {
+            "statusCode": {
+              "name": "statusCode",
+              "isArray": false,
+              "type": "Int",
+              "isRequired": false,
+              "attributes": []
+            },
+            "headers": {
+              "name": "headers",
+              "isArray": false,
+              "type": "AWSJSON",
+              "isRequired": false,
+              "attributes": []
+            }
+          }
         }
       },
       "queries": {
@@ -587,7 +606,7 @@
           "name": "VerifyUserCode",
           "isArray": false,
           "type": {
-            "nonModel": "GenericFunctionResponse"
+            "nonModel": "StatusCodeFunctionResponse"
           },
           "isRequired": false,
           "arguments": {

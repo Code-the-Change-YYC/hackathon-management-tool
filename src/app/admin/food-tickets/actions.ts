@@ -1,16 +1,15 @@
 "use server";
 
 import type { FoodEventCreateFormInputValues } from "@/../ui-components/FoodEventCreateForm";
-import { getCurrentCalgaryTime } from "@/amplify/function/utils/date";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
 export async function createFoodEvent(fields: FoodEventCreateFormInputValues) {
   const { errors } = await client.models.FoodEvent.create({
-    name: fields.name || "Meal",
-    description: fields.description || "No Description Provided...",
-    start: fields.start || getCurrentCalgaryTime().toISOString(),
-    end: fields.end || getCurrentCalgaryTime().toISOString(),
-    groups: fields.groups || 1,
+    name: fields.name,
+    description: fields.description,
+    start: fields.start,
+    end: fields.end,
+    groups: fields.groups,
   });
 
   if (errors) {

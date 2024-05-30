@@ -1,6 +1,6 @@
-import * as React from "react";
+import type * as React from "react";
 
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import type { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 
 export declare type EscapeHatchProps = {
   [elementHierarchy: string]: Record<string, unknown>;
@@ -21,11 +21,11 @@ export declare type ValidationFunction<T> = (
   validationResponse: ValidationResponse,
 ) => ValidationResponse | Promise<ValidationResponse>;
 export declare type FoodEventCreateFormInputValues = {
-  name?: string;
-  description?: string;
-  start?: string;
-  end?: string;
-  groups?: number;
+  name: string;
+  description: string;
+  start: string;
+  end: string;
+  groups: number;
 };
 export declare type FoodEventCreateFormValidationValues = {
   name?: ValidationFunction<string>;

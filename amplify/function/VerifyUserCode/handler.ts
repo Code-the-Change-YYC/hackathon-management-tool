@@ -39,7 +39,6 @@ type ResolverArgs = {
 };
 
 type ResolverResult = {
-  body: { valid: boolean };
   statusCode: number;
   headers: { "Content-Type": string };
 };
@@ -60,10 +59,7 @@ export const handler: AppSyncResolverHandler<
   );
 
   return {
-    body: {
-      valid: isValidCode,
-    },
-    statusCode: 422,
+    statusCode: isValidCode ? 200 : 422,
     headers: header,
   };
 };

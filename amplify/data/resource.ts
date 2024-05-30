@@ -52,7 +52,7 @@ const schema = a
       .model({
         id: a.id().required(),
         name: a.string().required(),
-        description: a.string(),
+        description: a.string().required(),
         start: a.datetime().required(),
         end: a.datetime().required(),
         groups: a.integer().required(),
@@ -75,6 +75,10 @@ const schema = a
       ]),
     GenericFunctionResponse: a.customType({
       body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
+    StatusCodeFunctionResponse: a.customType({
       statusCode: a.integer(),
       headers: a.json(),
     }),
@@ -108,7 +112,7 @@ const schema = a
       .arguments({
         userCode: a.string(),
       })
-      .returns(a.ref("GenericFunctionResponse"))
+      .returns(a.ref("StatusCodeFunctionResponse"))
       // allow all users to call this api for now
       .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(VerifyUserCode)),

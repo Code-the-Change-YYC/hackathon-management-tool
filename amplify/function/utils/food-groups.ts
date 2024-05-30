@@ -1,5 +1,3 @@
-import { getCalgaryTime } from "./date";
-
 // Functions to help with determining food groups and order
 
 /**
@@ -24,26 +22,26 @@ export function uuidToInteger(uuid: string) {
 /**
  *  Return the start and end calgary time time for a specific group
  */
-export function getTimeFromGroupNumber(
-  groupNumber: number,
+export function getTimeForGroupPosition(
+  groupPosition: number,
   groups: number | undefined | null,
   startTime: string,
   endTime: string,
 ): string {
   if (groups === undefined || groups == null) groups = 1;
 
-  const start = getCalgaryTime(startTime);
-  const end = getCalgaryTime(endTime);
+  const start = new Date(startTime);
+  const end = new Date(endTime);
 
   //total time between start and end
   const totalDuration = Math.abs(end.getTime() - start.getTime());
   const groupDuration = totalDuration / groups;
 
-  const groupStartTime = getCalgaryTime(
-    start.getTime() + groupDuration * groupNumber,
+  const groupStartTime = new Date(
+    start.getTime() + groupDuration * groupPosition,
   );
-  const groupEndTime = getCalgaryTime(
-    start.getTime() + groupDuration * (groupNumber + 1),
+  const groupEndTime = new Date(
+    start.getTime() + groupDuration * (groupPosition + 1),
   );
 
   const options: Intl.DateTimeFormatOptions = {
@@ -68,7 +66,7 @@ export function getTimeFromGroupNumber(
  * Get the group number (the order which groups can get food) for a user from time
  * Useful for times when we need to get the current expected group and time slot from the local calgary time
  */
-export function getGroupNumberFromTime(
+export function getGroupPositionForTime(
   target: Date,
   groups: number | undefined | null,
   startTime: string,
@@ -76,8 +74,8 @@ export function getGroupNumberFromTime(
 ): number {
   // Ensure groups is a number and default to 1 if not
   if (groups === undefined || groups == null) groups = 1;
-  const start = getCalgaryTime(startTime);
-  const end = getCalgaryTime(endTime);
+  const start = new Date(startTime);
+  const end = new Date(endTime);
 
   const totalDuration = Math.abs(end.getTime() - start.getTime());
   const groupDuration = totalDuration / groups;
@@ -89,15 +87,15 @@ export function getGroupNumberFromTime(
 
   // Calculate the group number for times within the range
   const timeFromStart = Math.abs(target.getTime() - start.getTime());
-  const groupNumber = Math.floor(timeFromStart / groupDuration);
+  const groupPosition = Math.floor(timeFromStart / groupDuration);
 
-  return groupNumber;
+  return groupPosition;
 }
 
 /**
  * gets the group number (the order which groups can get food) for a user
  */
-export function getGroupNumber(
+export function getGroupPosition(
   userID: string,
   eventID: string,
   groups: number | undefined | null,
@@ -105,21 +103,4 @@ export function getGroupNumber(
   if (groups === undefined || groups == null) groups = 1;
 
   return Math.abs((uuidToInteger(userID) + uuidToInteger(eventID)) % groups);
-}
-
-/**
- *   get the time which a user can eat
- */
-export function getUserTimeSlot(
-  userID: string,
-  eventID: string,
-  groups: number | undefined | null,
-  startTime: string,
-  endTime: string,
-) {
-  if (groups === undefined || groups == null) groups = 1;
-
-  const userGroupNumber = getGroupNumber(userID, eventID, groups);
-
-  return getTimeFromGroupNumber(userGroupNumber, groups, startTime, endTime);
 }

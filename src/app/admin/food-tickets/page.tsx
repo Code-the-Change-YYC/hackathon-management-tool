@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 import FoodEventCreateForm from "@/../ui-components/FoodEventCreateForm";
 import { type Schema } from "@/amplify/data/resource";
-import { getCalgaryTime } from "@/amplify/function/utils/date";
 
 import { deleteFoodEvent } from "./actions";
 
@@ -46,24 +45,22 @@ export default function AdminFoodTickets() {
               <p className="text-sm text-gray-600">{event.description}</p>
               <p className="text-sm">
                 <strong>Start:</strong>{" "}
-                {event.start
-                  ? getCalgaryTime(event.start).toLocaleString()
-                  : ""}
+                {event.start ? new Date(event.start).toLocaleString() : ""}
               </p>
               <p className="text-sm">
                 <strong>End:</strong>
-                {event.end ? getCalgaryTime(event.end).toLocaleString() : ""}
+                {event.end ? new Date(event.end).toLocaleString() : ""}
               </p>
               <p className="text-sm">
                 <strong>Groups:</strong> {event.groups}
               </p>
               <p className="text-sm">
                 <strong>Created At:</strong>{" "}
-                {getCalgaryTime(event.createdAt).toLocaleString()}
+                {new Date(event.createdAt).toLocaleString()}
               </p>
               <p className="text-sm">
                 <strong>Updated At:</strong>{" "}
-                {getCalgaryTime(event.updatedAt).toLocaleString()}
+                {new Date(event.updatedAt).toLocaleString()}
               </p>
             </div>
           ))}

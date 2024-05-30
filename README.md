@@ -72,6 +72,20 @@ Make sure to set these variables in your local dev sandbox and the production en
 | --------------------- | ------------------ | ---------------------------------------------------------------------- |
 | USER_VERIFICATION_KEY | [any string value] | Used for creating the MAC address for user UUID (used in food tickets) |
 
+## Environment Variables
+
+Make sure to set these variables in your local dev sandbox and the production environment.
+
+In your local dev environment, create a file: `.env.local`
+
+[Check the docs for more information](https://docs.amplify.aws/react/deploy-and-host/fullstack-branching/secrets-and-vars/)
+
+### Environment Variables used in project
+
+| Variable  | value              | Description                                 |
+| --------- | ------------------ | ------------------------------------------- |
+| TIME_ZONE | "America/Edmonton" | For consistent timezones in the application |
+
 ## Architecture
 
 ### Food Scanning

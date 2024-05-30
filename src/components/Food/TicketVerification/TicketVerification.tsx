@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { verifyFoodTicket } from "@/app/admin/scan-food-tickets/actions";
+import { verifyFoodTicket } from "./actions";
 
 export default function TicketVerification() {
   const [inputUserCode, setUserCode] = useState("");
