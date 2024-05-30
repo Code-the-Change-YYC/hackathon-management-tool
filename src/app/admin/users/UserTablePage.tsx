@@ -66,7 +66,7 @@ const UserTablePage = () => {
       const formattedData = data.map((user) => ({
         lastName: user.lastName ?? "",
         firstName: user.firstName ?? "",
-        role: "Participant",
+        role: "Participant", // Do I need to create an empty a
         team: user.team.name ?? "",
         email: user.email ?? "",
         userId: user.id ?? "",
