@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
 
-import { DropdownItem } from "@nextui-org/dropdown";
-
 const listOfRoles = ["All", "Admin", "Participant", "Judge"] as const;
 
 const BUTTON_STYLES =

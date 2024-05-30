@@ -66,7 +66,7 @@ const UserTablePage = () => {
       const formattedData = data.map((user) => ({
         lastName: user.lastName ?? "",
         firstName: user.firstName ?? "",
-        role: "Participant", // Do I need to create an empty a
+        role: "Participant" ?? "", // Do I need to create an empty a
         team: user.team.name ?? "",
         email: user.email ?? "",
         userId: user.id ?? "",
@@ -97,18 +97,22 @@ const UserTablePage = () => {
   useEffect(() => {
     const applyFilters = () => {
       let newFilteredData = tableData;
-      if (selectedFilterRole.includes("Admin")) {
+      if (selectedFilterRole.includes("All roles")) {
+        newFilteredData = tableData;
+        console.log("All roles selected");
+      } else if (selectedFilterRole.includes("Admin")) {
         newFilteredData = newFilteredData.filter((row) => row[2] === "Admin");
+        console.log("Admin selected");
       } else if (selectedFilterRole.includes("Judge")) {
         newFilteredData = newFilteredData.filter((row) => row[2] === "Judge");
+        console.log("Judge selected");
       } else if (selectedFilterRole.includes("Participant")) {
         newFilteredData = newFilteredData.filter(
           (row) => row[2] === "Participant",
         );
+        console.log("Participant selected");
       }
-
       newFilteredData.sort((a, b) => a[0].localeCompare(b[0]));
-
       setFilteredData(newFilteredData);
     };
 
@@ -153,7 +157,7 @@ const UserTablePage = () => {
             onFilterRolesChange={handleFilterChange}
           />
           <DataTableSection
-            tableData={tableData}
+            tableData={filteredData}
             tableHeaders={tableHeaders}
             userData={userData}
             tableDataMutation={tableDataMutation}
