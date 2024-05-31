@@ -22,14 +22,12 @@ export function uuidToInteger(uuid: string) {
 /**
  *  Return the start and end calgary time time for a specific group
  */
-export function getTimeForGroupPosition(
+export function getTimeForFoodGroupPosition(
   groupPosition: number,
-  groups: number | undefined | null,
+  groups: number,
   startTime: string,
   endTime: string,
 ): string {
-  if (groups === undefined || groups == null) groups = 1;
-
   const start = new Date(startTime);
   const end = new Date(endTime);
 
@@ -66,14 +64,12 @@ export function getTimeForGroupPosition(
  * Get the group number (the order which groups can get food) for a user from time
  * Useful for times when we need to get the current expected group and time slot from the local calgary time
  */
-export function getGroupPositionForTime(
+export function getFoodGroupPositionForTime(
   target: Date,
-  groups: number | undefined | null,
+  groups: number,
   startTime: string,
   endTime: string,
 ): number {
-  // Ensure groups is a number and default to 1 if not
-  if (groups === undefined || groups == null) groups = 1;
   const start = new Date(startTime);
   const end = new Date(endTime);
 
@@ -95,12 +91,12 @@ export function getGroupPositionForTime(
 /**
  * gets the group number (the order which groups can get food) for a user
  */
-export function getGroupPosition(
+export function getFoodGroupPosition(
   userID: string,
   eventID: string,
-  groups: number | undefined | null,
+  groups: number,
 ) {
-  if (groups === undefined || groups == null) groups = 1;
-
+  // Team UUID is for putting teams into random positions, Event UUID is to ensure that the teams are not in the same food position
+  // To set the food groups numbers, we can modulus the number.
   return Math.abs((uuidToInteger(userID) + uuidToInteger(eventID)) % groups);
 }

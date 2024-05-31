@@ -2,10 +2,9 @@ import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
-import { VerifyUserCode } from "@/amplify/function/VerifyUserCode/resource";
+import { GetUserMessageCode } from "@/amplify/function/GetUserMessageCode/resource";
+import { VerifyUserMessage } from "@/amplify/function/VerifyUserMessage/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-
-import { GetUserCode } from "../function/GetUserCode/resource";
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -98,16 +97,16 @@ const schema = a
       .authorization((allow) => [allow.guest()])
       .handler(a.handler.function(DemoFunction)),
 
-    getUserVerificationCode: a
+    GetUserMessageCode: a
       .query()
       .arguments({
-        userId: a.string(),
+        userMessage: a.string(),
       })
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.authenticated()])
-      .handler(a.handler.function(GetUserCode)),
+      .handler(a.handler.function(GetUserMessageCode)),
 
-    VerifyUserCode: a
+    VerifyUserMessage: a
       .query()
       .arguments({
         userCode: a.string(),
@@ -115,7 +114,7 @@ const schema = a
       .returns(a.ref("StatusCodeFunctionResponse"))
       // allow all users to call this api for now
       .authorization((allow) => [allow.authenticated()])
-      .handler(a.handler.function(VerifyUserCode)),
+      .handler(a.handler.function(VerifyUserMessage)),
 
     AssignUsersToTeams: a
       .mutation()
@@ -130,7 +129,7 @@ const schema = a
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
-    allow.resource(VerifyUserCode).to(["query", "mutate"]),
+    allow.resource(VerifyUserMessage).to(["query", "mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;
 

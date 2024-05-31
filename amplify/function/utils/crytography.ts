@@ -26,14 +26,14 @@ export async function createAuthenticationCode(
   return messageCode;
 }
 
-export function createUserIDAndCode(userId: string, mac: string): string {
+export function createMessageAndCode(userId: string, mac: string): string {
   return userId + ":" + mac;
 }
 
-export function getUserIDAndCode(input: string): [string, string] {
+export function getMessageAndCode(input: string): [string, string] {
   const inputArray = input.split(":");
-  const userID = inputArray[0];
+  const message = inputArray[0];
   const mac = inputArray[1];
 
-  return [userID, mac];
+  return [message, mac];
 }

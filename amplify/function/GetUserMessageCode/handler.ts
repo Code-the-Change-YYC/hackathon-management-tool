@@ -1,7 +1,7 @@
 import { Amplify } from "aws-amplify";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
-import { createAuthenticationCode } from "../utils/crytography";
+import { createAuthenticationCode } from "@/amplify/function/utils/crytography";
 
 Amplify.configure(
   {
@@ -31,7 +31,7 @@ Amplify.configure(
   },
 );
 
-type ResolverArgs = { userId: string };
+type ResolverArgs = { userMessage: string };
 
 type ResolverResult = {
   body: { value: string };
@@ -43,10 +43,8 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, _) => {
-  const userID = event.arguments.userId;
-
   const mac = await createAuthenticationCode(
-    userID,
+    event.arguments.userMessage,
     process.env.USER_VERIFICATION_KEY,
   );
 

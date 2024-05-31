@@ -1,6 +1,6 @@
 import { defineFunction, secret } from "@aws-amplify/backend";
 
-export const GetUserCode = defineFunction({
+export const GetUserMessageCode = defineFunction({
   entry: "./handler.ts",
   name: "GetUserCode",
   runtime: 20,

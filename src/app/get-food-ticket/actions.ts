@@ -4,8 +4,8 @@ import { DateTime } from "luxon";
 
 import { type Schema } from "@/amplify/data/resource";
 import {
-  getGroupPosition,
-  getTimeForGroupPosition,
+  getFoodGroupPosition,
+  getTimeForFoodGroupPosition,
 } from "@/amplify/function/utils/food-groups";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
@@ -25,19 +25,18 @@ export async function getFoodEventDetails(userID: string): Promise<{
   timeslot: string;
 }> {
   const foodEvents = (await client.models.FoodEvent.list()).data;
-  console.log(process.env.TIME_ZONE);
   const currentTime = DateTime.now().setZone(process.env.TIME_ZONE).toJSDate(); // Current local time in the time zone
   const nextFoodEvent = getNextEvent(foodEvents, currentTime);
 
   if (nextFoodEvent) {
     if (userID) {
-      const userGroupPosition = getGroupPosition(
+      const userGroupPosition = getFoodGroupPosition(
         userID,
         nextFoodEvent.id,
         nextFoodEvent.groups,
       );
 
-      const userTimeSlot = getTimeForGroupPosition(
+      const userTimeSlot = getTimeForFoodGroupPosition(
         userGroupPosition,
         nextFoodEvent.groups,
         nextFoodEvent.start,

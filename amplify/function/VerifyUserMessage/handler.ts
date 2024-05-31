@@ -2,9 +2,9 @@ import { Amplify } from "aws-amplify";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
 import {
-  getUserIDAndCode,
+  getMessageAndCode,
   isValidAuthenticationCode,
-} from "../utils/crytography";
+} from "@/amplify/function/utils/crytography";
 
 Amplify.configure(
   {
@@ -49,11 +49,11 @@ export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, _) => {
-  const [userID, mac] = getUserIDAndCode(event.arguments.userCode);
+  const [message, mac] = getMessageAndCode(event.arguments.userCode);
 
   //Make sure their code is a valid one that has not been tampered with
   const isValidCode = await isValidAuthenticationCode(
-    userID,
+    message,
     mac,
     process.env.USER_VERIFICATION_KEY,
   );

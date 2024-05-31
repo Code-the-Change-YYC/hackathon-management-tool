@@ -6,7 +6,7 @@ import { getCurrentUser } from "aws-amplify/auth";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
-import { createUserIDAndCode } from "@/amplify/function/utils/crytography";
+import { createMessageAndCode } from "@/amplify/function/utils/crytography";
 
 import { getFoodEventDetails } from "./actions";
 
@@ -57,17 +57,22 @@ export default function FoodPage() {
     }
   }
 
+  // get the user verification code and set it to the frontend
   async function setUserVerificationCode(userId: string) {
-    const response = await client.queries.getUserVerificationCode({
-      userId: userId,
+    const { data, errors } = await client.queries.GetUserMessageCode({
+      userMessage: userId,
     });
-    const response_body = response.data?.body;
+    if (errors) {
+      console.log(errors);
+      setUserCode("Error when searching for your message code");
+      return;
+    }
 
-    if (response_body) {
-      const json = JSON.parse(response_body as string);
+    if (data) {
+      const json = JSON.parse(data.body as string);
       const code = json["value"];
 
-      const verificationCode = createUserIDAndCode(userId, code);
+      const verificationCode = createMessageAndCode(userId, code);
       setUserCode(verificationCode);
     } else {
       setUserCode("Backend Server Error");
