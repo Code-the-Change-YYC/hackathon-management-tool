@@ -3,7 +3,11 @@ import { generateClient } from "aws-amplify/data";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
 import type { Schema } from "../../../data/resource";
-import { getTeam } from "./graphql/queries";
+import {
+  createTeam,
+  updateUser,
+} from "../AssignUsersToTeams/graphql/mutations";
+import { getTeam, getUser } from "./graphql/queries";
 
 Amplify.configure(
   {
@@ -37,7 +41,7 @@ const client = generateClient<Schema>({
   authMode: "iam",
 });
 
-type ResolverArgs = Record<string, never>;
+type ResolverArgs = { teamName: string; userId: string };
 
 type ResolverResult = {
   body: { value: string };
@@ -48,12 +52,29 @@ type ResolverResult = {
 export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
-> = async (_) => {
+> = async (event, _) => {
   let team = null;
-  let id = null;
+  let teamId = null;
   try {
+    const user = (
+      await client.graphql({
+        query: getUser,
+        variables: {
+          id: event.arguments.userId,
+        },
+      })
+    ).data.getUser;
+
+    if (user == null) {
+      return {
+        body: { value: `User does not exist` },
+        statusCode: 404,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
+
     do {
-      id = Array.from(Array(4), () =>
+      teamId = Array.from(Array(4), () =>
         Math.floor(Math.random() * 36).toString(36),
       ).join("");
 
@@ -61,14 +82,50 @@ export const handler: AppSyncResolverHandler<
         await client.graphql({
           query: getTeam,
           variables: {
-            id: id,
+            id: teamId,
           },
         })
       ).data.getTeam;
     } while (team != null);
 
+    await client
+      .graphql({
+        query: createTeam,
+        variables: {
+          input: {
+            name: event.arguments.teamName,
+            id: teamId,
+          },
+        },
+      })
+      .catch(() => {
+        return {
+          body: { value: `Error creating team` },
+          statusCode: 500,
+          headers: { "Content-Type": "application/json" },
+        };
+      });
+
+    await client
+      .graphql({
+        query: updateUser,
+        variables: {
+          input: {
+            id: user.id,
+            teamId: teamId,
+          },
+        },
+      })
+      .catch(() => {
+        return {
+          body: { value: `Error updating user` },
+          statusCode: 500,
+          headers: { "Content-Type": "application/json" },
+        };
+      });
+
     return {
-      body: { value: id },
+      body: { value: teamId },
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
     };

@@ -69,11 +69,20 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.guest(), allow.authenticated()])
       .handler(a.handler.function(AssignUsersToTeams)),
+    GenerateTeamCode: a
+      .mutation()
+      .arguments({
+        teamName: a.string().required(),
+        userId: a.string().required(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(GenerateTeamCode)),
   })
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
-    allow.resource(GenerateTeamCode).to(["query"]),
+    allow.resource(GenerateTeamCode).to(["query", "mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;
 
