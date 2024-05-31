@@ -6,9 +6,9 @@ import { getCurrentUser } from "aws-amplify/auth";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
-import { createMessageAndCode } from "@/amplify/function/utils/crytography";
+import { createMessageAndCode } from "@/amplify/function/BusinessLogic/utils/crytography";
 
-import { getFoodEventDetails } from "./actions";
+import { getUpcomingFoodEventDetails } from "./actions";
 
 export default function FoodPage() {
   const client = generateClient<Schema>();
@@ -21,16 +21,16 @@ export default function FoodPage() {
   const [userTimeSlot, setUserTimeSlot] = useState("");
   useEffect(() => {
     async function fetchData() {
-      const userID = await fetchCurrentAuthenticatedUser();
+      const teamID = await fetchUserTeamID();
 
-      if (userID) {
+      if (teamID) {
         const {
           queuePosition,
           eventName,
           eventDescription,
           eventTime,
           timeslot,
-        } = await getFoodEventDetails(userID);
+        } = await getUpcomingFoodEventDetails(teamID);
 
         setEventName(eventName);
         setEventDescription(eventDescription);
@@ -43,14 +43,23 @@ export default function FoodPage() {
   }, []);
 
   // Needs to be on client side since we need the authenticated client and their ID
-  async function fetchCurrentAuthenticatedUser() {
+  async function fetchUserTeamID() {
     try {
       const { userId } = await getCurrentUser();
 
-      if (userId) {
-        await setUserVerificationCode(userId);
+      const { data: user, errors: userErrors } = await client.models.User.get({
+        id: userId,
+      });
+      if (userErrors) {
+        console.log("error fetching user team ID");
+        return null;
       }
-      return userId;
+      const teamID = user?.teamId;
+
+      if (teamID) {
+        await setUserVerificationCode(teamID);
+      }
+      return teamID;
     } catch (err) {
       console.log(err);
       return null;

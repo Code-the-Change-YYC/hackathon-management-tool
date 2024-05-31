@@ -21,7 +21,7 @@ export default function AdminFoodTickets() {
       if (!errors) {
         setFoodData(data); // Update state with fetched data
       } else {
-        console.error(errors); // Log errors if any
+        console.error(errors);
       }
     }
 

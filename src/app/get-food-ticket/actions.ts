@@ -6,7 +6,7 @@ import { type Schema } from "@/amplify/data/resource";
 import {
   getFoodGroupPosition,
   getTimeForFoodGroupPosition,
-} from "@/amplify/function/utils/food-groups";
+} from "@/amplify/function/BusinessLogic/utils/food-groups";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
 type FoodEvent = Schema["FoodEvent"]["type"];
@@ -14,10 +14,10 @@ type FoodEvent = Schema["FoodEvent"]["type"];
 /**
  * Get details about the current/upcoming food event:
  * When is the person going to eat, what is description
- * @param userID
+ * @param teamID
  * @returns
  */
-export async function getFoodEventDetails(userID: string): Promise<{
+export async function getUpcomingFoodEventDetails(teamID: string): Promise<{
   queuePosition: string;
   eventName: string;
   eventDescription: string;
@@ -29,9 +29,9 @@ export async function getFoodEventDetails(userID: string): Promise<{
   const nextFoodEvent = getNextEvent(foodEvents, currentTime);
 
   if (nextFoodEvent) {
-    if (userID) {
+    if (teamID) {
       const userGroupPosition = getFoodGroupPosition(
-        userID,
+        teamID,
         nextFoodEvent.id,
         nextFoodEvent.groups,
       );

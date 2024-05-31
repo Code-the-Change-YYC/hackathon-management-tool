@@ -1,9 +1,9 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
+import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMessageCode/resource";
+import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
-import { GetUserMessageCode } from "@/amplify/function/GetUserMessageCode/resource";
-import { VerifyUserMessage } from "@/amplify/function/VerifyUserMessage/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 /*== STEP 1 ===============================================================

@@ -1,10 +1,7 @@
 import { Amplify } from "aws-amplify";
 import type { AppSyncResolverHandler } from "aws-lambda";
 
-import {
-  getMessageAndCode,
-  isValidAuthenticationCode,
-} from "@/amplify/function/utils/crytography";
+import { createAuthenticationCode } from "@/amplify/function/BusinessLogic/utils/crytography";
 
 Amplify.configure(
   {
@@ -34,32 +31,26 @@ Amplify.configure(
   },
 );
 
-type ResolverArgs = {
-  userCode: string;
-};
+type ResolverArgs = { userMessage: string };
 
 type ResolverResult = {
+  body: { value: string };
   statusCode: number;
   headers: { "Content-Type": string };
 };
-
-const header = { "Content-Type": "application/json" };
 
 export const handler: AppSyncResolverHandler<
   ResolverArgs,
   ResolverResult
 > = async (event, _) => {
-  const [message, mac] = getMessageAndCode(event.arguments.userCode);
-
-  //Make sure their code is a valid one that has not been tampered with
-  const isValidCode = await isValidAuthenticationCode(
-    message,
-    mac,
-    process.env.USER_VERIFICATION_KEY,
+  const mac = await createAuthenticationCode(
+    event.arguments.userMessage,
+    process.env.USER_VERIFICATION_KEY || "",
   );
 
   return {
-    statusCode: isValidCode ? 200 : 422,
-    headers: header,
+    body: { value: mac },
+    statusCode: 200,
+    headers: { "Content-Type": "application/json" },
   };
 };

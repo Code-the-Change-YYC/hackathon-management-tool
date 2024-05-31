@@ -48,7 +48,7 @@ export function getTimeForFoodGroupPosition(
     day: "2-digit",
     hour: "numeric",
     minute: "numeric",
-    timeZone: "America/Edmonton", // Make sure this is here, we want calgary time
+    timeZone: process.env.TIME_ZONE,
     hour12: true,
   };
 
@@ -92,11 +92,11 @@ export function getFoodGroupPositionForTime(
  * gets the group number (the order which groups can get food) for a user
  */
 export function getFoodGroupPosition(
-  userID: string,
+  teamID: string,
   eventID: string,
   groups: number,
 ) {
-  // Team UUID is for putting teams into random positions, Event UUID is to ensure that the teams are not in the same food position
-  // To set the food groups numbers, we can modulus the number.
-  return Math.abs((uuidToInteger(userID) + uuidToInteger(eventID)) % groups);
+  // Team UUID is for putting teams into random positions, Event UUID is to ensure that the teams are shuffled each food event.
+  // To set the max size of food groups, we can modulus the generated number by the max amount of groups.
+  return Math.abs((uuidToInteger(teamID) + uuidToInteger(eventID)) % groups);
 }

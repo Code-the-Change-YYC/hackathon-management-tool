@@ -3,12 +3,12 @@
 import { DateTime } from "luxon";
 import validator from "validator";
 
-import { getMessageAndCode } from "@/amplify/function/utils/crytography";
+import { getMessageAndCode } from "@/amplify/function/BusinessLogic/utils/crytography";
 import {
   getFoodGroupPosition,
   getFoodGroupPositionForTime,
   getTimeForFoodGroupPosition,
-} from "@/amplify/function/utils/food-groups";
+} from "@/amplify/function/BusinessLogic/utils/food-groups";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
 /**
@@ -26,6 +26,7 @@ export async function verifyFoodTicket(
   try {
     const [userID] = getMessageAndCode(userCode);
 
+    //Verify MAC
     const { data, errors: verificationErrors } =
       await client.queries.VerifyUserMessage({
         userCode: userCode,
@@ -37,6 +38,7 @@ export async function verifyFoodTicket(
     if (data.statusCode !== 200)
       return { canEat: false, description: "Not a valid code" };
 
+    //Verify UUID
     if (!validator.isUUID(eventID)) {
       return {
         canEat: false,
@@ -44,6 +46,7 @@ export async function verifyFoodTicket(
       };
     }
 
+    //get FoodEvent
     const { data: foodEvent, errors: foodEventErrors } =
       await client.models.FoodEvent.get({
         id: eventID,
@@ -57,6 +60,7 @@ export async function verifyFoodTicket(
           "Could not find the specified food event, had trouble calling food event",
       };
     }
+
     // User has already at the event
     if (await hasAlreadyAteAtFoodEvent(userID, eventID)) {
       return {
@@ -65,8 +69,20 @@ export async function verifyFoodTicket(
       };
     }
     // If the user is not in the correct time, they will still eat anyways, we will just let the scanner know that they should be at a different time
+
+    //get user teamID
+    const { data: user, errors: userErrors } = await client.models.User.get({
+      id: userID,
+    });
+    if (userErrors || !user?.teamId) {
+      return {
+        canEat: true,
+        description:
+          "Unknown time slot, had trouble finding the team for the user",
+      };
+    }
     const { description } = await isCorrectTimeSlot(
-      userID,
+      user?.teamId,
       foodEvent,
       timeSlot,
     );

@@ -12,12 +12,12 @@ export default function TicketVerification() {
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    // Handle the submission logic here
 
     const { canEat, description } = await verifyFoodTicket(
       inputUserCode,
       inputEventIDValue,
     );
+
     setCanEatBoolean(canEat);
     setEatDescription(description);
   };
