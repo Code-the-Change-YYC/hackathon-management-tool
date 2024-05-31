@@ -5,6 +5,8 @@ import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/reso
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
+import { addUserToGroup } from "../function/BusinessLogic/AddUserToGroup/resource";
+
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
 adding a new "isDone" field as a boolean. The authorization rules below
@@ -19,6 +21,7 @@ const schema = a
         id: a.id().required(),
         firstName: a.string(),
         lastName: a.string(),
+        role: a.string(),
         email: a.string(),
         meals: a.boolean(),
         institution: a.string(),
@@ -91,6 +94,15 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.group("Admin")])
       .handler(a.handler.function(AssignUsersToTeams)),
+    addUserToGroup: a
+      .mutation()
+      .arguments({
+        userId: a.string().required(),
+        groupName: a.string().required(),
+      })
+      .authorization((allow) => [allow.group("Admin")])
+      .handler(a.handler.function(addUserToGroup))
+      .returns(a.ref("GenericFunctionResponse")),
     CreateTeamWithCode: a
       .mutation()
       .arguments({
@@ -105,6 +117,7 @@ const schema = a
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
+    allow.resource(addUserToGroup).to(["mutate"]),
     allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;

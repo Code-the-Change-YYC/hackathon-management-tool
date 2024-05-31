@@ -1,6 +1,7 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { defineAuth } from "@aws-amplify/backend";
 
+import { addUserToGroup } from "../function/BusinessLogic/AddUserToGroup/resource";
 import { PostConfirmation } from "./PostConfirmation/resource";
 
 /**
@@ -13,6 +14,9 @@ export const auth = defineAuth({
   groups: ["Admin", "Participant", "Judge"],
   access: (allow) => [
     allow.resource(AssignUsersToTeams).to(["addUserToGroup"]),
+    allow
+      .resource(addUserToGroup)
+      .to(["addUserToGroup", "removeUserFromGroup", "listGroupsForUser"]),
   ],
   triggers: {
     preSignUp: PreSignUp,
