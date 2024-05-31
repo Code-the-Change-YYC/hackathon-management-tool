@@ -52,6 +52,8 @@ export const handler: Handler = async (event) => {
     });
     const groupResponse = await client.send(listGroupCommand);
 
+    console.log(groupResponse);
+
     // Remove the user from that group
     const removeFromGroupCommand = new AdminRemoveUserFromGroupCommand({
       Username: userId,
@@ -69,7 +71,9 @@ export const handler: Handler = async (event) => {
     });
     const response = await client.send(addUserToGroupCommand);
 
-    return { statusCode: 200, body: { response } };
+    console.log(response);
+
+    return { statusCode: 200, body: { message: "User added" } };
   } catch (error) {
     return { statusCode: 500, body: { message: error } };
   }
