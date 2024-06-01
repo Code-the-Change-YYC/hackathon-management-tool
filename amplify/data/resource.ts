@@ -73,7 +73,7 @@ const schema = a
       .mutation()
       .arguments({
         teamName: a.string().required(),
-        userId: a.string().required(),
+        addCallerToTeam: a.boolean().required(),
       })
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.guest(), allow.authenticated()])
