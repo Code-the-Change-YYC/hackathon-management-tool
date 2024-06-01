@@ -45,7 +45,7 @@ export const handler: Schema["GenerateTeamCode"]["functionHandler"] = async (
   event,
 ) => {
   let team = null;
-  let teamId = null;
+  let teamId: string | null = null;
   try {
     do {
       teamId = Array.from(Array(4), () =>
@@ -92,6 +92,13 @@ export const handler: Schema["GenerateTeamCode"]["functionHandler"] = async (
               },
             },
           })
+          .then(() => {
+            return {
+              body: { value: teamId },
+              statusCode: 200,
+              headers: { "Content-Type": "application/json" },
+            };
+          })
           .catch(() => {
             return {
               body: { value: `Error updating user (team was created)` },
@@ -99,12 +106,13 @@ export const handler: Schema["GenerateTeamCode"]["functionHandler"] = async (
               headers: { "Content-Type": "application/json" },
             };
           });
+      } else {
+        return {
+          body: { value: teamId },
+          statusCode: 200,
+          headers: { "Content-Type": "application/json" },
+        };
       }
-      return {
-        body: { value: teamId },
-        statusCode: 200,
-        headers: { "Content-Type": "application/json" },
-      };
     } else {
       return {
         body: { value: `Error creating team` },
@@ -119,4 +127,9 @@ export const handler: Schema["GenerateTeamCode"]["functionHandler"] = async (
       headers: { "Content-Type": "application/json" },
     };
   }
+  return {
+    body: { value: `No return condition reached` },
+    statusCode: 500,
+    headers: { "Content-Type": "application/json" },
+  };
 };
