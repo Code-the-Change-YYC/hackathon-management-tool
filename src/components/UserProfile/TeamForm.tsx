@@ -1,5 +1,4 @@
 import { type Schema } from "@/amplify/data/resource";
-import { type TeamFormProp } from "@/components/UserProfile/TeamProfile";
 
 const INPUT_STYLES =
   "rounded-full border-4 placeholder-black border-white bg-[#FFFFFF] bg-white/30 ps-3 py-2 my-2 text-sm md:text-md backdrop-opacity-30";
@@ -7,6 +6,11 @@ const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
 
 const FORM_STYLES = "md:mx-10 flex flex-col";
+
+export interface TeamFormProp {
+  data: Schema["Team"]["type"];
+  teamMutation: any;
+}
 
 export default function TeamForm({ data, teamMutation }: TeamFormProp) {
   const handleLeaveTeamClick = () => {

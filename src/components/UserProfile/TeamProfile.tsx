@@ -16,11 +16,6 @@ const TEAM_INSTRUCTION_STYLES =
 
 const client = generateClient<Schema>();
 
-export interface TeamFormProp {
-  data: Schema["Team"]["type"];
-  teamMutation: any;
-}
-
 const TeamProfile = () => {
   const queryClient = useQueryClient();
 
@@ -41,14 +36,9 @@ const TeamProfile = () => {
         return {} as Schema["Team"]["type"];
       }
 
-      const teamResponse = await client.models.Team.get(
-        {
-          id: userTeamId,
-        },
-        {
-          selectionSet: ["members.*", "id", "name"],
-        },
-      );
+      const teamResponse = await client.models.Team.get({
+        id: userTeamId,
+      });
       return teamResponse.data;
     },
   });
