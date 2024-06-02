@@ -1,5 +1,6 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
+import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
@@ -74,11 +75,21 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.guest(), allow.authenticated()])
       .handler(a.handler.function(AssignUsersToTeams)),
+    CreateTeamWithCode: a
+      .mutation()
+      .arguments({
+        teamName: a.string().required(),
+        addCallerToTeam: a.boolean().required(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(CreateTeamWithCode)),
   })
 
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
+    allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;
 
