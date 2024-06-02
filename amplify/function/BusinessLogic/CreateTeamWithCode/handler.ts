@@ -41,7 +41,7 @@ const client = generateClient<Schema>({
   authMode: "iam",
 });
 
-export const handler: Schema["GenerateTeamCode"]["functionHandler"] = async (
+export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
   event,
 ) => {
   let team = null;

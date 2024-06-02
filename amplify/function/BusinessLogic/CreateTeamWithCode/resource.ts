@@ -1,7 +1,7 @@
 import { defineFunction } from "@aws-amplify/backend";
 
-export const GenerateTeamCode = defineFunction({
+export const CreateTeamWithCode = defineFunction({
   entry: "./handler.ts",
   runtime: 20,
-  name: "GenerateTeamCode",
+  name: "CreateTeamWithCode",
 });
