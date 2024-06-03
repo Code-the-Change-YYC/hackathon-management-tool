@@ -1,6 +1,8 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { defineAuth } from "@aws-amplify/backend";
 
+import { PostConfirmation } from "./PostConfirmation/resource";
+
 /**
  * Define and configure your auth resource
  * When used alongside data, it is automatically configured as an auth provider for data
@@ -11,7 +13,9 @@ export const auth = defineAuth({
   groups: ["Admin", "Participant", "Judge"],
   triggers: {
     preSignUp: PreSignUp,
+    postConfirmation: PostConfirmation,
   },
+  access: (allow) => [allow.resource(PostConfirmation).to(["addUserToGroup"])],
   loginWith: {
     email: true,
 
