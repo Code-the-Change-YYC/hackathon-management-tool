@@ -1,7 +1,11 @@
 "use client";
 
+import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession } from "aws-amplify/auth";
+import { useContext } from "react";
 import { type ReactNode, createContext, useEffect, useState } from "react";
+
+import { type Schema } from "@/amplify/data/resource";
 
 interface Props {
   children: ReactNode | ReactNode[];
@@ -17,6 +21,11 @@ export enum UserType {
 export interface IUser {
   userSub: string;
   type: UserType;
+  completedProfile?: boolean;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  teamId?: string;
   populated: boolean;
 }
 
@@ -25,7 +34,9 @@ interface IUserReturn {
   // setCurrentUser: (state: IUser) => void;
 }
 
-const UserContext = createContext<IUserReturn>({} as IUserReturn);
+const client = generateClient<Schema>();
+
+export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 
 export function UserContextProvider({ children }: Props) {
   const [currentUser, setCurrentUser] = useState<IUser>({
@@ -38,12 +49,22 @@ export function UserContextProvider({ children }: Props) {
     async function currentAuthenticatedUser() {
       try {
         const user = await fetchAuthSession();
+
+        const response = await client.models.User.get({
+          id: user.userSub as string,
+        });
+
         setCurrentUser({
           userSub: user.userSub as string,
           type: (
             user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
-          )[0],
+          )?.[0],
           populated: true,
+          // TODO ONCE JUSTIN ADDS completed Field to signup flow
+          completedProfile: true,
+          email: response.data?.email ?? "",
+          firstName: response.data?.firstName ?? "",
+          lastName: response.data?.lastName ?? "",
         });
       } catch (err) {
         console.error(err);
@@ -53,11 +74,11 @@ export function UserContextProvider({ children }: Props) {
   }, []);
   return (
     <UserContext.Provider value={{ currentUser }}>
-      {children}
+      {currentUser.populated && children}
     </UserContext.Provider>
   );
 }
 
-// export function useUser(): IUserReturn {
-//   return useContext(UserContext);
-// }
+export function useUser(): IUserReturn {
+  return useContext(UserContext);
+}

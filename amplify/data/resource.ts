@@ -1,5 +1,6 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
+import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMessageCode/resource";
 import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
@@ -25,12 +26,16 @@ const schema = a
         allergies: a.string(),
         checkedIn: a.boolean(),
         willEatMeals: a.boolean(),
-        teamId: a.id(),
+        teamId: a
+          .id()
+          .authorization((allow) =>
+            allow.owner().to(["read", "update", "delete"]),
+          ),
         team: a.belongsTo("Team", "teamId"),
         attendedEvents: a.hasMany("UserFoodEventAttendance", "userId"),
       })
       .authorization((allow) => [
-        allow.owner(),
+        allow.owner().to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
     //for handling a many to many relationship of users and food events
@@ -66,10 +71,11 @@ const schema = a
       .model({
         name: a.string(),
         id: a.id(),
+        approved: a.boolean(),
         members: a.hasMany("User", "teamId"),
       })
       .authorization((allow) => [
-        allow.owner(),
+        allow.owner().to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
     GenericFunctionResponse: a.customType({
@@ -125,11 +131,22 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(AssignUsersToTeams)),
+    CreateTeamWithCode: a
+      .mutation()
+      .arguments({
+        teamName: a.string().required(),
+        addCallerToTeam: a.boolean().required(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(CreateTeamWithCode)),
   })
+
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
     allow.resource(VerifyUserMessage).to(["query", "mutate"]),
+    allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;
 
