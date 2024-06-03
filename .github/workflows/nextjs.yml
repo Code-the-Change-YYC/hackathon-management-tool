@@ -7,7 +7,10 @@ name: Test Next.JS build
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: ["main", "prod"]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: ["main", "prod"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
