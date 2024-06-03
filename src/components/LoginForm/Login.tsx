@@ -50,7 +50,8 @@ export default function Login() {
       formFields={formFields}
     >
       {({ user }) => {
-        return <PersonalFormFields user={user} />;
+        if (user) return <PersonalFormFields user={user} />;
+        return <div>Error, please try again later</div>;
       }}
     </Authenticator>
   );

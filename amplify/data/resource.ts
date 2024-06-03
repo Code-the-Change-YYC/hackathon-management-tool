@@ -22,6 +22,7 @@ const schema = a
         email: a.string(),
         meals: a.boolean(),
         institution: a.string(),
+        completedRegistration: a.boolean(),
         allergies: a.string(),
         checkedIn: a.boolean(),
         teamId: a
@@ -33,7 +34,7 @@ const schema = a
       })
       .authorization((allow) => [
         allow.owner().to(["read", "update"]),
-        allow.authenticated().to(["read"]),
+        allow.authenticated().to(["read", "update"]),
       ]),
     Team: a
       .model({
