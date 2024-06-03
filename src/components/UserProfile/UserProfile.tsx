@@ -28,16 +28,6 @@ export interface UserFormProp {
 const UserProfile = () => {
   const userId = useUser().currentUser.userSub as string;
 
-  const hello = async () => {
-    const response = await client.mutations.addUserToGroup({
-      userId: "dc8d2548-10d1-700f-6eb8-0260040d2214",
-      groupName: "Participant",
-    });
-    console.log(response);
-  };
-
-  hello();
-
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["User"]["type"],
     initialDataUpdatedAt: 0,

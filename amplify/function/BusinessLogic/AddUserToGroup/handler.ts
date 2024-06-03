@@ -1,4 +1,5 @@
 import { Amplify } from "aws-amplify";
+import { generateClient } from "aws-amplify/data";
 
 import {
   AdminAddUserToGroupCommand,
@@ -6,8 +7,10 @@ import {
   AdminRemoveUserFromGroupCommand,
   CognitoIdentityProviderClient,
 } from "@aws-sdk/client-cognito-identity-provider";
+import { useMutation } from "@tanstack/react-query";
 
 import type { Schema } from "../../../data/resource";
+import { updateUser } from "./graphql/mutations";
 
 Amplify.configure(
   {
@@ -41,6 +44,8 @@ type Handler = Schema["addUserToGroup"]["functionHandler"];
 
 const client = new CognitoIdentityProviderClient({});
 
+const dynamoClient = generateClient<Schema>();
+
 export const handler: Handler = async (event) => {
   try {
     const { userId, groupName } = event.arguments;
@@ -50,18 +55,32 @@ export const handler: Handler = async (event) => {
       Username: userId,
       UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
     });
-    const groupResponse = await client.send(listGroupCommand);
+    const listGroupResponse = await client.send(listGroupCommand);
 
-    console.log(groupResponse);
+    if (listGroupResponse.Groups?.length === 0) {
+      return {
+        body: { value: `User not found` },
+        statusCode: 404,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
 
     // Remove the user from that group
     const removeFromGroupCommand = new AdminRemoveUserFromGroupCommand({
       Username: userId,
-      GroupName: (groupResponse.Groups as { GroupName: string }[])[0]
+      GroupName: (listGroupResponse.Groups as { GroupName: string }[])[0]
         ?.GroupName,
       UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
     });
-    await client.send(removeFromGroupCommand);
+    const removeUserRepsonse = await client.send(removeFromGroupCommand);
+
+    if (removeUserRepsonse.$metadata.httpStatusCode !== 200) {
+      return {
+        body: { value: `Error while removing user from group` },
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
 
     // Add user to new group
     const addUserToGroupCommand = new AdminAddUserToGroupCommand({
@@ -69,12 +88,46 @@ export const handler: Handler = async (event) => {
       GroupName: groupName,
       UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
     });
-    const response = await client.send(addUserToGroupCommand);
+    const addUserResponse = await client.send(addUserToGroupCommand);
 
-    console.log(response);
+    if (addUserResponse.$metadata.httpStatusCode !== 200) {
+      return {
+        body: { value: `Error while adding user to group` },
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
 
-    return { statusCode: 200, body: { message: "User added" } };
+    // Edit the data in dynamoDB
+    const result = await dynamoClient.graphql({
+      query: updateUser,
+      variables: {
+        input: {
+          id: userId,
+          role: (listGroupResponse.Groups as { GroupName: string }[])[0]
+            ?.GroupName,
+        },
+      },
+    });
+
+    if (!result.errors) {
+      return {
+        body: { value: `Success` },
+        statusCode: 200,
+        headers: { "Content-Type": "application/json" },
+      };
+    } else {
+      return {
+        body: { value: `Error while updating database` },
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
   } catch (error) {
-    return { statusCode: 500, body: { message: error } };
+    return {
+      body: { value: `Unhandled Internal Server Error` },
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+    };
   }
 };
