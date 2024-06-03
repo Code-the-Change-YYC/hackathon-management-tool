@@ -1,14 +1,16 @@
 /* tslint:disable */
+
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
 import * as APITypes from "./API";
+
 type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationInput: InputType;
   __generatedMutationOutput: OutputType;
 };
 
-export const AssignUsersToTeams = /* GraphQL */ `mutation AssignUsersToTeams($teamId: String!, $userId: String!) {
+export const AssignUsersToTeams =
+  /* GraphQL */ `mutation AssignUsersToTeams($teamId: String!, $userId: String!) {
   AssignUsersToTeams(teamId: $teamId, userId: $userId) {
     body
     headers
@@ -17,10 +19,11 @@ export const AssignUsersToTeams = /* GraphQL */ `mutation AssignUsersToTeams($te
   }
 }
 ` as GeneratedMutation<
-  APITypes.AssignUsersToTeamsMutationVariables,
-  APITypes.AssignUsersToTeamsMutation
->;
-export const DemoFunction = /* GraphQL */ `mutation DemoFunction($content: String) {
+    APITypes.AssignUsersToTeamsMutationVariables,
+    APITypes.AssignUsersToTeamsMutation
+  >;
+export const DemoFunction =
+  /* GraphQL */ `mutation DemoFunction($content: String) {
   DemoFunction(content: $content) {
     body
     headers
@@ -29,10 +32,11 @@ export const DemoFunction = /* GraphQL */ `mutation DemoFunction($content: Strin
   }
 }
 ` as GeneratedMutation<
-  APITypes.DemoFunctionMutationVariables,
-  APITypes.DemoFunctionMutation
->;
-export const addUserToGroup = /* GraphQL */ `mutation AddUserToGroup($groupName: String!, $userId: String!) {
+    APITypes.DemoFunctionMutationVariables,
+    APITypes.DemoFunctionMutation
+  >;
+export const addUserToGroup =
+  /* GraphQL */ `mutation AddUserToGroup($groupName: String!, $userId: String!) {
   addUserToGroup(groupName: $groupName, userId: $userId) {
     body
     headers
@@ -41,9 +45,9 @@ export const addUserToGroup = /* GraphQL */ `mutation AddUserToGroup($groupName:
   }
 }
 ` as GeneratedMutation<
-  APITypes.AddUserToGroupMutationVariables,
-  APITypes.AddUserToGroupMutation
->;
+    APITypes.AddUserToGroupMutationVariables,
+    APITypes.AddUserToGroupMutation
+  >;
 export const createTeam = /* GraphQL */ `mutation CreateTeam(
   $condition: ModelTeamConditionInput
   $input: CreateTeamInput!
