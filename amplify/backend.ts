@@ -8,6 +8,7 @@ const backend = defineBackend({
   data,
 });
 
+// Cognito Email Overrides
 backend.auth.resources.cfnResources.cfnUserPool.emailConfiguration = {
   emailSendingAccount: "DEVELOPER",
   from: "welcome@hackthechangeyyc.ca",

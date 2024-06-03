@@ -15,7 +15,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const { isPending, isError, data } = useQuery({
     queryKey: ["user", user?.userId],
     queryFn: async () => {
-      return (await client.models.User.get({ id: String(user?.userId) })).data;
+      return (await client.models.User.get({ id: user.userId as string })).data;
     },
   });
   const userMutation = useMutation({
