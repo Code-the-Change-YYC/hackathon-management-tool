@@ -1,4 +1,6 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
+import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
+import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
@@ -22,21 +24,26 @@ const schema = a
         institution: a.string(),
         allergies: a.string(),
         checkedIn: a.boolean(),
-        teamId: a.id(),
+        teamId: a
+          .id()
+          .authorization((allow) =>
+            allow.owner().to(["read", "update", "delete"]),
+          ),
         team: a.belongsTo("Team", "teamId"),
       })
       .authorization((allow) => [
-        allow.owner(),
+        allow.owner().to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
     Team: a
       .model({
         name: a.string(),
         id: a.id(),
+        approved: a.boolean(),
         members: a.hasMany("User", "teamId"),
       })
       .authorization((allow) => [
-        allow.owner(),
+        allow.owner().to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
     GenericFunctionResponse: a.customType({
@@ -59,9 +66,32 @@ const schema = a
       // allow all users to call this api for now
       .authorization((allow) => [allow.guest()])
       .handler(a.handler.function(DemoFunction)),
-  })
-  .authorization((allow) => [allow.resource(PreSignUp).to(["mutate"])]);
 
+    AssignUsersToTeams: a
+      .mutation()
+      .arguments({
+        userId: a.string().required(),
+        teamId: a.string().required(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(AssignUsersToTeams)),
+    CreateTeamWithCode: a
+      .mutation()
+      .arguments({
+        teamName: a.string().required(),
+        addCallerToTeam: a.boolean().required(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(CreateTeamWithCode)),
+  })
+
+  .authorization((allow) => [
+    allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
+    allow.resource(PreSignUp).to(["mutate"]),
+    allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
+  ]);
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
@@ -83,7 +113,7 @@ Go to your frontend source code. From your client-side code, generate a
 Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
 WORK IN THE FRONTEND CODE FILE.)
 
-Using JavaScript or Next.js React Server Components, Middleware, Server 
+Using JavaScript or Next.js React Server Components, Middleware, Server
 Actions or Pages Router? Review how to generate Data clients for those use
 cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
 =========================================================================*/

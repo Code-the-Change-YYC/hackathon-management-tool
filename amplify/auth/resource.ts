@@ -1,6 +1,5 @@
-import { defineAuth, secret } from "@aws-amplify/backend";
-
-import { PreSignUp } from "./PreSignUp/resource";
+import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
+import { defineAuth } from "@aws-amplify/backend";
 
 /**
  * Define and configure your auth resource

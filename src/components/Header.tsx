@@ -1,20 +1,39 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+
+import { UserType, useUser } from "@/components/contexts/UserContext";
 
 const headerContainerStyles =
   "flex flex-row items-center justify-between text-awesomer-purple h-36 bg-white px-8";
 
-const isSignedIn = true;
-const hasTeam = true;
-
 export default function Header() {
+  const user = useUser().currentUser;
+
   return (
     <div className={headerContainerStyles}>
       <div className="flex w-48 font-semibold">
-        {isSignedIn ? (
-          hasTeam && <Link href="/">Join a Team</Link>
+        {user.completedProfile ? (
+          <>
+            {user.type === UserType.Participant ? (
+              <>
+                {user.teamId ? (
+                  <Link href="/participant/profile/team-details">
+                    View Team
+                  </Link>
+                ) : (
+                  <Link href="/participant/register">Join a Team</Link>
+                )}
+              </>
+            ) : user.type === UserType.Admin ? (
+              <Link href="/admin/teams">Admin Dashboard</Link>
+            ) : (
+              <Link href="/judge/dashboard">Judge Dashboard</Link>
+            )}
+          </>
         ) : (
-          <Link href="/">Join Hackathon</Link>
+          <Link href="/login">Join Hackathon</Link>
         )}
       </div>
 
@@ -31,8 +50,8 @@ export default function Header() {
       </div>
 
       <div className="flex w-48 justify-end">
-        {isSignedIn && (
-          <Link href="/">
+        {user.completedProfile && (
+          <Link href="/participant/profile">
             <Image
               src={
                 // This is temporary. replace with user profile image
