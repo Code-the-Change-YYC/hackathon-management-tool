@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
-import ProfileLinks from "@/components/UserProfile/ProfileLinks";
+// import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 import UserForm from "@/components/UserProfile/UserForm";
 import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery } from "@tanstack/react-query";

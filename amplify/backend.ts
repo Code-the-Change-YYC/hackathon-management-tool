@@ -1,5 +1,4 @@
-import * as secrets from "aws-cdk-lib/aws-secretsmanager";
-
+// import * as secrets from "aws-cdk-lib/aws-secretsmanager";
 import { auth } from "@/amplify/auth/resource";
 import { data } from "@/amplify/data/resource";
 import { defineBackend } from "@aws-amplify/backend";
