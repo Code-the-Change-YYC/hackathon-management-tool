@@ -1,12 +1,12 @@
-import { UserType } from "@/components/contexts/UserContext";
-import withAuthGuard from "@/components/hoc/withAuthGuard";
+import ProfileHeader from "@/components/UserProfile/ProfileHeader";
 
 const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
-  return <>{children}</>;
+  return (
+    <div className="w-full">
+      <ProfileHeader />
+      {children}
+    </div>
+  );
 };
 
-export default withAuthGuard(ProfileLayout, [
-  UserType.Participant,
-  UserType.Admin,
-  UserType.Judge,
-]);
+export default ProfileLayout;

@@ -49,8 +49,11 @@ export function UserContextProvider({ children }: Props) {
     async function currentAuthenticatedUser() {
       try {
         const user = await fetchAuthSession();
+        if (!user.userSub) {
+          throw new Error("No user");
+        }
+
         if (
-          !user ||
           (
             user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
           )?.[0] === undefined
@@ -83,12 +86,16 @@ export function UserContextProvider({ children }: Props) {
           lastName: response.data?.lastName ?? "",
         });
       } catch (err) {
-        setCurrentUser({
-          userSub: "",
-          type: UserType.Guest,
-          populated: true,
-        });
-        console.info("Not Logged in");
+        if (String(err).includes("No user")) {
+          setCurrentUser({
+            userSub: "",
+            type: UserType.Guest,
+            populated: true,
+          });
+          console.info("Not Logged in");
+        } else {
+          console.error(err);
+        }
       }
     }
     void currentAuthenticatedUser();

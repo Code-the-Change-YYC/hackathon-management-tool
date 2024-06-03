@@ -43,10 +43,24 @@ const UserProfile = () => {
   const userMutation = useMutation({
     //mutation takes parameters of input with User type
     mutationFn: async (input: Schema["User"]["type"]) => {
-      const { createdAt, updatedAt, team, teamId, owner, ...extractedFields } =
-        input;
+      const {
+        createdAt,
+        updatedAt,
+        team,
+        teamId,
+        owner,
+        checkedIn,
+        profileOwner,
+        ...extractedFields
+      } = input;
       // TODO this can be cleaned if we use React Hook Form to handle form state better
-      void createdAt, void updatedAt, void team, void teamId, void owner;
+      void createdAt,
+        void updatedAt,
+        void team,
+        void teamId,
+        void owner,
+        void checkedIn,
+        void profileOwner;
       await client.models.User.update(extractedFields);
     },
   });
