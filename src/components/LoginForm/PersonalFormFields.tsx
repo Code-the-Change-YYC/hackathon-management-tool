@@ -21,8 +21,12 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const userMutation = useMutation({
     mutationFn: async (input: Schema["User"]["type"]) => {
       await client.models.User.update({
-        ...input,
         id: user.userId,
+        firstName: input.firstName,
+        lastName: input.lastName,
+        institution: input.institution,
+        meals: input.meals,
+        allergies: input.allergies,
         completedRegistration: true,
       });
     },
