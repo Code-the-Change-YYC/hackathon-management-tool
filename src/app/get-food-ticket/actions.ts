@@ -4,8 +4,8 @@ import { DateTime } from "luxon";
 
 import { type Schema } from "@/amplify/data/resource";
 import {
-  getFoodGroupPosition,
-  getTimeForFoodGroupPosition,
+  getFoodGroupPositionNumber,
+  getTimeForFoodGroupPositionNumber,
 } from "@/amplify/function/BusinessLogic/utils/food-groups";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
@@ -30,14 +30,14 @@ export async function getUpcomingFoodEventDetails(teamID: string): Promise<{
 
   if (nextFoodEvent) {
     if (teamID) {
-      const userGroupPosition = getFoodGroupPosition(
+      const userGroupPositionNumber = getFoodGroupPositionNumber(
         teamID,
         nextFoodEvent.id,
         nextFoodEvent.groups,
       );
 
-      const userTimeSlot = getTimeForFoodGroupPosition(
-        userGroupPosition,
+      const userTimeSlot = getTimeForFoodGroupPositionNumber(
+        userGroupPositionNumber,
         nextFoodEvent.groups,
         nextFoodEvent.start,
         nextFoodEvent.end,
@@ -49,7 +49,7 @@ export async function getUpcomingFoodEventDetails(teamID: string): Promise<{
       return {
         queuePosition:
           "You are in position number " +
-          (userGroupPosition + 1) +
+          (userGroupPositionNumber + 1) +
           " out of " +
           nextFoodEvent.groups +
           " groups",

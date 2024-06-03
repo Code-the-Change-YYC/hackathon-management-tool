@@ -4,7 +4,7 @@ import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
-import TicketVerification from "@/components/Food/TicketVerification/TicketVerification";
+import TicketVerification from "@/app/admin/scan-food-tickets/TicketVerification/TicketVerification";
 
 type FoodEvent = Schema["FoodEvent"]["type"];
 

@@ -47,10 +47,7 @@ const schema = a
         user: a.belongsTo("User", "userId"),
         foodEvent: a.belongsTo("FoodEvent", "foodEventId"),
       })
-      .authorization((allow) => [
-        allow.owner(),
-        allow.authenticated().to(["read"]),
-      ]),
+      .authorization((allow) => [allow.group("Admin").to(["read"])]),
 
     FoodEvent: a
       .model({
@@ -63,7 +60,7 @@ const schema = a
         attended: a.hasMany("UserFoodEventAttendance", "foodEventId"),
       })
       .authorization((allow) => [
-        allow.owner(),
+        allow.group("Admin"),
         allow.authenticated().to(["read"]),
       ]),
 
@@ -119,7 +116,7 @@ const schema = a
       })
       .returns(a.ref("StatusCodeFunctionResponse"))
       // allow all users to call this api for now
-      .authorization((allow) => [allow.authenticated()])
+      .authorization((allow) => [allow.group("Admin")])
       .handler(a.handler.function(VerifyUserMessage)),
 
     AssignUsersToTeams: a

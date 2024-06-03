@@ -5,9 +5,9 @@ import validator from "validator";
 
 import { getMessageAndCode } from "@/amplify/function/BusinessLogic/utils/crytography";
 import {
-  getFoodGroupPosition,
-  getFoodGroupPositionForTime,
-  getTimeForFoodGroupPosition,
+  getFoodGroupPositionNumber,
+  getFoodGroupPositionNumberForTime,
+  getTimeForFoodGroupPositionNumber,
 } from "@/amplify/function/BusinessLogic/utils/food-groups";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
@@ -121,9 +121,9 @@ async function isCorrectTimeSlot(
   foodEvent: any, //FIXME: if you know how to get around this, please fix it
   timeSlot: number = -1, //by default will be automatic, unless a specific timeslot was chosen
 ) {
-  let currentGroupPosition = timeSlot;
+  let currentGroupPositionNumber = timeSlot;
   if (timeSlot === -1) {
-    currentGroupPosition = getFoodGroupPositionForTime(
+    currentGroupPositionNumber = getFoodGroupPositionNumberForTime(
       DateTime.now().setZone(process.env.TIME_ZONE).toJSDate(),
       foodEvent.groups,
       foodEvent.start,
@@ -131,19 +131,19 @@ async function isCorrectTimeSlot(
     );
   }
 
-  const userGroupPosition = getFoodGroupPosition(
+  const userGroupPositionNumber = getFoodGroupPositionNumber(
     userID,
     foodEvent.id,
     foodEvent.groups,
   );
 
-  if (currentGroupPosition === userGroupPosition) {
+  if (currentGroupPositionNumber === userGroupPositionNumber) {
     return {
       description: "valid code & correct timeslot",
     };
   } else {
-    const actualTimeSlot = getTimeForFoodGroupPosition(
-      userGroupPosition,
+    const actualTimeSlot = getTimeForFoodGroupPositionNumber(
+      userGroupPositionNumber,
       foodEvent.groups,
       foodEvent.start,
       foodEvent.end,

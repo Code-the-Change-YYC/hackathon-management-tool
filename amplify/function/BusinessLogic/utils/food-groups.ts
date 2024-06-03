@@ -22,8 +22,8 @@ export function uuidToInteger(uuid: string) {
 /**
  *  Return the start and end calgary time time for a specific group
  */
-export function getTimeForFoodGroupPosition(
-  groupPosition: number,
+export function getTimeForFoodGroupPositionNumber(
+  groupPositionNumber: number,
   groups: number,
   startTime: string,
   endTime: string,
@@ -36,10 +36,10 @@ export function getTimeForFoodGroupPosition(
   const groupDuration = totalDuration / groups;
 
   const groupStartTime = new Date(
-    start.getTime() + groupDuration * groupPosition,
+    start.getTime() + groupDuration * groupPositionNumber,
   );
   const groupEndTime = new Date(
-    start.getTime() + groupDuration * (groupPosition + 1),
+    start.getTime() + groupDuration * (groupPositionNumber + 1),
   );
 
   const options: Intl.DateTimeFormatOptions = {
@@ -64,7 +64,7 @@ export function getTimeForFoodGroupPosition(
  * Get the group number (the order which groups can get food) for a user from time
  * Useful for times when we need to get the current expected group and time slot from the local calgary time
  */
-export function getFoodGroupPositionForTime(
+export function getFoodGroupPositionNumberForTime(
   target: Date,
   groups: number,
   startTime: string,
@@ -83,15 +83,15 @@ export function getFoodGroupPositionForTime(
 
   // Calculate the group number for times within the range
   const timeFromStart = Math.abs(target.getTime() - start.getTime());
-  const groupPosition = Math.floor(timeFromStart / groupDuration);
+  const groupPositionNumber = Math.floor(timeFromStart / groupDuration);
 
-  return groupPosition;
+  return groupPositionNumber;
 }
 
 /**
  * gets the group number (the order which groups can get food) for a user
  */
-export function getFoodGroupPosition(
+export function getFoodGroupPositionNumber(
   teamID: string,
   eventID: string,
   groups: number,

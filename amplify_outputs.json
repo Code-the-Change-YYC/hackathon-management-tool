@@ -1,9 +1,9 @@
 {
   "auth": {
-    "user_pool_id": "ca-central-1_Bf5wNTFfY",
+    "user_pool_id": "ca-central-1_FvxhmznkU",
     "aws_region": "ca-central-1",
-    "user_pool_client_id": "5f4itfs290c8r1i6e09jbo8k56",
-    "identity_pool_id": "ca-central-1:3e5e3029-98cb-4521-941a-ca8bd743c601",
+    "user_pool_client_id": "hg23pcpltnhpi0o6jecnta167",
+    "identity_pool_id": "ca-central-1:ba28eb53-09e1-47ac-aadd-cd4e78639123",
     "standard_required_attributes": [
       "email"
     ],
@@ -23,9 +23,9 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://raqtqsd2zjfy5c265z7dgb7t7a.appsync-api.ca-central-1.amazonaws.com/graphql",
+    "url": "https://v3avj3idz5go5oc4kpdhpcidy4.appsync-api.ca-central-1.amazonaws.com/graphql",
     "aws_region": "ca-central-1",
-    "api_key": "da2-rp5ly3rurfbzfas2d53ykdolum",
+    "api_key": "da2-zwc55q4ub5bhncxckypdmasqim",
     "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
     "authorization_types": [
       "API_KEY",
@@ -172,13 +172,11 @@
                     "provider": "userPools",
                     "ownerField": "owner",
                     "allow": "owner",
-                    "identityClaim": "cognito:username",
                     "operations": [
-                      "create",
-                      "update",
-                      "delete",
-                      "read"
-                    ]
+                      "read",
+                      "update"
+                    ],
+                    "identityClaim": "cognito:username"
                   },
                   {
                     "allow": "private",
@@ -456,6 +454,13 @@
               "isRequired": false,
               "attributes": []
             },
+            "approved": {
+              "name": "approved",
+              "isArray": false,
+              "type": "Boolean",
+              "isRequired": false,
+              "attributes": []
+            },
             "members": {
               "name": "members",
               "isArray": true,
@@ -512,13 +517,11 @@
                     "provider": "userPools",
                     "ownerField": "owner",
                     "allow": "owner",
-                    "identityClaim": "cognito:username",
                     "operations": [
-                      "create",
-                      "update",
-                      "delete",
-                      "read"
-                    ]
+                      "read",
+                      "update"
+                    ],
+                    "identityClaim": "cognito:username"
                   },
                   {
                     "allow": "private",
@@ -654,6 +657,28 @@
               "name": "teamId",
               "isArray": false,
               "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "CreateTeamWithCode": {
+          "name": "CreateTeamWithCode",
+          "isArray": false,
+          "type": {
+            "nonModel": "GenericFunctionResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "teamName": {
+              "name": "teamName",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "addCallerToTeam": {
+              "name": "addCallerToTeam",
+              "isArray": false,
+              "type": "Boolean",
               "isRequired": true
             }
           }
