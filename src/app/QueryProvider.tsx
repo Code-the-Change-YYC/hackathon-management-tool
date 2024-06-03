@@ -2,6 +2,7 @@
 
 import React from "react";
 
+import { Authenticator } from "@aws-amplify/ui-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function Providers({
@@ -12,6 +13,8 @@ export default function Providers({
   const [queryClient] = React.useState(() => new QueryClient());
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <Authenticator.Provider>{children}</Authenticator.Provider>
+    </QueryClientProvider>
   );
 }

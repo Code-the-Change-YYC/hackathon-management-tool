@@ -1,5 +1,6 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
+import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
@@ -15,11 +16,13 @@ const schema = a
   .schema({
     User: a
       .model({
+        id: a.id().required(),
         firstName: a.string(),
         lastName: a.string(),
         email: a.string(),
         meals: a.boolean(),
         institution: a.string(),
+        completedRegistration: a.boolean(),
         allergies: a.string(),
         checkedIn: a
           .boolean()
@@ -37,7 +40,11 @@ const schema = a
             allow.groups(["Admin"]).to(["read", "update", "delete"]),
           ]),
         team: a.belongsTo("Team", "teamId"),
-        profileOwner: a.string().authorization((allow) => [allow.owner()]),
+        profileOwner: a
+          .string()
+          .authorization((allow) => [
+            allow.ownerDefinedIn("profileOwner").to(["read"]),
+          ]),
       })
       .authorization((allow) => [
         allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
@@ -84,11 +91,21 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.guest(), allow.authenticated()])
       .handler(a.handler.function(AssignUsersToTeams)),
+    CreateTeamWithCode: a
+      .mutation()
+      .arguments({
+        teamName: a.string().required(),
+        addCallerToTeam: a.boolean().required(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(CreateTeamWithCode)),
   })
 
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
+    allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;
 

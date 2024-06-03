@@ -31,7 +31,9 @@ export const metadata: Metadata = {
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${Omnes.className}`}>
+      <body
+        className={`${Omnes.className} flex size-full min-h-screen flex-col`}
+      >
         <Providers>
           <ConfigureAmplifyClientSide />
           <UserContextProvider>
