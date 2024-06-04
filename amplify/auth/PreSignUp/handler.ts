@@ -1,6 +1,3 @@
-/**
- * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
- */
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 import type { PreSignUpTriggerHandler } from "aws-lambda";
@@ -41,12 +38,15 @@ export const dataClient = generateClient<Schema>();
 
 export const handler: PreSignUpTriggerHandler = async (event) => {
   return await dataClient.models.User.create({
+    firstName: "",
+    lastName: "",
     id: event.userName,
     email: event.request.userAttributes.email,
     checkedIn: false,
     willEatMeals: false,
     allergies: "",
     institution: "",
+    profileOwner: `${event.userName}::${event.userName}`,
   })
     .then((user) => {
       console.log("User created", user);

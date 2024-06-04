@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
-import ProfileLinks from "@/components/UserProfile/ProfileLinks";
+// import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 import UserForm from "@/components/UserProfile/UserForm";
 import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -43,10 +43,22 @@ const UserProfile = () => {
   const userMutation = useMutation({
     //mutation takes parameters of input with User type
     mutationFn: async (input: Schema["User"]["type"]) => {
-      const { createdAt, updatedAt, team, teamId, owner, ...extractedFields } =
-        input;
+      const {
+        createdAt,
+        updatedAt,
+        team,
+        teamId,
+        checkedIn,
+        profileOwner,
+        ...extractedFields
+      } = input;
       // TODO this can be cleaned if we use React Hook Form to handle form state better
-      void createdAt, void updatedAt, void team, void teamId, void owner;
+      void createdAt,
+        void updatedAt,
+        void team,
+        void teamId,
+        void checkedIn,
+        void profileOwner;
       await client.models.User.update(extractedFields);
     },
   });
@@ -96,7 +108,7 @@ const UserProfile = () => {
             />{" "}
           </div>
           <div className="px-10 md:px-16 md:py-10">
-            <ProfileLinks />
+            {/* <ProfileLinks /> */}
             <div className="mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
               <h1 className="mt-3 text-lg font-bold md:text-2xl">My Details</h1>
               <button className={BUTTON_STYLES} onClick={handleEditClick}>
