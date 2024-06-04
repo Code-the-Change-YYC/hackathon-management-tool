@@ -20,7 +20,8 @@
     "incremental": true,
     "paths": {
       "@/*": [
-        "./src/*"
+        "./src/*",
+        "./public/*"
       ],
       "@/amplify/*": [
         "./amplify/*"

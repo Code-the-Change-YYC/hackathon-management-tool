@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Providers from "@/app/QueryProvider";
 import "@/app/globals.css";
 import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
+import { UserContextProvider } from "@/components/contexts/UserContext";
 // import { UserContextProvider } from "@/components/contexts/UserContext";
 import MainLayout from "@/components/layouts/MainLayout";
 import "@aws-amplify/ui-react/styles.css";
@@ -30,13 +31,14 @@ export const metadata: Metadata = {
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${Omnes.className}`}>
+      <body
+        className={`${Omnes.className} flex size-full min-h-screen flex-col`}
+      >
         <Providers>
           <ConfigureAmplifyClientSide />
-
-          {/* <UserContextProvider> */}
-          <MainLayout>{children}</MainLayout>
-          {/* </UserContextProvider> */}
+          <UserContextProvider>
+            <MainLayout>{children}</MainLayout>
+          </UserContextProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </Providers>
       </body>
