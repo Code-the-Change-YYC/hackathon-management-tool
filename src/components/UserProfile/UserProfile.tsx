@@ -48,7 +48,6 @@ const UserProfile = () => {
         updatedAt,
         team,
         teamId,
-        owner,
         checkedIn,
         profileOwner,
         ...extractedFields
@@ -58,7 +57,6 @@ const UserProfile = () => {
         void updatedAt,
         void team,
         void teamId,
-        void owner,
         void checkedIn,
         void profileOwner;
       await client.models.User.update(extractedFields);
