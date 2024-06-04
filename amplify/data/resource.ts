@@ -16,22 +16,38 @@ const schema = a
   .schema({
     User: a
       .model({
+        id: a.id().required(),
         firstName: a.string(),
         lastName: a.string(),
         email: a.string(),
         meals: a.boolean(),
         institution: a.string(),
+        completedRegistration: a.boolean(),
         allergies: a.string(),
-        checkedIn: a.boolean(),
+        checkedIn: a
+          .boolean()
+          .default(false)
+          .authorization((allow) => [
+            allow.ownerDefinedIn("profileOwner").to(["read"]),
+            allow.groups(["Admin"]).to(["read", "update"]),
+          ]),
         teamId: a
           .id()
-          .authorization((allow) =>
-            allow.owner().to(["read", "update", "delete"]),
-          ),
+          .authorization((allow) => [
+            allow
+              .ownerDefinedIn("profileOwner")
+              .to(["read", "update", "delete"]),
+            allow.groups(["Admin"]).to(["read", "update", "delete"]),
+          ]),
         team: a.belongsTo("Team", "teamId"),
+        profileOwner: a
+          .string()
+          .authorization((allow) => [
+            allow.ownerDefinedIn("profileOwner").to(["read"]),
+          ]),
       })
       .authorization((allow) => [
-        allow.owner().to(["read", "update"]),
+        allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
     Team: a

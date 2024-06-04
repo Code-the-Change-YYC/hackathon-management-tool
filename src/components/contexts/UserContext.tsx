@@ -1,7 +1,7 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-import { fetchAuthSession } from "aws-amplify/auth";
+import { fetchAuthSession, signOut } from "aws-amplify/auth";
 import { useContext } from "react";
 import { type ReactNode, createContext, useEffect, useState } from "react";
 
@@ -49,10 +49,29 @@ export function UserContextProvider({ children }: Props) {
     async function currentAuthenticatedUser() {
       try {
         const user = await fetchAuthSession();
+        if (!user.userSub) {
+          throw new Error("No user");
+        }
+
+        if (
+          (
+            user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
+          )?.[0] === undefined
+        ) {
+          // Logout User if not in group
+          signOut();
+          console.error("User not in group");
+        }
 
         const response = await client.models.User.get({
           id: user.userSub as string,
         });
+
+        if (response.data === null) {
+          // Logout User record does not exist in DB
+          signOut();
+          console.error("User not in DB");
+        }
 
         setCurrentUser({
           userSub: user.userSub as string,
@@ -67,7 +86,16 @@ export function UserContextProvider({ children }: Props) {
           lastName: response.data?.lastName ?? "",
         });
       } catch (err) {
-        console.error(err);
+        if (String(err).includes("No user")) {
+          setCurrentUser({
+            userSub: "",
+            type: UserType.Guest,
+            populated: true,
+          });
+          console.info("Not Logged in");
+        } else {
+          console.error(err);
+        }
       }
     }
     void currentAuthenticatedUser();
