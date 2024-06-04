@@ -49,6 +49,9 @@ export const handler: PreSignUpTriggerHandler = async (event) => {
     profileOwner: `${event.userName}::${event.userName}`,
   })
     .then((user) => {
+      if (user.errors) {
+        throw new Error("Failed to create user in DB");
+      }
       console.log("User created", user);
       return event;
     })
