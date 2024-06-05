@@ -5,7 +5,7 @@ import Header from "@/components/LoginForm/Header";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className=" flex w-full flex-1 flex-col items-center overflow-hidden bg-awesomer-purple pt-6">
-      <div className=" flex  w-11/12 max-w-screen-2xl flex-1 flex-col items-center overflow-hidden md:w-9/12 ">
+      <div className="flex w-11/12 max-w-screen-2xl flex-1 flex-col items-center md:w-9/12 ">
         <Header />
         {children}
       </div>

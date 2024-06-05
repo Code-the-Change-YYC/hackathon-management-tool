@@ -1,31 +1,27 @@
 import Image from "next/image";
-import { twMerge } from "tailwind-merge";
 
 import { Flex } from "@aws-amplify/ui-react";
 
 export default function FormFieldsHeader({
-  className,
   headerField,
 }: {
-  className?: string;
   headerField?: string;
 }) {
   return (
     <div
-      className={twMerge(
-        "relative ml-4 mt-4 flex flex-col justify-center bg-white px-8" +
-          className,
-      )}
+      className={
+        "relative ml-4 mt-4 flex flex-col justify-center bg-white px-8"
+      }
     >
       <Image
-        className="absolute -right-28 top-0"
+        className="absolute -right-28"
         src={"/svgs/login/Star_Icon.svg"}
         height={51}
         width={59}
         alt={""}
       />{" "}
       <Image
-        className="absolute -left-28 bottom-0"
+        className="absolute -left-28"
         src={"/svgs/login/Star_Icon.svg"}
         height={51}
         width={59}
