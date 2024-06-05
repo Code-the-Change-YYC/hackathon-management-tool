@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
 
 const BUTTON_STYLES =
   "flex w-full items-center justify-between rounded-lg border-2 border-[#A689FF] bg-white p-4 font-bold text-black duration-100 active:border-[#A689FF] active:text-black";
@@ -14,61 +13,64 @@ const DROPDOWN_ITEM_STYLES =
   "flex w-full cursor-pointer justify-between rounded-r-lg border-l-4 border-l-transparent p-4 hover:border-l-[#A689FF] hover:bg-white";
 
 interface Filter {
-  label: string;
+  label: string; // label comes from filter array of objects
 }
 
-interface FilterUserRoleProps {
-  filterRoles: Filter[];
-  onFilterRolesChange: (filters: string[]) => void;
+interface FilterUserProps {
+  filterLabels: Filter[]; //Filter[] is an array of objects with the label: role
+  onFilterChange: (filters: string[]) => void;
 }
 
-const FilterUserRole = ({
-  filterRoles,
-  onFilterRolesChange,
-}: FilterUserRoleProps) => {
-  const [selectedRole, setSelectedRole] = useState<string[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+const FilterUser = ({ filterLabels, onFilterChange }: FilterUserProps) => {
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   const handleDropDownRoleChange = (label: string) => {
-    console.log(label);
-    setSelectedRole((prevFilterRole) => {
-      const newFilterRole = prevFilterRole.includes(label)
-        ? prevFilterRole.filter((filter) => filter !== label)
-        : [...prevFilterRole, label];
-      onFilterRolesChange(newFilterRole);
-      return newFilterRole;
+    setSelectedFilters((prevFilters) => {
+      console.log(label); //label is the role selected from the dropdown
+      // const newFilters = prevFilters.includes(label)
+      //   ? prevFilters.filter((filter) => filter !== label)
+      //   : [...prevFilters, label];
+      // onFilterChange(newFilters);
+      // console.log(newFilters);
+      // return newFilters;
+
+      const newFilters =
+        label === "All roles"
+          ? ["All roles"]
+          : prevFilters.includes(label)
+            ? prevFilters.filter((filter) => filter !== label)
+            : [
+                ...prevFilters.filter(
+                  (filter) =>
+                    filter !== "All roles" &&
+                    filter !== "Admin" &&
+                    filter !== "Judge" &&
+                    filter !== "Participant",
+                ),
+                label,
+              ];
+
+      onFilterChange(newFilters);
+      return newFilters;
     });
   };
-
   return (
     <div className="flex justify-center ">
       <div className={DROPDOWN_STYLES}>
         <div className={DROPDOWN_HEADER_BAR_STYLES}>
           <h1 className="my-4 font-bold">Role</h1>
           <div className={DROPDOWN_CONTENT_STYLES}>
-            {/* <button
-              onClick={() => setIsOpen((prev) => !prev)}
-              className={BUTTON_STYLES}
-            >
-              Select a role
-              {!isOpen ? (
-                <AiOutlineCaretDown className="mx-2 h-8" />
-              ) : (
-                <AiOutlineCaretUp className="mx-2 h-8" />
-              )}
-            </button>
-            {isOpen && ( */}
-
             <div className={DROPDOWN_CONTENT_STYLES}>
               <select
                 className={BUTTON_STYLES}
                 onChange={(e) => handleDropDownRoleChange(e.target.value)}
               >
-                <option value="">Select a role</option>
-                {filterRoles.map((filter, index) => (
+                <option>Select a role</option>
+                {filterLabels.map((filter, index) => (
                   <option
                     key={index}
                     value={filter.label}
+                    selected={selectedFilters.includes(filter.label)}
                     style={{ color: "white", backgroundColor: "#A689FF" }}
                   >
                     {filter.label}
@@ -83,4 +85,4 @@ const FilterUserRole = ({
   );
 };
 
-export default FilterUserRole;
+export default FilterUser;

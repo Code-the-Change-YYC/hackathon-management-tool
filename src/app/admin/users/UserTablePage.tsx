@@ -1,12 +1,15 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
+import { table } from "console";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import DataTableSection from "@/app/admin/components/DataTableSection";
 import FilterUserRole from "@/app/admin/components/FilterUserRole";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import FilterUser from "../components/FilterUser";
 
 const LOADING_SCREEN_STYLES =
   "flex h-screen w-full items-center justify-center bg-awesome-purple";
@@ -45,7 +48,7 @@ const UserTablePage = () => {
 
   const [tableData, setTableData] = useState<string[][]>([]);
   const [filteredData, setFilteredData] = useState<string[][]>([]);
-  const [selectedFilterRole, setSelectedFilterRole] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   //Fetch the data
   const { data, isFetching } = useQuery({
@@ -54,7 +57,14 @@ const UserTablePage = () => {
     queryKey: ["Users"],
     queryFn: async () => {
       const response = await client.models.User.list({
-        selectionSet: ["lastName", "firstName", "team.name", "email", "id"], // need role - ask Ideen
+        selectionSet: [
+          "lastName",
+          "firstName",
+          "role",
+          "team.name",
+          "email",
+          "id",
+        ],
       });
       console.log(response.data);
       return response.data;
@@ -66,7 +76,7 @@ const UserTablePage = () => {
       const formattedData = data.map((user) => ({
         lastName: user.lastName ?? "",
         firstName: user.firstName ?? "",
-        role: "Participant" ?? "", // Do I need to create an empty a
+        role: user.role ?? "Participant",
         team: user.team.name ?? "",
         email: user.email ?? "",
         userId: user.id ?? "",
@@ -96,31 +106,34 @@ const UserTablePage = () => {
 
   useEffect(() => {
     const applyFilters = () => {
-      let newFilteredData = tableData;
-      if (selectedFilterRole.includes("All roles")) {
-        newFilteredData = tableData;
-        console.log("All roles selected");
-      } else if (selectedFilterRole.includes("Admin")) {
-        newFilteredData = newFilteredData.filter((row) => row[2] === "Admin");
-        console.log("Admin selected");
-      } else if (selectedFilterRole.includes("Judge")) {
-        newFilteredData = newFilteredData.filter((row) => row[2] === "Judge");
-        console.log("Judge selected");
-      } else if (selectedFilterRole.includes("Participant")) {
-        newFilteredData = newFilteredData.filter(
-          (row) => row[2] === "Participant",
-        );
-        console.log("Participant selected");
+      let newFilteredData = [];
+
+      switch (selectedFilters[0]) {
+        case "Admin":
+          newFilteredData = tableData.filter((row) => row[2] === "Admin");
+          break;
+        case "Judge":
+          newFilteredData = tableData.filter((row) => row[2] === "Judge");
+          break;
+        case "Participant":
+          newFilteredData = tableData.filter((row) => row[2] === "Participant");
+          break;
+        default:
+          newFilteredData = [...tableData];
       }
+
+      //sort the new filtered data alphabetically based on user's last name
       newFilteredData.sort((a, b) => a[0].localeCompare(b[0]));
+
       setFilteredData(newFilteredData);
     };
 
     applyFilters();
-  }, [selectedFilterRole, tableData]);
+  }, [selectedFilters, tableData]);
 
   const handleFilterChange = (filters: string[]) => {
-    setSelectedFilterRole(filters);
+    setSelectedFilters(filters);
+    console.log("Selected filters:", filters);
   };
 
   const queryClient = useQueryClient();
@@ -152,9 +165,15 @@ const UserTablePage = () => {
         </div>
       ) : (
         <>
-          <FilterUserRole
+          {/* <FilterUserRole
             filterRoles={filters}
-            onFilterRolesChange={handleFilterChange}
+            filterValueSelected={onFilterRoleSelected}
+            // onFilterRolesChange={handleFilterChange}
+            // filterValueSelected={onFilterValueSelected}
+          /> */}
+          <FilterUser
+            filterLabels={filters}
+            onFilterChange={handleFilterChange}
           />
           <DataTableSection
             tableData={filteredData}

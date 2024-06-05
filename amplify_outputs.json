@@ -59,6 +59,13 @@
               "isRequired": false,
               "attributes": []
             },
+            "role": {
+              "name": "role",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
             "email": {
               "name": "email",
               "isArray": false,
