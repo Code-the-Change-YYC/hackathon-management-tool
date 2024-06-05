@@ -10,18 +10,14 @@ import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
 import type { DefaultComponents } from "@aws-amplify/ui-react/dist/types/components/Authenticator/hooks/useCustomComponents/defaultComponents";
 import { type AuthContext } from "@aws-amplify/ui/dist/types";
 
-export default function Login({
-  headerField = "Login",
-}: {
-  headerField?: string;
-}) {
+export default function Login() {
   const pathname = usePathname();
   const components: DefaultComponents = {
     SignIn: {
-      Header: () => <FormFieldsHeader headerField={headerField} />,
+      Header: () => <FormFieldsHeader />,
     },
     SignUp: {
-      Header: () => <FormFieldsHeader headerField={headerField} />,
+      Header: () => <FormFieldsHeader />,
     },
     Footer: () => {
       const { toSignIn, toSignUp } = useAuthenticator();
