@@ -1,15 +1,15 @@
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
 import { Flex } from "@aws-amplify/ui-react";
 
 export default function FormFieldsHeader({
   className,
+  headerField,
 }: {
   className?: string;
+  headerField?: string;
 }) {
-  const pathName = usePathname();
   return (
     <div
       className={twMerge(
@@ -41,9 +41,7 @@ export default function FormFieldsHeader({
               width={28}
               height={21}
             />
-            <div className=" text-nowrap text-black">
-              {pathName === "/register" ? "Individual Registration" : "Login"}
-            </div>
+            <div className=" text-nowrap text-black">{headerField}</div>
           </Flex>
           <Image
             src="/svgs/login/vector_113.svg"

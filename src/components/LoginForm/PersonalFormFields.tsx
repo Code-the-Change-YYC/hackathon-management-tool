@@ -31,8 +31,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       });
     },
     onSuccess: () => {
-      // TODO: ADD TOAST
-      router.push("/participant/profile");
+      router.push("/register/team");
     },
   });
   const institutions = [
@@ -76,7 +75,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     return <div>Error, please try again later.</div>;
   }
   if (data?.completedRegistration) {
-    router.push("/participant/profile");
+    router.push("/register/team");
     return null;
   }
   return (
