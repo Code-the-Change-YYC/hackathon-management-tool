@@ -35,7 +35,7 @@ interface PopupProps {
 
 const client = generateClient<Schema>();
 
-const Popup = ({
+const PopupUser = ({
   selectedMembersData,
   selectedMemberStatus,
   popupType,
@@ -143,4 +143,4 @@ const Popup = ({
   );
 };
 
-export default Popup;
+export default PopupUser;

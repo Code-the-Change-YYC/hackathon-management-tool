@@ -4,9 +4,9 @@ import { generateClient } from "aws-amplify/api";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
-import DataTableSection from "@/app/admin/components/DataTableSection";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import DataTableSectionUser from "../components/DataTableSectionUser";
 import FilterUser from "../components/FilterUser";
 
 const LOADING_SCREEN_STYLES =
@@ -167,7 +167,7 @@ const UserTablePage = () => {
             filterLabels={filters}
             onFilterChange={handleFilterChange}
           />
-          <DataTableSection
+          <DataTableSectionUser
             tableData={filteredData}
             tableHeaders={tableHeaders}
             userData={userData}

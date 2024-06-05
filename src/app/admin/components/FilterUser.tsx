@@ -9,8 +9,8 @@ const DROPDOWN_STYLES =
 const DROPDOWN_HEADER_BAR_STYLES = "bg-white rounded-md p-10";
 const DROPDOWN_CONTENT_STYLES =
   "relative flex flex-col items-center w-[340px] h-[100px] rounded border-[#A689FF]";
-const DROPDOWN_ITEM_STYLES =
-  "flex w-full cursor-pointer justify-between rounded-r-lg border-l-4 border-l-transparent p-4 hover:border-l-[#A689FF] hover:bg-white";
+// const DROPDOWN_ITEM_STYLES =
+//   "flex w-full cursor-pointer justify-between rounded-r-lg border-l-4 border-l-transparent p-4 hover:border-l-[#A689FF] hover:bg-white";
 
 interface Filter {
   label: string; // label comes from filter array of objects
