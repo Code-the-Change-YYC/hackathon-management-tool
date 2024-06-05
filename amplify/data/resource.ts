@@ -20,7 +20,7 @@ const schema = a
         id: a.id().required(),
         firstName: a.string(),
         lastName: a.string(),
-        role: a.string(),
+        role: a.string().default("Participant"),
         email: a.string(),
         meals: a.boolean(),
         institution: a.string(),
@@ -68,7 +68,7 @@ const schema = a
       statusCode: a.integer(),
       headers: a.json(),
     }),
-    AResponse: a.customType({
+    AddUserToGroupResponse: a.customType({
       body: a.json(),
       statusCode: a.integer(),
       headers: a.json(),
@@ -98,7 +98,7 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.guest(), allow.authenticated()])
       .handler(a.handler.function(AssignUsersToTeams)),
-    addUserToGroup: a
+    AddUserToGroup: a
       .mutation()
       .arguments({
         userId: a.string().required(),
@@ -106,7 +106,7 @@ const schema = a
       })
       .authorization((allow) => [allow.group("Admin")])
       .handler(a.handler.function(AddUserToGroup))
-      .returns(a.ref("AResponse")),
+      .returns(a.ref("AddUserToGroupResponse")),
     CreateTeamWithCode: a
       .mutation()
       .arguments({

@@ -39,9 +39,9 @@ Amplify.configure(
   },
 );
 
-type Handler = Schema["addUserToGroup"]["functionHandler"];
+type Handler = Schema["AddUserToGroup"]["functionHandler"];
 
-const client = new CognitoIdentityProviderClient({});
+const cognitoClient = new CognitoIdentityProviderClient({});
 
 const dynamoClient = generateClient<Schema>();
 
@@ -54,31 +54,27 @@ export const handler: Handler = async (event) => {
       Username: userId,
       UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
     });
-    const listGroupResponse = await client.send(listGroupCommand);
+    const listGroupResponse = await cognitoClient.send(listGroupCommand);
 
-    if (listGroupResponse.Groups?.length === 0) {
-      return {
-        body: { value: `User not found` },
-        statusCode: 404,
-        headers: { "Content-Type": "application/json" },
-      };
-    }
+    if (listGroupResponse.Groups) {
+      // Remove the user from that group
+      const removeFromGroupCommand = new AdminRemoveUserFromGroupCommand({
+        Username: userId,
+        GroupName: (listGroupResponse.Groups as { GroupName: string }[])[0]
+          ?.GroupName,
+        UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
+      });
+      const removeUserRepsonse = await cognitoClient.send(
+        removeFromGroupCommand,
+      );
 
-    // Remove the user from that group
-    const removeFromGroupCommand = new AdminRemoveUserFromGroupCommand({
-      Username: userId,
-      GroupName: (listGroupResponse.Groups as { GroupName: string }[])[0]
-        ?.GroupName,
-      UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
-    });
-    const removeUserRepsonse = await client.send(removeFromGroupCommand);
-
-    if (removeUserRepsonse.$metadata.httpStatusCode !== 200) {
-      return {
-        body: { value: `Error while removing user from group` },
-        statusCode: 500,
-        headers: { "Content-Type": "application/json" },
-      };
+      if (removeUserRepsonse.$metadata.httpStatusCode !== 200) {
+        return {
+          body: { value: `Error while removing user from group` },
+          statusCode: 500,
+          headers: { "Content-Type": "application/json" },
+        };
+      }
     }
 
     // Add user to new group
@@ -87,7 +83,7 @@ export const handler: Handler = async (event) => {
       GroupName: groupName,
       UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
     });
-    const addUserResponse = await client.send(addUserToGroupCommand);
+    const addUserResponse = await cognitoClient.send(addUserToGroupCommand);
 
     if (addUserResponse.$metadata.httpStatusCode !== 200) {
       return {
