@@ -26,14 +26,6 @@ const FilterUser = ({ filterLabels, onFilterChange }: FilterUserProps) => {
 
   const handleDropDownRoleChange = (label: string) => {
     setSelectedFilters((prevFilters) => {
-      console.log(label); //label is the role selected from the dropdown
-      // const newFilters = prevFilters.includes(label)
-      //   ? prevFilters.filter((filter) => filter !== label)
-      //   : [...prevFilters, label];
-      // onFilterChange(newFilters);
-      // console.log(newFilters);
-      // return newFilters;
-
       const newFilters =
         label === "All roles"
           ? ["All roles"]

@@ -1,12 +1,10 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-import { table } from "console";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import DataTableSection from "@/app/admin/components/DataTableSection";
-import FilterUserRole from "@/app/admin/components/FilterUserRole";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import FilterUser from "../components/FilterUser";
@@ -133,7 +131,6 @@ const UserTablePage = () => {
 
   const handleFilterChange = (filters: string[]) => {
     setSelectedFilters(filters);
-    console.log("Selected filters:", filters);
   };
 
   const queryClient = useQueryClient();
@@ -142,6 +139,7 @@ const UserTablePage = () => {
       console.log("Updating data:", updatedData);
       try {
         const response = await client.models.User.update(updatedData);
+        console.log(response.data);
         return response.data;
       } catch (error) {
         console.error("Error updating table data:", error);
@@ -165,12 +163,6 @@ const UserTablePage = () => {
         </div>
       ) : (
         <>
-          {/* <FilterUserRole
-            filterRoles={filters}
-            filterValueSelected={onFilterRoleSelected}
-            // onFilterRolesChange={handleFilterChange}
-            // filterValueSelected={onFilterValueSelected}
-          /> */}
           <FilterUser
             filterLabels={filters}
             onFilterChange={handleFilterChange}
