@@ -30,6 +30,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
+    "react-qrcode-logo": "^3.0.0",
     "react-toastify": "^10.0.5",
     "tailwind-merge": "^2.2.2"
   },
