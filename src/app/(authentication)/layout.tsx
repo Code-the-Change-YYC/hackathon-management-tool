@@ -27,7 +27,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
       <Image
         src={"/svgs/login/Events_vector.svg"}
-        className=" hidden w-full md:block"
+        className="w-full"
         height={207}
         width={1485}
         alt={""}
