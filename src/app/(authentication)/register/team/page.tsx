@@ -1,11 +1,9 @@
 import Link from "next/link";
 
+import PurpleButton from "@/components/PurpleButton";
 import { Underline } from "@/utils/text-utils";
 
 import JoinTeamInstructions from "./JoinTeamInstructions";
-
-const BUTTON_STYLES =
-  "bg-awesomer-purple w-full py-2 hover:opacity-90 transition duration-300 font-medium text-xl rounded-full border-4 border-white shadow-md w-[300px]";
 
 export default function page() {
   return (
@@ -25,10 +23,10 @@ export default function page() {
       </div>
       <div className="flex flex-col items-center justify-between text-white lg:flex-row">
         <Link href={"/register/team/remind"}>
-          <button className={BUTTON_STYLES}>Remind me later</button>
+          <PurpleButton>Remind me later</PurpleButton>
         </Link>
         <Link href={"/register/team/ready"}>
-          <button className={BUTTON_STYLES}>Yes!</button>
+          <PurpleButton>Yes!</PurpleButton>
         </Link>
       </div>
     </div>

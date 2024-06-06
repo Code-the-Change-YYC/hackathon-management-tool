@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import PurpleButton from "@/components/PurpleButton";
 import NewMember1 from "@/images/register/NewMember1.png";
 import NewTeam1 from "@/images/register/NewTeam1.png";
 import { Underline } from "@/utils/text-utils";
@@ -14,9 +15,6 @@ function Card({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-const BUTTON_STYLES =
-  "bg-awesomer-purple w-full p-2 hover:opacity-90 text-white transition duration-300 text-xl rounded-full border-4 border-white shadow-md md:w-[300px]";
-
 export default function page() {
   return (
     <div className="flex w-full flex-col justify-center gap-6 rounded-3xl bg-white p-4 text-3xl font-bold md:p-8">
@@ -27,13 +25,13 @@ export default function page() {
       <div className="flex flex-col gap-8 lg:flex-row">
         <Card>
           <Link href={"/register/team/new"}>
-            <button className={BUTTON_STYLES}>Register New Team</button>
+            <PurpleButton>Register New Team</PurpleButton>
           </Link>
           <Image className="rounded-3xl bg-white p-4" src={NewTeam1} alt={""} />
         </Card>
         <Card>
           <Link href={"/register/team/existing"}>
-            <button className={BUTTON_STYLES}>Join Existing Team</button>
+            <PurpleButton>Join Existing Team</PurpleButton>
           </Link>
           <Image
             className="rounded-3xl bg-white p-4"

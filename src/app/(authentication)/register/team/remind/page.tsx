@@ -1,9 +1,8 @@
 import Link from "next/link";
 
-export default function page() {
-  const BUTTON_STYLES =
-    "bg-awesomer-purple flex items-center justify-center w-full py-2 hover:opacity-90 transition duration-300 font-medium text-xl rounded-full border-4 border-white shadow-md md:w-[300px]";
+import PurpleButton from "@/components/PurpleButton";
 
+export default function page() {
   // TODO: Add a reminder to join a team in two days
   return (
     <div className="flex w-full flex-col justify-center gap-6 rounded-3xl bg-white p-4 md:p-8">
@@ -12,8 +11,8 @@ export default function page() {
         We will remind you to join a team in two days!
       </div>
       <div className="flex justify-end">
-        <Link className={BUTTON_STYLES} href={"/"}>
-          <button className="text-white ">Close</button>
+        <Link href={"/"}>
+          <PurpleButton>Close</PurpleButton>
         </Link>
       </div>
     </div>

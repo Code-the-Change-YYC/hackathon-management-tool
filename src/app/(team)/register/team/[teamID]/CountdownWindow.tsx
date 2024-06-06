@@ -102,7 +102,7 @@ export default function CountdownWindow({
           height={50}
         />
       </div>
-      <div className="flex flex-col items-center gap-4 rounded-b-3xl bg-white py-12 text-awesomer-purple">
+      <div className="flex w-full flex-col items-center gap-4 rounded-b-3xl bg-white py-12 text-awesomer-purple">
         <h1 className="text-5xl font-extrabold">Thank you.</h1>
         <h1 className="text-3xl font-medium">Your registration is complete!</h1>
         {hackathonTime ? <HackathonStart /> : <HackathonClock />}

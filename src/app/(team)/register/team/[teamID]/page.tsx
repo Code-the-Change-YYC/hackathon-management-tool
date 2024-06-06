@@ -1,9 +1,7 @@
+import PurpleButton from "@/components/PurpleButton";
 import { Underline } from "@/utils/text-utils";
 
 import CountdownWindow from "./CountdownWindow";
-
-const BUTTON_STYLES =
-  "bg-awesomer-purple py-2 hover:opacity-90 transition duration-300 font-medium text-xl rounded-full border-4 border-white shadow-md w-48";
 
 const TeamInformation = ({
   teamID,
@@ -44,14 +42,14 @@ export default function page({ params }: { params: { teamID: string } }) {
         </h1>
         <hr />
         <div className=" flex w-full justify-evenly gap-4 text-white">
-          <button className={BUTTON_STYLES}>Google</button>
-          <button className={BUTTON_STYLES}>Outlook</button>
-          <button className={BUTTON_STYLES}>iCal</button>
+          <PurpleButton>Google</PurpleButton>
+          <PurpleButton>Outlook</PurpleButton>
+          <PurpleButton>iCal</PurpleButton>
         </div>
       </CountdownWindow>
 
       <div className="my-4 flex w-full justify-end text-white">
-        <button className={BUTTON_STYLES}>Return</button>
+        <PurpleButton>Return</PurpleButton>
       </div>
     </>
   );
