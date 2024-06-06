@@ -1,11 +1,10 @@
 "use client";
 
-import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession, signOut } from "aws-amplify/auth";
 import { useContext } from "react";
 import { type ReactNode, createContext, useEffect, useState } from "react";
 
-import { type Schema } from "@/amplify/data/resource";
+import { client } from "@/app/QueryProvider";
 
 interface Props {
   children: ReactNode | ReactNode[];
@@ -33,8 +32,6 @@ interface IUserReturn {
   currentUser: IUser;
   // setCurrentUser: (state: IUser) => void;
 }
-
-const client = generateClient<Schema>();
 
 export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 

@@ -1,15 +1,14 @@
-import { generateClient } from "aws-amplify/api";
 import type { AuthUser } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import type { Schema } from "@/amplify/data/resource";
+import { client } from "@/app/QueryProvider";
 import FormFieldButtons from "@/components/LoginForm/FormFieldButtons";
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-const client = generateClient<Schema>();
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();
   const { isPending, isError, data } = useQuery({

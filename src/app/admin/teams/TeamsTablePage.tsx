@@ -1,9 +1,8 @@
 "use client";
 
-import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
 
-import { type Schema } from "@/amplify/data/resource";
+import { client } from "@/app/QueryProvider";
 import DataTableSection from "@/app/admin/components/DataTableSection";
 import FilterSection from "@/app/admin/components/FilterSection";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -19,8 +18,6 @@ const tableHeaders = [
 ];
 
 const filters = [{ label: "Approved" }, { label: "Checked-in" }];
-
-const client = generateClient<Schema>();
 
 const TeamsTablePage = () => {
   const [teamData, setTeamData] = useState<

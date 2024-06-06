@@ -25,14 +25,13 @@ export default function RegistrationLayout({
   return (
     <div
       className={twMerge(
-        "flex w-full flex-1 flex-col items-center overflow-hidden pt-6",
+        "flex w-full flex-1 flex-col items-center justify-center overflow-hidden pt-6",
         bgColor,
       )}
     >
       <div className="flex w-11/12 max-w-screen-2xl flex-1 flex-col items-center md:w-9/12 ">
-        {/* <Header /> */}
         {header}
-        <div className="relative w-full ">
+        <div className="relative flex w-full flex-col items-center ">
           <Image
             className="absolute -right-28 top-0"
             src={"/svgs/login/Star_Icon.svg"}

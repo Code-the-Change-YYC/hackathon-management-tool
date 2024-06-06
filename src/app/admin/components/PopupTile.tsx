@@ -1,9 +1,8 @@
 "use client";
 
-import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
 
-import { type Schema } from "@/amplify/data/resource";
+import { client } from "@/app/QueryProvider";
 import { useMutation } from "@tanstack/react-query";
 
 const exit_icon = "/svgs/admin/exit_icon.svg";
@@ -32,8 +31,6 @@ interface PopupProps {
   recordToDelete: string;
   onClose: () => void;
 }
-
-const client = generateClient<Schema>();
 
 const Popup = ({
   selectedMembersData,
