@@ -60,7 +60,9 @@ export default function page() {
         </h2>
       </div>
       <div className="flex justify-between text-white">
-        <button className={BUTTON_STYLES}>Remind me later</button>
+        <Link href={"/register/team/remind"}>
+          <button className={BUTTON_STYLES}>Remind me later</button>
+        </Link>
         <button className={BUTTON_STYLES}>Yes!</button>
       </div>
     </div>
