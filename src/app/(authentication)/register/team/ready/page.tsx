@@ -15,7 +15,7 @@ function Card({ children }: { children: React.ReactNode }) {
 }
 const BUTTON_STYLES =
   "bg-awesomer-purple w-full p-2 hover:opacity-90 text-white transition duration-300 text-xl rounded-full border-4 border-white shadow-md md:w-[300px]";
-function Underline({
+export function Underline({
   children,
   noTick,
 }: {
