@@ -29,7 +29,6 @@ const LINK_STYLES =
 
 const WEBPAGE_CONTAINER =
   "hidden md:block lg:block rounded-t-md bg-[#00D3A9] opacity-95 ";
-const WINDOW_BUTTONS_SVG = "/svgs/heroSection/window_control_buttons.svg";
 
 const COUNTDOWN_CONTAINER = "mx-auto p-4";
 const TIMER_CONTAINER = "flex justify-center my-12";
@@ -155,7 +154,7 @@ const HeroSectionTile = (props: HeroSectionProps) => {
       <div className={WEBPAGE_CONTAINER}>
         <div className="relative rounded-t-md border-t-[30px] border-white">
           <Image
-            src={WINDOW_BUTTONS_SVG}
+            src={"/svgs/heroSection/window_control_buttons.svg"}
             alt="check mark icon"
             width={50}
             height={50}
