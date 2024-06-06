@@ -8,7 +8,7 @@ import { TeamInstructions } from "../page";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-3 rounded-3xl bg-green-200 p-4 text-xl font-light">
+    <div className="flex w-full flex-col items-center justify-center gap-3 rounded-3xl bg-pastel-green p-4 text-xl font-light">
       {children}
     </div>
   );
