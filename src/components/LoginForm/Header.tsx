@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Header = () => {
   return (
-    <div className="relative text-nowrap pb-4 text-center">
+    <div className="relative pb-4 text-center">
       <div className="hidden md:block">
         <Image
           className=" absolute -top-6 right-[-130px] "
