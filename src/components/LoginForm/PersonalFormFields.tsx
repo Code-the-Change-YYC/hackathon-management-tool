@@ -83,7 +83,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       onSubmit={submitForm}
       className="relative flex w-full flex-col justify-center gap-4 rounded-3xl bg-white p-4 md:p-8"
     >
-      <FormFieldsHeader className={" -ml-4 -mt-0 p-0"} />
+      <FormFieldsHeader />
       <div className="flex flex-row justify-between gap-2 md:gap-12 ">
         <div className="flex w-1/2 flex-col gap-2">
           <Label htmlFor="firstName">* First Name:</Label>

@@ -3,8 +3,9 @@ import Link from "next/link";
 
 import NewMember1 from "@/images/register/NewMember1.png";
 import NewTeam1 from "@/images/register/NewTeam1.png";
+import { Underline } from "@/utils/text-utils";
 
-import { TeamInstructions } from "../page";
+import JoinTeamInstructions from "../JoinTeamInstructions";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
@@ -15,36 +16,7 @@ function Card({ children }: { children: React.ReactNode }) {
 }
 const BUTTON_STYLES =
   "bg-awesomer-purple w-full p-2 hover:opacity-90 text-white transition duration-300 text-xl rounded-full border-4 border-white shadow-md md:w-[300px]";
-export function Underline({
-  children,
-  noTick,
-}: {
-  children: React.ReactNode;
-  noTick?: boolean;
-}) {
-  return (
-    <span className="relative w-fit">
-      {!noTick && (
-        <Image
-          className="pointer-events-none absolute -left-8 top-2 select-none"
-          src="/svgs/login/vector_112.svg"
-          alt=""
-          width={20}
-          height={20}
-        />
-      )}
-      {children}
-      <div className="absolute h-4 w-full">
-        <Image
-          src="/images/register/group_58.png"
-          objectFit="contain"
-          alt=""
-          fill
-        />
-      </div>
-    </span>
-  );
-}
+
 export default function page() {
   return (
     <div className="flex w-full flex-col justify-center gap-6 rounded-3xl bg-white p-4 text-3xl font-bold md:p-8">
@@ -74,7 +46,7 @@ export default function page() {
         <Underline>Looking for a team?</Underline>
       </div>
       <Card>
-        <TeamInstructions />
+        <JoinTeamInstructions />
       </Card>
     </div>
   );

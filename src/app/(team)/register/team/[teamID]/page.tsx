@@ -1,16 +1,10 @@
-import { Underline } from "@/app/(authentication)/register/team/ready/page";
+import { Underline } from "@/utils/text-utils";
 
 import CountdownWindow from "./CountdownWindow";
 
 const BUTTON_STYLES =
   "bg-awesomer-purple py-2 hover:opacity-90 transition duration-300 font-medium text-xl rounded-full border-4 border-white shadow-md w-48";
-export async function generateStaticParams() {
-  // const posts = await fetch('https://.../posts').then((res) => res.json())
-  const teams = [{ teamID: "myTeamName1" }, { teamID: "HackathonToolTeam-24" }];
-  return teams.map((team) => ({
-    teamID: team.teamID,
-  }));
-}
+
 const TeamInformation = ({
   teamID,
   teamName,

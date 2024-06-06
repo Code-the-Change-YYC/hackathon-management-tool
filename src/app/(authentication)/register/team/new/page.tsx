@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { Underline } from "../ready/page";
+import { Underline } from "@/utils/text-utils";
 
 const BUTTON_STYLES =
   "bg-awesomer-purple w-full py-2 hover:opacity-90 transition duration-300 font-medium text-xl rounded-full border-4 border-white shadow-md w-44";
