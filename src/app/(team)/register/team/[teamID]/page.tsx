@@ -1,4 +1,7 @@
+"use client";
+
 import PurpleButton from "@/components/PurpleButton";
+import { downloadEvent } from "@/utils/generateICS";
 import { Underline } from "@/utils/text-utils";
 
 import CountdownWindow from "./CountdownWindow";
@@ -42,9 +45,9 @@ export default function page({ params }: { params: { teamID: string } }) {
         </h1>
         <hr />
         <div className=" flex w-full justify-evenly gap-4 text-white">
-          <PurpleButton>Google</PurpleButton>
-          <PurpleButton>Outlook</PurpleButton>
-          <PurpleButton>iCal</PurpleButton>
+          <PurpleButton onClick={downloadEvent}>Google</PurpleButton>
+          <PurpleButton onClick={downloadEvent}>Outlook</PurpleButton>
+          <PurpleButton onClick={downloadEvent}>iCal</PurpleButton>
         </div>
       </CountdownWindow>
 
