@@ -4,8 +4,8 @@ import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
-import DataTableSection from "@/components/TeamsTable/DataTableSection";
-import FilterSection from "@/components/TeamsTable/FilterSection";
+import DataTableSection from "@/components/admin/TeamsTable/DataTableSection";
+import FilterSection from "@/components/admin/TeamsTable/FilterSection";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 
