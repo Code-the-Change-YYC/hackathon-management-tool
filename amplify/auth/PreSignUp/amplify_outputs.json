@@ -1,9 +1,9 @@
 {
   "auth": {
-    "user_pool_id": "ca-central-1_ojEjtQEX2",
+    "user_pool_id": "ca-central-1_ODzvYuJmV",
     "aws_region": "ca-central-1",
-    "user_pool_client_id": "44cbv445uef72rmo7ofhkkg6hj",
-    "identity_pool_id": "ca-central-1:a95bb69f-be2d-444f-bb60-e93992e066a3",
+    "user_pool_client_id": "4krvg3pjnm6ertqnlk0tq20sgi",
+    "identity_pool_id": "ca-central-1:750db570-9d78-4c3c-ad41-ed62c750a20c",
     "standard_required_attributes": ["email"],
     "username_attributes": ["email"],
     "user_verification_types": ["email"],
@@ -17,9 +17,9 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://jafl6nbdu5czfj443p77w65ncq.appsync-api.ca-central-1.amazonaws.com/graphql",
+    "url": "https://uck3fh7umzfdnhwukrxlrlgaeu.appsync-api.ca-central-1.amazonaws.com/graphql",
     "aws_region": "ca-central-1",
-    "api_key": "da2-wpyqloa55ra4dnobm2v4tu6a74",
+    "api_key": "da2-irowb2pkvrdkrfxyj7qkqajfzq",
     "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
     "authorization_types": ["API_KEY", "AWS_LAMBDA", "AWS_IAM"],
     "model_introspection": {
@@ -49,6 +49,13 @@
               "isRequired": false,
               "attributes": []
             },
+            "role": {
+              "name": "role",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
             "email": {
               "name": "email",
               "isArray": false,
@@ -67,6 +74,13 @@
               "name": "institution",
               "isArray": false,
               "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
+            "completedRegistration": {
+              "name": "completedRegistration",
+              "isArray": false,
+              "type": "Boolean",
               "isRequired": false,
               "attributes": []
             },
@@ -104,6 +118,13 @@
                 "targetNames": ["teamId"]
               }
             },
+            "profileOwner": {
+              "name": "profileOwner",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
             "createdAt": {
               "name": "createdAt",
               "isArray": false,
@@ -129,19 +150,25 @@
               "properties": {}
             },
             {
+              "type": "key",
+              "properties": {
+                "fields": ["id"]
+              }
+            },
+            {
               "type": "auth",
               "properties": {
                 "rules": [
                   {
                     "provider": "userPools",
-                    "ownerField": "owner",
+                    "ownerField": "profileOwner",
                     "allow": "owner",
-                    "identityClaim": "cognito:username",
-                    "operations": ["create", "update", "delete", "read"]
+                    "operations": ["read", "update"],
+                    "identityClaim": "cognito:username"
                   },
                   {
                     "allow": "private",
-                    "operations": ["read", "create", "update", "delete"]
+                    "operations": ["read"]
                   }
                 ]
               }
@@ -167,6 +194,13 @@
               "name": "name",
               "isArray": false,
               "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
+            "approved": {
+              "name": "approved",
+              "isArray": false,
+              "type": "Boolean",
               "isRequired": false,
               "attributes": []
             },
@@ -222,12 +256,12 @@
                     "provider": "userPools",
                     "ownerField": "owner",
                     "allow": "owner",
-                    "identityClaim": "cognito:username",
-                    "operations": ["create", "update", "delete", "read"]
+                    "operations": ["read", "update"],
+                    "identityClaim": "cognito:username"
                   },
                   {
                     "allow": "private",
-                    "operations": ["read", "create", "update", "delete"]
+                    "operations": ["read"]
                   }
                 ]
               }
@@ -267,6 +301,32 @@
               "attributes": []
             }
           }
+        },
+        "AddUserToGroupResponse": {
+          "name": "AddUserToGroupResponse",
+          "fields": {
+            "body": {
+              "name": "body",
+              "isArray": false,
+              "type": "AWSJSON",
+              "isRequired": false,
+              "attributes": []
+            },
+            "statusCode": {
+              "name": "statusCode",
+              "isArray": false,
+              "type": "Int",
+              "isRequired": false,
+              "attributes": []
+            },
+            "headers": {
+              "name": "headers",
+              "isArray": false,
+              "type": "AWSJSON",
+              "isRequired": false,
+              "attributes": []
+            }
+          }
         }
       },
       "mutations": {
@@ -283,6 +343,72 @@
               "isArray": false,
               "type": "String",
               "isRequired": false
+            }
+          }
+        },
+        "AssignUsersToTeams": {
+          "name": "AssignUsersToTeams",
+          "isArray": false,
+          "type": {
+            "nonModel": "GenericFunctionResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "userId": {
+              "name": "userId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "teamId": {
+              "name": "teamId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "AddUserToGroup": {
+          "name": "AddUserToGroup",
+          "isArray": false,
+          "type": {
+            "nonModel": "AddUserToGroupResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "userId": {
+              "name": "userId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "groupName": {
+              "name": "groupName",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "CreateTeamWithCode": {
+          "name": "CreateTeamWithCode",
+          "isArray": false,
+          "type": {
+            "nonModel": "GenericFunctionResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "teamName": {
+              "name": "teamName",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "addCallerToTeam": {
+              "name": "addCallerToTeam",
+              "isArray": false,
+              "type": "Boolean",
+              "isRequired": true
             }
           }
         }
