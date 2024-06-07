@@ -8,8 +8,8 @@ export function Underline({
   noTick?: boolean;
 }) {
   return (
-    <span className="relative w-fit">
-      <div className="flex">
+    <div className="relative flex w-fit flex-col">
+      <div className="flex w-fit">
         {!noTick && (
           <Image
             className="pointer-events-none select-none"
@@ -21,14 +21,13 @@ export function Underline({
         )}
         {children}
       </div>
-      <div className="absolute h-4 w-full">
-        <Image
-          src="/images/register/group_58.png"
-          objectFit="contain"
-          alt=""
-          fill
-        />
-      </div>
-    </span>
+      <Image
+        className="m-5 w-full pr-5 lg:m-10"
+        src="/images/register/group_58.png"
+        objectFit="contain"
+        alt=""
+        fill
+      />
+    </div>
   );
 }
