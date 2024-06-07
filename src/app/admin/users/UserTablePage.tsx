@@ -74,8 +74,8 @@ const UserTablePage = () => {
       const formattedData = data.map((user) => ({
         lastName: user.lastName ?? "",
         firstName: user.firstName ?? "",
-        role: user.role ?? "Participant",
-        team: user.team.name ?? "",
+        role: user.role ?? "",
+        team: user.team ?? "",
         email: user.email ?? "",
         userId: user.id ?? "",
       }));
