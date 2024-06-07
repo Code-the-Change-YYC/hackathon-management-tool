@@ -73,6 +73,10 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   if (isError) {
     return <div>Error, please try again later.</div>;
   }
+  if (data?.teamId) {
+    router.push(`/register/team/${data.teamId}`);
+    return null;
+  }
   if (data?.completedRegistration) {
     router.push("/register/team");
     return null;
