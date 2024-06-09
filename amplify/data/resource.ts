@@ -23,6 +23,7 @@ const schema = a
         role: a.string().default("Participant"),
         email: a.string(),
         meals: a.boolean(),
+        attended: a.boolean().default("false"),
         institution: a.string(),
         completedRegistration: a.boolean(),
         allergies: a.string(),
@@ -116,6 +117,21 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.guest(), allow.authenticated()])
       .handler(a.handler.function(CreateTeamWithCode)),
+
+    // Custom resolvers
+    SetUserAsAttended: a
+      .mutation()
+      .arguments({
+        userId: a.string().required(),
+      })
+      .returns(a.ref("User"))
+      .authorization((allow) => [allow.authenticated()])
+      .handler(
+        a.handler.custom({
+          dataSource: a.ref("User"),
+          entry: "./user/setUserAsAttended.js",
+        }),
+      ),
   })
 
   .authorization((allow) => [
