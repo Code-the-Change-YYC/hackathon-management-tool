@@ -1,6 +1,6 @@
-import * as React from "react";
+import type * as React from "react";
 
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import type { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 
 export declare type EscapeHatchProps = {
   [elementHierarchy: string]: Record<string, unknown>;
