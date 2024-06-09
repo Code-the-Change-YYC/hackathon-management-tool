@@ -1,4 +1,5 @@
-The prod branch has a CI/CD deployment available at: [https://hackthechangeyyc.ca/](https://hackthechangeyyc.ca/)
+- The prod branch has a CI/CD deployment available at: [https://hackthechangeyyc.ca/](https://hackthechangeyyc.ca/)
+- The main branch has a CI/CD deployment available at: [https://staging.hackthechangeyyc.ca/](https://staging.hackthechangeyyc.ca/)
 
 ## Getting Started
 
@@ -18,7 +19,7 @@ Ensure you run `npm i` in the root of the repo before continuing. Please respond
 
 https://docs.amplify.aws/gen2/start/account-setup/
 
-## Running the Dev Server
+## Running the dev Server with backend sandbox
 
 ```bash
 npx ampx sandbox
@@ -35,13 +36,9 @@ After updating a data model, deploy a sandbox so that amplify_outputs.json is up
 ## Running the Frontend
 
 ```bash
-npm run dev
+npm run dev -- -- <profile name>
 # or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn dev -- -- <profile name>
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

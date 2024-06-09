@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import Popup from "@/app/admin/components/PopupTile";
+import Popup from "@/components/admin/TeamsTable/PopupTile";
 
 const search_icon = "/svgs/admin/search_icon.svg";
 

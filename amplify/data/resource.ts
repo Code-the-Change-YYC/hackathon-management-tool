@@ -1,4 +1,5 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
+import { AddUserToGroup } from "@/amplify/function/BusinessLogic/AddUserToGroup/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
 import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
@@ -21,6 +22,7 @@ const schema = a
         id: a.id().required(),
         firstName: a.string(),
         lastName: a.string(),
+        role: a.string().default("Participant"),
         email: a.string(),
         institution: a.string(),
         completedRegistration: a.boolean(),
@@ -99,6 +101,11 @@ const schema = a
       statusCode: a.integer(),
       headers: a.json(),
     }),
+    AddUserToGroupResponse: a.customType({
+      body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
 
     /**
      * FUNCTION-RELATED APPSYNC RESOLVERS
@@ -143,6 +150,15 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(AssignUsersToTeams)),
+    AddUserToGroup: a
+      .mutation()
+      .arguments({
+        userId: a.string().required(),
+        groupName: a.string().required(),
+      })
+      .authorization((allow) => [allow.group("Admin")])
+      .handler(a.handler.function(AddUserToGroup))
+      .returns(a.ref("AddUserToGroupResponse")),
     CreateTeamWithCode: a
       .mutation()
       .arguments({
@@ -158,6 +174,7 @@ const schema = a
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
     allow.resource(VerifyUserMessage).to(["query", "mutate"]),
+    allow.resource(AddUserToGroup).to(["mutate"]),
     allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;

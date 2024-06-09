@@ -40,6 +40,7 @@ export const handler: PreSignUpTriggerHandler = async (event) => {
   return await dataClient.models.User.create({
     firstName: "",
     lastName: "",
+    role: "Participant",
     id: event.userName,
     email: event.request.userAttributes.email,
     checkedIn: false,
