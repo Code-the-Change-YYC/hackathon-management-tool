@@ -8,7 +8,7 @@ const SEARCH_RESULTS_SECTION_STYLES =
 const SEARCH_RESULTS_TEXT_STYLES = "py-6 text-2xl font-semibold";
 const SEARCH_BAR_STYLES =
   "border rounded-md border-black p-4 font-light h-3/5 w-2/5 max-w-[500px]";
-// const SEARCH_ICON_STYLES = "absolute right-8 top-1/2 -translate-y-1/2";
+const SEARCH_ICON_STYLES = "absolute right-8 top-1/2 -translate-y-1/2";
 
 const DATA_TABLE_SECTION_STYLES =
   "bg-light-grey border border-awesomer-purple m-4 p-4 rounded-md text-lg text-black w-full max-w-[1500px]";
@@ -161,13 +161,13 @@ const DataTableSectionUser = (props: DataTableProps) => {
             onChange={handleSearchChange}
           />
 
-          {/* <Image
+          <Image
             src={search_icon}
             alt="Magnifying glass icon"
             width={15}
             height={15}
             className={SEARCH_ICON_STYLES}
-          /> */}
+          />
         </div>
         <div>
           <table className={DATA_TABLE_CONTENT_STYLES}>

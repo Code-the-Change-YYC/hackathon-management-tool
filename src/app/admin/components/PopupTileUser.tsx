@@ -45,7 +45,7 @@ const PopupUser = ({
 }: PopupProps) => {
   const deleteRecord = useMutation({
     mutationFn: async (recordId: string) =>
-      await client.models.Team.delete({ id: recordId }),
+      await client.models.User.delete({ id: recordId }),
     onError: (error) => {
       console.log("Error deleting record:", error);
     },

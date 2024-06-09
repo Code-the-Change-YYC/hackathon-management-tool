@@ -31,7 +31,7 @@ const schema = a
           .default(false)
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read"]),
-            allow.groups(["Admin"]).to(["read", "update"]),
+            allow.groups(["Admin"]).to(["read", "update", "delete"]),
           ]),
         teamId: a
           .id()

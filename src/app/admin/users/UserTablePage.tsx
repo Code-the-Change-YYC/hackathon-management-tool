@@ -59,12 +59,14 @@ const UserTablePage = () => {
           "lastName",
           "firstName",
           "role",
-          "team.name",
+          "allergies",
           "email",
           "id",
         ],
       });
+
       console.log(response.data);
+
       return response.data;
     },
   });
@@ -75,7 +77,7 @@ const UserTablePage = () => {
         lastName: user.lastName ?? "",
         firstName: user.firstName ?? "",
         role: user.role ?? "",
-        team: user.team ?? "",
+        team: user.allergies ?? "",
         email: user.email ?? "",
         userId: user.id ?? "",
       }));
@@ -139,7 +141,6 @@ const UserTablePage = () => {
       console.log("Updating data:", updatedData);
       try {
         const response = await client.models.User.update(updatedData);
-        console.log(response.data);
         return response.data;
       } catch (error) {
         console.error("Error updating table data:", error);
