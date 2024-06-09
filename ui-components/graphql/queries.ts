@@ -2,10 +2,19 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const VerifyUserCode = /* GraphQL */ `
-  query VerifyUserCode($userCode: String) {
-    VerifyUserCode(userCode: $userCode) {
+export const GetUserMessageCode = /* GraphQL */ `
+  query GetUserMessageCode($userMessage: String) {
+    GetUserMessageCode(userMessage: $userMessage) {
       body
+      headers
+      statusCode
+      __typename
+    }
+  }
+`;
+export const VerifyUserMessage = /* GraphQL */ `
+  query VerifyUserMessage($userCode: String) {
+    VerifyUserMessage(userCode: $userCode) {
       headers
       statusCode
       __typename
@@ -22,11 +31,10 @@ export const getFoodEvent = /* GraphQL */ `
       createdAt
       description
       end
-      groups
       id
       name
-      owner
       start
+      totalGroupCount
       updatedAt
       __typename
     }
@@ -35,6 +43,7 @@ export const getFoodEvent = /* GraphQL */ `
 export const getTeam = /* GraphQL */ `
   query GetTeam($id: ID!) {
     getTeam(id: $id) {
+      approved
       createdAt
       id
       members {
@@ -52,28 +61,21 @@ export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       allergies
+      attendedEvents {
+        nextToken
+        __typename
+      }
       checkedIn
+      completedRegistration
       createdAt
       email
       firstName
       id
       institution
       lastName
-      meal {
-        createdAt
-        description
-        end
-        groups
-        id
-        name
-        owner
-        start
-        updatedAt
-        __typename
-      }
-      mealId
-      owner
+      profileOwner
       team {
+        approved
         createdAt
         id
         name
@@ -83,16 +85,46 @@ export const getUser = /* GraphQL */ `
       }
       teamId
       updatedAt
+      willEatMeals
       __typename
     }
   }
 `;
-export const getUserVerificationCode = /* GraphQL */ `
-  query GetUserVerificationCode($userId: String) {
-    getUserVerificationCode(userId: $userId) {
-      body
-      headers
-      statusCode
+export const getUserFoodEventAttendance = /* GraphQL */ `
+  query GetUserFoodEventAttendance($id: ID!) {
+    getUserFoodEventAttendance(id: $id) {
+      createdAt
+      foodEvent {
+        createdAt
+        description
+        end
+        id
+        name
+        start
+        totalGroupCount
+        updatedAt
+        __typename
+      }
+      foodEventId
+      id
+      updatedAt
+      user {
+        allergies
+        checkedIn
+        completedRegistration
+        createdAt
+        email
+        firstName
+        id
+        institution
+        lastName
+        profileOwner
+        teamId
+        updatedAt
+        willEatMeals
+        __typename
+      }
+      userId
       __typename
     }
   }
@@ -116,11 +148,10 @@ export const listFoodEvents = /* GraphQL */ `
         createdAt
         description
         end
-        groups
         id
         name
-        owner
         start
+        totalGroupCount
         updatedAt
         __typename
       }
@@ -145,11 +176,40 @@ export const listTeams = /* GraphQL */ `
       sortDirection: $sortDirection
     ) {
       items {
+        approved
         createdAt
         id
         name
         owner
         updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const listUserFoodEventAttendances = /* GraphQL */ `
+  query ListUserFoodEventAttendances(
+    $filter: ModelUserFoodEventAttendanceFilterInput
+    $id: ID
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listUserFoodEventAttendances(
+      filter: $filter
+      id: $id
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        createdAt
+        foodEventId
+        id
+        updatedAt
+        userId
         __typename
       }
       nextToken
@@ -175,16 +235,17 @@ export const listUsers = /* GraphQL */ `
       items {
         allergies
         checkedIn
+        completedRegistration
         createdAt
         email
         firstName
         id
         institution
         lastName
-        mealId
-        owner
+        profileOwner
         teamId
         updatedAt
+        willEatMeals
         __typename
       }
       nextToken

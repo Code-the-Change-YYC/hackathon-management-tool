@@ -71,7 +71,7 @@ const schema = a
         description: a.string().required(),
         start: a.datetime().required(),
         end: a.datetime().required(),
-        groups: a.integer().required(),
+        totalGroupCount: a.integer().required(),
         attended: a.hasMany("UserFoodEventAttendance", "foodEventId"),
       })
       .authorization((allow) => [

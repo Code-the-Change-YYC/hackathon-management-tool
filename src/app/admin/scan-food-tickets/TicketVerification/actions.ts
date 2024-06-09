@@ -3,6 +3,7 @@
 import { DateTime } from "luxon";
 import validator from "validator";
 
+import type { Schema } from "@/amplify/data/resource";
 import { getMessageAndCode } from "@/amplify/function/BusinessLogic/utils/crytography";
 import {
   getFoodGroupPositionNumber,
@@ -68,7 +69,6 @@ export async function verifyFoodTicket(
         description: "Person has already ate at this event",
       };
     }
-    // If the user is not in the correct time, they will still eat anyways, we will just let the scanner know that they should be at a different time
 
     //get user teamID
     const { data: user, errors: userErrors } = await client.models.User.get({
@@ -76,11 +76,12 @@ export async function verifyFoodTicket(
     });
     if (userErrors || !user?.teamId) {
       return {
-        canEat: true,
+        canEat: false,
         description:
           "Unknown time slot, had trouble finding the team for the user",
       };
     }
+    // If the user is not in the correct time, they will still eat anyways, we will just let the scanner know that they should be at a different time
     const { description } = await isCorrectTimeSlot(
       user?.teamId,
       foodEvent,
@@ -109,7 +110,6 @@ async function hasAlreadyAteAtFoodEvent(userID: string, foodEventID: string) {
       foodEventId: { eq: foodEventID },
     },
   });
-
   // Check if any records exist, indicating the user has attended the event
   return attendanceRecords.data.length > 0;
 }
@@ -117,24 +117,24 @@ async function hasAlreadyAteAtFoodEvent(userID: string, foodEventID: string) {
  * Check if the user is in the correct time slot
  */
 async function isCorrectTimeSlot(
-  userID: string,
-  foodEvent: any, //FIXME: if you know how to get around this, please fix it
+  teamID: string,
+  foodEvent: Schema["FoodEvent"]["type"], //FIXME: if you know how to get around this, please fix it
   timeSlot: number = -1, //by default will be automatic, unless a specific timeslot was chosen
 ) {
   let currentGroupPositionNumber = timeSlot;
   if (timeSlot === -1) {
     currentGroupPositionNumber = getFoodGroupPositionNumberForTime(
       DateTime.now().setZone(process.env.TIME_ZONE).toJSDate(),
-      foodEvent.groups,
+      foodEvent.totalGroupCount,
       foodEvent.start,
       foodEvent.end,
     );
   }
 
   const userGroupPositionNumber = getFoodGroupPositionNumber(
-    userID,
+    teamID,
     foodEvent.id,
-    foodEvent.groups,
+    foodEvent.totalGroupCount,
   );
 
   if (currentGroupPositionNumber === userGroupPositionNumber) {
@@ -144,11 +144,10 @@ async function isCorrectTimeSlot(
   } else {
     const actualTimeSlot = getTimeForFoodGroupPositionNumber(
       userGroupPositionNumber,
-      foodEvent.groups,
+      foodEvent.totalGroupCount,
       foodEvent.start,
       foodEvent.end,
     );
-
     return {
       description: `Person should be in timeslot ${actualTimeSlot}`,
     };
@@ -166,6 +165,5 @@ async function setUserAsAttendedAtFoodEvent(
     userId: userID,
     foodEventId: foodEventID,
   });
-
   return attendanceRecord;
 }

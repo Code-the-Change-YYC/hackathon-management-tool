@@ -5,9 +5,8 @@
 export const onCreateFoodEvent = /* GraphQL */ `
   subscription OnCreateFoodEvent(
     $filter: ModelSubscriptionFoodEventFilterInput
-    $owner: String
   ) {
-    onCreateFoodEvent(filter: $filter, owner: $owner) {
+    onCreateFoodEvent(filter: $filter) {
       attended {
         nextToken
         __typename
@@ -15,11 +14,10 @@ export const onCreateFoodEvent = /* GraphQL */ `
       createdAt
       description
       end
-      groups
       id
       name
-      owner
       start
+      totalGroupCount
       updatedAt
       __typename
     }
@@ -31,6 +29,7 @@ export const onCreateTeam = /* GraphQL */ `
     $owner: String
   ) {
     onCreateTeam(filter: $filter, owner: $owner) {
+      approved
       createdAt
       id
       members {
@@ -47,32 +46,25 @@ export const onCreateTeam = /* GraphQL */ `
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser(
     $filter: ModelSubscriptionUserFilterInput
-    $owner: String
+    $profileOwner: String
   ) {
-    onCreateUser(filter: $filter, owner: $owner) {
+    onCreateUser(filter: $filter, profileOwner: $profileOwner) {
       allergies
+      attendedEvents {
+        nextToken
+        __typename
+      }
       checkedIn
+      completedRegistration
       createdAt
       email
       firstName
       id
       institution
       lastName
-      meal {
-        createdAt
-        description
-        end
-        groups
-        id
-        name
-        owner
-        start
-        updatedAt
-        __typename
-      }
-      mealId
-      owner
+      profileOwner
       team {
+        approved
         createdAt
         id
         name
@@ -82,6 +74,48 @@ export const onCreateUser = /* GraphQL */ `
       }
       teamId
       updatedAt
+      willEatMeals
+      __typename
+    }
+  }
+`;
+export const onCreateUserFoodEventAttendance = /* GraphQL */ `
+  subscription OnCreateUserFoodEventAttendance(
+    $filter: ModelSubscriptionUserFoodEventAttendanceFilterInput
+  ) {
+    onCreateUserFoodEventAttendance(filter: $filter) {
+      createdAt
+      foodEvent {
+        createdAt
+        description
+        end
+        id
+        name
+        start
+        totalGroupCount
+        updatedAt
+        __typename
+      }
+      foodEventId
+      id
+      updatedAt
+      user {
+        allergies
+        checkedIn
+        completedRegistration
+        createdAt
+        email
+        firstName
+        id
+        institution
+        lastName
+        profileOwner
+        teamId
+        updatedAt
+        willEatMeals
+        __typename
+      }
+      userId
       __typename
     }
   }
@@ -89,9 +123,8 @@ export const onCreateUser = /* GraphQL */ `
 export const onDeleteFoodEvent = /* GraphQL */ `
   subscription OnDeleteFoodEvent(
     $filter: ModelSubscriptionFoodEventFilterInput
-    $owner: String
   ) {
-    onDeleteFoodEvent(filter: $filter, owner: $owner) {
+    onDeleteFoodEvent(filter: $filter) {
       attended {
         nextToken
         __typename
@@ -99,11 +132,10 @@ export const onDeleteFoodEvent = /* GraphQL */ `
       createdAt
       description
       end
-      groups
       id
       name
-      owner
       start
+      totalGroupCount
       updatedAt
       __typename
     }
@@ -115,6 +147,7 @@ export const onDeleteTeam = /* GraphQL */ `
     $owner: String
   ) {
     onDeleteTeam(filter: $filter, owner: $owner) {
+      approved
       createdAt
       id
       members {
@@ -131,32 +164,25 @@ export const onDeleteTeam = /* GraphQL */ `
 export const onDeleteUser = /* GraphQL */ `
   subscription OnDeleteUser(
     $filter: ModelSubscriptionUserFilterInput
-    $owner: String
+    $profileOwner: String
   ) {
-    onDeleteUser(filter: $filter, owner: $owner) {
+    onDeleteUser(filter: $filter, profileOwner: $profileOwner) {
       allergies
+      attendedEvents {
+        nextToken
+        __typename
+      }
       checkedIn
+      completedRegistration
       createdAt
       email
       firstName
       id
       institution
       lastName
-      meal {
-        createdAt
-        description
-        end
-        groups
-        id
-        name
-        owner
-        start
-        updatedAt
-        __typename
-      }
-      mealId
-      owner
+      profileOwner
       team {
+        approved
         createdAt
         id
         name
@@ -166,6 +192,48 @@ export const onDeleteUser = /* GraphQL */ `
       }
       teamId
       updatedAt
+      willEatMeals
+      __typename
+    }
+  }
+`;
+export const onDeleteUserFoodEventAttendance = /* GraphQL */ `
+  subscription OnDeleteUserFoodEventAttendance(
+    $filter: ModelSubscriptionUserFoodEventAttendanceFilterInput
+  ) {
+    onDeleteUserFoodEventAttendance(filter: $filter) {
+      createdAt
+      foodEvent {
+        createdAt
+        description
+        end
+        id
+        name
+        start
+        totalGroupCount
+        updatedAt
+        __typename
+      }
+      foodEventId
+      id
+      updatedAt
+      user {
+        allergies
+        checkedIn
+        completedRegistration
+        createdAt
+        email
+        firstName
+        id
+        institution
+        lastName
+        profileOwner
+        teamId
+        updatedAt
+        willEatMeals
+        __typename
+      }
+      userId
       __typename
     }
   }
@@ -173,9 +241,8 @@ export const onDeleteUser = /* GraphQL */ `
 export const onUpdateFoodEvent = /* GraphQL */ `
   subscription OnUpdateFoodEvent(
     $filter: ModelSubscriptionFoodEventFilterInput
-    $owner: String
   ) {
-    onUpdateFoodEvent(filter: $filter, owner: $owner) {
+    onUpdateFoodEvent(filter: $filter) {
       attended {
         nextToken
         __typename
@@ -183,11 +250,10 @@ export const onUpdateFoodEvent = /* GraphQL */ `
       createdAt
       description
       end
-      groups
       id
       name
-      owner
       start
+      totalGroupCount
       updatedAt
       __typename
     }
@@ -199,6 +265,7 @@ export const onUpdateTeam = /* GraphQL */ `
     $owner: String
   ) {
     onUpdateTeam(filter: $filter, owner: $owner) {
+      approved
       createdAt
       id
       members {
@@ -215,32 +282,25 @@ export const onUpdateTeam = /* GraphQL */ `
 export const onUpdateUser = /* GraphQL */ `
   subscription OnUpdateUser(
     $filter: ModelSubscriptionUserFilterInput
-    $owner: String
+    $profileOwner: String
   ) {
-    onUpdateUser(filter: $filter, owner: $owner) {
+    onUpdateUser(filter: $filter, profileOwner: $profileOwner) {
       allergies
+      attendedEvents {
+        nextToken
+        __typename
+      }
       checkedIn
+      completedRegistration
       createdAt
       email
       firstName
       id
       institution
       lastName
-      meal {
-        createdAt
-        description
-        end
-        groups
-        id
-        name
-        owner
-        start
-        updatedAt
-        __typename
-      }
-      mealId
-      owner
+      profileOwner
       team {
+        approved
         createdAt
         id
         name
@@ -250,6 +310,48 @@ export const onUpdateUser = /* GraphQL */ `
       }
       teamId
       updatedAt
+      willEatMeals
+      __typename
+    }
+  }
+`;
+export const onUpdateUserFoodEventAttendance = /* GraphQL */ `
+  subscription OnUpdateUserFoodEventAttendance(
+    $filter: ModelSubscriptionUserFoodEventAttendanceFilterInput
+  ) {
+    onUpdateUserFoodEventAttendance(filter: $filter) {
+      createdAt
+      foodEvent {
+        createdAt
+        description
+        end
+        id
+        name
+        start
+        totalGroupCount
+        updatedAt
+        __typename
+      }
+      foodEventId
+      id
+      updatedAt
+      user {
+        allergies
+        checkedIn
+        completedRegistration
+        createdAt
+        email
+        firstName
+        id
+        institution
+        lastName
+        profileOwner
+        teamId
+        updatedAt
+        willEatMeals
+        __typename
+      }
+      userId
       __typename
     }
   }

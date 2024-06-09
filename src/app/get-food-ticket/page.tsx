@@ -1,5 +1,6 @@
 "use client";
 
+// THIS PAGE IS A SAMPLE, PLEASE REPLACE IT AND IMPROVE IT FROM HERE
 // app/food/page.tsx
 import { generateClient } from "aws-amplify/api";
 import { getCurrentUser } from "aws-amplify/auth";
@@ -21,55 +22,35 @@ export default function FoodPage() {
   const [userTimeSlot, setUserTimeSlot] = useState("");
   useEffect(() => {
     async function fetchData() {
-      const teamID = await fetchUserTeamID();
+      // Needs to be on client side since we need the authenticated client and their ID
+      const { userId } = await getCurrentUser();
+      await setUserVerificationCode(userId);
 
-      if (teamID) {
+      if (userId) {
         const {
           queuePosition,
           eventName,
           eventDescription,
           eventTime,
           timeslot,
-        } = await getUpcomingFoodEventDetails(teamID);
+        } = await getUpcomingFoodEventDetails(userId);
 
         setEventName(eventName);
         setEventDescription(eventDescription);
         setQueueInfo(queuePosition);
         setEventTimeRange(eventTime);
         setUserTimeSlot(timeslot);
+      } else {
+        setQueueInfo("User does not have a team");
       }
     }
     fetchData();
   }, []);
 
-  // Needs to be on client side since we need the authenticated client and their ID
-  async function fetchUserTeamID() {
-    try {
-      const { userId } = await getCurrentUser();
-
-      const { data: user, errors: userErrors } = await client.models.User.get({
-        id: userId,
-      });
-      if (userErrors) {
-        console.log("error fetching user team ID");
-        return null;
-      }
-      const teamID = user?.teamId;
-
-      if (teamID) {
-        await setUserVerificationCode(teamID);
-      }
-      return teamID;
-    } catch (err) {
-      console.log(err);
-      return null;
-    }
-  }
-
   // get the user verification code and set it to the frontend
-  async function setUserVerificationCode(userId: string) {
+  async function setUserVerificationCode(teamID: string) {
     const { data, errors } = await client.queries.GetUserMessageCode({
-      userMessage: userId,
+      userMessage: teamID,
     });
     if (errors) {
       console.log(errors);
@@ -81,7 +62,7 @@ export default function FoodPage() {
       const json = JSON.parse(data.body as string);
       const code = json["value"];
 
-      const verificationCode = createMessageAndCode(userId, code);
+      const verificationCode = createMessageAndCode(teamID, code);
       setUserCode(verificationCode);
     } else {
       setUserCode("Backend Server Error");

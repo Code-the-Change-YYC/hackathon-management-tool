@@ -9,7 +9,7 @@ export async function createFoodEvent(fields: FoodEventCreateFormInputValues) {
     description: fields.description,
     start: fields.start,
     end: fields.end,
-    groups: fields.groups,
+    totalGroupCount: fields.totalGroupCount,
   });
 
   if (errors) {

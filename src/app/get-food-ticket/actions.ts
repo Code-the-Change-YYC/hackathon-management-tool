@@ -17,7 +17,7 @@ type FoodEvent = Schema["FoodEvent"]["type"];
  * @param teamID
  * @returns
  */
-export async function getUpcomingFoodEventDetails(teamID: string): Promise<{
+export async function getUpcomingFoodEventDetails(userID: string): Promise<{
   queuePosition: string;
   eventName: string;
   eventDescription: string;
@@ -29,16 +29,23 @@ export async function getUpcomingFoodEventDetails(teamID: string): Promise<{
   const nextFoodEvent = getNextEvent(foodEvents, currentTime);
 
   if (nextFoodEvent) {
+    const { data: user, errors: userErrors } = await client.models.User.get({
+      id: userID,
+    });
+    if (userErrors || !user) {
+      throw new Error("cannot find user data");
+    }
+    const teamID = user.teamId;
     if (teamID) {
       const userGroupPositionNumber = getFoodGroupPositionNumber(
         teamID,
         nextFoodEvent.id,
-        nextFoodEvent.groups,
+        nextFoodEvent.totalGroupCount,
       );
 
       const userTimeSlot = getTimeForFoodGroupPositionNumber(
         userGroupPositionNumber,
-        nextFoodEvent.groups,
+        nextFoodEvent.totalGroupCount,
         nextFoodEvent.start,
         nextFoodEvent.end,
       );
@@ -51,7 +58,7 @@ export async function getUpcomingFoodEventDetails(teamID: string): Promise<{
           "You are in position number " +
           (userGroupPositionNumber + 1) +
           " out of " +
-          nextFoodEvent.groups +
+          nextFoodEvent.totalGroupCount +
           " groups",
         eventName: nextFoodEvent.name,
         eventDescription: nextFoodEvent.description,

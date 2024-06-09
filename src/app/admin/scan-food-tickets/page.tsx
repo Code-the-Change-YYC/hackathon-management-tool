@@ -1,19 +1,17 @@
 "use client";
 
+// THIS PAGE IS A SAMPLE, PLEASE REPLACE IT AND IMPROVE IT FROM HERE
 import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
 
-import FoodEventCreateForm from "@/../ui-components/FoodEventCreateForm";
 import { type Schema } from "@/amplify/data/resource";
-
-import { deleteFoodEvent } from "./actions";
+import TicketVerification from "@/app/admin/scan-food-tickets/TicketVerification/TicketVerification";
 
 type FoodEvent = Schema["FoodEvent"]["type"];
 
-export default function AdminFoodTickets() {
+export default function ScanFoodTickets() {
   const client = generateClient<Schema>();
-
-  const [foodData, setFoodData] = useState<FoodEvent[]>(); // Use useState to manage foodData
+  const [foodData, setFoodData] = useState<FoodEvent[]>();
 
   useEffect(() => {
     async function fetchData() {
@@ -21,28 +19,27 @@ export default function AdminFoodTickets() {
       if (!errors) {
         setFoodData(data); // Update state with fetched data
       } else {
-        console.error(errors);
+        console.error(errors); // Log errors if any
       }
     }
-
     fetchData();
   }, []);
 
   return (
-    <div>
-      <FoodEventCreateForm />
+    <>
+      <TicketVerification></TicketVerification>
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
-        {foodData !== undefined &&
-          foodData.map((event: FoodEvent) => (
+        {foodData &&
+          foodData.map((event) => (
             <div
               key={event.id}
               className="w-auto rounded-lg bg-white p-6 shadow-md"
             >
-              <button onClick={() => deleteFoodEvent(event.id)}>
-                Delete this event
-              </button>
               <h3 className="text-lg font-semibold">{event.name}</h3>
               <p className="text-sm text-gray-600">{event.description}</p>
+              <p className="text-sm">
+                <strong>ID:</strong> {event?.id}
+              </p>
               <p className="text-sm">
                 <strong>Start:</strong>{" "}
                 {event.start ? new Date(event.start).toLocaleString() : ""}
@@ -52,7 +49,7 @@ export default function AdminFoodTickets() {
                 {event.end ? new Date(event.end).toLocaleString() : ""}
               </p>
               <p className="text-sm">
-                <strong>Groups:</strong> {event.groups}
+                <strong>Groups:</strong> {event.totalGroupCount}
               </p>
               <p className="text-sm">
                 <strong>Created At:</strong>{" "}
@@ -65,6 +62,6 @@ export default function AdminFoodTickets() {
             </div>
           ))}
       </div>
-    </div>
+    </>
   );
 }

@@ -1,6 +1,6 @@
-import type * as React from "react";
+import * as React from "react";
 
-import type { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 
 export declare type EscapeHatchProps = {
   [elementHierarchy: string]: Record<string, unknown>;
@@ -25,14 +25,14 @@ export declare type FoodEventCreateFormInputValues = {
   description: string;
   start: string;
   end: string;
-  groups: number;
+  totalGroupCount: number;
 };
 export declare type FoodEventCreateFormValidationValues = {
   name?: ValidationFunction<string>;
   description?: ValidationFunction<string>;
   start?: ValidationFunction<string>;
   end?: ValidationFunction<string>;
-  groups?: ValidationFunction<number>;
+  totalGroupCount?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> &
   React.DOMAttributes<HTMLDivElement>;
@@ -42,7 +42,7 @@ export declare type FoodEventCreateFormOverridesProps = {
   description?: PrimitiveOverrideProps<TextFieldProps>;
   start?: PrimitiveOverrideProps<TextFieldProps>;
   end?: PrimitiveOverrideProps<TextFieldProps>;
-  groups?: PrimitiveOverrideProps<TextFieldProps>;
+  totalGroupCount?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type FoodEventCreateFormProps = React.PropsWithChildren<
   {

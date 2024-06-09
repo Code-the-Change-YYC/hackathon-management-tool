@@ -68,9 +68,9 @@ Make sure to set these variables in your local dev sandbox and the production en
 
 ### Secrets used in project
 
-| Key                   | value              | Description                                                            |
-| --------------------- | ------------------ | ---------------------------------------------------------------------- |
-| USER_VERIFICATION_KEY | [any string value] | Used for creating the MAC address for user UUID (used in food tickets) |
+| Key                   | value                       | Description                                                            |
+| --------------------- | --------------------------- | ---------------------------------------------------------------------- |
+| USER_VERIFICATION_KEY | [any string value you want] | Used for creating the MAC address for user UUID (used in food tickets) |
 
 ## Environment Variables
 
@@ -90,7 +90,7 @@ In your local dev environment, create a file: `.env.local`
 
 ### Food Scanning
 
-**Food Ticket Generation**: admins can make a food event, example: breakfast, lunch, dinner. Filling in details such as the name, description, start and end times, and the number of groups. Groups are how the food event will be split into multiple sections/intervals of people to ensure not everyone rushes for food at once.
+**Food Ticket Generation**: admins can make a food event, example: breakfast, lunch, dinner. Filling in details such as the name, description, start and end times, and the number of groups. Groups are how the food event will be split into multiple sections/intervals of people to ensure not everyone rushes for food at once. Groups are defined by the team ID of a user, so users in the same team are in the same food groups.
 
 **Food Ticket Code**: clients, (or hackathoners), will call a url to get their authentication code. The code is as follows: [their uuid]:[the MAC of their user ID]. MAC Stands for Message Authentication Code. We use the SHA-256 Hash function with a secret key set in _secrets_, called "USER_VERIFICATION_KEY". This code serves the purpose of providing their uuid to us admins when we scan their QR code, and we use the MAC to ensure that the user ID is not tampered with.
 

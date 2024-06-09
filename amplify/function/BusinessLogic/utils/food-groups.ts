@@ -24,7 +24,7 @@ export function uuidToInteger(uuid: string) {
  */
 export function getTimeForFoodGroupPositionNumber(
   groupPositionNumber: number,
-  groups: number,
+  totalGroupCount: number,
   startTime: string,
   endTime: string,
 ): string {
@@ -33,15 +33,13 @@ export function getTimeForFoodGroupPositionNumber(
 
   //total time between start and end
   const totalDuration = Math.abs(end.getTime() - start.getTime());
-  const groupDuration = totalDuration / groups;
-
+  const groupDuration = totalDuration / totalGroupCount;
   const groupStartTime = new Date(
     start.getTime() + groupDuration * groupPositionNumber,
   );
   const groupEndTime = new Date(
     start.getTime() + groupDuration * (groupPositionNumber + 1),
   );
-
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
@@ -66,7 +64,7 @@ export function getTimeForFoodGroupPositionNumber(
  */
 export function getFoodGroupPositionNumberForTime(
   target: Date,
-  groups: number,
+  totalGroupCount: number,
   startTime: string,
   endTime: string,
 ): number {
@@ -74,7 +72,7 @@ export function getFoodGroupPositionNumberForTime(
   const end = new Date(endTime);
 
   const totalDuration = Math.abs(end.getTime() - start.getTime());
-  const groupDuration = totalDuration / groups;
+  const groupDuration = totalDuration / totalGroupCount;
 
   // If the time is before the start time or after the end time, return an invalid group
   if (target < start || target > end) {
@@ -94,9 +92,11 @@ export function getFoodGroupPositionNumberForTime(
 export function getFoodGroupPositionNumber(
   teamID: string,
   eventID: string,
-  groups: number,
+  totalGroupCount: number,
 ) {
   // Team UUID is for putting teams into random positions, Event UUID is to ensure that the teams are shuffled each food event.
   // To set the max size of food groups, we can modulus the generated number by the max amount of groups.
-  return Math.abs((uuidToInteger(teamID) + uuidToInteger(eventID)) % groups);
+  return Math.abs(
+    (uuidToInteger(teamID) + uuidToInteger(eventID)) % totalGroupCount,
+  );
 }

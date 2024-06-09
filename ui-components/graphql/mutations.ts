@@ -2,6 +2,26 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const AssignUsersToTeams = /* GraphQL */ `
+  mutation AssignUsersToTeams($teamId: String!, $userId: String!) {
+    AssignUsersToTeams(teamId: $teamId, userId: $userId) {
+      body
+      headers
+      statusCode
+      __typename
+    }
+  }
+`;
+export const CreateTeamWithCode = /* GraphQL */ `
+  mutation CreateTeamWithCode($addCallerToTeam: Boolean!, $teamName: String!) {
+    CreateTeamWithCode(addCallerToTeam: $addCallerToTeam, teamName: $teamName) {
+      body
+      headers
+      statusCode
+      __typename
+    }
+  }
+`;
 export const DemoFunction = /* GraphQL */ `
   mutation DemoFunction($content: String) {
     DemoFunction(content: $content) {
@@ -25,11 +45,10 @@ export const createFoodEvent = /* GraphQL */ `
       createdAt
       description
       end
-      groups
       id
       name
-      owner
       start
+      totalGroupCount
       updatedAt
       __typename
     }
@@ -41,6 +60,7 @@ export const createTeam = /* GraphQL */ `
     $input: CreateTeamInput!
   ) {
     createTeam(condition: $condition, input: $input) {
+      approved
       createdAt
       id
       members {
@@ -61,28 +81,21 @@ export const createUser = /* GraphQL */ `
   ) {
     createUser(condition: $condition, input: $input) {
       allergies
+      attendedEvents {
+        nextToken
+        __typename
+      }
       checkedIn
+      completedRegistration
       createdAt
       email
       firstName
       id
       institution
       lastName
-      meal {
-        createdAt
-        description
-        end
-        groups
-        id
-        name
-        owner
-        start
-        updatedAt
-        __typename
-      }
-      mealId
-      owner
+      profileOwner
       team {
+        approved
         createdAt
         id
         name
@@ -92,6 +105,49 @@ export const createUser = /* GraphQL */ `
       }
       teamId
       updatedAt
+      willEatMeals
+      __typename
+    }
+  }
+`;
+export const createUserFoodEventAttendance = /* GraphQL */ `
+  mutation CreateUserFoodEventAttendance(
+    $condition: ModelUserFoodEventAttendanceConditionInput
+    $input: CreateUserFoodEventAttendanceInput!
+  ) {
+    createUserFoodEventAttendance(condition: $condition, input: $input) {
+      createdAt
+      foodEvent {
+        createdAt
+        description
+        end
+        id
+        name
+        start
+        totalGroupCount
+        updatedAt
+        __typename
+      }
+      foodEventId
+      id
+      updatedAt
+      user {
+        allergies
+        checkedIn
+        completedRegistration
+        createdAt
+        email
+        firstName
+        id
+        institution
+        lastName
+        profileOwner
+        teamId
+        updatedAt
+        willEatMeals
+        __typename
+      }
+      userId
       __typename
     }
   }
@@ -109,11 +165,10 @@ export const deleteFoodEvent = /* GraphQL */ `
       createdAt
       description
       end
-      groups
       id
       name
-      owner
       start
+      totalGroupCount
       updatedAt
       __typename
     }
@@ -125,6 +180,7 @@ export const deleteTeam = /* GraphQL */ `
     $input: DeleteTeamInput!
   ) {
     deleteTeam(condition: $condition, input: $input) {
+      approved
       createdAt
       id
       members {
@@ -145,28 +201,21 @@ export const deleteUser = /* GraphQL */ `
   ) {
     deleteUser(condition: $condition, input: $input) {
       allergies
+      attendedEvents {
+        nextToken
+        __typename
+      }
       checkedIn
+      completedRegistration
       createdAt
       email
       firstName
       id
       institution
       lastName
-      meal {
-        createdAt
-        description
-        end
-        groups
-        id
-        name
-        owner
-        start
-        updatedAt
-        __typename
-      }
-      mealId
-      owner
+      profileOwner
       team {
+        approved
         createdAt
         id
         name
@@ -176,6 +225,49 @@ export const deleteUser = /* GraphQL */ `
       }
       teamId
       updatedAt
+      willEatMeals
+      __typename
+    }
+  }
+`;
+export const deleteUserFoodEventAttendance = /* GraphQL */ `
+  mutation DeleteUserFoodEventAttendance(
+    $condition: ModelUserFoodEventAttendanceConditionInput
+    $input: DeleteUserFoodEventAttendanceInput!
+  ) {
+    deleteUserFoodEventAttendance(condition: $condition, input: $input) {
+      createdAt
+      foodEvent {
+        createdAt
+        description
+        end
+        id
+        name
+        start
+        totalGroupCount
+        updatedAt
+        __typename
+      }
+      foodEventId
+      id
+      updatedAt
+      user {
+        allergies
+        checkedIn
+        completedRegistration
+        createdAt
+        email
+        firstName
+        id
+        institution
+        lastName
+        profileOwner
+        teamId
+        updatedAt
+        willEatMeals
+        __typename
+      }
+      userId
       __typename
     }
   }
@@ -193,11 +285,10 @@ export const updateFoodEvent = /* GraphQL */ `
       createdAt
       description
       end
-      groups
       id
       name
-      owner
       start
+      totalGroupCount
       updatedAt
       __typename
     }
@@ -209,6 +300,7 @@ export const updateTeam = /* GraphQL */ `
     $input: UpdateTeamInput!
   ) {
     updateTeam(condition: $condition, input: $input) {
+      approved
       createdAt
       id
       members {
@@ -229,28 +321,21 @@ export const updateUser = /* GraphQL */ `
   ) {
     updateUser(condition: $condition, input: $input) {
       allergies
+      attendedEvents {
+        nextToken
+        __typename
+      }
       checkedIn
+      completedRegistration
       createdAt
       email
       firstName
       id
       institution
       lastName
-      meal {
-        createdAt
-        description
-        end
-        groups
-        id
-        name
-        owner
-        start
-        updatedAt
-        __typename
-      }
-      mealId
-      owner
+      profileOwner
       team {
+        approved
         createdAt
         id
         name
@@ -260,6 +345,49 @@ export const updateUser = /* GraphQL */ `
       }
       teamId
       updatedAt
+      willEatMeals
+      __typename
+    }
+  }
+`;
+export const updateUserFoodEventAttendance = /* GraphQL */ `
+  mutation UpdateUserFoodEventAttendance(
+    $condition: ModelUserFoodEventAttendanceConditionInput
+    $input: UpdateUserFoodEventAttendanceInput!
+  ) {
+    updateUserFoodEventAttendance(condition: $condition, input: $input) {
+      createdAt
+      foodEvent {
+        createdAt
+        description
+        end
+        id
+        name
+        start
+        totalGroupCount
+        updatedAt
+        __typename
+      }
+      foodEventId
+      id
+      updatedAt
+      user {
+        allergies
+        checkedIn
+        completedRegistration
+        createdAt
+        email
+        firstName
+        id
+        institution
+        lastName
+        profileOwner
+        teamId
+        updatedAt
+        willEatMeals
+        __typename
+      }
+      userId
       __typename
     }
   }
