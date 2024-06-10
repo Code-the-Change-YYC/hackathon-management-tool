@@ -1,3 +1,5 @@
+"use client";
+
 import JudgingDashboard from "./JudgingDashboard";
 
 export default function Judging() {

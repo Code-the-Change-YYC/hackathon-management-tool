@@ -5,6 +5,14 @@ import StatsPanel from "@/components/judging/StatsPanel";
 
 const pink_underlines = "/svgs/judging/pink_underline.svg";
 
+const JUDGE_DASHBOARD_PAGE_STLYES = "flex justify-center text-blackish";
+const JUDGE_DASHBOARD_CONTENT_STYLES = "w-full max-w-[1500px] p-6";
+
+const JUDGE_DASHBOARD_HELLO_TILE_STYLES =
+  "mb-6 flex rounded-lg bg-white p-8 pb-6 text-4xl font-semibold drop-shadow-md";
+
+const SUBHEADER_TEXT_STYLES = "mb-4 text-xl font-semibold";
+
 // REPLACE WITH ACTUAL DATA
 const panelData = [
   {
@@ -33,13 +41,19 @@ const tableData: Array<[string, string, string, string, boolean]> = [
   ["Team B", "100", "99", "90", true],
   ["Team C", "100", "99", "90", true],
   ["Team D", "N/A", "N/A", "N/A", false],
+  ["Team E", "100", "99", "90", true],
+  ["Team F", "100", "99", "90", true],
+  ["Team G", "100", "99", "90", true],
+  ["Team H", "N/A", "N/A", "N/A", false],
+  ["Team I", "100", "99", "90", true],
+  ["Team J", "100", "99", "90", true],
 ];
 
 const JudgingDashboard = () => {
   return (
-    <div className="flex justify-center text-blackish">
-      <div className="w-full max-w-[1500px] p-6">
-        <div className="mb-6 flex rounded-lg bg-white p-8 pb-6 text-4xl font-semibold drop-shadow-md">
+    <div className={JUDGE_DASHBOARD_PAGE_STLYES}>
+      <div className={JUDGE_DASHBOARD_CONTENT_STYLES}>
+        <div className={JUDGE_DASHBOARD_HELLO_TILE_STYLES}>
           <h1>Hello,</h1>
           <div className="ml-2">
             <h1 className="text-dark-pink">
@@ -55,7 +69,7 @@ const JudgingDashboard = () => {
             </div>
           </div>
         </div>
-        <h2 className="mb-4 text-xl font-semibold">Assigned Teams</h2>
+        <h2 className={SUBHEADER_TEXT_STYLES}>Assigned Teams</h2>
         <div className="flex">
           <div className="mr-4 w-1/4">
             {panelData.map(({ icon, alt, stat, text }, index) => (
