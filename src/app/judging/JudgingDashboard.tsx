@@ -28,6 +28,13 @@ const tableHeaders = [
   { columnHeader: "Criteria 3", className: "w-1/7" },
 ];
 
+const tableData: Array<[string, string, string, string, boolean]> = [
+  ["Team A", "100", "99", "90", true],
+  ["Team B", "100", "99", "90", true],
+  ["Team C", "100", "99", "90", true],
+  ["Team D", "N/A", "N/A", "N/A", false],
+];
+
 const JudgingDashboard = () => {
   return (
     <div className="flex justify-center text-blackish">
@@ -61,8 +68,8 @@ const JudgingDashboard = () => {
               />
             ))}
           </div>
-          <div className="w-3/4">
-            <JudgingTable tableHeaders={tableHeaders} />
+          <div className="mb-4 w-3/4">
+            <JudgingTable tableHeaders={tableHeaders} tableData={tableData} />
           </div>
         </div>
       </div>
