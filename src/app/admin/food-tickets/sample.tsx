@@ -32,6 +32,7 @@ export default function AdminFoodTickets() {
   return (
     <div>
       {/* FoodEventCreateForm is the temporary form used, use a new component later on*/}
+      {/* @ts-ignore - Temporarily since this will all be replaced */}
       <FoodEventCreateForm onSubmit={createFoodEvent} />
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
         {foodData !== undefined &&

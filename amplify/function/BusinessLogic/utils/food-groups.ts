@@ -87,7 +87,7 @@ export function getFoodGroupPositionNumberForTime(
 }
 
 /**
- * gets the group number (the order which groups can get food) for a user
+ * gets the group position number (the order which groups can get food) for a user
  */
 export function getFoodGroupPositionNumber(
   teamID: string,
