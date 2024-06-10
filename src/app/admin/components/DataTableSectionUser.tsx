@@ -44,13 +44,6 @@ const DataTableSectionUser = (props: DataTableProps) => {
 
   const [editedValues, setEditedValues] = useState<string[][]>([]); // Create a state to store the edited values
 
-  useEffect(() => {
-    if (tableData.length > 0) {
-      const formattedEditedValues = tableData.map((rowData) => [...rowData]);
-      setEditedValues(formattedEditedValues);
-    }
-  }, [tableData]);
-
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [recordToDeleteId, setRecordToDeleteId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,12 +64,19 @@ const DataTableSectionUser = (props: DataTableProps) => {
   const endIndex = Math.min(startIndex + entries_per_page, filteredData.length);
 
   useEffect(() => {
+    if (tableData.length > 0) {
+      const formattedEditedValues = tableData.map((rowData) => [...rowData]);
+      setEditedValues(formattedEditedValues);
+    }
+  }, [tableData]);
+
+  useEffect(() => {
     const totalPages = Math.ceil(tableData.length / entries_per_page);
     const currentPageData = filteredData.slice(startIndex, endIndex);
 
     setTotalPages(totalPages);
     setCurrentPageData(currentPageData);
-  }, [filteredData]);
+  }, [tableData]);
 
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));

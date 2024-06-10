@@ -45,7 +45,6 @@ const UserTablePage = () => {
   >([]);
 
   const [tableData, setTableData] = useState<string[][]>([]);
-  const [filteredData, setFilteredData] = useState<string[][]>([]);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   //Fetch the data
@@ -82,16 +81,17 @@ const UserTablePage = () => {
         userId: user.id ?? "",
       }));
 
-      //Create an array to
-      const removeNullData = formattedData.map((item) => ({
-        ...item,
-      }));
+      // //Create an array to
+      // const removeNullData = formattedData.map((item) => ({
+      //   ...item,
+      // }));
+      // console.log(userData);
 
-      setUserData(removeNullData);
+      setUserData(formattedData);
 
       //Create an array to display the data in the Data Table
 
-      const displayedData = removeNullData.map((cellData) => [
+      const displayedData = formattedData.map((cellData) => [
         cellData.lastName,
         cellData.firstName,
         cellData.role,
@@ -100,39 +100,34 @@ const UserTablePage = () => {
       ]);
 
       setTableData(displayedData);
-      setFilteredData(displayedData);
     }
   }, [data]);
 
-  useEffect(() => {
-    const applyFilters = () => {
-      let newFilteredData = [];
+  const applyFilters = () => {
+    let newFilteredData = [];
 
-      switch (selectedFilters[0]) {
-        case "Admin":
-          newFilteredData = tableData.filter((row) => row[2] === "Admin");
-          break;
-        case "Judge":
-          newFilteredData = tableData.filter((row) => row[2] === "Judge");
-          break;
-        case "Participant":
-          newFilteredData = tableData.filter((row) => row[2] === "Participant");
-          break;
-        default:
-          newFilteredData = [...tableData];
-      }
+    switch (selectedFilters[0]) {
+      case "Admin":
+        newFilteredData = tableData.filter((row) => row[2] === "Admin");
+        break;
+      case "Judge":
+        newFilteredData = tableData.filter((row) => row[2] === "Judge");
+        break;
+      case "Participant":
+        newFilteredData = tableData.filter((row) => row[2] === "Participant");
+        break;
+      default:
+        newFilteredData = [...tableData];
+    }
 
-      //sort the new filtered data alphabetically based on user's last name
-      newFilteredData.sort((a, b) => a[0].localeCompare(b[0]));
+    newFilteredData.sort((a, b) => a[0].localeCompare(b[0]));
 
-      setFilteredData(newFilteredData);
-    };
-
-    applyFilters();
-  }, [selectedFilters, tableData]);
+    return newFilteredData;
+  };
 
   const handleFilterChange = (filters: string[]) => {
     setSelectedFilters(filters);
+    applyFilters();
   };
 
   const queryClient = useQueryClient();
@@ -169,7 +164,7 @@ const UserTablePage = () => {
             onFilterChange={handleFilterChange}
           />
           <DataTableSectionUser
-            tableData={filteredData}
+            tableData={applyFilters()}
             tableHeaders={tableHeaders}
             userData={userData}
             tableDataMutation={tableDataMutation}
