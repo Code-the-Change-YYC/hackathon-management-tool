@@ -9,19 +9,6 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
-export const AssignUsersToTeams =
-  /* GraphQL */ `mutation AssignUsersToTeams($teamId: String, $userId: String) {
-  AssignUsersToTeams(teamId: $teamId, userId: $userId) {
-    body
-    headers
-    statusCode
-    __typename
-  }
-}
-` as GeneratedMutation<
-    APITypes.AssignUsersToTeamsMutationVariables,
-    APITypes.AssignUsersToTeamsMutation
-  >;
 export const DemoFunction =
   /* GraphQL */ `mutation DemoFunction($content: String) {
   DemoFunction(content: $content) {
@@ -35,6 +22,31 @@ export const DemoFunction =
     APITypes.DemoFunctionMutationVariables,
     APITypes.DemoFunctionMutation
   >;
+export const createFoodEvent = /* GraphQL */ `mutation CreateFoodEvent(
+  $condition: ModelFoodEventConditionInput
+  $input: CreateFoodEventInput!
+) {
+  createFoodEvent(condition: $condition, input: $input) {
+    attended {
+      nextToken
+      __typename
+    }
+    createdAt
+    description
+    end
+    groups
+    id
+    name
+    owner
+    start
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateFoodEventMutationVariables,
+  APITypes.CreateFoodEventMutation
+>;
 export const createTeam = /* GraphQL */ `mutation CreateTeam(
   $condition: ModelTeamConditionInput
   $input: CreateTeamInput!
@@ -69,6 +81,19 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     id
     institution
     lastName
+    meal {
+      createdAt
+      description
+      end
+      groups
+      id
+      name
+      owner
+      start
+      updatedAt
+      __typename
+    }
+    mealId
     meals
     owner
     team {
@@ -87,6 +112,31 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
 ` as GeneratedMutation<
   APITypes.CreateUserMutationVariables,
   APITypes.CreateUserMutation
+>;
+export const deleteFoodEvent = /* GraphQL */ `mutation DeleteFoodEvent(
+  $condition: ModelFoodEventConditionInput
+  $input: DeleteFoodEventInput!
+) {
+  deleteFoodEvent(condition: $condition, input: $input) {
+    attended {
+      nextToken
+      __typename
+    }
+    createdAt
+    description
+    end
+    groups
+    id
+    name
+    owner
+    start
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteFoodEventMutationVariables,
+  APITypes.DeleteFoodEventMutation
 >;
 export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
   $condition: ModelTeamConditionInput
@@ -122,6 +172,19 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     id
     institution
     lastName
+    meal {
+      createdAt
+      description
+      end
+      groups
+      id
+      name
+      owner
+      start
+      updatedAt
+      __typename
+    }
+    mealId
     meals
     owner
     team {
@@ -140,6 +203,44 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
 ` as GeneratedMutation<
   APITypes.DeleteUserMutationVariables,
   APITypes.DeleteUserMutation
+>;
+export const getUserVerifcationCode =
+  /* GraphQL */ `mutation GetUserVerifcationCode($userId: String) {
+  getUserVerifcationCode(userId: $userId) {
+    body
+    headers
+    statusCode
+    __typename
+  }
+}
+` as GeneratedMutation<
+    APITypes.GetUserVerifcationCodeMutationVariables,
+    APITypes.GetUserVerifcationCodeMutation
+  >;
+export const updateFoodEvent = /* GraphQL */ `mutation UpdateFoodEvent(
+  $condition: ModelFoodEventConditionInput
+  $input: UpdateFoodEventInput!
+) {
+  updateFoodEvent(condition: $condition, input: $input) {
+    attended {
+      nextToken
+      __typename
+    }
+    createdAt
+    description
+    end
+    groups
+    id
+    name
+    owner
+    start
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateFoodEventMutationVariables,
+  APITypes.UpdateFoodEventMutation
 >;
 export const updateTeam = /* GraphQL */ `mutation UpdateTeam(
   $condition: ModelTeamConditionInput
@@ -175,6 +276,19 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     id
     institution
     lastName
+    meal {
+      createdAt
+      description
+      end
+      groups
+      id
+      name
+      owner
+      start
+      updatedAt
+      __typename
+    }
+    mealId
     meals
     owner
     team {
@@ -194,3 +308,16 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
   APITypes.UpdateUserMutationVariables,
   APITypes.UpdateUserMutation
 >;
+export const verifyUserVerifcationCode =
+  /* GraphQL */ `mutation VerifyUserVerifcationCode($eventID: String, $userCode: String) {
+  verifyUserVerifcationCode(eventID: $eventID, userCode: $userCode) {
+    body
+    headers
+    statusCode
+    __typename
+  }
+}
+` as GeneratedMutation<
+    APITypes.VerifyUserVerifcationCodeMutationVariables,
+    APITypes.VerifyUserVerifcationCodeMutation
+  >;

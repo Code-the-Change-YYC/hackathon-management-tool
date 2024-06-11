@@ -1,12 +1,18 @@
 {
   "auth": {
-    "user_pool_id": "ca-central-1_ojEjtQEX2",
+    "user_pool_id": "ca-central-1_j15GsKCBo",
     "aws_region": "ca-central-1",
-    "user_pool_client_id": "44cbv445uef72rmo7ofhkkg6hj",
-    "identity_pool_id": "ca-central-1:a95bb69f-be2d-444f-bb60-e93992e066a3",
-    "standard_required_attributes": ["email"],
-    "username_attributes": ["email"],
-    "user_verification_types": ["email"],
+    "user_pool_client_id": "1smlgo7cj1p8uu3rhdmqsf7orq",
+    "identity_pool_id": "ca-central-1:90dd3139-9061-46da-b14c-b2e59ea0d9d9",
+    "standard_required_attributes": [
+      "email"
+    ],
+    "username_attributes": [
+      "email"
+    ],
+    "user_verification_types": [
+      "email"
+    ],
     "password_policy": {
       "min_length": 8,
       "require_numbers": true,
@@ -17,11 +23,15 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://jafl6nbdu5czfj443p77w65ncq.appsync-api.ca-central-1.amazonaws.com/graphql",
+    "url": "https://uko735f6avdfri7d363krmempm.appsync-api.ca-central-1.amazonaws.com/graphql",
     "aws_region": "ca-central-1",
-    "api_key": "da2-wpyqloa55ra4dnobm2v4tu6a74",
+    "api_key": "da2-ybuj7ujjgbbqnip37kujcca7pi",
     "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
-    "authorization_types": ["API_KEY", "AWS_LAMBDA", "AWS_IAM"],
+    "authorization_types": [
+      "API_KEY",
+      "AWS_LAMBDA",
+      "AWS_IAM"
+    ],
     "model_introspection": {
       "version": 1,
       "models": {
@@ -56,13 +66,6 @@
               "isRequired": false,
               "attributes": []
             },
-            "meals": {
-              "name": "meals",
-              "isArray": false,
-              "type": "Boolean",
-              "isRequired": false,
-              "attributes": []
-            },
             "institution": {
               "name": "institution",
               "isArray": false,
@@ -70,10 +73,24 @@
               "isRequired": false,
               "attributes": []
             },
+            "completedRegistration": {
+              "name": "completedRegistration",
+              "isArray": false,
+              "type": "Boolean",
+              "isRequired": false,
+              "attributes": []
+            },
             "allergies": {
               "name": "allergies",
               "isArray": false,
               "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
+            "willEatMeals": {
+              "name": "willEatMeals",
+              "isArray": false,
+              "type": "Boolean",
               "isRequired": false,
               "attributes": []
             },
@@ -101,8 +118,33 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": ["teamId"]
+                "targetNames": [
+                  "teamId"
+                ]
               }
+            },
+            "attendedEvents": {
+              "name": "attendedEvents",
+              "isArray": true,
+              "type": {
+                "model": "UserFoodEventAttendance"
+              },
+              "isRequired": false,
+              "attributes": [],
+              "isArrayNullable": true,
+              "association": {
+                "connectionType": "HAS_MANY",
+                "associatedWith": [
+                  "userId"
+                ]
+              }
+            },
+            "profileOwner": {
+              "name": "profileOwner",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
             },
             "createdAt": {
               "name": "createdAt",
@@ -129,19 +171,270 @@
               "properties": {}
             },
             {
+              "type": "key",
+              "properties": {
+                "fields": [
+                  "id"
+                ]
+              }
+            },
+            {
               "type": "auth",
               "properties": {
                 "rules": [
                   {
                     "provider": "userPools",
-                    "ownerField": "owner",
+                    "ownerField": "profileOwner",
                     "allow": "owner",
-                    "identityClaim": "cognito:username",
-                    "operations": ["create", "update", "delete", "read"]
+                    "operations": [
+                      "read",
+                      "update"
+                    ],
+                    "identityClaim": "cognito:username"
                   },
                   {
                     "allow": "private",
-                    "operations": ["read", "create", "update", "delete"]
+                    "operations": [
+                      "read"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "primaryKeyInfo": {
+            "isCustomPrimaryKey": false,
+            "primaryKeyFieldName": "id",
+            "sortKeyFieldNames": []
+          }
+        },
+        "UserFoodEventAttendance": {
+          "name": "UserFoodEventAttendance",
+          "fields": {
+            "id": {
+              "name": "id",
+              "isArray": false,
+              "type": "ID",
+              "isRequired": true,
+              "attributes": []
+            },
+            "userId": {
+              "name": "userId",
+              "isArray": false,
+              "type": "ID",
+              "isRequired": false,
+              "attributes": []
+            },
+            "foodEventId": {
+              "name": "foodEventId",
+              "isArray": false,
+              "type": "ID",
+              "isRequired": false,
+              "attributes": []
+            },
+            "user": {
+              "name": "user",
+              "isArray": false,
+              "type": {
+                "model": "User"
+              },
+              "isRequired": false,
+              "attributes": [],
+              "association": {
+                "connectionType": "BELONGS_TO",
+                "targetNames": [
+                  "userId"
+                ]
+              }
+            },
+            "foodEvent": {
+              "name": "foodEvent",
+              "isArray": false,
+              "type": {
+                "model": "FoodEvent"
+              },
+              "isRequired": false,
+              "attributes": [],
+              "association": {
+                "connectionType": "BELONGS_TO",
+                "targetNames": [
+                  "foodEventId"
+                ]
+              }
+            },
+            "createdAt": {
+              "name": "createdAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+            },
+            "updatedAt": {
+              "name": "updatedAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+            }
+          },
+          "syncable": true,
+          "pluralName": "UserFoodEventAttendances",
+          "attributes": [
+            {
+              "type": "model",
+              "properties": {}
+            },
+            {
+              "type": "key",
+              "properties": {
+                "fields": [
+                  "id"
+                ]
+              }
+            },
+            {
+              "type": "auth",
+              "properties": {
+                "rules": [
+                  {
+                    "groupClaim": "cognito:groups",
+                    "provider": "userPools",
+                    "allow": "groups",
+                    "operations": [
+                      "read"
+                    ],
+                    "groups": [
+                      "Admin"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "primaryKeyInfo": {
+            "isCustomPrimaryKey": false,
+            "primaryKeyFieldName": "id",
+            "sortKeyFieldNames": []
+          }
+        },
+        "FoodEvent": {
+          "name": "FoodEvent",
+          "fields": {
+            "id": {
+              "name": "id",
+              "isArray": false,
+              "type": "ID",
+              "isRequired": true,
+              "attributes": []
+            },
+            "name": {
+              "name": "name",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true,
+              "attributes": []
+            },
+            "description": {
+              "name": "description",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true,
+              "attributes": []
+            },
+            "start": {
+              "name": "start",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": true,
+              "attributes": []
+            },
+            "end": {
+              "name": "end",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": true,
+              "attributes": []
+            },
+            "groups": {
+              "name": "groups",
+              "isArray": false,
+              "type": "Int",
+              "isRequired": true,
+              "attributes": []
+            },
+            "attended": {
+              "name": "attended",
+              "isArray": true,
+              "type": {
+                "model": "UserFoodEventAttendance"
+              },
+              "isRequired": false,
+              "attributes": [],
+              "isArrayNullable": true,
+              "association": {
+                "connectionType": "HAS_MANY",
+                "associatedWith": [
+                  "foodEventId"
+                ]
+              }
+            },
+            "createdAt": {
+              "name": "createdAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+            },
+            "updatedAt": {
+              "name": "updatedAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+            }
+          },
+          "syncable": true,
+          "pluralName": "FoodEvents",
+          "attributes": [
+            {
+              "type": "model",
+              "properties": {}
+            },
+            {
+              "type": "key",
+              "properties": {
+                "fields": [
+                  "id"
+                ]
+              }
+            },
+            {
+              "type": "auth",
+              "properties": {
+                "rules": [
+                  {
+                    "groupClaim": "cognito:groups",
+                    "provider": "userPools",
+                    "allow": "groups",
+                    "groups": [
+                      "Admin"
+                    ],
+                    "operations": [
+                      "create",
+                      "update",
+                      "delete",
+                      "read"
+                    ]
+                  },
+                  {
+                    "allow": "private",
+                    "operations": [
+                      "read"
+                    ]
                   }
                 ]
               }
@@ -170,6 +463,13 @@
               "isRequired": false,
               "attributes": []
             },
+            "approved": {
+              "name": "approved",
+              "isArray": false,
+              "type": "Boolean",
+              "isRequired": false,
+              "attributes": []
+            },
             "members": {
               "name": "members",
               "isArray": true,
@@ -181,7 +481,9 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": ["teamId"]
+                "associatedWith": [
+                  "teamId"
+                ]
               }
             },
             "createdAt": {
@@ -211,7 +513,9 @@
             {
               "type": "key",
               "properties": {
-                "fields": ["id"]
+                "fields": [
+                  "id"
+                ]
               }
             },
             {
@@ -222,12 +526,17 @@
                     "provider": "userPools",
                     "ownerField": "owner",
                     "allow": "owner",
-                    "identityClaim": "cognito:username",
-                    "operations": ["create", "update", "delete", "read"]
+                    "operations": [
+                      "read",
+                      "update"
+                    ],
+                    "identityClaim": "cognito:username"
                   },
                   {
                     "allow": "private",
-                    "operations": ["read", "create", "update", "delete"]
+                    "operations": [
+                      "read"
+                    ]
                   }
                 ]
               }
@@ -267,6 +576,59 @@
               "attributes": []
             }
           }
+        },
+        "StatusCodeFunctionResponse": {
+          "name": "StatusCodeFunctionResponse",
+          "fields": {
+            "statusCode": {
+              "name": "statusCode",
+              "isArray": false,
+              "type": "Int",
+              "isRequired": false,
+              "attributes": []
+            },
+            "headers": {
+              "name": "headers",
+              "isArray": false,
+              "type": "AWSJSON",
+              "isRequired": false,
+              "attributes": []
+            }
+          }
+        }
+      },
+      "queries": {
+        "GetUserMessageCode": {
+          "name": "GetUserMessageCode",
+          "isArray": false,
+          "type": {
+            "nonModel": "GenericFunctionResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "userMessage": {
+              "name": "userMessage",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            }
+          }
+        },
+        "VerifyUserMessage": {
+          "name": "VerifyUserMessage",
+          "isArray": false,
+          "type": {
+            "nonModel": "StatusCodeFunctionResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "userCode": {
+              "name": "userCode",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            }
+          }
         }
       },
       "mutations": {
@@ -283,6 +645,50 @@
               "isArray": false,
               "type": "String",
               "isRequired": false
+            }
+          }
+        },
+        "AssignUsersToTeams": {
+          "name": "AssignUsersToTeams",
+          "isArray": false,
+          "type": {
+            "nonModel": "GenericFunctionResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "userId": {
+              "name": "userId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "teamId": {
+              "name": "teamId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "CreateTeamWithCode": {
+          "name": "CreateTeamWithCode",
+          "isArray": false,
+          "type": {
+            "nonModel": "GenericFunctionResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "teamName": {
+              "name": "teamName",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "addCallerToTeam": {
+              "name": "addCallerToTeam",
+              "isArray": false,
+              "type": "Boolean",
+              "isRequired": true
             }
           }
         }
