@@ -36,6 +36,9 @@ const CheckInPage = () => {
       const result = await client.mutations.SetUserAsCheckedIn({
         userId: currentUser.userSub,
       });
+      if (result.errors) {
+        throw new Error(result.errors[0].message);
+      }
 
       console.log("User checked in:", result);
       setStatus(CheckInStatus.Success);
