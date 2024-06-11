@@ -14,14 +14,14 @@ export const onCreateTeam = /* GraphQL */ `subscription OnCreateTeam(
   $owner: String
 ) {
   onCreateTeam(filter: $filter, owner: $owner) {
-    Code
-    Members {
+    approved
+    createdAt
+    id
+    members {
       nextToken
       __typename
     }
-    Name
-    createdAt
-    id
+    name
     owner
     updatedAt
     __typename
@@ -36,26 +36,27 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
   $owner: String
 ) {
   onCreateUser(filter: $filter, owner: $owner) {
-    Allergies
-    CheckedIn
-    Email
-    FirstName
-    Institution
-    LastName
-    Meals
-    Team {
-      Code
-      Name
+    allergies
+    checkedIn
+    createdAt
+    email
+    firstName
+    id
+    institution
+    lastName
+    meals
+    owner
+    role
+    team {
+      approved
       createdAt
       id
+      name
       owner
       updatedAt
       __typename
     }
-    createdAt
-    id
-    owner
-    teamMembersId
+    teamId
     updatedAt
     __typename
   }
@@ -69,14 +70,14 @@ export const onDeleteTeam = /* GraphQL */ `subscription OnDeleteTeam(
   $owner: String
 ) {
   onDeleteTeam(filter: $filter, owner: $owner) {
-    Code
-    Members {
+    approved
+    createdAt
+    id
+    members {
       nextToken
       __typename
     }
-    Name
-    createdAt
-    id
+    name
     owner
     updatedAt
     __typename
@@ -91,26 +92,27 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
   $owner: String
 ) {
   onDeleteUser(filter: $filter, owner: $owner) {
-    Allergies
-    CheckedIn
-    Email
-    FirstName
-    Institution
-    LastName
-    Meals
-    Team {
-      Code
-      Name
+    allergies
+    checkedIn
+    createdAt
+    email
+    firstName
+    id
+    institution
+    lastName
+    meals
+    owner
+    role
+    team {
+      approved
       createdAt
       id
+      name
       owner
       updatedAt
       __typename
     }
-    createdAt
-    id
-    owner
-    teamMembersId
+    teamId
     updatedAt
     __typename
   }
@@ -124,14 +126,14 @@ export const onUpdateTeam = /* GraphQL */ `subscription OnUpdateTeam(
   $owner: String
 ) {
   onUpdateTeam(filter: $filter, owner: $owner) {
-    Code
-    Members {
+    approved
+    createdAt
+    id
+    members {
       nextToken
       __typename
     }
-    Name
-    createdAt
-    id
+    name
     owner
     updatedAt
     __typename
@@ -146,26 +148,27 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
   $owner: String
 ) {
   onUpdateUser(filter: $filter, owner: $owner) {
-    Allergies
-    CheckedIn
-    Email
-    FirstName
-    Institution
-    LastName
-    Meals
-    Team {
-      Code
-      Name
+    allergies
+    checkedIn
+    createdAt
+    email
+    firstName
+    id
+    institution
+    lastName
+    meals
+    owner
+    role
+    team {
+      approved
       createdAt
       id
+      name
       owner
       updatedAt
       __typename
     }
-    createdAt
-    id
-    owner
-    teamMembersId
+    teamId
     updatedAt
     __typename
   }

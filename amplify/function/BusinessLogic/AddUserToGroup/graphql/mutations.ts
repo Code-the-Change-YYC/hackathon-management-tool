@@ -9,6 +9,19 @@ type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationOutput: OutputType;
 };
 
+export const AssignUsersToTeams =
+  /* GraphQL */ `mutation AssignUsersToTeams($teamId: String!, $userId: String!) {
+  AssignUsersToTeams(teamId: $teamId, userId: $userId) {
+    body
+    headers
+    statusCode
+    __typename
+  }
+}
+` as GeneratedMutation<
+    APITypes.AssignUsersToTeamsMutationVariables,
+    APITypes.AssignUsersToTeamsMutation
+  >;
 export const DemoFunction =
   /* GraphQL */ `mutation DemoFunction($content: String) {
   DemoFunction(content: $content) {
@@ -22,19 +35,32 @@ export const DemoFunction =
     APITypes.DemoFunctionMutationVariables,
     APITypes.DemoFunctionMutation
   >;
+export const addUserToGroup =
+  /* GraphQL */ `mutation AddUserToGroup($groupName: String!, $userId: String!) {
+  addUserToGroup(groupName: $groupName, userId: $userId) {
+    body
+    headers
+    statusCode
+    __typename
+  }
+}
+` as GeneratedMutation<
+    APITypes.AddUserToGroupMutationVariables,
+    APITypes.AddUserToGroupMutation
+  >;
 export const createTeam = /* GraphQL */ `mutation CreateTeam(
   $condition: ModelTeamConditionInput
   $input: CreateTeamInput!
 ) {
   createTeam(condition: $condition, input: $input) {
-    Code
-    Members {
+    approved
+    createdAt
+    id
+    members {
       nextToken
       __typename
     }
-    Name
-    createdAt
-    id
+    name
     owner
     updatedAt
     __typename
@@ -49,26 +75,27 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
   $input: CreateUserInput!
 ) {
   createUser(condition: $condition, input: $input) {
-    Allergies
-    CheckedIn
-    Email
-    FirstName
-    Institution
-    LastName
-    Meals
-    Team {
-      Code
-      Name
+    allergies
+    checkedIn
+    createdAt
+    email
+    firstName
+    id
+    institution
+    lastName
+    meals
+    owner
+    role
+    team {
+      approved
       createdAt
       id
+      name
       owner
       updatedAt
       __typename
     }
-    createdAt
-    id
-    owner
-    teamMembersId
+    teamId
     updatedAt
     __typename
   }
@@ -82,14 +109,14 @@ export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
   $input: DeleteTeamInput!
 ) {
   deleteTeam(condition: $condition, input: $input) {
-    Code
-    Members {
+    approved
+    createdAt
+    id
+    members {
       nextToken
       __typename
     }
-    Name
-    createdAt
-    id
+    name
     owner
     updatedAt
     __typename
@@ -104,26 +131,27 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
   $input: DeleteUserInput!
 ) {
   deleteUser(condition: $condition, input: $input) {
-    Allergies
-    CheckedIn
-    Email
-    FirstName
-    Institution
-    LastName
-    Meals
-    Team {
-      Code
-      Name
+    allergies
+    checkedIn
+    createdAt
+    email
+    firstName
+    id
+    institution
+    lastName
+    meals
+    owner
+    role
+    team {
+      approved
       createdAt
       id
+      name
       owner
       updatedAt
       __typename
     }
-    createdAt
-    id
-    owner
-    teamMembersId
+    teamId
     updatedAt
     __typename
   }
@@ -137,14 +165,14 @@ export const updateTeam = /* GraphQL */ `mutation UpdateTeam(
   $input: UpdateTeamInput!
 ) {
   updateTeam(condition: $condition, input: $input) {
-    Code
-    Members {
+    approved
+    createdAt
+    id
+    members {
       nextToken
       __typename
     }
-    Name
-    createdAt
-    id
+    name
     owner
     updatedAt
     __typename
@@ -159,26 +187,27 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
   $input: UpdateUserInput!
 ) {
   updateUser(condition: $condition, input: $input) {
-    Allergies
-    CheckedIn
-    Email
-    FirstName
-    Institution
-    LastName
-    Meals
-    Team {
-      Code
-      Name
+    allergies
+    checkedIn
+    createdAt
+    email
+    firstName
+    id
+    institution
+    lastName
+    meals
+    owner
+    role
+    team {
+      approved
       createdAt
       id
+      name
       owner
       updatedAt
       __typename
     }
-    createdAt
-    id
-    owner
-    teamMembersId
+    teamId
     updatedAt
     __typename
   }
