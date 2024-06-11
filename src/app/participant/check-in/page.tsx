@@ -12,13 +12,14 @@ export default function FoodPage() {
 
   const handleCheckIn = async () => {
     const { userId } = await getCurrentUser();
+    console.log(userId);
     const { data: user } = await client.models.User.get({
       id: userId,
     });
     console.log(user);
 
     try {
-      const result = await client.mutations.SetUserAsAttended({
+      const result = await client.mutations.SetUserAsCheckedIn({
         userId: userId,
       });
 

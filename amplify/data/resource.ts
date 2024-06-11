@@ -23,7 +23,6 @@ const schema = a
         role: a.string().default("Participant"),
         email: a.string(),
         meals: a.boolean(),
-        attended: a.boolean().default("false"),
         institution: a.string(),
         completedRegistration: a.boolean(),
         allergies: a.string(),
@@ -119,7 +118,7 @@ const schema = a
       .handler(a.handler.function(CreateTeamWithCode)),
 
     // Custom resolvers
-    SetUserAsAttended: a
+    SetUserAsCheckedIn: a
       .mutation()
       .arguments({
         userId: a.string().required(),
@@ -129,7 +128,7 @@ const schema = a
       .handler(
         a.handler.custom({
           dataSource: a.ref("User"),
-          entry: "./user/setUserAsAttended.js",
+          entry: "./user/SetUserAsCheckedIn.js",
         }),
       ),
   })

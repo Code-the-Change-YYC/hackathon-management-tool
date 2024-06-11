@@ -3,8 +3,8 @@ export function request(ctx) {
     operation: "UpdateItem",
     key: util.dynamodb.toMapValues({ id: ctx.args.userId }),
     update: {
-      expression: "SET attended = :attended",
-      expressionValues: { ":attended": { BOOL: true } },
+      expression: "SET checkedIn = :checkedIn",
+      expressionValues: { ":checkedIn": { BOOL: true } },
     },
   };
 }
