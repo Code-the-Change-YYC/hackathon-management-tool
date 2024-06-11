@@ -168,6 +168,21 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.guest(), allow.authenticated()])
       .handler(a.handler.function(CreateTeamWithCode)),
+
+    // Custom resolvers
+    SetUserAsCheckedIn: a
+      .mutation()
+      .arguments({
+        userId: a.string().required(),
+      })
+      .returns(a.ref("User"))
+      .authorization((allow) => [allow.authenticated()])
+      .handler(
+        a.handler.custom({
+          dataSource: a.ref("User"),
+          entry: "./user/SetUserAsCheckedIn.js",
+        }),
+      ),
   })
 
   .authorization((allow) => [
