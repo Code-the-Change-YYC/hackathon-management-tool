@@ -6,8 +6,10 @@ import { generateClient } from "aws-amplify/api";
 import { getCurrentUser } from "aws-amplify/auth";
 
 import { type Schema } from "@/amplify/data/resource";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 
-export default function FoodPage() {
+function FoodPage() {
   const client = generateClient<Schema>();
 
   const handleCheckIn = async () => {
@@ -35,3 +37,5 @@ export default function FoodPage() {
     </div>
   );
 }
+
+export default withAuthGuard(FoodPage, [UserType.Participant]);
