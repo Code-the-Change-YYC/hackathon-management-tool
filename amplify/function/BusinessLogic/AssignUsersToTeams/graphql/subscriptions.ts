@@ -1,13 +1,39 @@
 /* tslint:disable */
+
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-
 import * as APITypes from "./API";
+
 type GeneratedSubscription<InputType, OutputType> = string & {
   __generatedSubscriptionInput: InputType;
   __generatedSubscriptionOutput: OutputType;
 };
 
+export const onCreateFoodEvent = /* GraphQL */ `subscription OnCreateFoodEvent(
+  $filter: ModelSubscriptionFoodEventFilterInput
+  $owner: String
+) {
+  onCreateFoodEvent(filter: $filter, owner: $owner) {
+    attended {
+      nextToken
+      __typename
+    }
+    createdAt
+    description
+    end
+    groups
+    id
+    name
+    owner
+    start
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateFoodEventSubscriptionVariables,
+  APITypes.OnCreateFoodEventSubscription
+>;
 export const onCreateTeam = /* GraphQL */ `subscription OnCreateTeam(
   $filter: ModelSubscriptionTeamFilterInput
   $owner: String
@@ -42,6 +68,19 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     id
     institution
     lastName
+    meal {
+      createdAt
+      description
+      end
+      groups
+      id
+      name
+      owner
+      start
+      updatedAt
+      __typename
+    }
+    mealId
     meals
     owner
     team {
@@ -60,6 +99,31 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
 ` as GeneratedSubscription<
   APITypes.OnCreateUserSubscriptionVariables,
   APITypes.OnCreateUserSubscription
+>;
+export const onDeleteFoodEvent = /* GraphQL */ `subscription OnDeleteFoodEvent(
+  $filter: ModelSubscriptionFoodEventFilterInput
+  $owner: String
+) {
+  onDeleteFoodEvent(filter: $filter, owner: $owner) {
+    attended {
+      nextToken
+      __typename
+    }
+    createdAt
+    description
+    end
+    groups
+    id
+    name
+    owner
+    start
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteFoodEventSubscriptionVariables,
+  APITypes.OnDeleteFoodEventSubscription
 >;
 export const onDeleteTeam = /* GraphQL */ `subscription OnDeleteTeam(
   $filter: ModelSubscriptionTeamFilterInput
@@ -95,6 +159,19 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     id
     institution
     lastName
+    meal {
+      createdAt
+      description
+      end
+      groups
+      id
+      name
+      owner
+      start
+      updatedAt
+      __typename
+    }
+    mealId
     meals
     owner
     team {
@@ -113,6 +190,31 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
 ` as GeneratedSubscription<
   APITypes.OnDeleteUserSubscriptionVariables,
   APITypes.OnDeleteUserSubscription
+>;
+export const onUpdateFoodEvent = /* GraphQL */ `subscription OnUpdateFoodEvent(
+  $filter: ModelSubscriptionFoodEventFilterInput
+  $owner: String
+) {
+  onUpdateFoodEvent(filter: $filter, owner: $owner) {
+    attended {
+      nextToken
+      __typename
+    }
+    createdAt
+    description
+    end
+    groups
+    id
+    name
+    owner
+    start
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateFoodEventSubscriptionVariables,
+  APITypes.OnUpdateFoodEventSubscription
 >;
 export const onUpdateTeam = /* GraphQL */ `subscription OnUpdateTeam(
   $filter: ModelSubscriptionTeamFilterInput
@@ -148,6 +250,19 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     id
     institution
     lastName
+    meal {
+      createdAt
+      description
+      end
+      groups
+      id
+      name
+      owner
+      start
+      updatedAt
+      __typename
+    }
+    mealId
     meals
     owner
     team {

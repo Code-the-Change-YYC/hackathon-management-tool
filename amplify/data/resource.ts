@@ -1,6 +1,10 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
+import { AddUserToGroup } from "@/amplify/function/BusinessLogic/AddUserToGroup/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
+import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
+import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMessageCode/resource";
+import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
@@ -15,31 +19,89 @@ const schema = a
   .schema({
     User: a
       .model({
+        id: a.id().required(),
         firstName: a.string(),
         lastName: a.string(),
+        role: a.string().default("Participant"),
         email: a.string(),
-        meals: a.boolean(),
         institution: a.string(),
+        completedRegistration: a.boolean(),
         allergies: a.string(),
-        checkedIn: a.boolean(),
-        teamId: a.id(),
+        willEatMeals: a.boolean(),
+        checkedIn: a
+          .boolean()
+          .default(false)
+          .authorization((allow) => [
+            allow.ownerDefinedIn("profileOwner").to(["read"]),
+            allow.groups(["Admin"]).to(["read", "update"]),
+          ]),
+        teamId: a
+          .id()
+          .authorization((allow) => [
+            allow
+              .ownerDefinedIn("profileOwner")
+              .to(["read", "update", "delete"]),
+            allow.groups(["Admin"]).to(["read", "update", "delete"]),
+          ]),
         team: a.belongsTo("Team", "teamId"),
+        attendedEvents: a.hasMany("UserFoodEventAttendance", "userId"),
+        profileOwner: a
+          .string()
+          .authorization((allow) => [
+            allow.ownerDefinedIn("profileOwner").to(["read"]),
+          ]),
       })
       .authorization((allow) => [
-        allow.owner(),
+        allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
+    //for handling a many to many relationship of users and food events
+    UserFoodEventAttendance: a
+      .model({
+        id: a.id().required(),
+        userId: a.id(),
+        foodEventId: a.id(),
+        user: a.belongsTo("User", "userId"),
+        foodEvent: a.belongsTo("FoodEvent", "foodEventId"),
+      })
+      .authorization((allow) => [allow.group("Admin").to(["read"])]),
+
+    FoodEvent: a
+      .model({
+        id: a.id().required(),
+        name: a.string().required(),
+        description: a.string().required(),
+        start: a.datetime().required(),
+        end: a.datetime().required(),
+        totalGroupCount: a.integer().required(),
+        attended: a.hasMany("UserFoodEventAttendance", "foodEventId"),
+      })
+      .authorization((allow) => [
+        allow.group("Admin"),
+        allow.authenticated().to(["read"]),
+      ]),
+
     Team: a
       .model({
         name: a.string(),
         id: a.id(),
+        approved: a.boolean(),
         members: a.hasMany("User", "teamId"),
       })
       .authorization((allow) => [
-        allow.owner(),
+        allow.owner().to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
     GenericFunctionResponse: a.customType({
+      body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
+    StatusCodeFunctionResponse: a.customType({
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
+    AddUserToGroupResponse: a.customType({
       body: a.json(),
       statusCode: a.integer(),
       headers: a.json(),
@@ -59,6 +121,26 @@ const schema = a
       // allow all users to call this api for now
       .authorization((allow) => [allow.guest()])
       .handler(a.handler.function(DemoFunction)),
+
+    GetUserMessageCode: a
+      .query()
+      .arguments({
+        userMessage: a.string(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.authenticated()])
+      .handler(a.handler.function(GetUserMessageCode)),
+
+    VerifyUserMessage: a
+      .query()
+      .arguments({
+        userCode: a.string(),
+      })
+      .returns(a.ref("StatusCodeFunctionResponse"))
+      // allow all users to call this api for now
+      .authorization((allow) => [allow.group("Admin")])
+      .handler(a.handler.function(VerifyUserMessage)),
+
     AssignUsersToTeams: a
       .mutation()
       .arguments({
@@ -66,12 +148,49 @@ const schema = a
         teamId: a.string().required(),
       })
       .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(AssignUsersToTeams)),
+    AddUserToGroup: a
+      .mutation()
+      .arguments({
+        userId: a.string().required(),
+        groupName: a.string().required(),
+      })
+      .authorization((allow) => [allow.group("Admin")])
+      .handler(a.handler.function(AddUserToGroup))
+      .returns(a.ref("AddUserToGroupResponse")),
+    CreateTeamWithCode: a
+      .mutation()
+      .arguments({
+        teamName: a.string().required(),
+        addCallerToTeam: a.boolean().required(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .handler(a.handler.function(CreateTeamWithCode)),
+
+    // Custom resolvers
+    SetUserAsCheckedIn: a
+      .mutation()
+      .arguments({
+        userId: a.string().required(),
+      })
+      .returns(a.ref("User"))
+      .authorization((allow) => [allow.authenticated()])
+      .handler(
+        a.handler.custom({
+          dataSource: a.ref("User"),
+          entry: "./user/SetUserAsCheckedIn.js",
+        }),
+      ),
   })
+
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
+    allow.resource(VerifyUserMessage).to(["query", "mutate"]),
+    allow.resource(AddUserToGroup).to(["mutate"]),
+    allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;
 

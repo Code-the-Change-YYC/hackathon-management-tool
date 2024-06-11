@@ -1,7 +1,13 @@
-export default function Profile() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Profile
-    </main>
-  );
+import UserProfile from "@/components/UserProfile/UserProfile";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
+
+function Profile() {
+  return <UserProfile />;
 }
+
+export default withAuthGuard(Profile, [
+  UserType.Participant,
+  UserType.Admin,
+  UserType.Judge,
+]);

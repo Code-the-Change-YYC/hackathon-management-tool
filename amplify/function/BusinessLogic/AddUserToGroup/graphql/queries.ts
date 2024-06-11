@@ -11,14 +11,14 @@ type GeneratedQuery<InputType, OutputType> = string & {
 
 export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
   getTeam(id: $id) {
-    Code
-    Members {
+    approved
+    createdAt
+    id
+    members {
       nextToken
       __typename
     }
-    Name
-    createdAt
-    id
+    name
     owner
     updatedAt
     __typename
@@ -27,26 +27,27 @@ export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
 ` as GeneratedQuery<APITypes.GetTeamQueryVariables, APITypes.GetTeamQuery>;
 export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   getUser(id: $id) {
-    Allergies
-    CheckedIn
-    Email
-    FirstName
-    Institution
-    LastName
-    Meals
-    Team {
-      Code
-      Name
+    allergies
+    checkedIn
+    createdAt
+    email
+    firstName
+    id
+    institution
+    lastName
+    meals
+    owner
+    role
+    team {
+      approved
       createdAt
       id
+      name
       owner
       updatedAt
       __typename
     }
-    createdAt
-    id
-    owner
-    teamMembersId
+    teamId
     updatedAt
     __typename
   }
@@ -67,10 +68,10 @@ export const listTeams = /* GraphQL */ `query ListTeams(
     sortDirection: $sortDirection
   ) {
     items {
-      Code
-      Name
+      approved
       createdAt
       id
+      name
       owner
       updatedAt
       __typename
@@ -82,30 +83,23 @@ export const listTeams = /* GraphQL */ `query ListTeams(
 ` as GeneratedQuery<APITypes.ListTeamsQueryVariables, APITypes.ListTeamsQuery>;
 export const listUsers = /* GraphQL */ `query ListUsers(
   $filter: ModelUserFilterInput
-  $id: ID
   $limit: Int
   $nextToken: String
-  $sortDirection: ModelSortDirection
 ) {
-  listUsers(
-    filter: $filter
-    id: $id
-    limit: $limit
-    nextToken: $nextToken
-    sortDirection: $sortDirection
-  ) {
+  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
-      Allergies
-      CheckedIn
-      Email
-      FirstName
-      Institution
-      LastName
-      Meals
+      allergies
+      checkedIn
       createdAt
+      email
+      firstName
       id
+      institution
+      lastName
+      meals
       owner
-      teamMembersId
+      role
+      teamId
       updatedAt
       __typename
     }

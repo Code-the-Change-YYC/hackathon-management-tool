@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
-import "react-toastify/dist/ReactToastify.css";
 
-import "@/app/globals.css";
-import "@aws-amplify/ui-react/styles.css";
-
-import SideNavBar from "./components/SideNavBar";
+import SideNavBar from "@/components/admin/SideNavBar";
 
 export const metadata: Metadata = {
   title: "Hack the Change - Admin",
