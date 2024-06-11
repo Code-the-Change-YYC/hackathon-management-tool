@@ -1,12 +1,12 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-import { getCurrentUser } from "aws-amplify/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
+import { useUser } from "@/components/contexts/UserContext";
 
 const check_mark_icon = "/svgs/checkin/check_mark.svg";
 const cross_icon = "/svgs/checkin/circle_cross.svg";
@@ -19,28 +19,28 @@ const CHECKIN_STATUS_TEXT_STYLES =
 const CHECKIN_STATUS_BUTTON_STYLES =
   "rounded-xl bg-dark-pink p-4 font-bold hover:bg-pastel-pink";
 
+enum CheckInStatus {
+  Loading = "loading",
+  Error = "error",
+  Success = "success",
+}
+
 const CheckInPage = () => {
   const client = generateClient<Schema>();
-  const [status, setStatus] = useState("loading");
+  const [status, setStatus] = useState<CheckInStatus>(CheckInStatus.Loading);
+  const { currentUser } = useUser();
 
   const handleCheckIn = async () => {
-    const { userId } = await getCurrentUser();
-    console.log(userId);
-    const { data: user } = await client.models.User.get({
-      id: userId,
-    });
-    console.log(user);
-
     try {
       const result = await client.mutations.SetUserAsCheckedIn({
-        userId: userId,
+        userId: currentUser.userSub,
       });
 
       console.log("User checked in:", result);
-      setStatus("success");
+      setStatus(CheckInStatus.Success);
     } catch (error) {
       console.error("Error checking in:", error);
-      setStatus("error");
+      setStatus(CheckInStatus.Error);
     }
   };
 
@@ -48,17 +48,19 @@ const CheckInPage = () => {
     const checkIn = async () => {
       await handleCheckIn();
     };
-    checkIn();
-  }, []);
+    if (currentUser.userSub) {
+      checkIn();
+    }
+  }, [currentUser.userSub]);
 
   return (
     <div className="flex h-[600px] w-full items-center justify-center bg-pastel-pink">
-      {status === "loading" && (
+      {status === CheckInStatus.Loading && (
         <p className="my-20 text-3xl font-bold text-dark-pink">
           Checking you in...
         </p>
       )}
-      {status === "error" && (
+      {status === CheckInStatus.Error && (
         <div className={CHECKIN_STATUS_TILE_STLYES}>
           <Image
             src={cross_icon}
@@ -76,7 +78,7 @@ const CheckInPage = () => {
           </Link>
         </div>
       )}
-      {status === "success" && (
+      {status === CheckInStatus.Success && (
         <div className={CHECKIN_STATUS_TILE_STLYES}>
           <Image
             src={check_mark_icon}
