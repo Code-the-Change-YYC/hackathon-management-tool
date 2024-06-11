@@ -3,6 +3,8 @@ import { AddUserToGroup } from "@/amplify/function/BusinessLogic/AddUserToGroup/
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
 import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
+import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMessageCode/resource";
+import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
@@ -22,10 +24,10 @@ const schema = a
         lastName: a.string(),
         role: a.string().default("Participant"),
         email: a.string(),
-        meals: a.boolean(),
         institution: a.string(),
         completedRegistration: a.boolean(),
         allergies: a.string(),
+        willEatMeals: a.boolean(),
         checkedIn: a
           .boolean()
           .default(false)
@@ -42,6 +44,7 @@ const schema = a
             allow.groups(["Admin"]).to(["read", "update", "delete"]),
           ]),
         team: a.belongsTo("Team", "teamId"),
+        attendedEvents: a.hasMany("UserFoodEventAttendance", "userId"),
         profileOwner: a
           .string()
           .authorization((allow) => [
@@ -52,6 +55,32 @@ const schema = a
         allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
+    //for handling a many to many relationship of users and food events
+    UserFoodEventAttendance: a
+      .model({
+        id: a.id().required(),
+        userId: a.id(),
+        foodEventId: a.id(),
+        user: a.belongsTo("User", "userId"),
+        foodEvent: a.belongsTo("FoodEvent", "foodEventId"),
+      })
+      .authorization((allow) => [allow.group("Admin").to(["read"])]),
+
+    FoodEvent: a
+      .model({
+        id: a.id().required(),
+        name: a.string().required(),
+        description: a.string().required(),
+        start: a.datetime().required(),
+        end: a.datetime().required(),
+        totalGroupCount: a.integer().required(),
+        attended: a.hasMany("UserFoodEventAttendance", "foodEventId"),
+      })
+      .authorization((allow) => [
+        allow.group("Admin"),
+        allow.authenticated().to(["read"]),
+      ]),
+
     Team: a
       .model({
         name: a.string(),
@@ -65,6 +94,10 @@ const schema = a
       ]),
     GenericFunctionResponse: a.customType({
       body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
+    StatusCodeFunctionResponse: a.customType({
       statusCode: a.integer(),
       headers: a.json(),
     }),
@@ -89,6 +122,25 @@ const schema = a
       .authorization((allow) => [allow.guest()])
       .handler(a.handler.function(DemoFunction)),
 
+    GetUserMessageCode: a
+      .query()
+      .arguments({
+        userMessage: a.string(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.authenticated()])
+      .handler(a.handler.function(GetUserMessageCode)),
+
+    VerifyUserMessage: a
+      .query()
+      .arguments({
+        userCode: a.string(),
+      })
+      .returns(a.ref("StatusCodeFunctionResponse"))
+      // allow all users to call this api for now
+      .authorization((allow) => [allow.group("Admin")])
+      .handler(a.handler.function(VerifyUserMessage)),
+
     AssignUsersToTeams: a
       .mutation()
       .arguments({
@@ -96,7 +148,7 @@ const schema = a
         teamId: a.string().required(),
       })
       .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(AssignUsersToTeams)),
     AddUserToGroup: a
       .mutation()
@@ -121,6 +173,7 @@ const schema = a
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
+    allow.resource(VerifyUserMessage).to(["query", "mutate"]),
     allow.resource(AddUserToGroup).to(["mutate"]),
     allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
   ]);

@@ -25,13 +25,16 @@
     "@typescript-eslint/parser": "^7.11.0",
     "aws-amplify": "^6.0.18",
     "aws-lambda": "^1.0.7",
+    "luxon": "^3.4.4",
     "concurrently": "^8.2.2",
     "next": "^14.2.3",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
     "react-toastify": "^10.0.5",
-    "tailwind-merge": "^2.2.2"
+    "sha3": "^2.1.4",
+    "tailwind-merge": "^2.2.2",
+    "validator": "^13.12.0"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.0.0",
