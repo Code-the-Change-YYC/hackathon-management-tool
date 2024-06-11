@@ -31,7 +31,7 @@ export default function FoodPage() {
 
   return (
     <div className="mx-auto text-center">
-      <button onSubmit={handleCheckIn}>press me</button>
+      <button onClick={handleCheckIn}>press me</button>
     </div>
   );
 }
