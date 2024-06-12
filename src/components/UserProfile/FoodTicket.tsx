@@ -140,9 +140,9 @@ export default function UserFoodTicket() {
               </div>
               <div className="bg-pink mt-10 flex flex-col items-center gap-5 rounded-3xl border-4 border-white bg-white/30 px-8 py-20 sm:flex-row sm:justify-start lg:gap-12 lg:px-20 lg:py-16">
                 <QRCode
-                  value="https://www.google.ca"
+                  value="https://www.google.ca" // placeholder
                   size={300}
-                  logoImage="https://media.licdn.com/dms/image/C560BAQElhKF1-EaccA/company-logo_200_200/0/1649698502090/codethechangeyyc_logo?e=1725494400&v=beta&t=xkbOt2oAECE8zYh-5gMcSrz8ZoXsjjpWsm04S8eYyHw"
+                  logoImage="/images/userProfile/ctclogo.jpg"
                   eyeColor={["#FF4D6F", "#FF4D6F", "#FF4D6F"]}
                   eyeRadius={50}
                   qrStyle="fluid"
