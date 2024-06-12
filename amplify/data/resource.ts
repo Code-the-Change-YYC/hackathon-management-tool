@@ -118,6 +118,7 @@ const schema = a
       .model({
         id: a.id().required(),
         time: a.datetime().required(),
+        zoomLink: a.string().required(),
         teamId: a.id().required(),
         roomId: a.id().required(),
         team: a.belongsTo("Team", "teamId"),
