@@ -60,6 +60,7 @@ https://docs.amplify.aws/react/start/
 ## Secrets
 
 Make sure to set these variables in your local dev sandbox and the production environment.
+`npx ampx sandbox secret set <secret name> --profile <profile name>`
 
 [Check the docs for more information](https://docs.amplify.aws/react/deploy-and-host/fullstack-branching/secrets-and-vars/)
 
@@ -68,6 +69,10 @@ Make sure to set these variables in your local dev sandbox and the production en
 | Key                   | value                       | Description                                                            |
 | --------------------- | --------------------------- | ---------------------------------------------------------------------- |
 | USER_VERIFICATION_KEY | [any string value you want] | Used for creating the MAC address for user UUID (used in food tickets) |
+| GOOGLE_CLIENT_ID      | [any string value you want] | Used for the Google OAuth Client ID                                    |
+| GOOGLE_CLIENT_SECRET  | [any string value you want] | Used for the Google OAuth Client Secret                                |
+
+Note: The 3rd party providers will not work locally even though the secret is set. This is because the actual value for these fields is not given out to local devs for security purposes. They will however work automatically on main since the actual values are set in the production/staging build environments
 
 ## Environment Variables
 
