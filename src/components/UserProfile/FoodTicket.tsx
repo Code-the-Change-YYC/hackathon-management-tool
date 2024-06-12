@@ -62,13 +62,23 @@ export default function UserFoodTicket() {
     },
   });
 
+  // Not sure if we actually plan on showing their use code and i have no idea what its used for so for container purposes i will shorten it
+  const shortenString = (str: string, maxLen: number) => {
+    if (str) {
+      if (str.length <= maxLen) {
+        return str;
+      }
+      return str.substring(0, maxLen) + "...";
+    }
+  };
+
   const [foodTicketData, setFoodTicketData] = useState({
     queuePosition: data?.queuePosition,
     eventName: data?.eventName,
     eventDescription: data?.eventDescription,
     eventTime: data?.eventTime,
     timeslot: data?.timeslot,
-    userCode: data?.verificationCode,
+    userCode: shortenString(data?.verificationCode as string, 15),
   });
 
   // Not sure if this is needed, but when queue becomes lower, than it should update
@@ -85,7 +95,7 @@ export default function UserFoodTicket() {
       eventDescription: data?.eventDescription,
       eventTime: data?.eventTime,
       timeslot: data?.timeslot,
-      userCode: data?.verificationCode,
+      userCode: shortenString(data?.verificationCode as string, 15),
     });
   }, [data]);
 
@@ -127,11 +137,8 @@ export default function UserFoodTicket() {
                 <h1 className="mt-3 text-lg font-bold md:text-2xl">
                   My Food Ticket
                 </h1>
-                <h1 className="mt-3 text-lg font-bold md:text-2xl">
-                  Hack The Change 2024
-                </h1>
               </div>
-              <div className="mt-12 flex flex-col items-center uppercase text-[#FF6B54] md:mx-10">
+              <div className="bg-pink mt-10 flex flex-col items-center gap-5 rounded-3xl border-4 border-white bg-white/30 px-8 py-20 sm:flex-row sm:justify-start lg:gap-12 lg:px-20 lg:py-16">
                 <QRCode
                   value="https://www.google.ca"
                   size={300}
@@ -144,14 +151,16 @@ export default function UserFoodTicket() {
                   logoPadding={3}
                   logoPaddingStyle="square"
                 />
-                {Object.entries(foodTicketData).map(([key, value]) => (
-                  <div key={key}>
-                    <h1 className="my-2 text-lg md:mt-2 md:text-xl">
-                      <strong>{key}:</strong>{" "}
-                      <span className="text-md ">{value}</span>
-                    </h1>
-                  </div>
-                ))}
+                <div className="flex flex-col flex-wrap">
+                  {Object.entries(foodTicketData).map(([key, value]) => (
+                    <div className="flex w-full flex-wrap" key={key}>
+                      <h1 className="my-2 w-fit text-lg md:mt-2 md:text-xl">
+                        <strong>{key}:</strong>{" "}
+                        <span className="text-md ">{value}</span>
+                      </h1>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
