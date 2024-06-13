@@ -25,7 +25,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         firstName: input.firstName,
         lastName: input.lastName,
         institution: input.institution,
-        meals: input.meals,
+        willEatMeals: input.willEatMeals,
         allergies: input.allergies,
         completedRegistration: true,
       });
@@ -128,7 +128,9 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         required
         name="meals"
         label="* Do you want provided food at the hackathon?"
-        value={(formState?.meals as unknown as string) ?? "Select an option"}
+        value={
+          (formState?.willEatMeals as unknown as string) ?? "Select an option"
+        }
         onChange={(e) => updateSelectInput(e)}
       >
         <option selected disabled>
