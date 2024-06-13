@@ -19,7 +19,7 @@ export enum UserType {
 }
 
 export interface IUser {
-  userSub: string;
+  username: string;
   type: UserType;
   completedProfile?: boolean;
   firstName?: string;
@@ -40,7 +40,7 @@ export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 
 export function UserContextProvider({ children }: Props) {
   const [currentUser, setCurrentUser] = useState<IUser>({
-    userSub: "",
+    username: "",
     type: UserType.Guest,
     populated: false,
   });
@@ -49,7 +49,7 @@ export function UserContextProvider({ children }: Props) {
     async function currentAuthenticatedUser() {
       try {
         const user = await fetchAuthSession();
-        if (!user.userSub) {
+        if (!user.username) {
           throw new Error("No user");
         }
 
@@ -59,28 +59,27 @@ export function UserContextProvider({ children }: Props) {
           )?.[0] === undefined
         ) {
           // Logout User if not in group
-          signOut();
+          // signOut();
           console.error("User not in group");
         }
 
         const response = await client.models.User.get({
-          id: user.userSub as string,
+          id: user.tokens?.accessToken.payload.username as string,
         });
 
         if (response.data === null) {
           // Logout User record does not exist in DB
-          signOut();
+          // signOut();
           console.error("User not in DB");
         }
 
         setCurrentUser({
-          userSub: user.userSub as string,
+          username: user.tokens?.accessToken.payload.username as string,
           type: (
             user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
           )?.[0],
           populated: true,
-          // TODO ONCE JUSTIN ADDS completed Field to signup flow
-          completedProfile: true,
+          completedProfile: response.data?.completedRegistration ?? false,
           email: response.data?.email ?? "",
           firstName: response.data?.firstName ?? "",
           lastName: response.data?.lastName ?? "",
@@ -88,7 +87,7 @@ export function UserContextProvider({ children }: Props) {
       } catch (err) {
         if (String(err).includes("No user")) {
           setCurrentUser({
-            userSub: "",
+            username: "",
             type: UserType.Guest,
             populated: true,
           });
