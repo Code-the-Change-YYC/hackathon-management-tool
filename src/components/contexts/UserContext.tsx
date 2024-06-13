@@ -49,7 +49,7 @@ export function UserContextProvider({ children }: Props) {
     async function currentAuthenticatedUser() {
       try {
         const user = await fetchAuthSession();
-        if (!user.username) {
+        if (!user.userSub) {
           throw new Error("No user");
         }
 
@@ -59,7 +59,7 @@ export function UserContextProvider({ children }: Props) {
           )?.[0] === undefined
         ) {
           // Logout User if not in group
-          // signOut();
+          signOut();
           console.error("User not in group");
         }
 
@@ -69,7 +69,7 @@ export function UserContextProvider({ children }: Props) {
 
         if (response.data === null) {
           // Logout User record does not exist in DB
-          // signOut();
+          signOut();
           console.error("User not in DB");
         }
 
