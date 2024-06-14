@@ -7,7 +7,6 @@ import { type Schema } from "@/amplify/data/resource";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import DataTableSectionUser from "../components/DataTableSectionUser";
-import { type userDataType } from "../components/DataTableSectionUser";
 import FilterUser from "../components/FilterUser";
 
 const LOADING_SCREEN_STYLES =
@@ -128,7 +127,7 @@ const UserTablePage = () => {
 
   const queryClient = useQueryClient();
   const tableDataMutation = useMutation({
-    mutationFn: async (updatedData: userDataType) => {
+    mutationFn: async (updatedData: Schema["User"]["type"]) => {
       console.log("Updating data:", updatedData);
       try {
         const response = await client.models.User.update(updatedData);
@@ -139,7 +138,7 @@ const UserTablePage = () => {
       }
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["Users"] });
+      queryClient.invalidateQueries({ queryKey: ["User"] });
       console.log("Table data updated successfully:", data);
     },
     onError: (error) => {

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
+import { type Schema } from "@/amplify/data/resource";
 import PopupUser from "@/app/admin/components/PopupTileUser";
 
 const SEARCH_RESULTS_SECTION_STYLES =
@@ -38,18 +39,10 @@ interface DataTableProps {
   tableDataMutation: any;
 }
 
-export type userDataType = {
-  lastName: string;
-  firstName: string;
-  role: string;
-  team: string;
-  id: string;
-};
-
 const DataTableSectionUser = (props: DataTableProps) => {
-  const { register, handleSubmit } = useForm<userDataType>();
+  const { register, handleSubmit } = useForm<Schema["User"]["type"]>();
 
-  const onSubmit: SubmitHandler<userDataType> = (data) => {
+  const onSubmit: SubmitHandler<Schema["User"]["type"]> = (data) => {
     const actualIndex = startIndex + index; // calculate the actual index
     const userId = userData[actualIndex].userId;
     data.id = userId;
@@ -188,6 +181,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
                             }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
                             {...register("lastName")}
+                            key={cellIndex}
                           />
                         ) : cellIndex === 1 ? (
                           <input
@@ -197,6 +191,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
                             }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
                             {...register("firstName")}
+                            key={cellIndex}
                           />
                         ) : cellIndex === 2 ? (
                           <select

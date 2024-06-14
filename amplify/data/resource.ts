@@ -49,6 +49,7 @@ const schema = a
           ]),
       })
       .authorization((allow) => [
+        allow.groups(["Admin"]).to(["read", "update"]),
         allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
