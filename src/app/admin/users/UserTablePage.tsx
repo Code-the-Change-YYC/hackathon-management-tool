@@ -7,6 +7,7 @@ import { type Schema } from "@/amplify/data/resource";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import DataTableSectionUser from "../components/DataTableSectionUser";
+import { type userDataType } from "../components/DataTableSectionUser";
 import FilterUser from "../components/FilterUser";
 
 const LOADING_SCREEN_STYLES =
@@ -81,15 +82,7 @@ const UserTablePage = () => {
         userId: user.id ?? "",
       }));
 
-      // //Create an array to
-      // const removeNullData = formattedData.map((item) => ({
-      //   ...item,
-      // }));
-      // console.log(userData);
-
       setUserData(formattedData);
-
-      //Create an array to display the data in the Data Table
 
       const displayedData = formattedData.map((cellData) => [
         cellData.lastName,
@@ -135,7 +128,7 @@ const UserTablePage = () => {
 
   const queryClient = useQueryClient();
   const tableDataMutation = useMutation({
-    mutationFn: async (updatedData: any) => {
+    mutationFn: async (updatedData: userDataType) => {
       console.log("Updating data:", updatedData);
       try {
         const response = await client.models.User.update(updatedData);

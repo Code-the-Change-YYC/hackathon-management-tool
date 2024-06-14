@@ -33,34 +33,34 @@ const entries_per_page = 10;
 
 interface DataTableProps {
   tableData: Array<Array<string>>;
-  tableHeaders: Array<{ columnHeader: string; className: string }>;
+  tableHeaders: Array<{ columnHeader: string }>;
   userData?: Array<any>;
   tableDataMutation: any;
 }
 
-type userData = {
+export type userDataType = {
   lastName: string;
   firstName: string;
   role: string;
   team: string;
-  userId: string;
+  id: string;
 };
 
 const DataTableSectionUser = (props: DataTableProps) => {
-  const { register, handleSubmit } = useForm<userData>();
+  const { register, handleSubmit } = useForm<userDataType>();
 
-  const onSubmit: SubmitHandler<userData> = (data) => {
+  const onSubmit: SubmitHandler<userDataType> = (data) => {
     const actualIndex = startIndex + index; // calculate the actual index
     const userId = userData[actualIndex].userId;
-    data.userId = userId;
-    // tableDataMutation.mutate(data);
+    data.id = userId;
+    tableDataMutation.mutate(data);
     console.log(data);
   };
 
-  const { tableData, tableHeaders, userData = [] } = props;
+  const { tableData, tableHeaders, userData = [], tableDataMutation } = props;
 
   const [editModes, setEditModes] = useState(
-    Array(tableData.length - 1).fill(false), //Create an array that is the same length as tableData, with all values set to false
+    Array(tableData.length).fill(false),
   );
 
   const [index, setIndex] = useState(0);
@@ -256,7 +256,10 @@ const DataTableSectionUser = (props: DataTableProps) => {
                       <>
                         <button
                           className={EDIT_BUTTON_STYLES}
-                          onClick={() => toggleEditMode(rowIndex)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleEditMode(rowIndex);
+                          }}
                         >
                           Edit
                         </button>
