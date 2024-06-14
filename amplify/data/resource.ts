@@ -92,7 +92,9 @@ const schema = a
     Score: a
       .model({
         id: a.id().required(),
-        score: a.integer().required(),
+        score: a.json().required(),
+        hackathonId: a.id().required(),
+        hackathon: a.belongsTo("Hackathon", "hackathonId"),
         judgeId: a.id().required(),
         judge: a.belongsTo("User", "judgeId"),
         teamId: a.id().required(),
@@ -125,6 +127,20 @@ const schema = a
         room: a.belongsTo("Room", "roomId"),
       })
       .authorization((allow) => [allow.authenticated().to(["read"])]),
+    // Table to provide metadata for the hackathon
+    Hackathon: a
+      .model({
+        id: a.id().required(),
+        startDate: a.date().required(),
+        endDate: a.date().required(),
+        scoringComponents: a.ref("ScoreComponentType").array(),
+        scoringSidepots: a.ref("ScoreComponentType").array(),
+        scores: a.hasMany("Score", "hackathonId"),
+      })
+      .authorization((allow) => [
+        allow.group("Admin").to(["read", "update", "create", "delete"]),
+        allow.authenticated().to(["read"]),
+      ]),
 
     /** Return Types */
     GenericFunctionResponse: a.customType({
@@ -140,6 +156,12 @@ const schema = a
       body: a.json(),
       statusCode: a.integer(),
       headers: a.json(),
+    }),
+    /** Score Type Model */
+    ScoreComponentType: a.customType({
+      id: a.id().required(),
+      friendlyName: a.string().required(),
+      isSidepot: a.boolean().required(),
     }),
 
     /**
