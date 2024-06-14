@@ -2,6 +2,7 @@
 
 import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession, signOut } from "aws-amplify/auth";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 import { type ReactNode, createContext, useEffect, useState } from "react";
 
@@ -25,6 +26,7 @@ export interface IUser {
   firstName?: string;
   lastName?: string;
   email?: string;
+  isReady: boolean;
   teamId?: string;
   populated: boolean;
 }
@@ -39,12 +41,33 @@ const client = generateClient<Schema>();
 export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 
 export function UserContextProvider({ children }: Props) {
+  const router = useRouter();
   const [currentUser, setCurrentUser] = useState<IUser>({
     username: "",
     type: UserType.Guest,
     populated: false,
+    isReady: false,
   });
   // TO DO load other user info from table
+  const checkRegistrationGuard = () => {
+    if (currentUser.type === UserType.Guest) {
+      return;
+    }
+    if (!currentUser.completedProfile) {
+      window.location.replace("/login");
+    }
+    if (!currentUser.teamId && currentUser.type === UserType.Participant) {
+      if (
+        router.pathname === "/participant/profile/team" ||
+        router.pathname === "/register/team"
+      ) {
+      } else {
+        window.location.replace("/participant/profile/team");
+      }
+    }
+
+    setCurrentUser({ ...currentUser, isReady: true });
+  };
   useEffect(() => {
     async function currentAuthenticatedUser() {
       try {
@@ -79,6 +102,7 @@ export function UserContextProvider({ children }: Props) {
             user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
           )?.[0],
           populated: true,
+          isReady: false,
           completedProfile: response.data?.completedRegistration ?? false,
           email: response.data?.email ?? "",
           firstName: response.data?.firstName ?? "",
@@ -90,6 +114,7 @@ export function UserContextProvider({ children }: Props) {
             username: "",
             type: UserType.Guest,
             populated: true,
+            isReady: false,
           });
           console.info("Not Logged in");
         } else {
@@ -99,9 +124,15 @@ export function UserContextProvider({ children }: Props) {
     }
     void currentAuthenticatedUser();
   }, []);
+
+  useEffect(() => {
+    if (currentUser.populated) {
+      checkRegistrationGuard();
+    }
+  }, [currentUser.populated]);
   return (
     <UserContext.Provider value={{ currentUser }}>
-      {currentUser.populated && children}
+      {currentUser.isReady && children}
     </UserContext.Provider>
   );
 }
