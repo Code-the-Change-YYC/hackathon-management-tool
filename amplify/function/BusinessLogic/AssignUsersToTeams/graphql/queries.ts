@@ -9,16 +9,48 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
+export const VerifyUserCode =
+  /* GraphQL */ `query VerifyUserCode($eventId: String, $userCode: String) {
+  VerifyUserCode(eventId: $eventId, userCode: $userCode) {
+    body
+    headers
+    statusCode
+    __typename
+  }
+}
+` as GeneratedQuery<
+    APITypes.VerifyUserCodeQueryVariables,
+    APITypes.VerifyUserCodeQuery
+  >;
+export const getFoodEvent = /* GraphQL */ `query GetFoodEvent($id: ID!) {
+  getFoodEvent(id: $id) {
+    attended {
+      nextToken
+      __typename
+    }
+    createdAt
+    description
+    end
+    groups
+    id
+    name
+    owner
+    start
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetFoodEventQueryVariables,
+  APITypes.GetFoodEventQuery
+>;
 export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
   getTeam(id: $id) {
     createdAt
     id
     members {
-      items {
-          id
-          __typename
-      }
       nextToken
+      __typename
     }
     name
     owner
@@ -37,6 +69,19 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     id
     institution
     lastName
+    meal {
+      createdAt
+      description
+      end
+      groups
+      id
+      name
+      owner
+      start
+      updatedAt
+      __typename
+    }
+    mealId
     meals
     owner
     team {
@@ -53,6 +98,40 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   }
 }
 ` as GeneratedQuery<APITypes.GetUserQueryVariables, APITypes.GetUserQuery>;
+export const listFoodEvents = /* GraphQL */ `query ListFoodEvents(
+  $filter: ModelFoodEventFilterInput
+  $id: ID
+  $limit: Int
+  $nextToken: String
+  $sortDirection: ModelSortDirection
+) {
+  listFoodEvents(
+    filter: $filter
+    id: $id
+    limit: $limit
+    nextToken: $nextToken
+    sortDirection: $sortDirection
+  ) {
+    items {
+      createdAt
+      description
+      end
+      groups
+      id
+      name
+      owner
+      start
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListFoodEventsQueryVariables,
+  APITypes.ListFoodEventsQuery
+>;
 export const listTeams = /* GraphQL */ `query ListTeams(
   $filter: ModelTeamFilterInput
   $id: ID
@@ -95,6 +174,7 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       id
       institution
       lastName
+      mealId
       meals
       owner
       teamId

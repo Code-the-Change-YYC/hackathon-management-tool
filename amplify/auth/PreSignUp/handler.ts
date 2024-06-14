@@ -44,12 +44,15 @@ export const handler: PreSignUpTriggerHandler = async (event) => {
     id: event.userName,
     email: event.request.userAttributes.email,
     checkedIn: false,
-    meals: false,
+    willEatMeals: false,
     allergies: "",
     institution: "",
     profileOwner: `${event.userName}::${event.userName}`,
   })
     .then((user) => {
+      if (user.errors) {
+        throw new Error("Failed to create user in DB");
+      }
       console.log("User created", user);
       return event;
     })

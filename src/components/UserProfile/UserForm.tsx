@@ -106,11 +106,11 @@ export default function UserForm({
       <label>Do you want provided meals at the hackathon?</label>
       <select
         className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
-        value={formState.meals ? "Yes" : "No"}
+        value={formState.willEatMeals ? "Yes" : "No"}
         onChange={(e) =>
           setFormState((prevState) => ({
             ...prevState,
-            meals: e.target.value === "Yes",
+            willEatMeals: e.target.value === "Yes",
           }))
         }
         disabled={!isEditing} // Disabled when not in edit mode
@@ -118,7 +118,7 @@ export default function UserForm({
         <option value="Yes">Yes</option>
         <option value="No">No</option>
       </select>
-      {formState.meals && (
+      {formState.willEatMeals && (
         <>
           <label>Do you have any allergies?</label>
           <input
