@@ -133,8 +133,8 @@ const schema = a
         id: a.id().required(),
         startDate: a.date().required(),
         endDate: a.date().required(),
-        scoringComponents: a.ref("ScoreComponentType").array(),
-        scoringSidepots: a.ref("ScoreComponentType").array(),
+        scoringComponents: a.ref("ScoreComponentType").array().required(),
+        scoringSidepots: a.ref("ScoreComponentType").array().required(),
         scores: a.hasMany("Score", "hackathonId"),
       })
       .authorization((allow) => [
