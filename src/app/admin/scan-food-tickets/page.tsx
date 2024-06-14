@@ -1,10 +1,14 @@
 "use client";
 
+import { generateClient } from "aws-amplify/api";
 import { useEffect, useState } from "react";
 import { QrReader } from "react-qr-reader";
 
+import type { Schema } from "@/amplify/data/resource";
+
 import { verifyFoodTicket } from "./TicketVerification/actions";
-import { getFoodEvents } from "./TicketVerification/actions";
+
+type FoodEvent = Schema["FoodEvent"]["type"];
 
 export default function AdminFoodTickets() {
   const [scanResult, setScanResult] = useState<string>();
@@ -12,13 +16,20 @@ export default function AdminFoodTickets() {
   const [eatDescription, setEatDescription] = useState("");
   const [inputEventIDValue, setEventIDValue] = useState("");
   const [foodEvents, setFoodEvents] = useState<FoodEvent[]>([]);
+  const client = generateClient<Schema>();
 
   useEffect(() => {
-    const fetchFoodEvents = async () => {
-      const events = await getFoodEvents();
-      setFoodEvents(events);
-    };
-    fetchFoodEvents();
+    async function fetchData() {
+      const { data, errors } = await client.models.FoodEvent.list();
+      if (!errors) {
+        setFoodEvents(data); // Update state with fetched data
+        console.log(data);
+      } else {
+        console.error(errors);
+      }
+    }
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -32,12 +43,16 @@ export default function AdminFoodTickets() {
     <>
       <select name="foodEvent" id="foodEvent">
         <option value="">Select a food event</option>
-        {foodEvents.map((event) => (
-          <option key={event.id} value={event.id}>
-            {new Date(event.start).toLocaleString()} -{" "}
-            {new Date(event.end).toLocaleString()}
-          </option>
-        ))}
+        {foodEvents ? (
+          foodEvents.map((event) => (
+            <option key={event.id} value={event.id}>
+              {new Date(event.start).toLocaleString()} -{" "}
+              {new Date(event.end).toLocaleString()}
+            </option>
+          ))
+        ) : (
+          <></>
+        )}
       </select>
       <QrReader
         className="w-auto"
