@@ -32,6 +32,7 @@ export const auth = defineAuth({
       google: {
         clientId: secret("GOOGLE_CLIENT_ID"),
         clientSecret: secret("GOOGLE_CLIENT_SECRET"),
+        scopes: ["profile", "email", "openid"],
       },
       // signInWithApple: {
       //   clientId: secret("APPLE_CLIENT_ID"),
@@ -40,10 +41,11 @@ export const auth = defineAuth({
       //   privateKey: secret("APPLE_PRIVATE_KEY"),
       //   scopes: ["name", "email"],
       // },
+
       callbackUrls: [
-        "http://localhost:3000",
-        "https://hackthechangeyyc.ca",
-        "https://staging.hackthechangeyyc.ca",
+        "http://localhost:3000/login",
+        "https://hackthechangeyyc.ca/login",
+        "https://staging.hackthechangeyyc.ca/login",
       ],
       logoutUrls: [
         "http://localhost:3000/logout",
