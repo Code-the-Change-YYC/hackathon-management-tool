@@ -1,27 +1,46 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
+import "react-toastify/dist/ReactToastify.css";
 
+import Providers from "@/app/QueryProvider";
 import "@/app/globals.css";
 import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
+import { UserContextProvider } from "@/components/contexts/UserContext";
 // import { UserContextProvider } from "@/components/contexts/UserContext";
 import MainLayout from "@/components/layouts/MainLayout";
 import "@aws-amplify/ui-react/styles.css";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-const inter = Inter({ subsets: ["latin"] });
-
+const Omnes = localFont({
+  src: "./fonts/Omnes Medium.ttf",
+  variable: "--font-omnes",
+});
 export const metadata: Metadata = {
   title: "Hack the Change",
-  description: "Hack the Change management tool",
+  description: "Hack the Change Participant Portal",
+  icons: [
+    {
+      rel: "icon",
+      type: "image/ico",
+      sizes: "32x32",
+      url: "/favicon.ico",
+    },
+  ],
 };
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ConfigureAmplifyClientSide />
-        {/* <UserContextProvider> */}
-        <MainLayout>{children}</MainLayout>
-        {/* </UserContextProvider> */}
+      <body
+        className={`${Omnes.className} flex size-full min-h-screen flex-col`}
+      >
+        <Providers>
+          <ConfigureAmplifyClientSide />
+          <UserContextProvider>
+            <MainLayout>{children}</MainLayout>
+          </UserContextProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Providers>
       </body>
     </html>
   );

@@ -30,7 +30,7 @@ interface EventDetailProps {
 const eventDetails = {
   eventDate: 1731258000,
   eventLocation: "University of Calgary",
-  eventImg: "/image",
+  eventImg: "/images/imgplaceholder.png",
   eventPrizeAmount: 17000,
 };
 
