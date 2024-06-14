@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
 
 import PopupUser from "@/app/admin/components/PopupTileUser";
 
@@ -14,8 +15,10 @@ const DATA_TABLE_SECTION_STYLES =
   "bg-light-grey border border-awesomer-purple m-4 p-4 rounded-md text-lg text-black w-full max-w-[1500px]";
 const DATA_TABLE_CONTENT_STYLES =
   "w-full border-separate border-spacing-x-0.5 text-left";
-const DATA_TABLE_HEADER_CELL_STYLES = "p-3 font-normal text-xl bg-[#A689FF]";
-const DATA_TABLE_CELL_STYLES = "p-3 py-4 text-md font-light";
+const DATA_TABLE_HEADER_CELL_STYLES =
+  "p-3 font-normal text-xl bg-[#A689FF] flex justify-center items-center";
+const DATA_TABLE_CELL_STYLES =
+  "p-3 py-4 text-md font-light overflow-x-auto flex items-center justify-start";
 
 const EDIT_BUTTON_STYLES = "mr-6 text-awesomer-purple";
 const EDIT_MODE_TEXT_INPUT_STYLES =
@@ -35,15 +38,32 @@ interface DataTableProps {
   tableDataMutation: any;
 }
 
+type userData = {
+  lastName: string;
+  firstName: string;
+  role: string;
+  team: string;
+  userId: string;
+};
+
 const DataTableSectionUser = (props: DataTableProps) => {
-  const { tableData, tableHeaders, userData = [], tableDataMutation } = props;
+  const { register, handleSubmit } = useForm<userData>();
+
+  const onSubmit: SubmitHandler<userData> = (data) => {
+    const actualIndex = startIndex + index; // calculate the actual index
+    const userId = userData[actualIndex].userId;
+    data.userId = userId;
+    // tableDataMutation.mutate(data);
+    console.log(data);
+  };
+
+  const { tableData, tableHeaders, userData = [] } = props;
 
   const [editModes, setEditModes] = useState(
-    Array(tableData.length).fill(false), //Create an array that is the same length as tableData, with all values set to false
+    Array(tableData.length - 1).fill(false), //Create an array that is the same length as tableData, with all values set to false
   );
 
-  const [editedValues, setEditedValues] = useState<string[][]>([]); // Create a state to store the edited values
-
+  const [index, setIndex] = useState(0);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [recordToDeleteId, setRecordToDeleteId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -59,20 +79,14 @@ const DataTableSectionUser = (props: DataTableProps) => {
       cellData.toLowerCase().includes(searchQuery.toLowerCase()),
     ),
   );
-
   const startIndex = (currentPage - 1) * entries_per_page;
   const endIndex = Math.min(startIndex + entries_per_page, filteredData.length);
 
   useEffect(() => {
-    if (tableData.length > 0) {
-      const formattedEditedValues = tableData.map((rowData) => [...rowData]);
-      setEditedValues(formattedEditedValues);
-    }
-  }, [tableData]);
-
-  useEffect(() => {
     const totalPages = Math.ceil(tableData.length / entries_per_page);
-    const currentPageData = filteredData.slice(startIndex, endIndex);
+    const currentPageData = filteredData
+      .slice(startIndex, endIndex)
+      .map((rowData) => rowData.slice(0, -1));
 
     setTotalPages(totalPages);
     setCurrentPageData(currentPageData);
@@ -87,29 +101,11 @@ const DataTableSectionUser = (props: DataTableProps) => {
   };
 
   const handleSaveButtonClick = (index: number) => {
-    const actualIndex = startIndex + index; // calculate the actual index of the row in the editedValues array
-
-    const editedLastName = editedValues[actualIndex][0];
-    const editedFirstName = editedValues[actualIndex][1];
-    const roleStatus = editedValues[actualIndex][2];
-    const editedTeam = editedValues[actualIndex][3];
-    const editedEmail = editedValues[actualIndex][4];
-    const userId = userData[actualIndex].userId;
-
-    tableDataMutation.mutate({
-      id: userId,
-      lastName: editedLastName,
-      firstName: editedFirstName,
-      role: roleStatus,
-      teamName: editedTeam,
-      email: editedEmail,
-    });
-    console.log("Save button clicked");
-
     toggleEditMode(index);
   };
 
   const toggleEditMode = (index: number) => {
+    setIndex(index);
     const actualIndex = startIndex + index;
 
     const newEditModes = [...editModes];
@@ -117,26 +113,16 @@ const DataTableSectionUser = (props: DataTableProps) => {
     setEditModes(newEditModes);
   };
 
-  const handleInputChange = (
-    value: string,
-    rowIndex: number,
-    cellIndex: number,
-  ) => {
-    const actualIndex = startIndex + rowIndex; // calculate the actual index of the row in the editedValues array
-
-    const newEditedValues = [...editedValues]; // create a copy of the editedValues array
-    newEditedValues[actualIndex][cellIndex] = value; // update the value of the specific cell in the specific row
-    setEditedValues(newEditedValues); // set the editedValues state to the new array
-  };
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
 
-  const handleDeleteButton = async (recordId: string) => {
+  const handleDeleteButton = async (index: number) => {
+    const actualIndex = startIndex + index; // calculate the actual index
+    const userId = userData[actualIndex].userId;
     setShowDeletePopup(true);
-    setRecordToDeleteId(recordId);
+    setRecordToDeleteId(userId);
   };
 
   return (
@@ -169,108 +155,77 @@ const DataTableSectionUser = (props: DataTableProps) => {
             className={SEARCH_ICON_STYLES}
           />
         </div>
-        <div>
-          <table className={DATA_TABLE_CONTENT_STYLES}>
-            <thead className="bg-dark-grey">
-              <tr className="text-white">
-                {/* Corrected mapping with return statement */}
-                {tableHeaders.map((header, index) => (
-                  <th
-                    className={`${DATA_TABLE_HEADER_CELL_STYLES} ${header.className}`}
-                    key={index}
-                  >
-                    {header.columnHeader}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {currentPageData.map((rowData, rowIndex) => (
-                <tr
-                  key={rowIndex}
-                  className={`${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
+        <div className={`${DATA_TABLE_CONTENT_STYLES} flex flex-col`}>
+          <div className="flex w-full flex-row text-white">
+            {tableHeaders.map((header, index) => (
+              <div
+                key={index}
+                className={`${DATA_TABLE_HEADER_CELL_STYLES} ${index === 0 ? "w-1/6" : index === 1 ? "w-1/6" : index === 2 ? "w-1/6" : index === 3 ? "w-1/6" : index === 4 ? "w-2/5" : "w-1/4"} border-r border-gray-300 `}
+              >
+                {header.columnHeader}
+              </div>
+            ))}
+          </div>
+          <div className="">
+            {currentPageData.map((rowData, rowIndex) => (
+              <form key={rowIndex} onSubmit={handleSubmit(onSubmit)}>
+                <div
+                  className={`flex flex-row ${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
+                  role="row"
                 >
                   {rowData.map((cellData, cellIndex) => (
-                    <td className={DATA_TABLE_CELL_STYLES} key={cellIndex}>
-                      {/* LAST NAME*/}
+                    <div
+                      className={`${DATA_TABLE_CELL_STYLES}  ${cellIndex === 0 ? "w-1/6" : cellIndex === 1 ? "w-1/6" : cellIndex === 2 ? "w-1/6" : cellIndex === 3 ? "w-1/6" : cellIndex === 4 ? "w-2/5" : "w-1/6"} border-r border-gray-300`}
+                      key={cellIndex}
+                      role="col"
+                    >
                       {editModes[startIndex + rowIndex] ? (
                         cellIndex === 0 ? (
                           <input
                             type="text"
-                            value={
-                              editedValues[startIndex + rowIndex][cellIndex]
+                            defaultValue={
+                              tableData[startIndex + rowIndex][cellIndex]
                             }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
-                            onChange={(e) =>
-                              handleInputChange(
-                                e.target.value,
-                                rowIndex,
-                                cellIndex,
-                              )
-                            }
+                            {...register("lastName")}
                           />
-                        ) : cellIndex === 1 ? ( //FIRST NAME
+                        ) : cellIndex === 1 ? (
                           <input
                             type="text"
-                            value={
-                              editedValues[startIndex + rowIndex][cellIndex]
+                            defaultValue={
+                              tableData[startIndex + rowIndex][cellIndex]
                             }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
-                            onChange={(e) =>
-                              handleInputChange(
-                                e.target.value,
-                                rowIndex,
-                                cellIndex,
-                              )
-                            }
+                            {...register("firstName")}
                           />
-                        ) : cellIndex === 2 ? ( //ROLE
+                        ) : cellIndex === 2 ? (
                           <select
-                            value={
-                              editedValues[startIndex + rowIndex][cellIndex]
+                            defaultValue={
+                              tableData[startIndex + rowIndex][cellIndex]
                             }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
-                            onChange={(e) =>
-                              handleInputChange(
-                                e.target.value,
-                                rowIndex,
-                                cellIndex,
-                              )
-                            }
+                            {...register("role")}
                           >
                             <option value="Admin">Admin</option>
                             <option value="Judge">Judge</option>
                             <option value="Participant">Participant</option>
                           </select>
-                        ) : cellIndex === 3 ? ( //TEAM
+                        ) : cellIndex === 3 ? (
                           <input
                             type="text"
-                            value={
-                              editedValues[startIndex + rowIndex][cellIndex]
+                            defaultValue={
+                              tableData[startIndex + rowIndex][cellIndex]
                             }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
-                            onChange={(e) =>
-                              handleInputChange(
-                                e.target.value,
-                                rowIndex,
-                                cellIndex,
-                              )
-                            }
+                            {...register("team")}
                           />
-                        ) : cellIndex === 4 ? ( //EMAIL
+                        ) : cellIndex === 4 ? (
                           <input
                             type="text"
-                            value={
-                              editedValues[startIndex + rowIndex][cellIndex]
+                            defaultValue={
+                              tableData[startIndex + rowIndex][cellIndex]
                             }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
-                            onChange={(e) =>
-                              handleInputChange(
-                                e.target.value,
-                                rowIndex,
-                                cellIndex,
-                              )
-                            }
                           />
                         ) : (
                           cellData
@@ -278,13 +233,14 @@ const DataTableSectionUser = (props: DataTableProps) => {
                       ) : (
                         cellData
                       )}
-                    </td>
+                    </div>
                   ))}
-                  <td className="min-w-[250px] p-3 text-center">
+                  <div className="w-1/4 p-3 text-center">
                     {editModes[startIndex + rowIndex] ? (
                       <>
                         <button
                           className={EDIT_BUTTON_STYLES}
+                          type="submit"
                           onClick={() => handleSaveButtonClick(rowIndex)}
                         >
                           Save
@@ -306,28 +262,25 @@ const DataTableSectionUser = (props: DataTableProps) => {
                         </button>
                         <button
                           className="text-dark-pink"
-                          onClick={() =>
-                            handleDeleteButton(
-                              userData[startIndex + rowIndex].userId,
-                            )
-                          }
+                          onClick={() => handleDeleteButton(rowIndex)}
                         >
                           Delete
                         </button>
                       </>
                     )}
-                  </td>
-                </tr>
-              ))}
-              <tr className="h-10 bg-awesome-purple">
-                {Array(tableHeaders.length + 1)
-                  .fill(null)
-                  .map((_, index) => (
-                    <td key={index}></td>
-                  ))}
-              </tr>
-            </tbody>
-          </table>
+                  </div>
+                </div>
+              </form>
+            ))}
+            <div role="row" className="h-10 bg-awesome-purple">
+              {Array(tableHeaders.length + 1)
+                .fill(null)
+                .map((_, index) => (
+                  <div key={index}></div>
+                ))}
+            </div>
+          </div>
+
           {/* popup component to confirm deletion of record */}
           {showDeletePopup && (
             <PopupUser

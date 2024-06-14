@@ -36,6 +36,23 @@ const config: Config = {
     },
   },
 
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        "::-webkit-scrollbar": {
+          width: "2px",
+          height: "6px",
+        },
+        "::-webkit-scrollbar-thumb": {
+          backgroundColor: "#FF4D6F",
+        },
+        "::-webkit-scrollbar-track": {
+          backgroundColor: "#D2D2D2",
+        },
+      };
+
+      addUtilities(newUtilities, ["responsive", "hover"]);
+    },
+  ],
 };
 export default config;

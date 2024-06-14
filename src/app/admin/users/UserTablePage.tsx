@@ -14,12 +14,12 @@ const LOADING_SCREEN_STYLES =
 
 // added option for styles to customize the column widths
 const tableHeaders = [
-  { columnHeader: "Last Name", className: "w-1/6" },
-  { columnHeader: "First Name", className: "w-1/6" },
-  { columnHeader: "Role", className: "w-1/6" },
-  { columnHeader: "Team", className: "w-1/6" },
-  { columnHeader: "Email", className: "w-1/6" },
-  { columnHeader: "", className: "w-1/3" },
+  { columnHeader: "Last Name" },
+  { columnHeader: "First Name" },
+  { columnHeader: "Role" },
+  { columnHeader: "Team" },
+  { columnHeader: "Email" },
+  { columnHeader: "" },
 ];
 
 const filters = [
@@ -97,7 +97,10 @@ const UserTablePage = () => {
         cellData.role,
         cellData.team,
         cellData.email,
+        cellData.userId,
       ]);
+
+      console.log(displayedData);
 
       setTableData(displayedData);
     }
