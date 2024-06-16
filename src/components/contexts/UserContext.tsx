@@ -4,8 +4,6 @@ import { fetchAuthSession, signOut } from "aws-amplify/auth";
 import { useContext } from "react";
 import { type ReactNode, createContext, useEffect, useState } from "react";
 
-import { client } from "@/app/QueryProvider";
-
 import { getUserInfo } from "../hooks/useGetUser";
 
 interface Props {
