@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { CgProfile } from "react-icons/cg";
 
 import { UserType, useUser } from "@/components/contexts/UserContext";
 
@@ -52,16 +53,7 @@ export default function Header() {
       <div className="flex w-48 justify-end">
         {user.completedProfile && (
           <Link href="/participant/profile">
-            <Image
-              src={
-                // This is temporary. replace with user profile image
-                "/MissingProfile.png"
-              }
-              alt={"profile image"}
-              width={70}
-              height={70}
-              className="rounded-full"
-            />
+            <CgProfile size={60} />
           </Link>
         )}
       </div>

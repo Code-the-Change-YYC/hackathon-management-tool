@@ -33,7 +33,7 @@ const CheckInPage = () => {
   const handleCheckIn = async () => {
     try {
       const result = await client.mutations.SetUserAsCheckedIn({
-        userId: currentUser.userSub,
+        userId: currentUser.username,
       });
 
       console.log("User checked in:", result);
@@ -48,10 +48,10 @@ const CheckInPage = () => {
     const checkIn = async () => {
       await handleCheckIn();
     };
-    if (currentUser.userSub) {
+    if (currentUser.username) {
       checkIn();
     }
-  }, [currentUser.userSub]);
+  }, [currentUser.username]);
 
   return (
     <div className="flex h-[600px] w-full items-center justify-center bg-pastel-pink">

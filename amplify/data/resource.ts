@@ -8,13 +8,6 @@ import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMe
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-/*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rules below
-specify that owners, authenticated via your Auth resource can "create",
-"read", "update", and "delete" their own records. Public users,
-authenticated via an API key, can only "read" records.
-=========================================================================*/
 const schema = a
   .schema({
     User: a
@@ -50,12 +43,15 @@ const schema = a
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read"]),
           ]),
+        JUDGE_givenScores: a.hasMany("Score", "judgeId"),
+        JUDGE_roomId: a.id(),
+        JUDGE_room: a.belongsTo("Room", "JUDGE_roomId"),
       })
       .authorization((allow) => [
         allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
-    //for handling a many to many relationship of users and food events
+    // For handling a many to many relationship of users and food events
     UserFoodEventAttendance: a
       .model({
         id: a.id().required(),
@@ -80,18 +76,73 @@ const schema = a
         allow.group("Admin"),
         allow.authenticated().to(["read"]),
       ]),
-
     Team: a
       .model({
         name: a.string(),
         id: a.id(),
         approved: a.boolean(),
         members: a.hasMany("User", "teamId"),
+        scores: a.hasMany("Score", "teamId"),
+        teamRooms: a.hasMany("TeamRoom", "teamId"),
       })
       .authorization((allow) => [
-        allow.owner().to(["read", "update"]),
+        allow.group("Admin").to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
+    Score: a
+      .model({
+        id: a.id().required(),
+        score: a.json().required(),
+        hackathonId: a.id().required(),
+        hackathon: a.belongsTo("Hackathon", "hackathonId"),
+        judgeId: a.id().required(),
+        judge: a.belongsTo("User", "judgeId"),
+        teamId: a.id().required(),
+        team: a.belongsTo("Team", "teamId"),
+      })
+      .authorization((allow) => [
+        allow.group("Admin").to(["create", "read", "update", "delete"]),
+        allow.group("Judge").to(["create", "update"]),
+      ]),
+    Room: a
+      .model({
+        id: a.id().required(),
+        name: a.string().required(),
+        teamRoom: a.hasMany("TeamRoom", "roomId"),
+        judges: a.hasMany("User", "JUDGE_roomId"),
+      })
+      .authorization((allow) => [
+        allow.group("Admin").to(["read", "update"]),
+        allow.authenticated().to(["read"]),
+      ]),
+    // For handling a many to many relationship of teams and rooms
+    TeamRoom: a
+      .model({
+        id: a.id().required(),
+        time: a.datetime().required(),
+        zoomLink: a.string().required(),
+        teamId: a.id().required(),
+        roomId: a.id().required(),
+        team: a.belongsTo("Team", "teamId"),
+        room: a.belongsTo("Room", "roomId"),
+      })
+      .authorization((allow) => [allow.authenticated().to(["read"])]),
+    // Table to provide metadata for the hackathon
+    Hackathon: a
+      .model({
+        id: a.id().required(),
+        startDate: a.date().required(),
+        endDate: a.date().required(),
+        scoringComponents: a.ref("ScoreComponentType").array().required(),
+        scoringSidepots: a.ref("ScoreComponentType").array().required(),
+        scores: a.hasMany("Score", "hackathonId"),
+      })
+      .authorization((allow) => [
+        allow.group("Admin").to(["read", "update", "create", "delete"]),
+        allow.authenticated().to(["read"]),
+      ]),
+
+    /** Return Types */
     GenericFunctionResponse: a.customType({
       body: a.json(),
       statusCode: a.integer(),
@@ -105,6 +156,12 @@ const schema = a
       body: a.json(),
       statusCode: a.integer(),
       headers: a.json(),
+    }),
+    /** Score Type Model */
+    ScoreComponentType: a.customType({
+      id: a.id().required(),
+      friendlyName: a.string().required(),
+      isSidepot: a.boolean().required(),
     }),
 
     /**
@@ -137,7 +194,6 @@ const schema = a
         userCode: a.string(),
       })
       .returns(a.ref("StatusCodeFunctionResponse"))
-      // allow all users to call this api for now
       .authorization((allow) => [allow.group("Admin")])
       .handler(a.handler.function(VerifyUserMessage)),
 
@@ -166,7 +222,7 @@ const schema = a
         addCallerToTeam: a.boolean().required(),
       })
       .returns(a.ref("GenericFunctionResponse"))
-      .authorization((allow) => [allow.guest(), allow.authenticated()])
+      .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(CreateTeamWithCode)),
 
     // Custom resolvers
@@ -207,32 +263,3 @@ export const data = defineData({
     },
   },
 });
-
-/*== STEP 2 ===============================================================
-Go to your frontend source code. From your client-side code, generate a
-Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
-WORK IN THE FRONTEND CODE FILE.)
-
-Using JavaScript or Next.js React Server Components, Middleware, Server
-Actions or Pages Router? Review how to generate Data clients for those use
-cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
-=========================================================================*/
-
-/*
-"use client"
-import { generateClient } from "aws-amplify/data";
-import { type Schema } from "@/amplify/data/resource";
-
-const client = generateClient<Schema>() // use this Data client for CRUDL requests
-*/
-
-/*== STEP 3 ===============================================================
-Fetch records from the database and use them in your frontend component.
-(THIS SNIPPET WILL ONLY WORK IN THE FRONTEND CODE FILE.)
-=========================================================================*/
-
-/* For example, in a React component, you can use this snippet in your
-  function's RETURN statement */
-// const { data: todos } = client.models.Todo.list()
-
-// return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>
