@@ -16,7 +16,7 @@ const TEAM_INSTRUCTION_STYLES =
 const TeamProfile = () => {
   const queryClient = useQueryClient();
 
-  const userId = useUser().currentUser.userSub as string;
+  const userId = useUser().currentUser.username as string;
 
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["Team"]["type"],

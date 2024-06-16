@@ -1,5 +1,5 @@
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
-import { defineAuth } from "@aws-amplify/backend";
+import { defineAuth, secret } from "@aws-amplify/backend";
 
 import { AddUserToGroup } from "../function/BusinessLogic/AddUserToGroup/resource";
 import { PostConfirmation } from "./PostConfirmation/resource";
@@ -28,44 +28,31 @@ export const auth = defineAuth({
   loginWith: {
     email: true,
 
-    // externalProviders: {
-    //   google: {
-    //     clientId: secret("GOOGLE_CLIENT_ID"),
-    //     clientSecret: secret("GOOGLE_CLIENT_SECRET"),
-    //   },
-    //   signInWithApple: {
-    //     clientId: secret("APPLE_CLIENT_ID"),
-    //     teamId: secret("APPLE_TEAM_ID"),
-    //     keyId: secret("APPLE_KEY_ID"),
-    //     privateKey: secret("APPLE_PRIVATE_KEY"),
-    //     scopes: ["name", "email"],
-    //   },
-    //   callbackUrls: [
-    //     "http://localhost:3000",
-    //     "https://hackthechangeyyc.ca",
-    //     "https://staging.hackthechangeyyc.ca",
-    //   ],
-    //   logoutUrls: [
-    //     "http://localhost:3000/logout",
-    //     "https://hackthechangeyyc.ca/logout",
-    //     "https://staging.hackthechangeyyc.ca/logout",
-    //   ],
-    // },
-    // add social providers
-    // externalProviders: {
-    /**
-     * first, create your secrets using `amplify sandbox secret`
-     * then, import `secret` from `@aws-amplify/backend`
-     * @see https://docs.amplify.aws/gen2/deploy-and-host/sandbox-environments/features/#setting-secrets
-     */
-    // loginWithAmazon: {
-    //   clientId: secret('LOGINWITHAMAZON_CLIENT_ID'),
-    //   clientSecret: secret('LOGINWITHAMAZON_CLIENT_SECRET'),
-    // }
-    // configure callback and logout URLs
-    // callbackUrls: ['http://localhost:3000'],
-    // logoutUrls: ['http://localhost:3000'],
-    // },
+    externalProviders: {
+      google: {
+        clientId: secret("GOOGLE_CLIENT_ID"),
+        clientSecret: secret("GOOGLE_CLIENT_SECRET"),
+        scopes: ["profile", "email", "openid"],
+      },
+      // signInWithApple: {
+      //   clientId: secret("APPLE_CLIENT_ID"),
+      //   teamId: secret("APPLE_TEAM_ID"),
+      //   keyId: secret("APPLE_KEY_ID"),
+      //   privateKey: secret("APPLE_PRIVATE_KEY"),
+      //   scopes: ["name", "email"],
+      // },
+
+      callbackUrls: [
+        "http://localhost:3000/login",
+        "https://hackthechangeyyc.ca/login",
+        "https://staging.hackthechangeyyc.ca/login",
+      ],
+      logoutUrls: [
+        "http://localhost:3000/logout",
+        "https://hackthechangeyyc.ca/logout",
+        "https://staging.hackthechangeyyc.ca/logout",
+      ],
+    },
   },
   /**
    * enable multifactor authentication

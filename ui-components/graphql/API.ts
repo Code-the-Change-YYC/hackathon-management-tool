@@ -392,7 +392,6 @@ export type ModelSubscriptionBooleanInput = {
 };
 
 export type VerifyUserCodeQueryVariables = {
-  eventId?: string | null;
   userCode?: string | null;
 };
 
@@ -758,12 +757,12 @@ export type DeleteUserMutation = {
   } | null;
 };
 
-export type GetUserVerifcationCodeMutationVariables = {
+export type GetUserVerificationCodeMutationVariables = {
   userId?: string | null;
 };
 
-export type GetUserVerifcationCodeMutation = {
-  getUserVerifcationCode?: {
+export type GetUserVerificationCodeMutation = {
+  getUserVerificationCode?: {
     __typename: "GenericFunctionResponse";
     body?: string | null;
     headers?: string | null;
@@ -856,20 +855,6 @@ export type UpdateUserMutation = {
     } | null;
     teamId?: string | null;
     updatedAt: string;
-  } | null;
-};
-
-export type VerifyUserVerifcationCodeMutationVariables = {
-  eventID?: string | null;
-  userCode?: string | null;
-};
-
-export type VerifyUserVerifcationCodeMutation = {
-  verifyUserVerifcationCode?: {
-    __typename: "GenericFunctionResponse";
-    body?: string | null;
-    headers?: string | null;
-    statusCode?: number | null;
   } | null;
 };
 

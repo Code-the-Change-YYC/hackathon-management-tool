@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 import { client } from "@/app/QueryProvider";
-import DataTableSection from "@/app/admin/components/DataTableSection";
-import FilterSection from "@/app/admin/components/FilterSection";
+import DataTableSection from "@/components/admin/TeamsTable/DataTableSection";
+import FilterSection from "@/components/admin/TeamsTable/FilterSection";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 

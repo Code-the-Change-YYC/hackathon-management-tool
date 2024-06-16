@@ -39,4 +39,3 @@ next-env.d.ts
 .amplify
 /amplifyconfiguration.json
 /amplify_outputs.json
-amplify/function/BusinessLogic/CreateTeamWithCode/graphql/API.ts
