@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Body, Html, Text } from "@react-email/components";
 
 export function Welcome(props: Record<string, any>) {
