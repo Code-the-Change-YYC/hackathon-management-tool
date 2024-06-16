@@ -106,7 +106,7 @@ export default function CountdownWindow({
         <h1 className="text-5xl font-extrabold">Thank you.</h1>
         <h1 className="text-3xl font-medium">Your registration is complete!</h1>
         {hackathonTime ? <HackathonStart /> : <HackathonClock />}
-        <p className="text-lg font-semibold text-black">
+        <p className="px-4 text-center text-lg font-semibold text-black">
           Join us for the two-day for-charity hackathon hosted on November 11th
           to 12th by{" "}
           <Link

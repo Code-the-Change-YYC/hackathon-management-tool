@@ -18,6 +18,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     },
   });
   const userMutation = useMutation({
+    mutationKey: ["User", user?.userId],
     mutationFn: async (input: Schema["User"]["type"]) => {
       await client.models.User.update({
         id: user.userId,
@@ -26,11 +27,13 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         institution: input.institution,
         willEatMeals: input.willEatMeals,
         allergies: input.allergies,
-        completedRegistration: true,
       });
     },
     onSuccess: () => {
       router.push("/register/team");
+    },
+    onError: (error) => {
+      console.error("Error updating user", error);
     },
   });
   const institutions = [
@@ -40,6 +43,10 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     "Other",
     "None",
   ];
+  enum MealOptions {
+    "Yes" = "Yes",
+    "No" = "No",
+  }
   const [formState, setFormState] = useState<Schema["User"]["type"]>({
     id: user?.userId,
   } as Schema["User"]["type"]);
@@ -47,18 +54,19 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     e.preventDefault();
     userMutation.mutate(formState);
   };
-  const updateForm = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const updateForm = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ): void => {
     const { name, value } = e.target;
-    setFormState((prevState) => ({ ...prevState, [name]: value }));
-  };
-  const updateSelectInput = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    const { name, value } = e.target;
-    if (name === "meals") {
-      setFormState((prevState) => ({ ...prevState, [name]: value === "yes" }));
+    if (name === "willEatMeals") {
+      setFormState((prevState) => ({
+        ...prevState,
+        [name]: value === MealOptions.Yes,
+      }));
+    } else {
+      setFormState((prevState) => ({ ...prevState, [name]: value }));
     }
-    setFormState((prevState) => ({ ...prevState, [name]: value }));
   };
-
   if (isPending) {
     return (
       // These are mandatory divs for the loading spinner
@@ -112,10 +120,11 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         </div>
       </div>
       <SelectField
+        required
         name="institution"
         label="Which institution do you go to?"
         value={formState?.institution ?? "Select Insitution"}
-        onChange={(e) => updateSelectInput(e)}
+        onChange={(e) => updateForm(e)}
       >
         <option selected disabled>
           Select Insitution
@@ -128,18 +137,28 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       </SelectField>
       <SelectField
         required
-        name="meals"
+        name="willEatMeals"
         label="* Do you want provided food at the hackathon?"
+        defaultValue="Select an option"
         value={
-          (formState?.willEatMeals as unknown as string) ?? "Select an option"
+          "willEatMeals" in formState
+            ? formState.willEatMeals
+              ? "Yes"
+              : "No"
+            : "Select an option"
         }
-        onChange={(e) => updateSelectInput(e)}
+        onChange={(e) => updateForm(e)}
       >
         <option selected disabled>
           Select an option
         </option>
-        <option value={"yes"}>Yes</option>
-        <option value={"no"}>No</option>
+        {(Object.keys(MealOptions) as Array<keyof typeof MealOptions>).map(
+          (mealOption) => (
+            <option key={mealOption} value={mealOption}>
+              {mealOption}
+            </option>
+          ),
+        )}
       </SelectField>
       <Flex direction="column" gap="small">
         <Label htmlFor="allergies">
