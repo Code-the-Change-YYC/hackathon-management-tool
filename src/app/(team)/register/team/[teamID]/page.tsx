@@ -16,7 +16,8 @@ const TeamInformation = ({
   return (
     <div className="flex flex-col gap-8 py-8 text-neutral-700">
       <h1 className=" text-center text-5xl font-semibold">
-        {teamName + "'s"} Team ID is: <br /> {teamID}
+        {teamName + "'s"} Team ID is: <br />{" "}
+        {teamID.split("").join("-").toUpperCase()}
       </h1>
       <div className="text-center text-xl font-medium">
         <span className="">
@@ -38,7 +39,7 @@ export default function page({ params }: { params: { teamID: string } }) {
   const teamID = "1-2-3-4-5-6";
   return (
     <>
-      <TeamInformation teamName={params.teamID} teamID={teamID} />
+      <TeamInformation teamName={params.teamID} teamID={params.teamID} />
       <CountdownWindow>
         <h1 className="text-2xl font-semibold">
           <Underline noTick>Add to Calendar</Underline>

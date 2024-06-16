@@ -6,6 +6,8 @@ import { type ReactNode, createContext, useEffect, useState } from "react";
 
 import { client } from "@/app/QueryProvider";
 
+import { getUserInfo } from "../hooks/useGetUser";
+
 interface Props {
   children: ReactNode | ReactNode[];
 }
@@ -41,7 +43,9 @@ export function UserContextProvider({ children }: Props) {
     type: UserType.Guest,
     populated: false,
   });
-  // TO DO load other user info from table
+
+  const { data } = getUserInfo(currentUser.username);
+
   useEffect(() => {
     async function currentAuthenticatedUser() {
       try {
@@ -60,11 +64,11 @@ export function UserContextProvider({ children }: Props) {
           console.error("User not in group");
         }
 
-        const response = await client.models.User.get({
-          id: user.tokens?.accessToken.payload.username as string,
-        });
+        // const response = await client.models.User.get({
+        //   id: user.tokens?.accessToken.payload.username as string,
+        // });
 
-        if (response.data === null) {
+        if (data === null) {
           // Logout User record does not exist in DB
           signOut();
           console.error("User not in DB");
@@ -76,10 +80,10 @@ export function UserContextProvider({ children }: Props) {
             user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
           )?.[0],
           populated: true,
-          completedProfile: response.data?.completedRegistration ?? false,
-          email: response.data?.email ?? "",
-          firstName: response.data?.firstName ?? "",
-          lastName: response.data?.lastName ?? "",
+          completedProfile: data?.completedRegistration ?? false,
+          email: data?.email ?? "",
+          firstName: data?.firstName ?? "",
+          lastName: data?.lastName ?? "",
         });
       } catch (err) {
         if (String(err).includes("No user")) {
@@ -95,7 +99,7 @@ export function UserContextProvider({ children }: Props) {
       }
     }
     void currentAuthenticatedUser();
-  }, []);
+  }, [data]);
   return (
     <UserContext.Provider value={{ currentUser }}>
       {currentUser.populated && children}

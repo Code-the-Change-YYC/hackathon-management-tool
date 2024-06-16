@@ -12,7 +12,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();
   const { isPending, isError, data } = useQuery({
-    queryKey: ["user", user?.userId],
+    queryKey: ["User", user?.userId],
     queryFn: async () => {
       return (await client.models.User.get({ id: user.userId as string })).data;
     },
