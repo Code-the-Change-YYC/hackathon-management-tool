@@ -26,7 +26,7 @@ export interface UserFormProp {
 }
 
 const UserProfile = () => {
-  const userId = useUser().currentUser.userSub as string;
+  const userId = useUser().currentUser?.userSub as string;
 
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["User"]["type"],
