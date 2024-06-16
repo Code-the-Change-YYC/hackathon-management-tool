@@ -42,6 +42,7 @@ const UserProfile = () => {
 
   const userMutation = useMutation({
     //mutation takes parameters of input with User type
+    mutationKey: ["User"],
     mutationFn: async (input: Schema["User"]["type"]) => {
       const {
         createdAt,
