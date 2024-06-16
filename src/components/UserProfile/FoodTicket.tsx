@@ -2,7 +2,6 @@
 
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { QRCode } from "react-qrcode-logo";
 
 import { type Schema } from "@/amplify/data/resource";
@@ -37,7 +36,7 @@ export default function UserFoodTicket() {
       });
       if (errors) {
         console.log(errors);
-        verificationCode = "Error when searching for your message code";
+        verificationCode = "Error when generating your message code";
         return;
       }
 
@@ -48,7 +47,7 @@ export default function UserFoodTicket() {
         const createdVerificationCode = createMessageAndCode(userId, code);
         verificationCode = createdVerificationCode;
       } else {
-        verificationCode = "Error when searching for your message code";
+        verificationCode = "Error when generating your message code";
       }
 
       return {
@@ -62,42 +61,14 @@ export default function UserFoodTicket() {
     },
   });
 
-  // Not sure if we actually plan on showing their use code and i have no idea what its used for so for container purposes i will shorten it
-  const shortenString = (str: string, maxLen: number) => {
-    if (str) {
-      if (str.length <= maxLen) {
-        return str;
-      }
-      return str.substring(0, maxLen) + "...";
-    }
+  const foodTicketData = {
+    "Queue Position": `You are in position ${data?.queuePosition ?? "unknown"} in the queue.`,
+    "Event Name": data?.eventName ?? "N/A",
+    "Event Description": data?.eventDescription ?? "N/A",
+    "Event Time": data?.eventTime ?? "N/A",
+    timeslot: data?.timeslot ?? "N/A",
+    userCode: data?.verificationCode ?? "N/A",
   };
-
-  const [foodTicketData, setFoodTicketData] = useState({
-    queuePosition: data?.queuePosition,
-    eventName: data?.eventName,
-    eventDescription: data?.eventDescription,
-    eventTime: data?.eventTime,
-    timeslot: data?.timeslot,
-    userCode: shortenString(data?.verificationCode as string, 15),
-  });
-
-  // Not sure if this is needed, but when queue becomes lower, than it should update
-  useEffect(() => {
-    let queuePosition;
-    if (data?.queuePosition === "0") {
-      queuePosition = "You are first in line!";
-    } else {
-      queuePosition = data?.queuePosition;
-    }
-    setFoodTicketData({
-      queuePosition: queuePosition,
-      eventName: data?.eventName,
-      eventDescription: data?.eventDescription,
-      eventTime: data?.eventTime,
-      timeslot: data?.timeslot,
-      userCode: shortenString(data?.verificationCode as string, 15),
-    });
-  }, [data]);
 
   return (
     <>
@@ -140,7 +111,7 @@ export default function UserFoodTicket() {
               </div>
               <div className="bg-pink mt-10 flex flex-col items-center gap-5 rounded-3xl border-4 border-white bg-white/30 px-8 py-20 sm:flex-row sm:justify-start lg:gap-12 lg:px-20 lg:py-16">
                 <QRCode
-                  value="https://www.google.ca" // placeholder
+                  value={foodTicketData.userCode}
                   size={300}
                   logoImage="/images/userProfile/ctclogo.jpg"
                   eyeColor={["#FF4D6F", "#FF4D6F", "#FF4D6F"]}
@@ -152,14 +123,16 @@ export default function UserFoodTicket() {
                   logoPaddingStyle="square"
                 />
                 <div className="flex flex-col flex-wrap">
-                  {Object.entries(foodTicketData).map(([key, value]) => (
-                    <div className="flex w-full flex-wrap" key={key}>
-                      <h1 className="my-2 w-fit text-lg md:mt-2 md:text-xl">
-                        <strong>{key}:</strong>{" "}
-                        <span className="text-md ">{value}</span>
-                      </h1>
-                    </div>
-                  ))}
+                  {Object.entries(foodTicketData)
+                    .slice(0, -1)
+                    .map(([key, value]) => (
+                      <div className="flex w-full flex-wrap" key={key}>
+                        <h1 className="my-2 w-fit text-lg md:mt-2 md:text-xl">
+                          <strong>{key}:</strong>{" "}
+                          <span className="text-md">{` ${value}`}</span>
+                        </h1>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
