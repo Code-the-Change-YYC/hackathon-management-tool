@@ -80,7 +80,7 @@ const UserProfile = () => {
     <div>
       {" "}
       {isFetching ? (
-        <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
+        <div className="flex w-full items-center justify-center bg-fuzzy-peach">
           <h1 className="text-2xl">Loading...</h1>
         </div>
       ) : (
