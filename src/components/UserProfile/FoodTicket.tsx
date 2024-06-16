@@ -15,7 +15,7 @@ import ProfileLinks from "./ProfileLinks";
 export default function UserFoodTicket() {
   const client = generateClient<Schema>();
 
-  const userId = useUser().currentUser?.userSub as string;
+  const userId = useUser().currentUser.username as string;
 
   const { data, isFetching } = useQuery({
     initialDataUpdatedAt: 0,
