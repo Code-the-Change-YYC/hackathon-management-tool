@@ -7,7 +7,6 @@ import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
 import Provider from "@/components/contexts/Provider";
 import ToastProvider from "@/components/contexts/ToastProvider";
 import { UserContextProvider } from "@/components/contexts/UserContext";
-import MainLayout from "@/components/layouts/MainLayout";
 import "@aws-amplify/ui-react/styles.css";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -37,9 +36,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <ToastProvider>
           <Provider>
             <ConfigureAmplifyClientSide />
-            <UserContextProvider>
-              <MainLayout>{children}</MainLayout>
-            </UserContextProvider>
+            <UserContextProvider>{children}</UserContextProvider>
             <ReactQueryDevtools initialIsOpen={false} />
           </Provider>
         </ToastProvider>
