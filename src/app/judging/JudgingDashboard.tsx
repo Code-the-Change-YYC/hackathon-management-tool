@@ -1,6 +1,8 @@
 import Image from "next/image";
+import { useState } from "react";
 
 import JudgingTable from "@/components/judging/JudgingTable";
+import ModalPopup from "@/components/judging/ModalPopup";
 import StatsPanel from "@/components/judging/StatsPanel";
 
 const pink_underlines = "/svgs/judging/pink_underline.svg";
@@ -50,6 +52,18 @@ const tableData: Array<[string, string, string, string, boolean]> = [
 ];
 
 const JudgingDashboard = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTeamName, setSelectedTeamName] = useState("");
+
+  const handleCreateScoreClick = (teamName: string) => {
+    setSelectedTeamName(teamName);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className={JUDGE_DASHBOARD_PAGE_STLYES}>
       <div className={JUDGE_DASHBOARD_CONTENT_STYLES}>
@@ -83,10 +97,19 @@ const JudgingDashboard = () => {
             ))}
           </div>
           <div className="mb-4 w-3/4">
-            <JudgingTable tableHeaders={tableHeaders} tableData={tableData} />
+            <JudgingTable
+              tableHeaders={tableHeaders}
+              tableData={tableData}
+              onCreateScoreClick={handleCreateScoreClick}
+            />
           </div>
         </div>
       </div>
+      <ModalPopup
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        teamName={selectedTeamName}
+      />
     </div>
   );
 };

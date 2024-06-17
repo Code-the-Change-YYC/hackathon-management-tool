@@ -20,10 +20,11 @@ const PAGINATION_BUTTON_STYLES =
 interface JudgingTableProps {
   tableHeaders: Array<{ columnHeader: string; className: string }>;
   tableData: Array<(string | boolean)[]>;
+  onCreateScoreClick: (teamName: string) => void;
 }
 
 const JudgingTable = (props: JudgingTableProps) => {
-  const { tableHeaders, tableData } = props;
+  const { tableHeaders, tableData, onCreateScoreClick } = props;
   const [currentPage, setCurrentPage] = useState(1);
   const entries_per_page = 5;
 
@@ -83,7 +84,10 @@ const JudgingTable = (props: JudgingTableProps) => {
                       />
                     </div>
                   ) : (
-                    <button className={CREATE_SCORE_BUTTON_STYLES}>
+                    <button
+                      className={CREATE_SCORE_BUTTON_STYLES}
+                      onClick={() => onCreateScoreClick(row[0] as string)}
+                    >
                       + Create Score
                     </button>
                   )}
