@@ -10,7 +10,7 @@ export default function page() {
       <Greetings />
       <h1 className="text-2xl">Hackathon Statistics</h1>
       <div className="flex flex-row gap-4">
-        <div className="flex flex-col gap-4">
+        <div className="flex w-full flex-col gap-4">
           <div className="flex flex-row gap-4">
             <TotalTeams />
             <TotalParticipants />
