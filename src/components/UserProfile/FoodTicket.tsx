@@ -110,7 +110,7 @@ export default function UserFoodTicket() {
                 <QRCode
                   value={foodTicketData.userCode}
                   size={300}
-                  logoImage="/images/userProfile/ctclogo.jpg"
+                  logoImage="/CTCLogo.svg"
                   eyeColor={["#FF4D6F", "#FF4D6F", "#FF4D6F"]}
                   eyeRadius={50}
                   qrStyle="fluid"
