@@ -42,6 +42,16 @@ export default function RankingTable() {
     { teamName: "TeamH", score: 95 },
     { teamName: "TeamI", score: 47 },
     { teamName: "TeamJ", score: 69 },
+    { teamName: "Thunderbolts", score: 85 },
+    { teamName: "LightningStrikers", score: 72 },
+    { teamName: "BlazingComets", score: 94 },
+    { teamName: "ShadowHunters", score: 68 },
+    { teamName: "MysticWarriors", score: 76 },
+    { teamName: "CosmicVoyagers", score: 88 },
+    { teamName: "IronGiants", score: 53 },
+    { teamName: "PhantomRiders", score: 95 },
+    { teamName: "SolarFlares", score: 47 },
+    { teamName: "GalacticTitans", score: 69 },
   ];
 
   const [sortKey, setSortKey] = useState<keyof Ranking>("teamName");
@@ -62,7 +72,7 @@ export default function RankingTable() {
     [sortKey, sortAscending],
   );
   return (
-    <div className="max-h-[50vh] w-full overflow-auto rounded-xl">
+    <div className="flex w-full overflow-auto rounded-xl">
       <table className=" w-full text-left text-lg font-medium text-gray-500">
         <thead className=" rounded-xl bg-awesome-purple text-lg  font-medium text-white">
           <tr>

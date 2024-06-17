@@ -6,12 +6,12 @@ import TotalTeams from "@/components/admin/TotalTeams";
 
 export default function page() {
   return (
-    <div className="flex  flex-col gap-8 p-4 text-3xl font-semibold">
+    <div className="flex flex-1 flex-col gap-8 overflow-auto p-4 text-3xl font-semibold">
       <Greetings />
-      <h1 className="text-2xl">Hackathon Statistics</h1>
-      <div className="flex flex-row gap-4">
+      <h1 className="text-2xl font-semibold">Hackathon Statistics</h1>
+      <div className="flex flex-1 flex-row gap-4 overflow-y-auto">
         <div className="flex w-full flex-col gap-4">
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-1 flex-row gap-4">
             <TotalTeams />
             <TotalParticipants />
           </div>
