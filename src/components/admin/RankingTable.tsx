@@ -72,7 +72,7 @@ export default function RankingTable() {
     [sortKey, sortAscending],
   );
   return (
-    <div className="flex w-full overflow-auto rounded-xl">
+    <div className="flex size-full justify-start overflow-auto rounded-xl">
       <table className=" w-full text-left text-lg font-medium text-gray-500">
         <thead className=" rounded-xl bg-awesome-purple text-lg  font-medium text-white">
           <tr>
