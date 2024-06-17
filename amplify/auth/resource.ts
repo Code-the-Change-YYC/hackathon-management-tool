@@ -26,7 +26,12 @@ export const auth = defineAuth({
       .to(["addUserToGroup", "removeUserFromGroup", "listGroupsForUser"]),
   ],
   loginWith: {
-    email: true,
+    email: {
+      verificationEmailStyle: "CODE",
+      verificationEmailSubject: "Welcome Hack the Change!",
+      verificationEmailBody: (createCode) =>
+        `<h1>Use this code to confirm your Hack the Change Account: ${createCode()}</h1>`,
+    },
 
     externalProviders: {
       google: {
