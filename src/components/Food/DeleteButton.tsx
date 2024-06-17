@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteFoodEvent } from "@/app/admin/food-tickets/actions";
+import { deleteFoodEvent } from "@/components/actions/userFoodTicketActions";
 
 export default function DeleteButton({ eventId }: { eventId: string }) {
   const handleDelete = async () => {
