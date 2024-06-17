@@ -8,7 +8,7 @@ import AdminNavTitle from "./AdminNavTitle";
 export default function TopNavBar() {
   return (
     <>
-      <div className=" flex w-full justify-between p-4 px-8 text-4xl font-semibold">
+      <div className=" flex w-full justify-between bg-white p-4 px-8 text-4xl font-semibold">
         <AdminNavTitle />
         <div className="flex flex-row items-center gap-4">
           <IoIosSearch />
