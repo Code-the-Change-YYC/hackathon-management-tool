@@ -10,8 +10,6 @@ import { getUpcomingFoodEventDetails } from "@/app/get-food-ticket/actions";
 import { useUser } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 
-import ProfileLinks from "./ProfileLinks";
-
 export default function UserFoodTicket() {
   const client = generateClient<Schema>();
 
@@ -102,7 +100,6 @@ export default function UserFoodTicket() {
             />{" "}
           </div>
           <div className="px-10 md:px-16 md:py-10">
-            <ProfileLinks />
             <div className="mb-3 flex flex-col justify-between uppercase text-[#FF6B54] md:mx-10">
               <div className="flex flex-row justify-between">
                 <h1 className="mt-3 text-lg font-bold md:text-2xl">
