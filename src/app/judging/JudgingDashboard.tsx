@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
+import { useUser } from "@/components/contexts/UserContext";
 import JudgingTable from "@/components/judging/JudgingTable";
 import ModalPopup from "@/components/judging/ModalPopup";
 import StatsPanel from "@/components/judging/StatsPanel";
@@ -47,27 +48,29 @@ const JudgingDashboard = () => {
     },
   ]);
 
-  const fetchJudgeData = async (judgeRoomId: string) => {
+  const fetchJudgeData = async (userId: string) => {
     try {
+      const userResponse = await client.models.User.get({ id: userId });
+      const userData = userResponse.data;
+      if (!userData) throw new Error("User data not found");
+
+      const judgeRoomId = userData.JUDGE_roomId;
+      if (!judgeRoomId) throw new Error("Judge room ID not found");
+
       const roomResponse = await client.models.Room.get({ id: judgeRoomId });
       const roomData = roomResponse.data;
-      if (!roomData) {
-        throw new Error("Room data not found");
-      }
+      if (!roomData) throw new Error("Room data not found");
 
       const hackathonResponse = await client.models.Hackathon.get({
-        id: "123", // Replace with actual hackathon ID
+        id: "123",
       });
       const hackathonData = hackathonResponse.data;
-      if (!hackathonData) {
-        throw new Error("Hackathon data not found");
-      }
+      if (!hackathonData) throw new Error("Hackathon data not found");
 
       const teamRoomResponse = await roomData.teamRoom();
       const teamRoomData = teamRoomResponse.data;
-      if (!teamRoomData || teamRoomData.length === 0) {
+      if (!teamRoomData || teamRoomData.length === 0)
         throw new Error("Team room data not found or empty");
-      }
 
       const teams = await Promise.all(
         teamRoomData.map(async (teamRoom: any) => {
@@ -75,11 +78,10 @@ const JudgingDashboard = () => {
             id: teamRoom.teamId,
           });
           const teamData = teamResponse.data;
-          if (!teamData) {
+          if (!teamData)
             throw new Error(
               `Team data not found for teamId: ${teamRoom.teamId}`,
             );
-          }
 
           const scoresResponse = await teamData.scores();
           const scoresData = scoresResponse.data;
@@ -104,10 +106,13 @@ const JudgingDashboard = () => {
     }
   };
 
+  const { currentUser } = useUser();
+  const userId = currentUser.username;
+
   const { data, isFetching } = useQuery({
     initialDataUpdatedAt: 0,
     queryKey: ["JudgeData"],
-    queryFn: () => fetchJudgeData("123"), // replace with actual id
+    queryFn: () => fetchJudgeData(userId),
   });
 
   useEffect(() => {
@@ -120,13 +125,24 @@ const JudgingDashboard = () => {
         })),
       ];
 
-      const updatedTableData = data.teams.map((team: any) => [
-        team.name,
-        ...(team.scores.length > 0
-          ? team.scores.map((score: any) => score.toString())
-          : Array(data.scoringComponents.length).fill("N/A")),
-        team.scores.length > 0,
-      ]);
+      const updatedTableData = data.teams.map((team: any) => {
+        const parsedScores =
+          team.scores.length > 0
+            ? team.scores.flatMap((scoreData: any) => {
+                try {
+                  const parsedScore = JSON.parse(scoreData.score);
+                  return Object.values(parsedScore);
+                } catch (error) {
+                  console.error("Error parsing score JSON:", error);
+                  return Array(data.scoringComponents.length).fill(
+                    "Invalid Score",
+                  );
+                }
+              })
+            : Array(data.scoringComponents.length).fill("N/A");
+
+        return [team.name, ...parsedScores, team.scores.length > 0];
+      });
 
       setTableHeaders(updatedTableHeaders);
       setTableData(updatedTableData);
