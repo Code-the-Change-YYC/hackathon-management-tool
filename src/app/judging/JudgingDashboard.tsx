@@ -14,7 +14,8 @@ const pink_underlines = "/svgs/judging/pink_underline.svg";
 const LOADING_SCREEN_STYLES =
   "flex h-screen w-full items-center justify-center bg-pastel-pink";
 
-const JUDGE_DASHBOARD_PAGE_STYLES = "flex justify-center text-blackish";
+const JUDGE_DASHBOARD_PAGE_STYLES =
+  "flex justify-center text-blackish h-screen";
 const JUDGE_DASHBOARD_CONTENT_STYLES = "w-full max-w-[1500px] p-6";
 
 const JUDGE_DASHBOARD_HELLO_TILE_STYLES =
@@ -62,10 +63,8 @@ const JudgingDashboard = () => {
       const roomData = roomResponse.data;
       if (!roomData) throw new Error("Room data not found");
 
-      const hackathonResponse = await client.models.Hackathon.get({
-        id: "123",
-      });
-      const hackathonData = hackathonResponse.data;
+      const hackathonResponse = await client.models.Hackathon.list();
+      const hackathonData = hackathonResponse.data[0];
       if (!hackathonData) throw new Error("Hackathon data not found");
 
       const teamRoomResponse = await roomData.teamRoom();
@@ -146,13 +145,6 @@ const JudgingDashboard = () => {
         return [team.name, ...parsedScores, team.scores.length > 0];
       });
 
-      setTableHeaders(updatedTableHeaders);
-      setTableData(updatedTableData);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (data) {
       const updatedPanelData = [
         {
           icon: "/svgs/judging/team_icon.svg",
@@ -170,6 +162,8 @@ const JudgingDashboard = () => {
       ];
 
       setPanelData(updatedPanelData);
+      setTableHeaders(updatedTableHeaders);
+      setTableData(updatedTableData);
     }
   }, [data]);
 
