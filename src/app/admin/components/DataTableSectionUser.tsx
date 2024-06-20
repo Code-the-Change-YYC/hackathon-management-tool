@@ -220,7 +220,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
                             defaultValue={
                               tableData[startIndex + rowIndex][cellIndex]
                             }
-                            className={EDIT_MODE_TEXT_INPUT_STYLES}
+                            // className={EDIT_MODE_TEXT_INPUT_STYLES}
                           />
                         ) : (
                           cellData

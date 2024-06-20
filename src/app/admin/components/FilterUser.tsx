@@ -57,7 +57,6 @@ const FilterUser = ({ filterLabels, onFilterChange }: FilterUserProps) => {
                 className={BUTTON_STYLES}
                 onChange={(e) => handleDropDownRoleChange(e.target.value)}
               >
-                <option>Select a role</option>
                 {filterLabels.map((filter, index) => (
                   <option
                     key={index}
