@@ -27,6 +27,7 @@ const client = generateClient<Schema>();
 const JudgingDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTeamName, setSelectedTeamName] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
   const [tableData, setTableData] = useState<string[][]>([]);
   const [tableHeaders, setTableHeaders] = useState<
     { columnHeader: string; className: string }[]
@@ -108,6 +109,7 @@ const JudgingDashboard = () => {
 
   const { currentUser } = useUser();
   const userId = currentUser.username;
+  console.log(userId);
 
   const { data, isFetching } = useQuery({
     initialDataUpdatedAt: 0,
@@ -173,18 +175,31 @@ const JudgingDashboard = () => {
 
   const handleCreateScoreClick = (teamName: string) => {
     setSelectedTeamName(teamName);
+    setIsEditing(false);
+    setIsModalOpen(true);
+  };
+
+  const handleEditScoreClick = (teamName: string) => {
+    setSelectedTeamName(teamName);
+    setIsEditing(true);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setSelectedTeamName("");
   };
 
   return (
     <>
       {isFetching ? (
         <div className={LOADING_SCREEN_STYLES}>
-          <p>Loading...</p>
+          <div className="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       ) : (
         <div className={JUDGE_DASHBOARD_PAGE_STYLES}>
@@ -206,7 +221,7 @@ const JudgingDashboard = () => {
               </div>
             </div>
             <h2 className={SUBHEADER_TEXT_STYLES}>Assigned Teams</h2>
-            <div className="flex">
+            <div className="mb-4 flex">
               <div className="mr-4 flex w-1/4 flex-col space-y-4">
                 {panelData.map((item, index) => (
                   <div key={index} className="h-1/2">
@@ -224,6 +239,7 @@ const JudgingDashboard = () => {
                   tableHeaders={tableHeaders}
                   tableData={tableData}
                   onCreateScoreClick={handleCreateScoreClick}
+                  onEditScoreClick={handleEditScoreClick}
                 />
               </div>
             </div>
@@ -232,6 +248,7 @@ const JudgingDashboard = () => {
             isOpen={isModalOpen}
             onClose={closeModal}
             teamName={selectedTeamName}
+            isEditing={isEditing}
           />
         </div>
       )}

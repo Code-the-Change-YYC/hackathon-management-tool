@@ -10,10 +10,12 @@ interface ModalPopupProps {
   isOpen: boolean;
   onClose: () => void;
   teamName: string;
+  isEditing: boolean;
 }
 
+// can edit logic once modal is implemented
 const ModalPopup = (props: ModalPopupProps) => {
-  const { isOpen, onClose, teamName } = props;
+  const { isOpen, onClose, teamName, isEditing } = props;
 
   if (!isOpen) return null;
 
@@ -21,7 +23,9 @@ const ModalPopup = (props: ModalPopupProps) => {
     <div className={MODAL_POPUP_SECTION_STYLES}>
       <div className={MODAL_POPUP_TILE_STLYES}>
         <div className="flex justify-between">
-          <h1 className="text-2xl font-bold">Scoring {teamName}</h1>
+          <h1 className="text-2xl font-bold">
+            {isEditing ? `Editing ${teamName}` : `Scoring ${teamName}`}
+          </h1>
           <button onClick={onClose}>
             <Image
               src={exit_icon}

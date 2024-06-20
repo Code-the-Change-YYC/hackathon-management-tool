@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-const check_icon = "/svgs/judging/circle_check.svg";
+const edit_icon = "/svgs/judging/edit_icon.svg";
 
 const JUDGE_TABLE_SECTION_STYLES =
   "h-full rounded-lg bg-white p-6 drop-shadow-md";
@@ -11,7 +11,7 @@ const JUDGE_TABLE_CONTENT_STYLES =
 const JUDGE_TABLE_HEADER_CELL_STLYES =
   "text-white text-xl font-medium py-4 bg-dark-pink";
 const JUDGE_TABLE_CELL_STYLES = "text-center text-lg py-4";
-const CREATE_SCORE_BUTTON_STYLES =
+const SCORE_BUTTON_STYLES =
   "rounded-full border-2 border-dark-pink bg-pastel-pink px-2 py-1 text-sm font-semibold text-dark-pink";
 
 const PAGINATION_BUTTON_STYLES =
@@ -21,10 +21,12 @@ interface JudgingTableProps {
   tableHeaders: Array<{ columnHeader: string; className: string }>;
   tableData: Array<(string | boolean)[]>;
   onCreateScoreClick: (teamName: string) => void;
+  onEditScoreClick: (teamName: string) => void;
 }
 
 const JudgingTable = (props: JudgingTableProps) => {
-  const { tableHeaders, tableData, onCreateScoreClick } = props;
+  const { tableHeaders, tableData, onCreateScoreClick, onEditScoreClick } =
+    props;
   const [currentPage, setCurrentPage] = useState(1);
   const entries_per_page = 5;
 
@@ -75,17 +77,24 @@ const JudgingTable = (props: JudgingTableProps) => {
                 ))}
                 <td className={JUDGE_TABLE_CELL_STYLES}>
                   {row[row.length - 1] ? (
-                    <div className="flex justify-center">
-                      <Image
-                        src={check_icon}
-                        height={40}
-                        width={25}
-                        alt="Checkmark icon"
-                      />
-                    </div>
+                    <button
+                      className={SCORE_BUTTON_STYLES}
+                      onClick={() => onEditScoreClick(row[0] as string)}
+                    >
+                      <div className="flex">
+                        <Image
+                          src={edit_icon}
+                          height={10}
+                          width={10}
+                          alt="Edit score icon"
+                          className="mr-2"
+                        />
+                        <p>Edit Score</p>
+                      </div>
+                    </button>
                   ) : (
                     <button
-                      className={CREATE_SCORE_BUTTON_STYLES}
+                      className={SCORE_BUTTON_STYLES}
                       onClick={() => onCreateScoreClick(row[0] as string)}
                     >
                       + Create Score

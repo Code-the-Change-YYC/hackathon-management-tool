@@ -102,7 +102,7 @@ const schema = a
       })
       .authorization((allow) => [
         allow.group("Admin").to(["create", "read", "update", "delete"]),
-        allow.group("Judge").to(["create", "update"]),
+        allow.group("Judge").to(["create", "read", "update"]),
       ]),
     Room: a
       .model({
