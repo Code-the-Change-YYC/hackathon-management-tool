@@ -2,6 +2,10 @@ import Image from "next/image";
 
 const exit_icon = "/svgs/judging/exit_icon.svg";
 
+const MODAL_POPUP_SECTION_STYLES =
+  "fixed inset-0 z-50 flex items-center justify-center bg-black/60";
+const MODAL_POPUP_TILE_STLYES = "w-4/5 max-w-[1200px] rounded-md bg-white p-6";
+
 interface ModalPopupProps {
   isOpen: boolean;
   onClose: () => void;
@@ -14,8 +18,8 @@ const ModalPopup = (props: ModalPopupProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-      <div className="w-4/5 max-w-[1200px] rounded-md bg-white p-6">
+    <div className={MODAL_POPUP_SECTION_STYLES}>
+      <div className={MODAL_POPUP_TILE_STLYES}>
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold">Scoring {teamName}</h1>
           <button onClick={onClose}>

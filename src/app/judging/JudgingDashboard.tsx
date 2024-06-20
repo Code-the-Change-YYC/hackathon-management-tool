@@ -1,13 +1,19 @@
+import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { type Schema } from "@/amplify/data/resource";
 import JudgingTable from "@/components/judging/JudgingTable";
 import ModalPopup from "@/components/judging/ModalPopup";
 import StatsPanel from "@/components/judging/StatsPanel";
+import { useQuery } from "@tanstack/react-query";
 
 const pink_underlines = "/svgs/judging/pink_underline.svg";
 
-const JUDGE_DASHBOARD_PAGE_STLYES = "flex justify-center text-blackish";
+const LOADING_SCREEN_STYLES =
+  "flex h-screen w-full items-center justify-center bg-pastel-pink";
+
+const JUDGE_DASHBOARD_PAGE_STYLES = "flex justify-center text-blackish";
 const JUDGE_DASHBOARD_CONTENT_STYLES = "w-full max-w-[1500px] p-6";
 
 const JUDGE_DASHBOARD_HELLO_TILE_STYLES =
@@ -15,45 +21,139 @@ const JUDGE_DASHBOARD_HELLO_TILE_STYLES =
 
 const SUBHEADER_TEXT_STYLES = "mb-4 text-xl font-semibold";
 
-// REPLACE WITH ACTUAL DATA
-const panelData = [
-  {
-    icon: "/svgs/judging/team_icon.svg",
-    alt: "Teams assigned icon",
-    stat: 10,
-    text: "Teams Assigned to Room 1", //replace with real room assignment
-  },
-  {
-    icon: "/svgs/judging/teams_left.svg",
-    alt: "Teams left icon",
-    stat: 5,
-    text: "Teams Left To Score",
-  },
-];
-
-const tableHeaders = [
-  { columnHeader: "Team Name", className: "w-1/3 rounded-tl-lg" },
-  { columnHeader: "Criteria 1", className: "w-1/7" },
-  { columnHeader: "Criteria 2", className: "w-1/7" },
-  { columnHeader: "Criteria 3", className: "w-1/7" },
-];
-
-const tableData: Array<[string, string, string, string, boolean]> = [
-  ["Team A", "100", "99", "90", true],
-  ["Team B", "100", "99", "90", true],
-  ["Team C", "100", "99", "90", true],
-  ["Team D", "N/A", "N/A", "N/A", false],
-  ["Team E", "100", "99", "90", true],
-  ["Team F", "100", "99", "90", true],
-  ["Team G", "100", "99", "90", true],
-  ["Team H", "N/A", "N/A", "N/A", false],
-  ["Team I", "100", "99", "90", true],
-  ["Team J", "100", "99", "90", true],
-];
+const client = generateClient<Schema>();
 
 const JudgingDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTeamName, setSelectedTeamName] = useState("");
+  const [tableData, setTableData] = useState<string[][]>([]);
+  const [tableHeaders, setTableHeaders] = useState<
+    { columnHeader: string; className: string }[]
+  >([]);
+  const [panelData, setPanelData] = useState<
+    Array<{ icon: string; alt: string; stat: number; text: string }>
+  >([
+    {
+      icon: "/svgs/judging/team_icon.svg",
+      alt: "Teams assigned icon",
+      stat: 0,
+      text: "Loading...",
+    },
+    {
+      icon: "/svgs/judging/teams_left.svg",
+      alt: "Teams left icon",
+      stat: 0,
+      text: "Teams Left To Score",
+    },
+  ]);
+
+  const fetchJudgeData = async (judgeRoomId: string) => {
+    try {
+      const roomResponse = await client.models.Room.get({ id: judgeRoomId });
+      const roomData = roomResponse.data;
+      if (!roomData) {
+        throw new Error("Room data not found");
+      }
+
+      const hackathonResponse = await client.models.Hackathon.get({
+        id: "123", // Replace with actual hackathon ID
+      });
+      const hackathonData = hackathonResponse.data;
+      if (!hackathonData) {
+        throw new Error("Hackathon data not found");
+      }
+
+      const teamRoomResponse = await roomData.teamRoom();
+      const teamRoomData = teamRoomResponse.data;
+      if (!teamRoomData || teamRoomData.length === 0) {
+        throw new Error("Team room data not found or empty");
+      }
+
+      const teams = await Promise.all(
+        teamRoomData.map(async (teamRoom: any) => {
+          const teamResponse = await client.models.Team.get({
+            id: teamRoom.teamId,
+          });
+          const teamData = teamResponse.data;
+          if (!teamData) {
+            throw new Error(
+              `Team data not found for teamId: ${teamRoom.teamId}`,
+            );
+          }
+
+          const scoresResponse = await teamData.scores();
+          const scoresData = scoresResponse.data;
+
+          return {
+            id: teamData.id,
+            name: teamData.name,
+            scores: scoresData || [],
+            scored: scoresData && scoresData.length > 0,
+          };
+        }),
+      );
+
+      return {
+        room: roomData,
+        teams,
+        scoringComponents: hackathonData.scoringComponents || [],
+      };
+    } catch (error) {
+      console.error("Error fetching judge data:", error);
+      throw error;
+    }
+  };
+
+  const { data, isFetching } = useQuery({
+    initialDataUpdatedAt: 0,
+    queryKey: ["JudgeData"],
+    queryFn: () => fetchJudgeData("123"), // replace with actual id
+  });
+
+  useEffect(() => {
+    if (data) {
+      const updatedTableHeaders = [
+        { columnHeader: "Team Name", className: "w-1/3 rounded-tl-lg" },
+        ...(data.scoringComponents ?? []).map((component: any) => ({
+          columnHeader: component?.friendlyName ?? "N/A",
+          className: "w-1/7",
+        })),
+      ];
+
+      const updatedTableData = data.teams.map((team: any) => [
+        team.name,
+        ...(team.scores.length > 0
+          ? team.scores.map((score: any) => score.toString())
+          : Array(data.scoringComponents.length).fill("N/A")),
+        team.scores.length > 0,
+      ]);
+
+      setTableHeaders(updatedTableHeaders);
+      setTableData(updatedTableData);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data) {
+      const updatedPanelData = [
+        {
+          icon: "/svgs/judging/team_icon.svg",
+          alt: "Teams assigned icon",
+          stat: data.teams.length,
+          text: `Teams Assigned to Room ${data.room.name}`,
+        },
+        {
+          icon: "/svgs/judging/teams_left.svg",
+          alt: "Teams left icon",
+          stat: data.teams.filter((team: any) => team.scores.length === 0)
+            .length,
+          text: "Teams Left To Score",
+        },
+      ];
+
+      setPanelData(updatedPanelData);
+    }
+  }, [data]);
 
   const handleCreateScoreClick = (teamName: string) => {
     setSelectedTeamName(teamName);
@@ -65,52 +165,61 @@ const JudgingDashboard = () => {
   };
 
   return (
-    <div className={JUDGE_DASHBOARD_PAGE_STLYES}>
-      <div className={JUDGE_DASHBOARD_CONTENT_STYLES}>
-        <div className={JUDGE_DASHBOARD_HELLO_TILE_STYLES}>
-          <h1>Hello,</h1>
-          <div className="ml-2">
-            <h1 className="text-dark-pink">
-              <i>Judge!</i>
-            </h1>
-            <div className="mt-2 flex justify-center">
-              <Image
-                src={pink_underlines}
-                height={100}
-                width={80}
-                alt="Pink underlines"
-              />
+    <>
+      {isFetching ? (
+        <div className={LOADING_SCREEN_STYLES}>
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <div className={JUDGE_DASHBOARD_PAGE_STYLES}>
+          <div className={JUDGE_DASHBOARD_CONTENT_STYLES}>
+            <div className={JUDGE_DASHBOARD_HELLO_TILE_STYLES}>
+              <h1>Hello,</h1>
+              <div className="ml-2">
+                <h1 className="text-dark-pink">
+                  <i>Judge!</i>
+                </h1>
+                <div className="mt-2 flex justify-center">
+                  <Image
+                    src={pink_underlines}
+                    height={100}
+                    width={80}
+                    alt="Pink underlines"
+                  />
+                </div>
+              </div>
+            </div>
+            <h2 className={SUBHEADER_TEXT_STYLES}>Assigned Teams</h2>
+            <div className="flex">
+              <div className="mr-4 flex w-1/4 flex-col space-y-4">
+                {panelData.map((item, index) => (
+                  <div key={index} className="h-1/2">
+                    <StatsPanel
+                      icon={item.icon}
+                      alt={item.alt}
+                      stat={item.stat}
+                      subheader={item.text}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="w-3/4">
+                <JudgingTable
+                  tableHeaders={tableHeaders}
+                  tableData={tableData}
+                  onCreateScoreClick={handleCreateScoreClick}
+                />
+              </div>
             </div>
           </div>
+          <ModalPopup
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            teamName={selectedTeamName}
+          />
         </div>
-        <h2 className={SUBHEADER_TEXT_STYLES}>Assigned Teams</h2>
-        <div className="flex">
-          <div className="mr-4 w-1/4">
-            {panelData.map(({ icon, alt, stat, text }, index) => (
-              <StatsPanel
-                icon={icon}
-                alt={alt}
-                stat={stat}
-                key={index}
-                subheader={text}
-              />
-            ))}
-          </div>
-          <div className="mb-4 w-3/4">
-            <JudgingTable
-              tableHeaders={tableHeaders}
-              tableData={tableData}
-              onCreateScoreClick={handleCreateScoreClick}
-            />
-          </div>
-        </div>
-      </div>
-      <ModalPopup
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        teamName={selectedTeamName}
-      />
-    </div>
+      )}
+    </>
   );
 };
 

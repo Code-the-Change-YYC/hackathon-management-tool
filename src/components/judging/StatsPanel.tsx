@@ -11,7 +11,7 @@ const StatsPanel = (props: StatsPanelProps) => {
   const { icon, stat, alt, subheader } = props;
 
   return (
-    <div className="mb-4 flex min-h-[225px] flex-col items-center justify-center rounded-lg bg-white px-6 py-8 drop-shadow-md">
+    <div className="flex h-full flex-col items-center justify-center rounded-lg bg-white px-6 py-8 drop-shadow-md">
       <div className="flex size-12 items-center justify-center rounded-full bg-pastel-pink">
         <Image src={icon} height={50} width={25} alt={alt} />
       </div>
