@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 
 import { type Schema } from "@/amplify/data/resource";
@@ -80,24 +80,26 @@ const DataTableSectionUser = (props: DataTableProps) => {
     }>
   >(userData);
 
-  const filteredData = userData.filter((rowData) =>
-    Object.values(rowData).some((value) =>
-      value.toString().toLowerCase().includes(searchQuery.toLowerCase()),
-    ),
-  );
+  const filteredData = useMemo(() => {
+    return userData.filter((rowData) =>
+      Object.values(rowData).some((value) =>
+        value.toString().toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
+    );
+  }, [userData, searchQuery]);
   const startIndex = (currentPage - 1) * entries_per_page;
   const endIndex = Math.min(startIndex + entries_per_page, filteredData.length);
 
   useEffect(() => {
-    const totalPages = Math.ceil(userData.length / entries_per_page);
+    const totalPages = Math.ceil(filteredData.length / entries_per_page);
     const currentPageData = filteredData
       .slice(startIndex, endIndex)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .map(({ userId, ...keepAttrs }) => keepAttrs);
+      .map(({ userId, ...allOtherFields }) => allOtherFields);
 
     setTotalPages(totalPages);
     setCurrentPageData(currentPageData);
-  }, [userData]);
+  }, [filteredData, currentPage, entries_per_page]);
 
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));

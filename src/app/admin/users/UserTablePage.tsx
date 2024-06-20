@@ -105,8 +105,6 @@ const UserTablePage = () => {
 
     newFilteredData.sort((a, b) => a.userId.localeCompare(b.userId));
 
-    console.log(newFilteredData);
-
     return newFilteredData;
   };
 
