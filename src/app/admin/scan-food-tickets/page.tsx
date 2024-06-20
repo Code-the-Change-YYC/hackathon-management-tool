@@ -33,20 +33,31 @@ export default function AdminFoodTickets() {
   }, []);
 
   useEffect(() => {
-    // const { canEat, description } = await verifyFoodTicket(
-    //   scanResult,
-    //   inputEventIDValue,
-    // );
+    async function fetchData() {
+      if (scanResult && inputEventIDValue) {
+        const { canEat } = await verifyFoodTicket(
+          scanResult,
+          inputEventIDValue,
+        );
+        setCanEatBoolean(canEat);
+      }
+    }
+    fetchData();
   }, [scanResult]);
+
+  const handleEventChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setEventIDValue(event.target.value);
+  };
 
   return (
     <>
-      <select name="foodEvent" id="foodEvent">
+      {canEatBoolean === true && <p>They can Eat!</p>}
+      <select name="foodEvent" id="foodEvent" onChange={handleEventChange}>
         <option value="">Select a food event</option>
         {foodEvents ? (
           foodEvents.map((event) => (
             <option key={event.id} value={event.id}>
-              {new Date(event.start).toLocaleString()} -{" "}
+              {event.name}: {new Date(event.start).toLocaleString()} -{" "}
               {new Date(event.end).toLocaleString()}
             </option>
           ))
