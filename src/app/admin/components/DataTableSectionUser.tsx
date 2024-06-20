@@ -33,9 +33,15 @@ const search_icon = "/svgs/admin/search_icon.svg";
 const entries_per_page = 10;
 
 interface DataTableProps {
-  tableData: Array<Array<string>>;
   tableHeaders: Array<{ columnHeader: string }>;
-  userData?: Array<any>;
+  userData?: Array<{
+    lastName: string;
+    firstName: string;
+    role: string;
+    team: string;
+    email: string;
+    userId: string;
+  }>;
   tableDataMutation: any;
 }
 
@@ -43,47 +49,55 @@ const DataTableSectionUser = (props: DataTableProps) => {
   const { register, handleSubmit } = useForm<Schema["User"]["type"]>();
 
   const onSubmit: SubmitHandler<Schema["User"]["type"]> = (data) => {
-    const actualIndex = startIndex + index; // calculate the actual index
-    const userId = userData[actualIndex].userId;
-    data.id = userId;
-    tableDataMutation.mutate(data);
-    console.log(data);
+    const userObject = userData.find((user) => user.email === data.email);
+    if (userObject) {
+      data.id = userObject.userId;
+      tableDataMutation.mutate(data);
+      console.log(data);
+    } else {
+      console.error("User not found");
+    }
   };
 
-  const { tableData, tableHeaders, userData = [], tableDataMutation } = props;
+  const { tableHeaders, userData = [], tableDataMutation } = props;
 
   const [editModes, setEditModes] = useState(
-    Array(tableData.length).fill(false),
+    Array(userData.length).fill(false),
   );
 
-  const [index, setIndex] = useState(0);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [recordToDeleteId, setRecordToDeleteId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [currentPageData, setCurrentPageData] =
-    useState<Array<Array<string>>>(tableData);
+  const [currentPageData, setCurrentPageData] = useState<
+    Array<{
+      lastName: string;
+      firstName: string;
+      role: string;
+      team: string;
+      email: string;
+    }>
+  >(userData);
 
-  // Function to include only the rows o tableData where at least one cell contains the search query string, without case-sensitivity
-
-  const filteredData = tableData.filter((rowData) =>
-    rowData.some((cellData) =>
-      cellData.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredData = userData.filter((rowData) =>
+    Object.values(rowData).some((value) =>
+      value.toString().toLowerCase().includes(searchQuery.toLowerCase()),
     ),
   );
   const startIndex = (currentPage - 1) * entries_per_page;
   const endIndex = Math.min(startIndex + entries_per_page, filteredData.length);
 
   useEffect(() => {
-    const totalPages = Math.ceil(tableData.length / entries_per_page);
+    const totalPages = Math.ceil(userData.length / entries_per_page);
     const currentPageData = filteredData
       .slice(startIndex, endIndex)
-      .map((rowData) => rowData.slice(0, -1));
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .map(({ userId, ...keepAttrs }) => keepAttrs);
 
     setTotalPages(totalPages);
     setCurrentPageData(currentPageData);
-  }, [tableData]);
+  }, [userData]);
 
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -98,7 +112,6 @@ const DataTableSectionUser = (props: DataTableProps) => {
   };
 
   const toggleEditMode = (index: number) => {
-    setIndex(index);
     const actualIndex = startIndex + index;
 
     const newEditModes = [...editModes];
@@ -125,9 +138,9 @@ const DataTableSectionUser = (props: DataTableProps) => {
         <div className={SEARCH_RESULTS_SECTION_STYLES}>
           <h1 className={SEARCH_RESULTS_TEXT_STYLES}>
             Search Results (
-            {searchQuery === "" ? tableData.length : filteredData.length}{" "}
+            {searchQuery === "" ? userData.length : filteredData.length}{" "}
             {searchQuery === ""
-              ? tableData.length === 1
+              ? userData.length === 1
                 ? "record"
                 : "records"
               : "records"}{" "}
@@ -166,38 +179,30 @@ const DataTableSectionUser = (props: DataTableProps) => {
                   className={`flex flex-row ${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
                   role="row"
                 >
-                  {rowData.map((cellData, cellIndex) => (
+                  {Object.entries(rowData).map(([key, value], cellIndex) => (
                     <div
-                      className={`${DATA_TABLE_CELL_STYLES}  ${cellIndex === 0 ? "w-1/6" : cellIndex === 1 ? "w-1/6" : cellIndex === 2 ? "w-1/6" : cellIndex === 3 ? "w-1/6" : cellIndex === 4 ? "w-2/5" : "w-1/6"} border-r border-gray-300`}
-                      key={cellIndex}
+                      className={`${DATA_TABLE_CELL_STYLES} ${cellIndex === 0 ? "w-1/6" : cellIndex === 1 ? "w-1/6" : cellIndex === 2 ? "w-1/6" : cellIndex === 3 ? "w-1/6" : cellIndex === 4 ? "w-2/5" : "w-1/6"} border-r border-gray-300`}
+                      key={key}
                       role="col"
                     >
                       {editModes[startIndex + rowIndex] ? (
-                        cellIndex === 0 ? (
+                        key === "lastName" ? (
                           <input
                             type="text"
-                            defaultValue={
-                              tableData[startIndex + rowIndex][cellIndex]
-                            }
+                            value={value}
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
                             {...register("lastName")}
-                            key={cellIndex}
                           />
-                        ) : cellIndex === 1 ? (
+                        ) : key === "firstName" ? (
                           <input
                             type="text"
-                            defaultValue={
-                              tableData[startIndex + rowIndex][cellIndex]
-                            }
+                            value={value}
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
                             {...register("firstName")}
-                            key={cellIndex}
                           />
-                        ) : cellIndex === 2 ? (
+                        ) : key === "role" ? (
                           <select
-                            defaultValue={
-                              tableData[startIndex + rowIndex][cellIndex]
-                            }
+                            value={value}
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
                             {...register("role")}
                           >
@@ -205,28 +210,23 @@ const DataTableSectionUser = (props: DataTableProps) => {
                             <option value="Judge">Judge</option>
                             <option value="Participant">Participant</option>
                           </select>
-                        ) : cellIndex === 3 ? (
+                        ) : key === "team" ? (
                           <input
                             type="text"
-                            defaultValue={
-                              tableData[startIndex + rowIndex][cellIndex]
-                            }
+                            value={value}
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
                             {...register("team")}
                           />
-                        ) : cellIndex === 4 ? (
+                        ) : (
                           <input
                             type="text"
-                            defaultValue={
-                              tableData[startIndex + rowIndex][cellIndex]
-                            }
+                            defaultValue={value}
                             // className={EDIT_MODE_TEXT_INPUT_STYLES}
+                            {...register("email")}
                           />
-                        ) : (
-                          cellData
                         )
                       ) : (
-                        cellData
+                        value
                       )}
                     </div>
                   ))}
@@ -294,8 +294,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
           <div className="my-4 flex items-center justify-between">
             {/* replace dynamically */}
             <h2 className="text-lg">
-              Showing {currentPage} of {totalPages} of {tableData.length}{" "}
-              entries
+              Showing {currentPage} of {totalPages} of {userData.length} entries
             </h2>
             <div className="flex text-sm text-awesomer-purple">
               <p className={CHANGE_PAGE_BUTTON_TEXT_STYLING}>Previous</p>

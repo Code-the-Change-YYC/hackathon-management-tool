@@ -44,7 +44,6 @@ const UserTablePage = () => {
     }>
   >([]);
 
-  const [tableData, setTableData] = useState<string[][]>([]);
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
   //Fetch the data
@@ -82,19 +81,6 @@ const UserTablePage = () => {
       }));
 
       setUserData(formattedData);
-
-      const displayedData = formattedData.map((cellData) => [
-        cellData.lastName,
-        cellData.firstName,
-        cellData.role,
-        cellData.team,
-        cellData.email,
-        cellData.userId,
-      ]);
-
-      console.log(displayedData);
-
-      setTableData(displayedData);
     }
   }, [data]);
 
@@ -103,26 +89,29 @@ const UserTablePage = () => {
 
     switch (selectedFilters[0]) {
       case "Admin":
-        newFilteredData = tableData.filter((row) => row[2] === "Admin");
+        newFilteredData = userData.filter((user) => user.role === "Admin");
         break;
       case "Judge":
-        newFilteredData = tableData.filter((row) => row[2] === "Judge");
+        newFilteredData = userData.filter((user) => user.role === "Judge");
         break;
       case "Participant":
-        newFilteredData = tableData.filter((row) => row[2] === "Participant");
+        newFilteredData = userData.filter(
+          (user) => user.role === "Participant",
+        );
         break;
       default:
-        newFilteredData = [...tableData];
+        newFilteredData = [...userData];
     }
 
-    newFilteredData.sort((a, b) => a[0].localeCompare(b[0]));
+    newFilteredData.sort((a, b) => a.userId.localeCompare(b.userId));
+
+    console.log(newFilteredData);
 
     return newFilteredData;
   };
 
-  const handleFilterChange = (filters: string[]) => {
-    setSelectedFilters(filters);
-    applyFilters();
+  const handleFilterChange = (filter: string[]) => {
+    setSelectedFilters(filter);
   };
 
   const queryClient = useQueryClient();
@@ -159,9 +148,8 @@ const UserTablePage = () => {
             onFilterChange={handleFilterChange}
           />
           <DataTableSectionUser
-            tableData={applyFilters()}
             tableHeaders={tableHeaders}
-            userData={userData}
+            userData={applyFilters()}
             tableDataMutation={tableDataMutation}
           />
         </>
