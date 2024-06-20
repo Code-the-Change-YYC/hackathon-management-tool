@@ -22,13 +22,6 @@ const tableHeaders = [
   { columnHeader: "" },
 ];
 
-const filters = [
-  { label: "All roles" },
-  { label: "Admin" },
-  { label: "Judge" },
-  { label: "Participant" },
-];
-
 const client = generateClient<Schema>();
 
 const UserTablePage = () => {
@@ -44,7 +37,7 @@ const UserTablePage = () => {
     }>
   >([]);
 
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string>("All roles");
 
   //Fetch the data
   const { data, isFetching } = useQuery({
@@ -87,7 +80,7 @@ const UserTablePage = () => {
   const applyFilters = () => {
     let newFilteredData = [];
 
-    switch (selectedFilters[0]) {
+    switch (selectedFilter) {
       case "Admin":
         newFilteredData = userData.filter((user) => user.role === "Admin");
         break;
@@ -108,8 +101,8 @@ const UserTablePage = () => {
     return newFilteredData;
   };
 
-  const handleFilterChange = (filter: string[]) => {
-    setSelectedFilters(filter);
+  const handleFilterChange = (filter: string) => {
+    setSelectedFilter(filter);
   };
 
   const queryClient = useQueryClient();
@@ -141,10 +134,7 @@ const UserTablePage = () => {
         </div>
       ) : (
         <>
-          <FilterUser
-            filterLabels={filters}
-            onFilterChange={handleFilterChange}
-          />
+          <FilterUser onFilterChange={handleFilterChange} />
           <DataTableSectionUser
             tableHeaders={tableHeaders}
             userData={applyFilters()}

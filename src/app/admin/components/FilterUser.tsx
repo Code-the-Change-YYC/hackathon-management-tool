@@ -12,38 +12,24 @@ const DROPDOWN_CONTENT_STYLES =
 // const DROPDOWN_ITEM_STYLES =
 //   "flex w-full cursor-pointer justify-between rounded-r-lg border-l-4 border-l-transparent p-4 hover:border-l-[#A689FF] hover:bg-white";
 
-interface Filter {
-  label: string; // label comes from filter array of objects
-}
-
 interface FilterUserProps {
-  filterLabels: Filter[]; //Filter[] is an array of objects with the label: role
-  onFilterChange: (filters: string[]) => void;
+  onFilterChange: (filters: string) => void;
 }
 
-const FilterUser = ({ filterLabels, onFilterChange }: FilterUserProps) => {
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+const filters = [
+  { label: "All roles" },
+  { label: "Admin" },
+  { label: "Judge" },
+  { label: "Participant" },
+];
+
+const FilterUser = ({ onFilterChange }: FilterUserProps) => {
+  const [selectedFilters, setSelectedFilters] = useState<string>("All roles");
 
   const handleDropDownRoleChange = (label: string) => {
-    setSelectedFilters((prevFilters) => {
-      const newFilters =
-        label === "All roles"
-          ? ["All roles"]
-          : prevFilters.includes(label)
-            ? prevFilters.filter((filter) => filter !== label)
-            : [
-                ...prevFilters.filter(
-                  (filter) =>
-                    filter !== "All roles" &&
-                    filter !== "Admin" &&
-                    filter !== "Judge" &&
-                    filter !== "Participant",
-                ),
-                label,
-              ];
-
-      onFilterChange(newFilters);
-      return newFilters;
+    setSelectedFilters(() => {
+      onFilterChange(label);
+      return label;
     });
   };
   return (
@@ -57,7 +43,7 @@ const FilterUser = ({ filterLabels, onFilterChange }: FilterUserProps) => {
                 className={BUTTON_STYLES}
                 onChange={(e) => handleDropDownRoleChange(e.target.value)}
               >
-                {filterLabels.map((filter, index) => (
+                {filters.map((filter, index) => (
                   <option
                     key={index}
                     value={filter.label}
