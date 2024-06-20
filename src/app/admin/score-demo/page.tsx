@@ -1,9 +1,9 @@
 "use client";
 
-import { generateClient } from "aws-amplify/api";
+// import { generateClient } from "aws-amplify/api";
 import { useEffect } from "react";
 
-import { type Schema } from "@/amplify/data/resource";
+// import { type Schema } from "@/amplify/data/resource";
 
 // const client = generateClient<Schema>();
 
