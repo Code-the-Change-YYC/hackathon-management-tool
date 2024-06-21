@@ -2,6 +2,7 @@
 
 import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
+import { Bounce, toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
 import { useMutation } from "@tanstack/react-query";
@@ -29,7 +30,7 @@ interface PopupProps {
   selectedMemberStatus: string | string[];
   popupType: string;
   teamName: string;
-  recordToDelete: string;
+  recordToDelete: string | undefined;
   onClose: () => void;
 }
 
@@ -44,13 +45,36 @@ const PopupUser = ({
   teamName,
 }: PopupProps) => {
   const deleteRecord = useMutation({
-    mutationFn: async (recordId: string) =>
-      await client.models.User.delete({ id: recordId }),
+    mutationFn: async (recordId: string | undefined) => {
+      if (typeof recordId === "string") {
+        await client.models.User.delete({ id: recordId });
+      } else {
+        throw new Error("Record ID is not a string");
+      }
+    },
     onError: (error) => {
       console.log("Error deleting record:", error);
+      toast.error("❌ Error updating table data", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: 0,
+        theme: "light",
+        transition: Bounce,
+      });
     },
     onSuccess: () => {
       onClose();
+      toast.success("✅ Table data updated succesfully", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: 0,
+        theme: "light",
+        transition: Bounce,
+      });
     },
   });
 

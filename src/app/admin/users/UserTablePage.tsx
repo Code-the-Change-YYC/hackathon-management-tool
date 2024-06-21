@@ -2,6 +2,7 @@
 
 import { generateClient } from "aws-amplify/api";
 import { useEffect, useState } from "react";
+import { Bounce, toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -17,7 +18,7 @@ const tableHeaders = [
   { columnHeader: "Last Name" },
   { columnHeader: "First Name" },
   { columnHeader: "Role" },
-  { columnHeader: "Team" },
+  { columnHeader: "Team ID" },
   { columnHeader: "Email" },
   { columnHeader: "" },
 ];
@@ -27,14 +28,7 @@ const client = generateClient<Schema>();
 const UserTablePage = () => {
   // const queryClient = useQueryClient();
   const [userData, setUserData] = useState<
-    Array<{
-      lastName: string;
-      firstName: string;
-      role: string;
-      team: string;
-      email: string;
-      userId: string;
-    }>
+    Array<Partial<Schema["User"]["type"]>>
   >([]);
 
   const [selectedFilter, setSelectedFilter] = useState<string>("All roles");
@@ -43,20 +37,18 @@ const UserTablePage = () => {
   const { data, isFetching } = useQuery({
     initialData: [],
     initialDataUpdatedAt: 0,
-    queryKey: ["Users"],
+    queryKey: ["User"],
     queryFn: async () => {
       const response = await client.models.User.list({
         selectionSet: [
           "lastName",
           "firstName",
           "role",
-          "allergies",
+          "teamId",
           "email",
           "id",
         ],
       });
-
-      console.log(response.data);
 
       return response.data;
     },
@@ -68,11 +60,10 @@ const UserTablePage = () => {
         lastName: user.lastName ?? "",
         firstName: user.firstName ?? "",
         role: user.role ?? "",
-        team: user.allergies ?? "",
+        teamId: user.teamId ?? "",
         email: user.email ?? "",
-        userId: user.id ?? "",
+        id: user.id ?? "",
       }));
-
       setUserData(formattedData);
     }
   }, [data]);
@@ -96,7 +87,11 @@ const UserTablePage = () => {
         newFilteredData = [...userData];
     }
 
-    newFilteredData.sort((a, b) => a.userId.localeCompare(b.userId));
+    newFilteredData = newFilteredData.filter(
+      (user): user is Partial<Schema["User"]["type"]> & { id: string } =>
+        user.id !== undefined,
+    );
+    newFilteredData.sort((a, b) => a.id.localeCompare(b.id));
 
     return newFilteredData;
   };
@@ -120,9 +115,27 @@ const UserTablePage = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["User"] });
       console.log("Table data updated successfully:", data);
+      toast.success("✅ Table data updated succesfully", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: 0,
+        theme: "light",
+        transition: Bounce,
+      });
     },
     onError: (error) => {
       console.error("Error updating table data:", error);
+      toast.error("❌ Error updating table data", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: 0,
+        theme: "light",
+        transition: Bounce,
+      });
     },
   });
 

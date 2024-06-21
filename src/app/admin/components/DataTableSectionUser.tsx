@@ -1,6 +1,12 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import { Controller, type SubmitHandler, useForm } from "react-hook-form";
+import {
+  type Control,
+  Controller,
+  type SubmitHandler,
+  useForm,
+} from "react-hook-form";
+import { Bounce, toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
 import PopupUser from "@/app/admin/components/PopupTileUser";
@@ -34,14 +40,7 @@ const entries_per_page = 10;
 
 interface DataTableProps {
   tableHeaders: Array<{ columnHeader: string }>;
-  userData?: Array<{
-    lastName: string;
-    firstName: string;
-    role: string;
-    team: string;
-    email: string;
-    userId: string;
-  }>;
+  userData?: Array<Partial<Schema["User"]["type"]>>;
   tableDataMutation: any;
 }
 
@@ -52,11 +51,20 @@ const DataTableSectionUser = (props: DataTableProps) => {
     const strippedObject = userData.find((user) => user.email === data.email);
     console.log(data);
     if (strippedObject) {
-      data.id = strippedObject.userId ?? "";
+      data.id = strippedObject.id ?? "";
       tableDataMutation.mutate(data);
       console.log(data);
     } else {
       console.error("User not found");
+      toast.error("❌ User cannot be found", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: 0,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
@@ -67,24 +75,22 @@ const DataTableSectionUser = (props: DataTableProps) => {
   );
 
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [recordToDeleteId, setRecordToDeleteId] = useState("");
+  const [recordToDeleteId, setRecordToDeleteId] = useState(
+    "" as string | undefined,
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [currentPageData, setCurrentPageData] = useState<
-    Array<{
-      lastName: string;
-      firstName: string;
-      role: string;
-      team: string;
-      email: string;
-    }>
-  >(userData);
+  const [currentPageData, setCurrentPageData] =
+    useState<Array<Partial<Schema["User"]["type"]>>>(userData);
 
   const filteredData = useMemo(() => {
     return userData.filter((rowData) =>
-      Object.values(rowData).some((value) =>
-        value.toString().toLowerCase().includes(searchQuery.toLowerCase()),
+      Object.values(rowData).some(
+        (value) =>
+          value !== null &&
+          value !== undefined &&
+          value.toString().toLowerCase().includes(searchQuery.toLowerCase()),
       ),
     );
   }, [userData, searchQuery]);
@@ -96,7 +102,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
     const currentPageData = filteredData
       .slice(startIndex, endIndex)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .map(({ userId, ...allOtherFields }) => allOtherFields);
+      .map(({ id, ...allOtherFields }) => allOtherFields);
 
     setTotalPages(totalPages);
     setCurrentPageData(currentPageData);
@@ -130,7 +136,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
 
   const handleDeleteButton = async (index: number) => {
     const actualIndex = startIndex + index; // calculate the actual index
-    const userId = userData[actualIndex].userId;
+    const userId = userData[actualIndex].id;
     setShowDeletePopup(true);
     setRecordToDeleteId(userId);
   };
@@ -152,7 +158,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
           </h1>
           <input
             type="text"
-            placeholder="Search name"
+            placeholder="Search id, name, email..."
             className={SEARCH_BAR_STYLES}
             onChange={handleSearchChange}
           />
@@ -188,7 +194,14 @@ const DataTableSectionUser = (props: DataTableProps) => {
                     className={`${DATA_TABLE_CELL_STYLES} ${cellIndex === 0 ? "w-1/6" : cellIndex === 1 ? "w-1/6" : cellIndex === 2 ? "w-1/6" : cellIndex === 3 ? "w-1/6" : cellIndex === 4 ? "w-2/5" : "w-1/6"} border-r border-gray-300`}
                   >
                     {editModes[startIndex + rowIndex]
-                      ? renderInputField(key, rowIndex, control, value)
+                      ? typeof value === "string"
+                        ? renderInputField(
+                            key,
+                            rowIndex,
+                            control,
+                            value.toString(),
+                          )
+                        : null
                       : value}
                   </form>
                 ))}
@@ -286,7 +299,7 @@ export default DataTableSectionUser;
 const renderInputField = (
   key: string,
   rowIndex: number,
-  control: any,
+  control: Control,
   value: string,
 ) => {
   const inputName = `${key}_${rowIndex}`;
