@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import { type SubmitHandler, useForm } from "react-hook-form";
+import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 
 import { type Schema } from "@/amplify/data/resource";
 import PopupUser from "@/app/admin/components/PopupTileUser";
@@ -46,12 +46,13 @@ interface DataTableProps {
 }
 
 const DataTableSectionUser = (props: DataTableProps) => {
-  const { register, handleSubmit } = useForm<Schema["User"]["type"]>();
+  const { control, handleSubmit } = useForm<Schema["User"]["type"]>();
 
   const onSubmit: SubmitHandler<Schema["User"]["type"]> = (data) => {
-    const userObject = userData.find((user) => user.email === data.email);
-    if (userObject) {
-      data.id = userObject.userId;
+    const strippedObject = userData.find((user) => user.email === data.email);
+    console.log(data);
+    if (strippedObject) {
+      data.id = strippedObject.userId ?? "";
       tableDataMutation.mutate(data);
       console.log(data);
     } else {
@@ -111,6 +112,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
 
   const handleSaveButtonClick = (index: number) => {
     toggleEditMode(index);
+    handleSubmit(onSubmit)();
   };
 
   const toggleEditMode = (index: number) => {
@@ -176,101 +178,57 @@ const DataTableSectionUser = (props: DataTableProps) => {
           </div>
           <div className="">
             {currentPageData.map((rowData, rowIndex) => (
-              <form key={rowIndex} onSubmit={handleSubmit(onSubmit)}>
-                <div
-                  className={`flex flex-row ${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
-                  role="row"
-                >
-                  {Object.entries(rowData).map(([key, value], cellIndex) => (
-                    <div
-                      className={`${DATA_TABLE_CELL_STYLES} ${cellIndex === 0 ? "w-1/6" : cellIndex === 1 ? "w-1/6" : cellIndex === 2 ? "w-1/6" : cellIndex === 3 ? "w-1/6" : cellIndex === 4 ? "w-2/5" : "w-1/6"} border-r border-gray-300`}
-                      key={key}
-                      role="col"
-                    >
-                      {editModes[startIndex + rowIndex] ? (
-                        key === "lastName" ? (
-                          <input
-                            type="text"
-                            value={value}
-                            className={EDIT_MODE_TEXT_INPUT_STYLES}
-                            {...register("lastName")}
-                          />
-                        ) : key === "firstName" ? (
-                          <input
-                            type="text"
-                            value={value}
-                            className={EDIT_MODE_TEXT_INPUT_STYLES}
-                            {...register("firstName")}
-                          />
-                        ) : key === "role" ? (
-                          <select
-                            value={value}
-                            className={EDIT_MODE_TEXT_INPUT_STYLES}
-                            {...register("role")}
-                          >
-                            <option value="Admin">Admin</option>
-                            <option value="Judge">Judge</option>
-                            <option value="Participant">Participant</option>
-                          </select>
-                        ) : key === "team" ? (
-                          <input
-                            type="text"
-                            value={value}
-                            className={EDIT_MODE_TEXT_INPUT_STYLES}
-                            {...register("team")}
-                          />
-                        ) : (
-                          <input
-                            type="text"
-                            defaultValue={value}
-                            // className={EDIT_MODE_TEXT_INPUT_STYLES}
-                            {...register("email")}
-                          />
-                        )
-                      ) : (
-                        value
-                      )}
-                    </div>
-                  ))}
-                  <div className="w-1/4 p-3 text-center">
-                    {editModes[startIndex + rowIndex] ? (
-                      <>
-                        <button
-                          className={EDIT_BUTTON_STYLES}
-                          type="submit"
-                          onClick={() => handleSaveButtonClick(rowIndex)}
-                        >
-                          Save
-                        </button>
-                        <button
-                          className="text-dark-pink"
-                          onClick={() => toggleEditMode(rowIndex)}
-                        >
-                          Cancel
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className={EDIT_BUTTON_STYLES}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleEditMode(rowIndex);
-                          }}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="text-dark-pink"
-                          onClick={() => handleDeleteButton(rowIndex)}
-                        >
-                          Delete
-                        </button>
-                      </>
-                    )}
-                  </div>
+              <div
+                key={rowIndex}
+                className={`flex flex-row ${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
+              >
+                {Object.entries(rowData).map(([key, value], cellIndex) => (
+                  <form
+                    key={key}
+                    className={`${DATA_TABLE_CELL_STYLES} ${cellIndex === 0 ? "w-1/6" : cellIndex === 1 ? "w-1/6" : cellIndex === 2 ? "w-1/6" : cellIndex === 3 ? "w-1/6" : cellIndex === 4 ? "w-2/5" : "w-1/6"} border-r border-gray-300`}
+                  >
+                    {editModes[startIndex + rowIndex]
+                      ? renderInputField(key, rowIndex, control, value)
+                      : value}
+                  </form>
+                ))}
+                <div className="w-1/4 p-3 text-center">
+                  {editModes[startIndex + rowIndex] ? (
+                    <>
+                      <button
+                        className={EDIT_BUTTON_STYLES}
+                        onClick={() => handleSaveButtonClick(rowIndex)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="text-dark-pink"
+                        onClick={() => toggleEditMode(rowIndex)}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className={EDIT_BUTTON_STYLES}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleEditMode(rowIndex);
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="text-dark-pink"
+                        onClick={() => handleDeleteButton(rowIndex)}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </div>
-              </form>
+              </div>
             ))}
             <div role="row" className="h-10 bg-awesome-purple">
               {Array(tableHeaders.length + 1)
@@ -324,3 +282,64 @@ const DataTableSectionUser = (props: DataTableProps) => {
 };
 
 export default DataTableSectionUser;
+
+const renderInputField = (
+  key: string,
+  rowIndex: number,
+  control: any,
+  value: string,
+) => {
+  const inputName = `${key}_${rowIndex}`;
+  const commonProps = {
+    control,
+    name: inputName,
+    defaultValue: value,
+  };
+
+  switch (key) {
+    case "email":
+      return (
+        <Controller
+          {...commonProps}
+          render={({ field }) => (
+            <input
+              type="text"
+              {...field}
+              onChange={(e) => field.onChange(e.target.value)}
+            />
+          )}
+        />
+      );
+    case "role":
+      return (
+        <Controller
+          {...commonProps}
+          render={({ field }) => (
+            <select
+              {...field}
+              onChange={(e) => field.onChange(e.target.value)}
+              className={EDIT_MODE_TEXT_INPUT_STYLES}
+            >
+              <option value="Admin">Admin</option>
+              <option value="Judge">Judge</option>
+              <option value="Participant">Participant</option>
+            </select>
+          )}
+        />
+      );
+    default:
+      return (
+        <Controller
+          {...commonProps}
+          render={({ field }) => (
+            <input
+              type="text"
+              {...field}
+              onChange={(e) => field.onChange(e.target.value)}
+              className={EDIT_MODE_TEXT_INPUT_STYLES}
+            />
+          )}
+        />
+      );
+  }
+};
