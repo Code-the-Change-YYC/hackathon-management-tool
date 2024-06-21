@@ -9,6 +9,8 @@ import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+import LoadingSpinner from "../LoadingSpinner";
+
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();
   const { isPending, isError, data } = useQuery({
@@ -68,15 +70,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     }
   };
   if (isPending) {
-    return (
-      // These are mandatory divs for the loading spinner
-      <div className="lds-ring">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
   if (isError) {
     return <div>Error, please try again later.</div>;
