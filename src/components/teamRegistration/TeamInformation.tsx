@@ -4,7 +4,13 @@ import { client } from "@/app/QueryProvider";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useQuery } from "@tanstack/react-query";
 
-export default function TeamInformation({ teamID }: { teamID: string }) {
+export default function TeamInformation({
+  state = "Registered",
+  teamID,
+}: {
+  state?: "Registered" | "Joined";
+  teamID: string;
+}) {
   const { isPending, data } = useQuery({
     queryKey: ["Team", teamID],
     queryFn: async () => {
@@ -13,6 +19,14 @@ export default function TeamInformation({ teamID }: { teamID: string }) {
   });
   const teamName = data?.name ?? "Unknown";
   if (isPending) return <LoadingSpinner />;
+  if (state === "Joined")
+    return (
+      <div className=" flex flex-col gap-4 text-center text-5xl font-bold">
+        <div className=" ">{"It's official!"}</div>
+        <h1>You joined {teamName}.</h1>
+        <p className="text-3xl">Your Team ID is {teamID}.</p>
+      </div>
+    );
   return (
     <div className="flex flex-col gap-8 py-8 text-neutral-700">
       <h1 className=" text-center text-5xl font-semibold">

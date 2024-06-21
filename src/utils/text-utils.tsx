@@ -22,7 +22,7 @@ export function Underline({
         {children}
       </div>
       <Image
-        className="m-5 w-full pr-5 lg:m-10"
+        className="pointer-events-none m-5 w-full select-none pr-5 lg:m-10"
         src="/images/register/group_58.png"
         objectFit="contain"
         alt=""

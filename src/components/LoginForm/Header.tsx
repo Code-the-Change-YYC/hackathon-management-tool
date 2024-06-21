@@ -3,7 +3,7 @@ import Image from "next/image";
 const Header = () => {
   return (
     <div className="relative pb-4 text-center">
-      <div className="hidden md:block">
+      <div className="pointer-events-none hidden select-none md:block">
         <Image
           className=" absolute -top-6 right-[-130px] "
           src={"/svgs/login/Vector_4.svg"}

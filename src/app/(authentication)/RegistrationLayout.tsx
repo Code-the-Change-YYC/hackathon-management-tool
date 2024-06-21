@@ -10,7 +10,7 @@ export default function RegistrationLayout({
   footer = (
     <Image
       src={"/svgs/login/Events_vector.svg"}
-      className="w-full"
+      className="pointer-events-none w-full select-none"
       height={207}
       width={1485}
       alt={""}
@@ -33,14 +33,14 @@ export default function RegistrationLayout({
         {header}
         <div className="relative flex w-full flex-col items-center ">
           <Image
-            className="absolute -right-28 top-0"
+            className="pointer-events-none absolute -right-28 top-0 select-none"
             src={"/svgs/login/Star_Icon.svg"}
             height={51}
             width={59}
             alt={""}
           />
           <Image
-            className="absolute -left-28 bottom-0"
+            className="pointer-events-none absolute -left-28 bottom-0 select-none"
             src={"/svgs/login/Star_Icon.svg"}
             height={51}
             width={59}

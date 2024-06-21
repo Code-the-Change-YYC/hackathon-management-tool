@@ -3,7 +3,7 @@ import Link from "next/link";
 import PurpleButton from "@/components/PurpleButton";
 import { Underline } from "@/utils/text-utils";
 
-import JoinTeamInstructions from "./JoinTeamInstructions";
+import JoinTeamInstructions from "../../../../components/teamRegistration/JoinTeamInstructions";
 
 export default function page() {
   return (

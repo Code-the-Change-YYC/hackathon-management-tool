@@ -6,7 +6,7 @@ import NewMember1 from "@/images/register/NewMember1.png";
 import NewTeam1 from "@/images/register/NewTeam1.png";
 import { Underline } from "@/utils/text-utils";
 
-import JoinTeamInstructions from "../JoinTeamInstructions";
+import JoinTeamInstructions from "../../../../../components/teamRegistration/JoinTeamInstructions";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (

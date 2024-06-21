@@ -9,7 +9,7 @@ import { Underline } from "@/utils/text-utils";
 export default function page({ params }: { params: { teamID: string } }) {
   return (
     <>
-      <TeamInformation teamID={params.teamID} />
+      <TeamInformation state={"Joined"} teamID={params.teamID} />
       <CountdownWindow>
         <h1 className="text-2xl font-semibold">
           <Underline noTick>Add to Calendar</Underline>
@@ -20,7 +20,7 @@ export default function page({ params }: { params: { teamID: string } }) {
 
       <div className="my-4 flex w-full justify-end text-white">
         <Link href="/participant/profile">
-          <PurpleButton>Return</PurpleButton>
+          <PurpleButton className="w-48">Return</PurpleButton>
         </Link>
       </div>
     </>
