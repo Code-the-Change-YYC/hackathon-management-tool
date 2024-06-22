@@ -10,7 +10,7 @@ export default function page() {
   ];
   return (
     <div className="flex w-full flex-col justify-center gap-6 rounded-3xl bg-white p-4 text-3xl font-bold md:p-8">
-      <div className="hidden flex-col flex-wrap gap-2 sm:flex sm:flex-row">
+      <div className=" flex flex-nowrap gap-2 ">
         <Underline>Join existing </Underline> team
       </div>
       <ol className="flex list-inside list-decimal flex-col gap-1 px-6 text-lg font-medium">

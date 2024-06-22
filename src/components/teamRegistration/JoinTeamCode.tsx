@@ -77,10 +77,10 @@ export default function JoinTeamCode() {
     <>
       <form className="flex flex-col gap-4" onSubmit={handleJoinTeam}>
         <div className="flex flex-col gap-4 rounded-3xl bg-rose-200/50 px-24 py-8  outline outline-rose-500/50">
-          <div className="pb-12 text-center text-3xl font-semibold leading-10 text-rose-500/80">
+          <div className=" pb-12 text-center text-3xl font-semibold leading-10 text-rose-500/80">
             Enter 4-digit Team ID
           </div>
-          <div className="flex justify-center gap-8 pb-12">
+          <div className="flex justify-center gap-2.5 pb-12 sm:gap-8">
             {teamIDInput.map((_, index) => (
               <input
                 key={index}
@@ -96,21 +96,21 @@ export default function JoinTeamCode() {
             ))}
           </div>
         </div>
-        <div className="flex w-full flex-row justify-between">
+        <div className="flex w-full flex-col flex-wrap items-center justify-between gap-2 lg:flex-row">
           <Link href="/register/team/ready">
-            <PurpleButton type="button" className=" w-48">
+            <PurpleButton type="button" className="w-48">
               Back
             </PurpleButton>
           </Link>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row flex-wrap items-center justify-center gap-2">
             <PurpleButton
               type="reset"
-              className=" w-48"
+              className="w-48"
               onClick={handleCancelInput}
             >
               Cancel
             </PurpleButton>
-            <PurpleButton type="submit" className=" w-48">
+            <PurpleButton type="submit" className="w-48">
               {joinTeamMutation.isPending ? "Joining..." : "Join"}
             </PurpleButton>
           </div>

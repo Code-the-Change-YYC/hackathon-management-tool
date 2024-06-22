@@ -7,8 +7,8 @@ import JoinTeamInstructions from "../../../../components/teamRegistration/JoinTe
 
 export default function page() {
   return (
-    <div className="flex w-full flex-col justify-center gap-6 rounded-3xl bg-white p-4 md:p-8">
-      <div className="flex flex-col items-center justify-center text-3xl font-semibold md:items-start">
+    <div className="flex w-full flex-col justify-center gap-6 rounded-3xl bg-white p-4 text-3xl md:p-8">
+      <div className="flex flex-col items-center justify-center font-semibold md:items-start">
         <h1>Next steps...</h1>
         <Underline noTick>Create your team!</Underline>
       </div>
@@ -17,7 +17,7 @@ export default function page() {
         <JoinTeamInstructions />
       </div>
       <div className=" flex items-center justify-center">
-        <h2 className="max-w-lg text-center text-4xl font-bold">
+        <h2 className="max-w-lg text-center font-bold">
           Ready to Register a new team or Join an existing team?
         </h2>
       </div>
