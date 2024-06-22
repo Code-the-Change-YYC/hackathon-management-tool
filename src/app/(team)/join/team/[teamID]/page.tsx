@@ -18,7 +18,7 @@ export default function page({ params }: { params: { teamID: string } }) {
         <CalendarSection />
       </CountdownWindow>
 
-      <div className="my-4 flex w-full justify-end text-white">
+      <div className="my-4 flex w-full justify-center text-white sm:justify-end">
         <Link href="/participant/profile">
           <PurpleButton className="w-48">Return</PurpleButton>
         </Link>

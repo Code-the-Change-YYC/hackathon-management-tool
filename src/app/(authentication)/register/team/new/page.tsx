@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { type Id, toast } from "react-toastify";
 
 import { client } from "@/app/QueryProvider";
 import PurpleButton from "@/components/PurpleButton";
@@ -12,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 export default function page() {
   const [teamName, setTeamName] = useState("");
   const router = useRouter();
+  const toastRef = useRef<Id>("");
   const teamMutation = useMutation({
     mutationFn: async (input: string) => {
       return await client.mutations.CreateTeamWithCode({
@@ -20,16 +22,28 @@ export default function page() {
       });
     },
     onSuccess: (res) => {
-      if (res.data?.body) {
+      if (res.data?.body && res.data.statusCode === 200) {
+        toast.update(toastRef.current, {
+          render: "Team created successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
         const teamID = JSON.parse(res.data.body.toString()).value;
         router.push(`/register/team/${teamID}`);
       } else {
-        router.push(`/register/team/error`);
+        toast.update(toastRef.current, {
+          render: "Failed to create team",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000,
+        });
       }
     },
   });
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    toastRef.current = toast.loading("Creating team...");
     teamMutation.mutate(teamName);
   }
   return (
@@ -57,10 +71,10 @@ export default function page() {
       </div>
       <div className="flex flex-col items-center justify-between gap-4 text-white sm:flex-row">
         <Link href={"/register/team/ready"}>
-          <PurpleButton>Back</PurpleButton>
+          <PurpleButton type="button">Back</PurpleButton>
         </Link>
         <PurpleButton disabled={teamMutation.isPending} type="submit">
-          Register
+          {teamMutation.isPending ? "Registering..." : "Register"}
         </PurpleButton>
       </div>
     </form>
