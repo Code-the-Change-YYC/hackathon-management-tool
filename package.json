@@ -74,5 +74,11 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "overrides": {
+    "react-qr-reader": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
   }
 }
