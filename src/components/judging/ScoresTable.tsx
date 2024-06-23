@@ -8,25 +8,42 @@ const JUDGE_TABLE_SECTION_STYLES =
 
 const JUDGE_TABLE_CONTENT_STYLES =
   "w-full border-separate border-spacing-x-0.5";
-const JUDGE_TABLE_HEADER_CELL_STLYES =
-  "text-white text-xl font-medium py-4 bg-dark-pink";
+const JUDGE_TABLE_HEADER_CELL_STLYES = "text-white text-xl font-medium py-4";
 const JUDGE_TABLE_CELL_STYLES = "text-center text-lg py-4";
 const SCORE_BUTTON_STYLES =
-  "rounded-full border-2 border-dark-pink bg-pastel-pink px-2 py-1 text-sm font-semibold text-dark-pink";
+  "rounded-full border-2 px-2 py-1 text-sm font-medium";
 
-const PAGINATION_BUTTON_STYLES =
-  "bg-dark-pink text-white rounded-full pb-1 px-6 mr-2 hover:bg-pastel-pink";
+const PAGINATION_BUTTON_STYLES = "text-white rounded-full pb-1 px-6 mr-2";
+
+const COLOR_SCHEMES = {
+  pink: {
+    headerCellBg: "bg-dark-pink",
+    scoreButtonStyles: "border-white bg-medium-pink text-white",
+    paginationButtonStyles: "bg-dark-pink hover:bg-pastel-pink",
+  },
+  purple: {
+    headerCellBg: "bg-awesomer-purple",
+    scoreButtonStyles: "border-white bg-awesome-purple text-white",
+    paginationButtonStyles: "bg-awesomer-purple hover:bg-awesome-purple",
+  },
+};
 
 interface JudgingTableProps {
   tableHeaders: Array<{ columnHeader: string; className: string }>;
   tableData: Array<(string | boolean)[]>;
   onCreateScoreClick: (teamName: string) => void;
   onEditScoreClick: (teamName: string) => void;
+  colorScheme: "pink" | "purple";
 }
 
 const JudgingTable = (props: JudgingTableProps) => {
-  const { tableHeaders, tableData, onCreateScoreClick, onEditScoreClick } =
-    props;
+  const {
+    tableHeaders,
+    tableData,
+    onCreateScoreClick,
+    onEditScoreClick,
+    colorScheme,
+  } = props;
   const [currentPage, setCurrentPage] = useState(1);
   const entries_per_page = 5;
 
@@ -46,6 +63,8 @@ const JudgingTable = (props: JudgingTableProps) => {
     startIndex + entries_per_page,
   );
 
+  const colorStyles = COLOR_SCHEMES[colorScheme];
+
   return (
     <div className={JUDGE_TABLE_SECTION_STYLES}>
       <div>
@@ -55,12 +74,14 @@ const JudgingTable = (props: JudgingTableProps) => {
               {tableHeaders.map((header, index) => (
                 <th
                   key={index}
-                  className={`${JUDGE_TABLE_HEADER_CELL_STLYES} ${header.className}`}
+                  className={`${JUDGE_TABLE_HEADER_CELL_STLYES} ${header.className} ${colorStyles.headerCellBg}`}
                 >
                   {header.columnHeader}
                 </th>
               ))}
-              <th className="w-1/5 rounded-tr-lg bg-dark-pink"></th>
+              <th
+                className={`w-1/5 rounded-tr-lg ${colorStyles.headerCellBg}`}
+              ></th>
             </tr>
           </thead>
           <tbody>
@@ -78,7 +99,7 @@ const JudgingTable = (props: JudgingTableProps) => {
                 <td className={JUDGE_TABLE_CELL_STYLES}>
                   {row[row.length - 1] ? (
                     <button
-                      className={SCORE_BUTTON_STYLES}
+                      className={`${SCORE_BUTTON_STYLES} ${colorStyles.scoreButtonStyles}`}
                       onClick={() => onEditScoreClick(row[0] as string)}
                     >
                       <div className="flex">
@@ -94,7 +115,7 @@ const JudgingTable = (props: JudgingTableProps) => {
                     </button>
                   ) : (
                     <button
-                      className={SCORE_BUTTON_STYLES}
+                      className={`${SCORE_BUTTON_STYLES} ${colorStyles.scoreButtonStyles}`}
                       onClick={() => onCreateScoreClick(row[0] as string)}
                     >
                       + Create Score
@@ -107,14 +128,14 @@ const JudgingTable = (props: JudgingTableProps) => {
         </table>
         <div className="mt-6 flex justify-end">
           <button
-            className={PAGINATION_BUTTON_STYLES}
+            className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
           >
             &lt;
           </button>
           <button
-            className={PAGINATION_BUTTON_STYLES}
+            className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
             onClick={handleNextPage}
             disabled={
               currentPage === Math.ceil(tableData.length / entries_per_page)

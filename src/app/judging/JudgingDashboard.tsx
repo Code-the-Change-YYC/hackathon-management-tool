@@ -228,6 +228,7 @@ const JudgingDashboard = () => {
                   tableData={tableData}
                   onCreateScoreClick={handleCreateScoreClick}
                   onEditScoreClick={handleEditScoreClick}
+                  colorScheme="pink"
                 />
               </div>
             </div>
