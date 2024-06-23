@@ -1,8 +1,7 @@
 "use server";
 
+import type { FoodEventCreateFormInputValues } from "@../../../ui-components/FoodEventCreateForm";
 import client from "@/components/_Amplify/AmplifyBackendClient";
-
-import type { FoodEventCreateFormInputValues } from "../../../../ui-components/FoodEventCreateForm";
 
 export async function createFoodEvent(fields: FoodEventCreateFormInputValues) {
   const { errors } = await client.models.FoodEvent.create({
