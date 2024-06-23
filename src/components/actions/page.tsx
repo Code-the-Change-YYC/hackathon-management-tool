@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import FoodEventCreateForm from "@../../../ui-components/FoodEventCreateForm";
 import { type Schema } from "@/amplify/data/resource";
 
-import { createFoodEvent, deleteFoodEvent } from "./actions";
+import { createFoodEvent, deleteFoodEvent } from "./userFoodTicketActions";
 
 type FoodEvent = Schema["FoodEvent"]["type"];
 
