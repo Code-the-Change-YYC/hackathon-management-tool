@@ -1,11 +1,6 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import {
-  type Control,
-  Controller,
-  type SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 import { Bounce, toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
@@ -202,7 +197,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
                             value.toString(),
                           )
                         : null
-                      : value}
+                      : value?.toString()}
                   </form>
                 ))}
                 <div className="w-1/4 p-3 text-center">
@@ -299,11 +294,14 @@ export default DataTableSectionUser;
 const renderInputField = (
   key: string,
   rowIndex: number,
-  control: Control,
+  control: any,
   value: string,
 ) => {
-  const inputName = `${key}_${rowIndex}`;
+  const uniqueKey = `${key}_${rowIndex}`;
+  const inputName = key;
+
   const commonProps = {
+    uniqueKey,
     control,
     name: inputName,
     defaultValue: value,
