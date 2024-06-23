@@ -229,6 +229,7 @@ const JudgingDashboard = () => {
                   onCreateScoreClick={handleCreateScoreClick}
                   onEditScoreClick={handleEditScoreClick}
                   colorScheme="pink"
+                  entriesPerPage={5}
                 />
               </div>
             </div>

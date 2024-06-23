@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 const edit_icon = "/svgs/judging/edit_icon.svg";
+const filter_icon = "/svgs/judging/filter_arrows.svg";
 
 const JUDGE_TABLE_SECTION_STYLES =
   "h-full rounded-lg bg-white p-6 drop-shadow-md";
@@ -34,6 +35,7 @@ interface JudgingTableProps {
   onCreateScoreClick: (teamName: string) => void;
   onEditScoreClick: (teamName: string) => void;
   colorScheme: "pink" | "purple";
+  entriesPerPage: number;
 }
 
 const JudgingTable = (props: JudgingTableProps) => {
@@ -43,9 +45,12 @@ const JudgingTable = (props: JudgingTableProps) => {
     onCreateScoreClick,
     onEditScoreClick,
     colorScheme,
+    entriesPerPage,
   } = props;
   const [currentPage, setCurrentPage] = useState(1);
-  const entries_per_page = 5;
+  const [sortedData, setSortedData] = useState([...tableData]);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const entries_per_page = entriesPerPage;
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) =>
@@ -57,8 +62,24 @@ const JudgingTable = (props: JudgingTableProps) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
+  //sorts team names (first index of data)
+  const handleSortClick = () => {
+    const sorted = [...sortedData].sort((a, b) => {
+      const nameA = a[0].toString().toLowerCase();
+      const nameB = b[0].toString().toLowerCase();
+      if (sortDirection === "asc") {
+        return nameA.localeCompare(nameB);
+      } else {
+        return nameB.localeCompare(nameA);
+      }
+    });
+    setSortedData(sorted);
+    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    setCurrentPage(1);
+  };
+
   const startIndex = (currentPage - 1) * entries_per_page;
-  const paginatedData = tableData.slice(
+  const paginatedData = sortedData.slice(
     startIndex,
     startIndex + entries_per_page,
   );
@@ -88,7 +109,9 @@ const JudgingTable = (props: JudgingTableProps) => {
             {paginatedData.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className={`${rowIndex % 2 === 0 ? "bg-[#f1f1f1]" : "bg-[#e1e1e1]"}`}
+                className={`${
+                  rowIndex % 2 === 0 ? "bg-[#f1f1f1]" : "bg-[#e1e1e1]"
+                }`}
               >
                 {/* iterates through all rows except last (boolean for scored status) */}
                 {row.slice(0, -1).map((cell, cellIndex) => (
@@ -126,23 +149,40 @@ const JudgingTable = (props: JudgingTableProps) => {
             ))}
           </tbody>
         </table>
-        <div className="mt-6 flex justify-end">
-          <button
-            className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
-            onClick={handlePreviousPage}
-            disabled={currentPage === 1}
-          >
-            &lt;
+        <div className="mt-6 flex justify-between">
+          <button className="flex items-center" onClick={handleSortClick}>
+            <Image
+              src={filter_icon}
+              height={20}
+              width={20}
+              alt="Filter icon"
+              className="mr-2"
+            />
+            <p>
+              Sort{" "}
+              {sortDirection === "asc"
+                ? "Alphabetically"
+                : "Reverse Alphabetically"}
+            </p>
           </button>
-          <button
-            className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
-            onClick={handleNextPage}
-            disabled={
-              currentPage === Math.ceil(tableData.length / entries_per_page)
-            }
-          >
-            &gt;
-          </button>
+          <div>
+            <button
+              className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+            >
+              &lt;
+            </button>
+            <button
+              className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
+              onClick={handleNextPage}
+              disabled={
+                currentPage === Math.ceil(sortedData.length / entries_per_page)
+              }
+            >
+              &gt;
+            </button>
+          </div>
         </div>
       </div>
     </div>
