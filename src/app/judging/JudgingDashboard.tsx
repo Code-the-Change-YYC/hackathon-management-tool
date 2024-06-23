@@ -3,9 +3,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
+import LoadingRing from "@/components/LoadingRing";
 import { useUser } from "@/components/contexts/UserContext";
-import JudgingTable from "@/components/judging/JudgingTable";
 import ModalPopup from "@/components/judging/ModalPopup";
+import ScoresTable from "@/components/judging/ScoresTable";
 import StatsPanel from "@/components/judging/StatsPanel";
 import { useQuery } from "@tanstack/react-query";
 
@@ -50,62 +51,6 @@ const JudgingDashboard = () => {
     },
   ]);
 
-  const fetchJudgeData = async (userId: string) => {
-    try {
-      const userResponse = await client.models.User.get({ id: userId });
-      const userData = userResponse.data;
-      if (!userData) throw new Error("User data not found");
-
-      const judgeRoomId = userData.JUDGE_roomId;
-      if (!judgeRoomId) throw new Error("Judge room ID not found");
-
-      const roomResponse = await client.models.Room.get({ id: judgeRoomId });
-      const roomData = roomResponse.data;
-      if (!roomData) throw new Error("Room data not found");
-
-      const hackathonResponse = await client.models.Hackathon.list();
-      const hackathonData = hackathonResponse.data[0];
-      if (!hackathonData) throw new Error("Hackathon data not found");
-
-      const teamRoomResponse = await roomData.teamRoom();
-      const teamRoomData = teamRoomResponse.data;
-      if (!teamRoomData || teamRoomData.length === 0)
-        throw new Error("Team room data not found or empty");
-
-      const teams = await Promise.all(
-        teamRoomData.map(async (teamRoom: any) => {
-          const teamResponse = await client.models.Team.get({
-            id: teamRoom.teamId,
-          });
-          const teamData = teamResponse.data;
-          if (!teamData)
-            throw new Error(
-              `Team data not found for teamId: ${teamRoom.teamId}`,
-            );
-
-          const scoresResponse = await teamData.scores();
-          const scoresData = scoresResponse.data;
-
-          return {
-            id: teamData.id,
-            name: teamData.name,
-            scores: scoresData || [],
-            scored: scoresData && scoresData.length > 0,
-          };
-        }),
-      );
-
-      return {
-        room: roomData,
-        teams,
-        scoringComponents: hackathonData.scoringComponents || [],
-      };
-    } catch (error) {
-      console.error("Error fetching judge data:", error);
-      throw error;
-    }
-  };
-
   const { currentUser } = useUser();
   const userId = currentUser.username;
   console.log(userId);
@@ -113,7 +58,61 @@ const JudgingDashboard = () => {
   const { data, isFetching } = useQuery({
     initialDataUpdatedAt: 0,
     queryKey: ["JudgeData"],
-    queryFn: () => fetchJudgeData(userId),
+    queryFn: async () => {
+      try {
+        const userResponse = await client.models.User.get({ id: userId });
+        const userData = userResponse.data;
+        if (!userData) throw new Error("User data not found");
+
+        const judgeRoomId = userData.JUDGE_roomId;
+        if (!judgeRoomId) throw new Error("Judge room ID not found");
+
+        const roomResponse = await client.models.Room.get({ id: judgeRoomId });
+        const roomData = roomResponse.data;
+        if (!roomData) throw new Error("Room data not found");
+
+        const hackathonResponse = await client.models.Hackathon.list();
+        const hackathonData = hackathonResponse.data[0];
+        if (!hackathonData) throw new Error("Hackathon data not found");
+
+        const teamRoomResponse = await roomData.teamRoom();
+        const teamRoomData = teamRoomResponse.data;
+        if (!teamRoomData || teamRoomData.length === 0)
+          throw new Error("Team room data not found or empty");
+
+        const teams = await Promise.all(
+          teamRoomData.map(async (teamRoom: any) => {
+            const teamResponse = await client.models.Team.get({
+              id: teamRoom.teamId,
+            });
+            const teamData = teamResponse.data;
+            if (!teamData)
+              throw new Error(
+                `Team data not found for teamId: ${teamRoom.teamId}`,
+              );
+
+            const scoresResponse = await teamData.scores();
+            const scoresData = scoresResponse.data;
+
+            return {
+              id: teamData.id,
+              name: teamData.name,
+              scores: scoresData || [],
+              scored: scoresData && scoresData.length > 0,
+            };
+          }),
+        );
+
+        return {
+          room: roomData,
+          teams,
+          scoringComponents: hackathonData.scoringComponents || [],
+        };
+      } catch (error) {
+        console.error("Error fetching judge data:", error);
+        throw error;
+      }
+    },
   });
 
   useEffect(() => {
@@ -188,12 +187,7 @@ const JudgingDashboard = () => {
     <>
       {isFetching ? (
         <div className={LOADING_SCREEN_STYLES}>
-          <div className="lds-ring">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
+          <LoadingRing />
         </div>
       ) : (
         <div className={JUDGE_DASHBOARD_PAGE_STYLES}>
@@ -229,7 +223,7 @@ const JudgingDashboard = () => {
                 ))}
               </div>
               <div className="w-3/4">
-                <JudgingTable
+                <ScoresTable
                   tableHeaders={tableHeaders}
                   tableData={tableData}
                   onCreateScoreClick={handleCreateScoreClick}
