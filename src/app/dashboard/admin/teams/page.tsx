@@ -1,4 +1,4 @@
-import TeamsTablePage from "@/app/admin/teams/TeamsTablePage";
+import TeamsTablePage from "@/app/(admin)/admin/teams/TeamsTablePage";
 
 export default function Teams() {
   /*== STEP 2 ===============================================================

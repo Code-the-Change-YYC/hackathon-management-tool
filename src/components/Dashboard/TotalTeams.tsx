@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
-export default function TotalTeams() {
-  const numTeams = 50;
+export default async function TotalTeams() {
+  const teams = await client.models.Team.list();
+  const numTeams = teams.data.length;
   const href = "#";
   return (
     <Card>

@@ -5,6 +5,7 @@ import NumFoodTickets from "@/components/Dashboard/NumFoodTickets";
 import TeamRankings from "@/components/Dashboard/TeamRankings";
 import TotalParticipants from "@/components/Dashboard/TotalParticipants";
 import TotalTeams from "@/components/Dashboard/TotalTeams";
+import { SuspenseWrapper } from "@/components/SuspenseWrapper";
 
 export const metadata: Metadata = {
   title: "Hack the Change - Admin",
@@ -26,10 +27,16 @@ export default function page() {
       <div className="-mb-2 -ml-2 flex flex-1 flex-row gap-4 overflow-y-auto pb-2 pl-2 ">
         <div className="flex w-full flex-col gap-4">
           <div className="flex flex-1 flex-row gap-4">
-            <TotalTeams />
-            <TotalParticipants />
+            <SuspenseWrapper>
+              <TotalTeams />
+            </SuspenseWrapper>
+            <SuspenseWrapper>
+              <TotalParticipants />
+            </SuspenseWrapper>
           </div>
-          <NumFoodTickets />
+          <SuspenseWrapper>
+            <NumFoodTickets />
+          </SuspenseWrapper>
         </div>
         <TeamRankings />
       </div>

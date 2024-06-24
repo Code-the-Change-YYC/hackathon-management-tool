@@ -1,11 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
-export default function NumFoodTickets() {
-  const numFoodTickets = 200;
+export default async function NumFoodTickets() {
   const href = "#";
+  const foodTickets = await client.models.UserFoodEventAttendance.list();
+  console.log(foodTickets);
+  // TODO: Update this with foodTickets.data.length
+  const numFoodTickets = 200;
   return (
     <Card>
       <div className="flex items-center gap-4 ">
