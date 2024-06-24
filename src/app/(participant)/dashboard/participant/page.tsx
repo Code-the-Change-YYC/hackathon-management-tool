@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 
 import DevPostSubmission from "@/components/Dashboard/DevPostSubmission";
+import GoToFoodTicket from "@/components/Dashboard/GoToFoodTicket";
 import Greetings from "@/components/Dashboard/Greetings";
+import NextMealScheduled from "@/components/Dashboard/NextMealScheduled";
 import NumFoodTickets from "@/components/Dashboard/NumFoodTickets";
 import TotalParticipants from "@/components/Dashboard/TotalParticipants";
-import TotalTeams from "@/components/Dashboard/TotalTeams";
 
 export const metadata: Metadata = {
-  title: "Hack the Change - Admin",
-  description: "Hack the Change Admin Portal",
+  title: "Hack the Change - Participant",
+  description: "Hack the Change Participant Portal",
   icons: [
     {
       rel: "icon",
@@ -25,10 +26,13 @@ export default function page() {
       <h1 className="text-2xl font-semibold">Hackathon Information</h1>
       <div className="grid grow grid-flow-col gap-4">
         <div className="flex flex-col gap-4">
-          <TotalTeams />
+          <NextMealScheduled />
           <DevPostSubmission />
         </div>
-        <TotalParticipants />
+        <div className="flex flex-col gap-4">
+          <GoToFoodTicket />
+          <TotalParticipants />
+        </div>
         <NumFoodTickets />
       </div>
     </div>

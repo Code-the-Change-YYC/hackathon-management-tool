@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import TicketIcon from "@/images/dashboard/TicketIcon.png";
+
 import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
@@ -16,9 +18,7 @@ export default async function NumFoodTickets() {
         <Link href={href}>
           <Image
             className="transition duration-300 hover:opacity-90"
-            src={"/images/admin/TicketIcon.png"}
-            width={100}
-            height={100}
+            src={TicketIcon}
             alt={"Food Ticket Icon"}
           />
         </Link>
