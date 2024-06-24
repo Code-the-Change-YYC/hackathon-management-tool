@@ -3,22 +3,14 @@
 import { usePathname } from "next/navigation";
 
 export default function AdminNavTitle() {
-  const path = usePathname().replace("/admin", "");
+  const paths = usePathname().split("/");
+  const path = paths[paths.length - 1];
+  console.log(path);
   const getTitle = (): string => {
-    switch (path) {
-      case "/dashboard":
-        return "Dashboard";
-      case "/teams":
-        return "Teams";
-      case "/users":
-        return "Participants";
-      case "/settings":
-        return "Settings";
-      case "":
-        return "Home";
-      default:
-        return "";
+    if (path === "admin") {
+      return "Home";
     }
+    return path[0].toUpperCase() + path.slice(1);
   };
   return (
     <div className="">
