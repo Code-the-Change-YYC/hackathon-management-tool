@@ -1,7 +1,12 @@
+"use client";
+
+import { useUser } from "../contexts/UserContext";
 import Card from "./Card";
 
 export default function Greetings() {
-  const name = "Admin";
+  const { currentUser } = useUser();
+  const name = currentUser.firstName;
+
   return (
     <Card>
       <div className=" flex w-full justify-start p-4 text-6xl">

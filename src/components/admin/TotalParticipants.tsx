@@ -1,10 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
-export default function TotalParticipants() {
-  const numParticipants = 150;
+export default async function TotalParticipants() {
+  const users = await client.models.User.list();
+  // TODO: "user.role should be an enum, not a string."
+  const participants = users.data.filter((user) => user.role === "Participant");
+  const numParticipants = participants.length;
   const href = "#  ";
   return (
     <Card>

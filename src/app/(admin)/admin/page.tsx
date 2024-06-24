@@ -1,3 +1,7 @@
+import { Suspense } from "react";
+import Skeleton from "react-loading-skeleton";
+import { twMerge } from "tailwind-merge";
+
 import Greetings from "@/components/admin/Greetings";
 import NumFoodTickets from "@/components/admin/NumFoodTickets";
 import TeamRankings from "@/components/admin/TeamRankings";
@@ -12,13 +16,38 @@ export default function page() {
       <div className="-mb-2 -ml-2 flex flex-1 flex-row gap-4 overflow-y-auto pb-2 pl-2 ">
         <div className="flex w-full flex-col gap-4">
           <div className="flex flex-1 flex-row gap-4">
-            <TotalTeams />
-            <TotalParticipants />
+            <SuspenseWrapper>
+              <TotalTeams />
+            </SuspenseWrapper>
+            <SuspenseWrapper>
+              <TotalParticipants />
+            </SuspenseWrapper>
           </div>
-          <NumFoodTickets />
+          <SuspenseWrapper>
+            <NumFoodTickets />
+          </SuspenseWrapper>
         </div>
         <TeamRankings />
       </div>
     </div>
+  );
+}
+export function SuspenseWrapper({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className={twMerge("size-full", className)}>
+          <Skeleton height={"100%"} />
+        </div>
+      }
+    >
+      {children}
+    </Suspense>
   );
 }
