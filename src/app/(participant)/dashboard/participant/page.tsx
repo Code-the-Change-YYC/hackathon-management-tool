@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
+import DevPostSubmission from "@/components/Dashboard/DevPostSubmission";
 import Greetings from "@/components/Dashboard/Greetings";
 import NumFoodTickets from "@/components/Dashboard/NumFoodTickets";
-import TeamRankings from "@/components/Dashboard/TeamRankings";
 import TotalParticipants from "@/components/Dashboard/TotalParticipants";
 import TotalTeams from "@/components/Dashboard/TotalTeams";
 
@@ -23,10 +23,10 @@ export default function page() {
     <div className="flex w-full flex-1 flex-col gap-4 overflow-auto bg-slate-200 p-4 text-3xl font-semibold">
       <Greetings />
       <h1 className="text-2xl font-semibold">Hackathon Information</h1>
-      <div className="grid grow auto-cols-auto grid-flow-col gap-4">
-        <div className="">
+      <div className="grid grow grid-flow-col gap-4">
+        <div className="flex flex-col gap-4">
           <TotalTeams />
-          <div>Test</div>
+          <DevPostSubmission />
         </div>
         <TotalParticipants />
         <NumFoodTickets />
