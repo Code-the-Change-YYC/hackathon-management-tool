@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import SideNavBar from "@/components/admin/SideNavBar";
-import TopNavBar from "@/components/admin/TopNavBar";
+import SideNavBar from "@/components/Dashboard/SideNavBar";
+import TopNavBar from "@/components/Dashboard/TopNavBar";
 
 export const metadata: Metadata = {
   title: "Hack the Change - Admin",

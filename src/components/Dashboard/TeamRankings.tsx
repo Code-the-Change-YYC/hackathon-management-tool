@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import RankingTable from "../admin/RankingTable";
 import Card from "./Card";
-import RankingTable from "./RankingTable";
 
 export default function TeamRankings() {
   return (

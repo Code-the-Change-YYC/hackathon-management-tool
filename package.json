@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "concurrently --names client,backend --prefix-colors green,#DD00FF --kill-others --passthrough-arguments \"next dev\" \"npx ampx sandbox --profile {@} \" ",
     "dev:client": "next dev",
+    "dev:backend": "npx ampx sandbox",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

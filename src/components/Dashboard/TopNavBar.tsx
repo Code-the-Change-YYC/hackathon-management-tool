@@ -3,7 +3,7 @@ import { IoIosSearch } from "react-icons/io";
 import { IoMailOutline } from "react-icons/io5";
 import { PiUserCircleFill } from "react-icons/pi";
 
-import AdminNavTitle from "./AdminNavTitle";
+import AdminNavTitle from "@/components/Dashboard/AdminNavTitle";
 
 export default function TopNavBar() {
   return (

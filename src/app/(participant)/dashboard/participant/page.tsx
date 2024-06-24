@@ -20,18 +20,16 @@ export const metadata: Metadata = {
 };
 export default function page() {
   return (
-    <div className="flex flex-1 flex-col gap-4 overflow-auto bg-slate-200 p-4 text-3xl font-semibold">
+    <div className="flex w-full flex-1 flex-col gap-4 overflow-auto bg-slate-200 p-4 text-3xl font-semibold">
       <Greetings />
-      <h1 className="text-2xl font-semibold">Hackathon Statistics</h1>
-      <div className="-mb-2 -ml-2 flex flex-1 flex-row gap-4 overflow-y-auto pb-2 pl-2 ">
-        <div className="flex w-full flex-col gap-4">
-          <div className="flex flex-1 flex-row gap-4">
-            <TotalTeams />
-            <TotalParticipants />
-          </div>
-          <NumFoodTickets />
+      <h1 className="text-2xl font-semibold">Hackathon Information</h1>
+      <div className="grid grow auto-cols-auto grid-flow-col gap-4">
+        <div className="">
+          <TotalTeams />
+          <div>Test</div>
         </div>
-        <TeamRankings />
+        <TotalParticipants />
+        <NumFoodTickets />
       </div>
     </div>
   );
