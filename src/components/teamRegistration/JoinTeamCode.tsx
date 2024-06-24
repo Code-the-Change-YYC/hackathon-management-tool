@@ -51,8 +51,10 @@ export default function JoinTeamCode() {
         });
         router.push(`/join/team/${teamIDInput.join("")}`);
       } else {
+        const errorMessage =
+          JSON.parse(res.data?.body as string).value ?? "Failed to join team";
         toast.update(toastRef.current, {
-          render: "Failed to join team",
+          render: errorMessage,
           type: "error",
           isLoading: false,
           autoClose: 3000,

@@ -37,8 +37,10 @@ export default function page() {
         const teamID = JSON.parse(res.data.body.toString()).value;
         router.push(`/register/team/${teamID}`);
       } else {
+        const errorMessage =
+          JSON.parse(res.data?.body as string).value ?? "Failed to create team";
         toast.update(toastRef.current, {
-          render: "Failed to create team",
+          render: errorMessage,
           type: "error",
           isLoading: false,
           autoClose: 3000,
