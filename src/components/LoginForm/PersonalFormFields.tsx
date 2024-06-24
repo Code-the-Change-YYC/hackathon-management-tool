@@ -1,6 +1,8 @@
 import type { AuthUser } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import type { Id } from "react-toastify";
+import { toast } from "react-toastify";
 
 import type { Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
@@ -19,10 +21,12 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       return (await client.models.User.get({ id: user.userId as string })).data;
     },
   });
+  const toastRef = useRef<Id>("");
   const userMutation = useMutation({
     mutationKey: ["User", user?.userId],
     mutationFn: async (input: Schema["User"]["type"]) => {
-      await client.models.User.update({
+      toastRef.current = toast.loading("Updating user information...");
+      return await client.models.User.update({
         id: user.userId,
         firstName: input.firstName,
         lastName: input.lastName,
@@ -32,9 +36,22 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       });
     },
     onSuccess: () => {
+      toast.update(toastRef.current, {
+        render: "User information updated successfully",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
       router.push("/register/team");
     },
     onError: (error) => {
+      toast.update(toastRef.current, {
+        render: "Failed to update user information",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
+
       console.error("Error updating user", error);
     },
   });
@@ -54,6 +71,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   } as Schema["User"]["type"]);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     userMutation.mutate(formState);
   };
   const updateForm = (

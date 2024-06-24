@@ -7,15 +7,20 @@ import { type Id, toast } from "react-toastify";
 
 import { client } from "@/app/QueryProvider";
 import PurpleButton from "@/components/PurpleButton";
+import { useUser } from "@/components/contexts/UserContext";
 import { Underline } from "@/utils/text-utils";
 import { useMutation } from "@tanstack/react-query";
 
 export default function page() {
   const [teamName, setTeamName] = useState("");
   const router = useRouter();
+  const user = useUser();
   const toastRef = useRef<Id>("");
   const teamMutation = useMutation({
     mutationFn: async (input: string) => {
+      if (user.currentUser.teamId) {
+        return await Promise.reject(new Error("User already has a team"));
+      }
       return await client.mutations.CreateTeamWithCode({
         teamName: input,
         addCallerToTeam: true,
@@ -39,6 +44,14 @@ export default function page() {
           autoClose: 3000,
         });
       }
+    },
+    onError: (error) => {
+      toast.update(toastRef.current, {
+        render: error.message,
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
     },
   });
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {

@@ -1,9 +1,8 @@
 import Link from "next/link";
 
 import PurpleButton from "@/components/PurpleButton";
+import JoinTeamInstructions from "@/components/teamRegistration/JoinTeamInstructions";
 import { Underline } from "@/utils/text-utils";
-
-import JoinTeamInstructions from "../../../../components/teamRegistration/JoinTeamInstructions";
 
 export default function page() {
   return (

@@ -82,6 +82,7 @@ export function UserContextProvider({ children }: Props) {
           email: data?.email ?? "",
           firstName: data?.firstName ?? "",
           lastName: data?.lastName ?? "",
+          teamId: data?.teamId ?? "",
         });
       } catch (err) {
         if (String(err).includes("No user")) {

@@ -128,9 +128,9 @@ export const handler: AppSyncResolverHandler<
         headers: { "Content-Type": "application/json" },
       };
     }
-  } catch {
+  } catch (error) {
     return {
-      body: { value: `Unhandled Internal Server Error` },
+      body: { value: `Unhandled Internal Server Error`, error },
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
     };
