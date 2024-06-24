@@ -1,7 +1,4 @@
-import { Suspense } from "react";
-import Skeleton from "react-loading-skeleton";
-import { twMerge } from "tailwind-merge";
-
+import { SuspenseWrapper } from "@/components/SuspenseWrapper";
 import Greetings from "@/components/admin/Greetings";
 import NumFoodTickets from "@/components/admin/NumFoodTickets";
 import TeamRankings from "@/components/admin/TeamRankings";
@@ -30,24 +27,5 @@ export default function page() {
         <TeamRankings />
       </div>
     </div>
-  );
-}
-export function SuspenseWrapper({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <Suspense
-      fallback={
-        <div className={twMerge("size-full", className)}>
-          <Skeleton height={"100%"} />
-        </div>
-      }
-    >
-      {children}
-    </Suspense>
   );
 }
