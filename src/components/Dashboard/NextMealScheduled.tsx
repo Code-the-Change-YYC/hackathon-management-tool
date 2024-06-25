@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import CalendarIcon from "@/images/dashboard/Calendar.png";
+
 import Card from "./Card";
 
 export default function NextMealScheduled() {
@@ -11,13 +13,11 @@ export default function NextMealScheduled() {
   });
   const location = "ICT";
   return (
-    <Card className="flex flex-row justify-around gap-4">
+    <Card className="flex flex-row justify-start gap-8">
       <Link href={href}>
         <Image
           className="transition duration-300 hover:opacity-90"
-          src={"/images/dashboard/calendar.png"}
-          width={100}
-          height={100}
+          src={CalendarIcon}
           alt={"Participant Icon"}
         />
       </Link>

@@ -12,10 +12,10 @@ export default function SubmissionDueClock() {
   const [minute, setMinute] = useState(0);
   useEffect(() => {
     const intervalID = setInterval(() => {
-      const { h, m } = calculateDateDifference(new Date(eventDate * 1000));
-      setHour(h);
+      const { d, h, m } = calculateDateDifference(new Date(eventDate * 1000));
+      setHour(h + 24 * d);
       setMinute(m);
-    }, 60000);
+    }, 1000);
     return () => clearInterval(intervalID);
   }, []);
   return (

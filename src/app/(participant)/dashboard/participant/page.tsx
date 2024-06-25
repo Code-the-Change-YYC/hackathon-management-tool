@@ -25,7 +25,7 @@ export default function page() {
     <div className="flex w-full flex-1 flex-col gap-4 overflow-auto bg-slate-200 p-4 text-3xl font-semibold">
       <Greetings />
       <h1 className="text-2xl font-semibold">Hackathon Information</h1>
-      <div className="grid grow grid-cols-1 gap-4 xl:grid-flow-col">
+      <div className="grid grow grid-cols-1 gap-4 md:grid-cols-2 xl:grid-flow-col xl:grid-cols-none">
         <div className="flex flex-col gap-4">
           <NextMealScheduled />
           <DevPostSubmission />
