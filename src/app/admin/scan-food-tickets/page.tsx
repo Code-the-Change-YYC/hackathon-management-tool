@@ -14,7 +14,7 @@ import {
 
 type FoodEvent = Schema["FoodEvent"]["type"];
 
-export default function AdminFoodTickets() {
+const AdminFoodTickets = () => {
   const [scanResult, setScanResult] = useState("");
   const [canEatBoolean, setCanEatBoolean] = useState(false);
   const [eatDescription, setEatDescription] = useState("");
@@ -90,34 +90,62 @@ export default function AdminFoodTickets() {
   };
 
   return (
-    <>
-      {canEatBoolean && <p>They can Eat!</p>}
-      {eatDescription && <p>{eatDescription}</p>}
-      {markAttendedButton && scanResult && (
-        <button onClick={handleClickSetAttended}>
-          Mark as attended anyway
-        </button>
-      )}
-      <select name="foodEvent" id="foodEvent" onChange={handleEventChange}>
-        <option value="">Select a food event</option>
-        {foodEvents.map((event) => (
-          <option key={event.id} value={event.id}>
-            {event.name}: {new Date(event.start).toLocaleString()} -{" "}
-            {new Date(event.end).toLocaleString()}
-          </option>
-        ))}
-      </select>
-      <QrReader
-        className="w-auto"
-        scanDelay={50}
-        onResult={(result) => {
-          if (result) {
-            setScanResult(result.getText());
-          }
-        }}
-        constraints={{ facingMode: "environment" }}
-      />
-      <button onClick={handleManualScan}>Manual Scan</button>
-    </>
+    <div className="overflow-x-hidden bg-medium-grey text-blackish">
+      <div className="container mx-auto flex items-center justify-center p-4">
+        <div className="w-full max-w-[500px] rounded-lg bg-white p-6 drop-shadow-md md:w-auto">
+          <h1 className="mb-4 text-2xl font-bold">Scan Food Ticket</h1>
+          <div className="mb-2">
+            {canEatBoolean && <p>They can Eat!</p>}
+            {eatDescription && <p>{eatDescription}</p>}
+            {markAttendedButton && scanResult && (
+              <button
+                className="mx-auto mt-2 block rounded-xl bg-awesomer-purple px-4 py-2 font-medium text-white hover:bg-lilac-purple"
+                onClick={handleClickSetAttended}
+              >
+                Mark as attended anyway
+              </button>
+            )}
+          </div>
+          <div className="relative">
+            <select
+              name="foodEvent"
+              id="foodEvent"
+              className="mb-4 w-full rounded-md border border-blackish p-2 focus:border-2 focus:border-awesomer-purple focus:outline-none"
+              onChange={handleEventChange}
+            >
+              <option value="">Select a food event</option>
+              {foodEvents.map((event) => (
+                <option key={event.id} value={event.id}>
+                  <span>{event.name}: </span>
+                  <span>
+                    {new Date(event.start).toLocaleString()} -{" "}
+                    {new Date(event.end).toLocaleString()}
+                  </span>
+                </option>
+              ))}
+            </select>
+            <div className="rounded-md border-2 border-lilac-purple bg-lilac-purple">
+              <QrReader
+                scanDelay={50}
+                onResult={(result) => {
+                  if (result) {
+                    setScanResult(result.getText());
+                  }
+                }}
+                constraints={{ facingMode: "environment" }}
+              />
+            </div>
+          </div>
+          <button
+            className="mx-auto mt-6 block rounded-xl bg-awesomer-purple px-4 py-2 font-medium text-white hover:bg-lilac-purple"
+            onClick={handleManualScan}
+          >
+            Manual Scan
+          </button>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default AdminFoodTickets;

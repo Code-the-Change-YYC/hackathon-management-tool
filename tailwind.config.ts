@@ -28,6 +28,7 @@ const config: Config = {
         "pastel-green": "#BAFBE4",
         "medium-grey": "#D9D9D9",
         "light-grey": "#F2F2F2",
+        "lilac-purple": "#D6C9FF",
       },
       borderRadius: {
         "20": "20px",
