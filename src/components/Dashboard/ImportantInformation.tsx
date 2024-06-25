@@ -21,15 +21,17 @@ export default function ImportantInformation() {
           Important <br /> Information
         </div>
       </div>
-      <div className="text-start text-2xl font-normal">
-        <h1 className="pb-2 text-3xl font-bold">Opening Ceremony</h1>
-        <p>Location: {openingCeremony.location}</p>
-        <p>Time: {openingCeremony.time}</p>
-      </div>
-      <div className="text-start text-2xl font-normal">
-        <h1 className="pb-2 text-3xl font-bold">Closing Ceremony</h1>
-        <p>Location: {closingCeremony.location}</p>
-        <p>Time: {closingCeremony.time}</p>
+      <div className="grid w-full grid-flow-row gap-4 sm:grid-flow-col">
+        <div className="text-start text-2xl font-normal">
+          <h1 className="pb-2 text-3xl font-bold">Opening Ceremony</h1>
+          <p>Location: {openingCeremony.location}</p>
+          <p>Time: {openingCeremony.time}</p>
+        </div>
+        <div className="text-start text-2xl font-normal">
+          <h1 className="pb-2 text-3xl font-bold">Closing Ceremony</h1>
+          <p>Location: {closingCeremony.location}</p>
+          <p>Time: {closingCeremony.time}</p>
+        </div>
       </div>
     </Card>
   );

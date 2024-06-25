@@ -34,7 +34,7 @@ export default function page() {
           <GoToFoodTicket />
           <JudgingInfo />
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 md:col-span-2">
           <ImportantInformation />
           <SubmissionDueClock />
         </div>
