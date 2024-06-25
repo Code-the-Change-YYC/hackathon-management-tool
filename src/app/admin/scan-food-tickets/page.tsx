@@ -1,6 +1,7 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { QrReader } from "react-qr-reader";
 import { toast } from "react-toastify";
@@ -11,6 +12,24 @@ import {
   setUserAsAttendedAtFoodEventFromCode,
   verifyFoodTicket,
 } from "./TicketVerification/actions";
+
+const question_icon = "/svgs/admin/chat_question.svg";
+
+const QR_SCANNER_SECTION_STYLES =
+  "overflow-x-hidden bg-medium-grey text-blackish";
+const QR_SCANNER_CONTENT_STYLES =
+  "container mx-auto flex items-center justify-center p-4";
+const QR_SCANNER_CONTAINER_STYLES =
+  "w-full max-w-[500px] rounded-lg bg-white p-6 drop-shadow-md md:w-auto";
+
+const MARK_ATTENDED_BUTTON_STYLES =
+  "flex justify-center items-center w-full mb-4 block rounded-md border-2 border-awesomer-purple bg-white text-awesomer-purple py-2 font-medium hover:bg-medium-grey";
+const SELECT_FOOD_EVENT_STYLES =
+  "mb-4 w-full rounded-md border border-blackish p-2 focus:border-2 focus:border-awesomer-purple focus:outline-none";
+const QR_READER_CONTAINER_STYLES =
+  "border-awesome-purple bg-awesome-purple rounded-md border-2";
+const MANUAL_SCAN_BUTTON_STYLES =
+  "hover:bg-lilac-purple mx-auto mt-6 block rounded-xl bg-awesomer-purple px-4 py-2 font-medium text-white";
 
 type FoodEvent = Schema["FoodEvent"]["type"];
 
@@ -90,19 +109,25 @@ const AdminFoodTickets = () => {
   };
 
   return (
-    <div className="overflow-x-hidden bg-medium-grey text-blackish">
-      <div className="container mx-auto flex items-center justify-center p-4">
-        <div className="w-full max-w-[500px] rounded-lg bg-white p-6 drop-shadow-md md:w-auto">
+    <div className={QR_SCANNER_SECTION_STYLES}>
+      <div className={QR_SCANNER_CONTENT_STYLES}>
+        <div className={QR_SCANNER_CONTAINER_STYLES}>
           <h1 className="mb-4 text-2xl font-bold">Scan Food Ticket</h1>
           <div className="mb-2">
-            {canEatBoolean && <p>They can Eat!</p>}
+            {!canEatBoolean && <p>They can Eat!</p>}
             {eatDescription && <p>{eatDescription}</p>}
             {markAttendedButton && scanResult && (
               <button
-                className="mx-auto mt-2 block rounded-xl bg-awesomer-purple px-4 py-2 font-medium text-white hover:bg-lilac-purple"
+                className={MARK_ATTENDED_BUTTON_STYLES}
                 onClick={handleClickSetAttended}
               >
-                Mark as attended anyway
+                <p className="mr-2">Mark as attended anyway</p>
+                <Image
+                  src={question_icon}
+                  height={20}
+                  width={20}
+                  alt="Question icon"
+                />
               </button>
             )}
           </div>
@@ -110,7 +135,7 @@ const AdminFoodTickets = () => {
             <select
               name="foodEvent"
               id="foodEvent"
-              className="mb-4 w-full rounded-md border border-blackish p-2 focus:border-2 focus:border-awesomer-purple focus:outline-none"
+              className={SELECT_FOOD_EVENT_STYLES}
               onChange={handleEventChange}
             >
               <option value="">Select a food event</option>
@@ -124,7 +149,7 @@ const AdminFoodTickets = () => {
                 </option>
               ))}
             </select>
-            <div className="rounded-md border-2 border-lilac-purple bg-lilac-purple">
+            <div className={QR_READER_CONTAINER_STYLES}>
               <QrReader
                 scanDelay={50}
                 onResult={(result) => {
@@ -137,7 +162,7 @@ const AdminFoodTickets = () => {
             </div>
           </div>
           <button
-            className="mx-auto mt-6 block rounded-xl bg-awesomer-purple px-4 py-2 font-medium text-white hover:bg-lilac-purple"
+            className={MANUAL_SCAN_BUTTON_STYLES}
             onClick={handleManualScan}
           >
             Manual Scan
