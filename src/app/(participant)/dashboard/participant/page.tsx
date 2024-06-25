@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import DevPostSubmission from "@/components/Dashboard/DevPostSubmission";
 import GoToFoodTicket from "@/components/Dashboard/GoToFoodTicket";
 import Greetings from "@/components/Dashboard/Greetings";
+import JudgingInfo from "@/components/Dashboard/JudgingInfo";
 import NextMealScheduled from "@/components/Dashboard/NextMealScheduled";
 import NumFoodTickets from "@/components/Dashboard/NumFoodTickets";
-import TotalParticipants from "@/components/Dashboard/TotalParticipants";
 
 export const metadata: Metadata = {
   title: "Hack the Change - Participant",
@@ -31,7 +31,7 @@ export default function page() {
         </div>
         <div className="flex flex-col gap-4">
           <GoToFoodTicket />
-          <TotalParticipants />
+          <JudgingInfo />
         </div>
         <NumFoodTickets />
       </div>
