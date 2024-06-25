@@ -114,7 +114,7 @@ const AdminFoodTickets = () => {
         <div className={QR_SCANNER_CONTAINER_STYLES}>
           <h1 className="mb-4 text-2xl font-bold">Scan Food Ticket</h1>
           <div className="mb-2">
-            {!canEatBoolean && <p>They can Eat!</p>}
+            {canEatBoolean && <p>They can Eat!</p>}
             {eatDescription && <p>{eatDescription}</p>}
             {markAttendedButton && scanResult && (
               <button
