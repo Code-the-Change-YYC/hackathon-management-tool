@@ -12,7 +12,8 @@ export default function Greetings() {
       : "text-emerald-500";
   return (
     <Card>
-      <div className=" flex w-full justify-start p-4 text-6xl">
+      <div className=" flex w-full flex-col justify-start p-4 text-start text-6xl">
+        <h2 className="text-2xl font-normal">Hack the Change 2024</h2>
         <h1>
           Hello,
           <span className={`capitalize italic ${nameColor}`}>
