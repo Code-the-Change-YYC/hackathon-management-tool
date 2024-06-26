@@ -20,7 +20,7 @@ const DATA_TABLE_CONTENT_STYLES =
 const DATA_TABLE_HEADER_CELL_STYLES =
   "p-3 font-normal text-xl bg-[#A689FF] flex justify-center items-center";
 const DATA_TABLE_CELL_STYLES =
-  "p-3 py-4 text-md font-light overflow-x-auto flex items-center justify-start";
+  "p-3 py-4 text-md font-light overflow-x-auto flex items-center justify-start border-r border-gray-300";
 
 const EDIT_BUTTON_STYLES = "mr-6 text-awesomer-purple";
 const EDIT_MODE_TEXT_INPUT_STYLES =
@@ -35,7 +35,7 @@ const entries_per_page = 10;
 
 interface DataTableProps {
   tableHeaders: Array<{ columnHeader: string }>;
-  userData?: Array<Partial<Schema["User"]["type"]>>;
+  userData: Array<Partial<Schema["User"]["type"]>>;
   tableDataMutation: any;
 }
 
@@ -43,6 +43,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
   const { control, handleSubmit } = useForm<Schema["User"]["type"]>();
 
   const onSubmit: SubmitHandler<Schema["User"]["type"]> = (data) => {
+    setEditingId("");
     const strippedObject = userData.find((user) => user.email === data.email);
     console.log(data);
     if (strippedObject) {
@@ -65,14 +66,11 @@ const DataTableSectionUser = (props: DataTableProps) => {
 
   const { tableHeaders, userData = [], tableDataMutation } = props;
 
-  const [editModes, setEditModes] = useState(
-    Array(userData.length).fill(false),
-  );
-
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [recordToDeleteId, setRecordToDeleteId] = useState(
     "" as string | undefined,
   );
+  const [editingId, setEditingId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -94,10 +92,9 @@ const DataTableSectionUser = (props: DataTableProps) => {
 
   useEffect(() => {
     const totalPages = Math.ceil(filteredData.length / entries_per_page);
-    const currentPageData = filteredData
-      .slice(startIndex, endIndex)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .map(({ id, ...allOtherFields }) => allOtherFields);
+    const currentPageData = filteredData.slice(startIndex, endIndex);
+    // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // .map(({ id, ...allOtherFields }) => allOtherFields);
 
     setTotalPages(totalPages);
     setCurrentPageData(currentPageData);
@@ -111,17 +108,24 @@ const DataTableSectionUser = (props: DataTableProps) => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
   };
 
-  const handleSaveButtonClick = (index: number) => {
-    toggleEditMode(index);
-    handleSubmit(onSubmit)();
-  };
-
-  const toggleEditMode = (index: number) => {
-    const actualIndex = startIndex + index;
-
-    const newEditModes = [...editModes];
-    newEditModes[actualIndex] = !newEditModes[actualIndex];
-    setEditModes(newEditModes);
+  const toggleEditMode = (rowId: string) => {
+    console.log(rowId);
+    console.log(editingId);
+    if (rowId === undefined) {
+      toast.error("❌ An error occurred", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: 0,
+        theme: "light",
+        transition: Bounce,
+      });
+    } else if (rowId === editingId) {
+      setEditingId("");
+    } else {
+      setEditingId(rowId);
+    }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,74 +181,160 @@ const DataTableSectionUser = (props: DataTableProps) => {
               </div>
             ))}
           </div>
-          <div className="">
-            {currentPageData.map((rowData, rowIndex) => (
-              <div
-                key={rowIndex}
-                className={`flex flex-row ${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
-              >
-                {Object.entries(rowData).map(([key, value], cellIndex) => (
+
+          {currentPageData.map((rowData, rowIndex) => (
+            <div
+              key={rowIndex}
+              className={`flex w-full flex-row ${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
+            >
+              {editingId === rowData.id ? (
+                <>
                   <form
-                    key={key}
-                    className={`${DATA_TABLE_CELL_STYLES} ${cellIndex === 0 ? "w-1/6" : cellIndex === 1 ? "w-1/6" : cellIndex === 2 ? "w-1/6" : cellIndex === 3 ? "w-1/6" : cellIndex === 4 ? "w-2/5" : "w-1/6"} border-r border-gray-300`}
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="text-md flex items-center justify-start overflow-x-auto border-r border-gray-300 font-light"
                   >
-                    {editModes[startIndex + rowIndex]
-                      ? typeof value === "string"
-                        ? renderInputField(
-                            key,
-                            rowIndex,
-                            control,
-                            value.toString(),
-                          )
-                        : null
-                      : value?.toString()}
-                  </form>
-                ))}
-                <div className="w-1/4 p-3 text-center">
-                  {editModes[startIndex + rowIndex] ? (
-                    <>
-                      <button
-                        className={EDIT_BUTTON_STYLES}
-                        onClick={() => handleSaveButtonClick(rowIndex)}
-                      >
+                    <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                      <Controller
+                        key={rowData.id}
+                        name="lastName"
+                        control={control}
+                        defaultValue={rowData.lastName}
+                        render={({ field }) => (
+                          <input
+                            type="text"
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value)}
+                            className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
+                          />
+                        )}
+                      />
+                    </div>
+                    <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                      <Controller
+                        key={rowData.id}
+                        name="firstName"
+                        control={control}
+                        defaultValue={rowData.firstName}
+                        render={({ field }) => (
+                          <input
+                            type="text"
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value)}
+                            className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
+                          />
+                        )}
+                      />
+                    </div>
+                    <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                      <Controller
+                        key={rowData.id}
+                        name="role"
+                        control={control}
+                        defaultValue={rowData.role}
+                        render={({ field }) => (
+                          <select
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value)}
+                            className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
+                          >
+                            <option value="Admin">Admin</option>
+                            <option value="Judge">Judge</option>
+                            <option value="Participant">Participant</option>
+                          </select>
+                        )}
+                      />
+                    </div>
+                    <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                      <Controller
+                        key={rowData.id}
+                        name="teamId"
+                        control={control}
+                        defaultValue={rowData.teamId}
+                        render={({ field }) => (
+                          <input
+                            type="text"
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value)}
+                            className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
+                          />
+                        )}
+                      />
+                    </div>
+                    <div className={`${DATA_TABLE_CELL_STYLES} w-2/5`}>
+                      <Controller
+                        key={rowData.id}
+                        name="email"
+                        control={control}
+                        defaultValue={rowData.email}
+                        render={({ field }) => (
+                          <input
+                            type="text"
+                            {...field}
+                            onChange={(e) => field.onChange(e.target.value)}
+                            className="w-full"
+                          />
+                        )}
+                      />
+                    </div>
+
+                    <div className={`${DATA_TABLE_CELL_STYLES} w-1/4`}>
+                      <button className={EDIT_BUTTON_STYLES} type="submit">
                         Save
                       </button>
                       <button
                         className="text-dark-pink"
-                        onClick={() => toggleEditMode(rowIndex)}
+                        onClick={() => toggleEditMode(rowData.id)}
                       >
                         Cancel
                       </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        className={EDIT_BUTTON_STYLES}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          toggleEditMode(rowIndex);
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="text-dark-pink"
-                        onClick={() => handleDeleteButton(rowIndex)}
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
+                    </div>
+                  </form>
+                </>
+              ) : (
+                <div className="flex w-full">
+                  <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                    {rowData.lastName}
+                  </div>
+                  <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                    {rowData.firstName}
+                  </div>
+                  <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                    {rowData.role}
+                  </div>
+                  <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                    {rowData.teamId}
+                  </div>
+                  <div className={`${DATA_TABLE_CELL_STYLES} w-2/5`}>
+                    {rowData.email}
+                  </div>
+                  <div className={`${DATA_TABLE_CELL_STYLES} w-1/4`}>
+                    {" "}
+                    <button
+                      className={EDIT_BUTTON_STYLES}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toggleEditMode(rowData.id);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-dark-pink"
+                      onClick={() => handleDeleteButton(rowIndex)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-            <div role="row" className="h-10 bg-awesome-purple">
-              {Array(tableHeaders.length + 1)
-                .fill(null)
-                .map((_, index) => (
-                  <div key={index}></div>
-                ))}
+              )}
             </div>
+          ))}
+          <div role="row" className="h-10 bg-awesome-purple">
+            {Array(tableHeaders.length + 1)
+              .fill(null)
+              .map((_, index) => (
+                <div key={index}></div>
+              ))}
           </div>
 
           {/* popup component to confirm deletion of record */}
@@ -290,67 +380,3 @@ const DataTableSectionUser = (props: DataTableProps) => {
 };
 
 export default DataTableSectionUser;
-
-const renderInputField = (
-  key: string,
-  rowIndex: number,
-  control: any,
-  value: string,
-) => {
-  const uniqueKey = `${key}_${rowIndex}`;
-  const inputName = key;
-
-  const commonProps = {
-    uniqueKey,
-    control,
-    name: inputName,
-    defaultValue: value,
-  };
-
-  switch (key) {
-    case "email":
-      return (
-        <Controller
-          {...commonProps}
-          render={({ field }) => (
-            <input
-              type="text"
-              {...field}
-              onChange={(e) => field.onChange(e.target.value)}
-            />
-          )}
-        />
-      );
-    case "role":
-      return (
-        <Controller
-          {...commonProps}
-          render={({ field }) => (
-            <select
-              {...field}
-              onChange={(e) => field.onChange(e.target.value)}
-              className={EDIT_MODE_TEXT_INPUT_STYLES}
-            >
-              <option value="Admin">Admin</option>
-              <option value="Judge">Judge</option>
-              <option value="Participant">Participant</option>
-            </select>
-          )}
-        />
-      );
-    default:
-      return (
-        <Controller
-          {...commonProps}
-          render={({ field }) => (
-            <input
-              type="text"
-              {...field}
-              onChange={(e) => field.onChange(e.target.value)}
-              className={EDIT_MODE_TEXT_INPUT_STYLES}
-            />
-          )}
-        />
-      );
-  }
-};

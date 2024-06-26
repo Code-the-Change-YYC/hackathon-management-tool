@@ -1,10 +1,11 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Bounce, toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
+import { UserType } from "@/components/contexts/UserContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import DataTableSectionUser from "../components/DataTableSectionUser";
@@ -13,7 +14,6 @@ import FilterUser from "../components/FilterUser";
 const LOADING_SCREEN_STYLES =
   "flex h-screen w-full items-center justify-center bg-awesome-purple";
 
-// added option for styles to customize the column widths
 const tableHeaders = [
   { columnHeader: "Last Name" },
   { columnHeader: "First Name" },
@@ -26,14 +26,10 @@ const tableHeaders = [
 const client = generateClient<Schema>();
 
 const UserTablePage = () => {
-  // const queryClient = useQueryClient();
-  const [userData, setUserData] = useState<
+  const [filteredData, setFilteredData] = useState<
     Array<Partial<Schema["User"]["type"]>>
   >([]);
 
-  const [selectedFilter, setSelectedFilter] = useState<string>("All roles");
-
-  //Fetch the data
   const { data, isFetching } = useQuery({
     initialData: [],
     initialDataUpdatedAt: 0,
@@ -50,54 +46,35 @@ const UserTablePage = () => {
         ],
       });
 
+      // Set the initial filtered data to the response data
+      setFilteredData(response.data);
+
       return response.data;
     },
   });
 
-  useEffect(() => {
-    if (data) {
-      const formattedData = data.map((user) => ({
-        lastName: user.lastName ?? "",
-        firstName: user.firstName ?? "",
-        role: user.role ?? "",
-        teamId: user.teamId ?? "",
-        email: user.email ?? "",
-        id: user.id ?? "",
-      }));
-      setUserData(formattedData);
-    }
-  }, [data]);
-
-  const applyFilters = () => {
+  const handleFilterChange = (filter: string) => {
     let newFilteredData = [];
 
-    switch (selectedFilter) {
-      case "Admin":
-        newFilteredData = userData.filter((user) => user.role === "Admin");
+    switch (filter) {
+      case UserType.Admin:
+        newFilteredData = data.filter((user) => user.role === UserType.Admin);
         break;
-      case "Judge":
-        newFilteredData = userData.filter((user) => user.role === "Judge");
+      case UserType.Judge:
+        newFilteredData = data.filter((user) => user.role === UserType.Judge);
         break;
-      case "Participant":
-        newFilteredData = userData.filter(
-          (user) => user.role === "Participant",
+      case UserType.Participant:
+        newFilteredData = data.filter(
+          (user) => user.role === UserType.Participant,
         );
         break;
       default:
-        newFilteredData = [...userData];
+        newFilteredData = [...data];
     }
 
-    newFilteredData = newFilteredData.filter(
-      (user): user is Partial<Schema["User"]["type"]> & { id: string } =>
-        user.id !== undefined,
-    );
     newFilteredData.sort((a, b) => a.id.localeCompare(b.id));
 
-    return newFilteredData;
-  };
-
-  const handleFilterChange = (filter: string) => {
-    setSelectedFilter(filter);
+    setFilteredData(newFilteredData);
   };
 
   const queryClient = useQueryClient();
@@ -150,7 +127,7 @@ const UserTablePage = () => {
           <FilterUser onFilterChange={handleFilterChange} />
           <DataTableSectionUser
             tableHeaders={tableHeaders}
-            userData={applyFilters()}
+            userData={filteredData}
             tableDataMutation={tableDataMutation}
           />
         </>
