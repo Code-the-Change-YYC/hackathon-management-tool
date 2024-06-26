@@ -23,12 +23,106 @@ export const onCreateFoodEvent = /* GraphQL */ `
     }
   }
 `;
-export const onCreateTeam = /* GraphQL */ `
-  subscription OnCreateTeam(
-    $filter: ModelSubscriptionTeamFilterInput
-    $owner: String
+export const onCreateHackathon = /* GraphQL */ `
+  subscription OnCreateHackathon(
+    $filter: ModelSubscriptionHackathonFilterInput
   ) {
-    onCreateTeam(filter: $filter, owner: $owner) {
+    onCreateHackathon(filter: $filter) {
+      createdAt
+      endDate
+      id
+      scores {
+        nextToken
+        __typename
+      }
+      scoringComponents {
+        friendlyName
+        id
+        isSidepot
+        __typename
+      }
+      scoringSidepots {
+        friendlyName
+        id
+        isSidepot
+        __typename
+      }
+      startDate
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateRoom = /* GraphQL */ `
+  subscription OnCreateRoom($filter: ModelSubscriptionRoomFilterInput) {
+    onCreateRoom(filter: $filter) {
+      createdAt
+      id
+      judges {
+        nextToken
+        __typename
+      }
+      name
+      teamRoom {
+        nextToken
+        __typename
+      }
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateScore = /* GraphQL */ `
+  subscription OnCreateScore($filter: ModelSubscriptionScoreFilterInput) {
+    onCreateScore(filter: $filter) {
+      createdAt
+      hackathon {
+        createdAt
+        endDate
+        id
+        startDate
+        updatedAt
+        __typename
+      }
+      hackathonId
+      id
+      judge {
+        JUDGE_roomId
+        allergies
+        checkedIn
+        completedRegistration
+        createdAt
+        email
+        firstName
+        id
+        institution
+        lastName
+        profileOwner
+        role
+        teamId
+        updatedAt
+        willEatMeals
+        __typename
+      }
+      judgeId
+      score
+      team {
+        approved
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      teamId
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateTeam = /* GraphQL */ `
+  subscription OnCreateTeam($filter: ModelSubscriptionTeamFilterInput) {
+    onCreateTeam(filter: $filter) {
       approved
       createdAt
       id
@@ -37,8 +131,44 @@ export const onCreateTeam = /* GraphQL */ `
         __typename
       }
       name
-      owner
+      scores {
+        nextToken
+        __typename
+      }
+      teamRooms {
+        nextToken
+        __typename
+      }
       updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateTeamRoom = /* GraphQL */ `
+  subscription OnCreateTeamRoom($filter: ModelSubscriptionTeamRoomFilterInput) {
+    onCreateTeamRoom(filter: $filter) {
+      createdAt
+      id
+      room {
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      roomId
+      team {
+        approved
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      teamId
+      time
+      updatedAt
+      zoomLink
       __typename
     }
   }
@@ -49,6 +179,18 @@ export const onCreateUser = /* GraphQL */ `
     $profileOwner: String
   ) {
     onCreateUser(filter: $filter, profileOwner: $profileOwner) {
+      JUDGE_givenScores {
+        nextToken
+        __typename
+      }
+      JUDGE_room {
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      JUDGE_roomId
       allergies
       attendedEvents {
         nextToken
@@ -63,12 +205,12 @@ export const onCreateUser = /* GraphQL */ `
       institution
       lastName
       profileOwner
+      role
       team {
         approved
         createdAt
         id
         name
-        owner
         updatedAt
         __typename
       }
@@ -100,6 +242,7 @@ export const onCreateUserFoodEventAttendance = /* GraphQL */ `
       id
       updatedAt
       user {
+        JUDGE_roomId
         allergies
         checkedIn
         completedRegistration
@@ -110,6 +253,7 @@ export const onCreateUserFoodEventAttendance = /* GraphQL */ `
         institution
         lastName
         profileOwner
+        role
         teamId
         updatedAt
         willEatMeals
@@ -141,12 +285,106 @@ export const onDeleteFoodEvent = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteTeam = /* GraphQL */ `
-  subscription OnDeleteTeam(
-    $filter: ModelSubscriptionTeamFilterInput
-    $owner: String
+export const onDeleteHackathon = /* GraphQL */ `
+  subscription OnDeleteHackathon(
+    $filter: ModelSubscriptionHackathonFilterInput
   ) {
-    onDeleteTeam(filter: $filter, owner: $owner) {
+    onDeleteHackathon(filter: $filter) {
+      createdAt
+      endDate
+      id
+      scores {
+        nextToken
+        __typename
+      }
+      scoringComponents {
+        friendlyName
+        id
+        isSidepot
+        __typename
+      }
+      scoringSidepots {
+        friendlyName
+        id
+        isSidepot
+        __typename
+      }
+      startDate
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteRoom = /* GraphQL */ `
+  subscription OnDeleteRoom($filter: ModelSubscriptionRoomFilterInput) {
+    onDeleteRoom(filter: $filter) {
+      createdAt
+      id
+      judges {
+        nextToken
+        __typename
+      }
+      name
+      teamRoom {
+        nextToken
+        __typename
+      }
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteScore = /* GraphQL */ `
+  subscription OnDeleteScore($filter: ModelSubscriptionScoreFilterInput) {
+    onDeleteScore(filter: $filter) {
+      createdAt
+      hackathon {
+        createdAt
+        endDate
+        id
+        startDate
+        updatedAt
+        __typename
+      }
+      hackathonId
+      id
+      judge {
+        JUDGE_roomId
+        allergies
+        checkedIn
+        completedRegistration
+        createdAt
+        email
+        firstName
+        id
+        institution
+        lastName
+        profileOwner
+        role
+        teamId
+        updatedAt
+        willEatMeals
+        __typename
+      }
+      judgeId
+      score
+      team {
+        approved
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      teamId
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteTeam = /* GraphQL */ `
+  subscription OnDeleteTeam($filter: ModelSubscriptionTeamFilterInput) {
+    onDeleteTeam(filter: $filter) {
       approved
       createdAt
       id
@@ -155,8 +393,44 @@ export const onDeleteTeam = /* GraphQL */ `
         __typename
       }
       name
-      owner
+      scores {
+        nextToken
+        __typename
+      }
+      teamRooms {
+        nextToken
+        __typename
+      }
       updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteTeamRoom = /* GraphQL */ `
+  subscription OnDeleteTeamRoom($filter: ModelSubscriptionTeamRoomFilterInput) {
+    onDeleteTeamRoom(filter: $filter) {
+      createdAt
+      id
+      room {
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      roomId
+      team {
+        approved
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      teamId
+      time
+      updatedAt
+      zoomLink
       __typename
     }
   }
@@ -167,6 +441,18 @@ export const onDeleteUser = /* GraphQL */ `
     $profileOwner: String
   ) {
     onDeleteUser(filter: $filter, profileOwner: $profileOwner) {
+      JUDGE_givenScores {
+        nextToken
+        __typename
+      }
+      JUDGE_room {
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      JUDGE_roomId
       allergies
       attendedEvents {
         nextToken
@@ -181,12 +467,12 @@ export const onDeleteUser = /* GraphQL */ `
       institution
       lastName
       profileOwner
+      role
       team {
         approved
         createdAt
         id
         name
-        owner
         updatedAt
         __typename
       }
@@ -218,6 +504,7 @@ export const onDeleteUserFoodEventAttendance = /* GraphQL */ `
       id
       updatedAt
       user {
+        JUDGE_roomId
         allergies
         checkedIn
         completedRegistration
@@ -228,6 +515,7 @@ export const onDeleteUserFoodEventAttendance = /* GraphQL */ `
         institution
         lastName
         profileOwner
+        role
         teamId
         updatedAt
         willEatMeals
@@ -259,12 +547,106 @@ export const onUpdateFoodEvent = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateTeam = /* GraphQL */ `
-  subscription OnUpdateTeam(
-    $filter: ModelSubscriptionTeamFilterInput
-    $owner: String
+export const onUpdateHackathon = /* GraphQL */ `
+  subscription OnUpdateHackathon(
+    $filter: ModelSubscriptionHackathonFilterInput
   ) {
-    onUpdateTeam(filter: $filter, owner: $owner) {
+    onUpdateHackathon(filter: $filter) {
+      createdAt
+      endDate
+      id
+      scores {
+        nextToken
+        __typename
+      }
+      scoringComponents {
+        friendlyName
+        id
+        isSidepot
+        __typename
+      }
+      scoringSidepots {
+        friendlyName
+        id
+        isSidepot
+        __typename
+      }
+      startDate
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateRoom = /* GraphQL */ `
+  subscription OnUpdateRoom($filter: ModelSubscriptionRoomFilterInput) {
+    onUpdateRoom(filter: $filter) {
+      createdAt
+      id
+      judges {
+        nextToken
+        __typename
+      }
+      name
+      teamRoom {
+        nextToken
+        __typename
+      }
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateScore = /* GraphQL */ `
+  subscription OnUpdateScore($filter: ModelSubscriptionScoreFilterInput) {
+    onUpdateScore(filter: $filter) {
+      createdAt
+      hackathon {
+        createdAt
+        endDate
+        id
+        startDate
+        updatedAt
+        __typename
+      }
+      hackathonId
+      id
+      judge {
+        JUDGE_roomId
+        allergies
+        checkedIn
+        completedRegistration
+        createdAt
+        email
+        firstName
+        id
+        institution
+        lastName
+        profileOwner
+        role
+        teamId
+        updatedAt
+        willEatMeals
+        __typename
+      }
+      judgeId
+      score
+      team {
+        approved
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      teamId
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateTeam = /* GraphQL */ `
+  subscription OnUpdateTeam($filter: ModelSubscriptionTeamFilterInput) {
+    onUpdateTeam(filter: $filter) {
       approved
       createdAt
       id
@@ -273,8 +655,44 @@ export const onUpdateTeam = /* GraphQL */ `
         __typename
       }
       name
-      owner
+      scores {
+        nextToken
+        __typename
+      }
+      teamRooms {
+        nextToken
+        __typename
+      }
       updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateTeamRoom = /* GraphQL */ `
+  subscription OnUpdateTeamRoom($filter: ModelSubscriptionTeamRoomFilterInput) {
+    onUpdateTeamRoom(filter: $filter) {
+      createdAt
+      id
+      room {
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      roomId
+      team {
+        approved
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      teamId
+      time
+      updatedAt
+      zoomLink
       __typename
     }
   }
@@ -285,6 +703,18 @@ export const onUpdateUser = /* GraphQL */ `
     $profileOwner: String
   ) {
     onUpdateUser(filter: $filter, profileOwner: $profileOwner) {
+      JUDGE_givenScores {
+        nextToken
+        __typename
+      }
+      JUDGE_room {
+        createdAt
+        id
+        name
+        updatedAt
+        __typename
+      }
+      JUDGE_roomId
       allergies
       attendedEvents {
         nextToken
@@ -299,12 +729,12 @@ export const onUpdateUser = /* GraphQL */ `
       institution
       lastName
       profileOwner
+      role
       team {
         approved
         createdAt
         id
         name
-        owner
         updatedAt
         __typename
       }
@@ -336,6 +766,7 @@ export const onUpdateUserFoodEventAttendance = /* GraphQL */ `
       id
       updatedAt
       user {
+        JUDGE_roomId
         allergies
         checkedIn
         completedRegistration
@@ -346,6 +777,7 @@ export const onUpdateUserFoodEventAttendance = /* GraphQL */ `
         institution
         lastName
         profileOwner
+        role
         teamId
         updatedAt
         willEatMeals
