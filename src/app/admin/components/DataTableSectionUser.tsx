@@ -40,19 +40,19 @@ interface DataTableProps {
 }
 
 const DataTableSectionUser = (props: DataTableProps) => {
-  const { control, handleSubmit } = useForm<Schema["User"]["type"]>();
+  const { control, handleSubmit, reset } = useForm<Schema["User"]["type"]>();
 
-  const onSubmit: SubmitHandler<Schema["User"]["type"]> = (data) => {
-    setEditingId("");
-    const strippedObject = userData.find((user) => user.email === data.email);
+  const onSubmit: SubmitHandler<Schema["User"]["type"]> = (
+    data,
+    userId: any,
+  ) => {
+    data.id = userId;
     console.log(data);
-    if (strippedObject) {
-      data.id = strippedObject.id ?? "";
+    try {
       tableDataMutation.mutate(data);
-      console.log(data);
-    } else {
-      console.error("User not found");
-      toast.error("❌ User cannot be found", {
+    } catch (error) {
+      console.error(error);
+      toast.error("❌ An error occured", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -62,14 +62,13 @@ const DataTableSectionUser = (props: DataTableProps) => {
         transition: Bounce,
       });
     }
+    setEditingId("");
   };
 
   const { tableHeaders, userData = [], tableDataMutation } = props;
 
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [recordToDeleteId, setRecordToDeleteId] = useState(
-    "" as string | undefined,
-  );
+  const [recordToDeleteId, setRecordToDeleteId] = useState("" as string);
   const [editingId, setEditingId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -109,8 +108,6 @@ const DataTableSectionUser = (props: DataTableProps) => {
   };
 
   const toggleEditMode = (rowId: string) => {
-    console.log(rowId);
-    console.log(editingId);
     if (rowId === undefined) {
       toast.error("❌ An error occurred", {
         position: "top-right",
@@ -126,6 +123,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
     } else {
       setEditingId(rowId);
     }
+    reset(); // reset form fields
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,9 +131,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
     setCurrentPage(1);
   };
 
-  const handleDeleteButton = async (index: number) => {
-    const actualIndex = startIndex + index; // calculate the actual index
-    const userId = userData[actualIndex].id;
+  const handleDeleteButton = async (userId: string) => {
     setShowDeletePopup(true);
     setRecordToDeleteId(userId);
   };
@@ -182,153 +178,156 @@ const DataTableSectionUser = (props: DataTableProps) => {
             ))}
           </div>
 
-          {currentPageData.map((rowData, rowIndex) => (
-            <div
-              key={rowIndex}
-              className={`flex w-full flex-row ${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
-            >
-              {editingId === rowData.id ? (
-                <>
-                  <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="text-md flex items-center justify-start overflow-x-auto border-r border-gray-300 font-light"
-                  >
+          {currentPageData.map(
+            (rowData: Partial<Schema["User"]["type"]>, rowIndex: number) => (
+              <div
+                key={rowIndex}
+                className={`flex w-full flex-row ${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
+              >
+                {editingId === rowData.id ? (
+                  <>
+                    <form
+                      onSubmit={handleSubmit((data) =>
+                        onSubmit(data, rowData.id as any),
+                      )}
+                      className="text-md flex items-center justify-start overflow-x-auto border-r border-gray-300 font-light"
+                    >
+                      <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                        <Controller
+                          key={rowData.id}
+                          name="lastName"
+                          control={control}
+                          defaultValue={rowData.lastName}
+                          render={({ field }) => (
+                            <input
+                              type="text"
+                              {...field}
+                              onChange={(e) => field.onChange(e.target.value)}
+                              value={field.value?.toString()}
+                              className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
+                            />
+                          )}
+                        />
+                      </div>
+                      <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                        <Controller
+                          key={rowData.id}
+                          name="firstName"
+                          control={control}
+                          defaultValue={rowData.firstName}
+                          render={({ field }) => (
+                            <input
+                              type="text"
+                              {...field}
+                              onChange={(e) => field.onChange(e.target.value)}
+                              value={field.value?.toString()}
+                              className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
+                            />
+                          )}
+                        />
+                      </div>
+                      <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                        <Controller
+                          key={rowData.id}
+                          name="role"
+                          control={control}
+                          defaultValue={rowData.role}
+                          render={({ field }) => (
+                            <select
+                              {...field}
+                              onChange={(e) => field.onChange(e.target.value)}
+                              value={field.value?.toString()}
+                              className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
+                            >
+                              <option value="Admin">Admin</option>
+                              <option value="Judge">Judge</option>
+                              <option value="Participant">Participant</option>
+                            </select>
+                          )}
+                        />
+                      </div>
+                      <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
+                        <Controller
+                          key={rowData.id}
+                          name="teamId"
+                          control={control}
+                          defaultValue={rowData.teamId}
+                          render={({ field }) => (
+                            <input
+                              type="text"
+                              {...field}
+                              onChange={(e) => field.onChange(e.target.value)}
+                              value={field.value?.toString()}
+                              className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
+                            />
+                          )}
+                        />
+                      </div>
+                      <div className={`${DATA_TABLE_CELL_STYLES} w-2/5`}>
+                        {rowData.email}
+                      </div>
+
+                      <div
+                        className={
+                          "text-md flex w-1/4 items-center justify-center overflow-x-auto border-r border-gray-300 p-3 py-4 font-light"
+                        }
+                      >
+                        <button className={EDIT_BUTTON_STYLES} type="submit">
+                          Save
+                        </button>
+                        <button
+                          className="text-dark-pink"
+                          onClick={() => toggleEditMode(rowData.id as string)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  </>
+                ) : (
+                  <div className="flex w-full">
                     <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
-                      <Controller
-                        key={rowData.id}
-                        name="lastName"
-                        control={control}
-                        defaultValue={rowData.lastName}
-                        render={({ field }) => (
-                          <input
-                            type="text"
-                            {...field}
-                            onChange={(e) => field.onChange(e.target.value)}
-                            className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
-                          />
-                        )}
-                      />
+                      {rowData.lastName}
                     </div>
                     <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
-                      <Controller
-                        key={rowData.id}
-                        name="firstName"
-                        control={control}
-                        defaultValue={rowData.firstName}
-                        render={({ field }) => (
-                          <input
-                            type="text"
-                            {...field}
-                            onChange={(e) => field.onChange(e.target.value)}
-                            className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
-                          />
-                        )}
-                      />
+                      {rowData.firstName}
                     </div>
                     <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
-                      <Controller
-                        key={rowData.id}
-                        name="role"
-                        control={control}
-                        defaultValue={rowData.role}
-                        render={({ field }) => (
-                          <select
-                            {...field}
-                            onChange={(e) => field.onChange(e.target.value)}
-                            className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
-                          >
-                            <option value="Admin">Admin</option>
-                            <option value="Judge">Judge</option>
-                            <option value="Participant">Participant</option>
-                          </select>
-                        )}
-                      />
+                      {rowData.role}
                     </div>
                     <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
-                      <Controller
-                        key={rowData.id}
-                        name="teamId"
-                        control={control}
-                        defaultValue={rowData.teamId}
-                        render={({ field }) => (
-                          <input
-                            type="text"
-                            {...field}
-                            onChange={(e) => field.onChange(e.target.value)}
-                            className={`${EDIT_MODE_TEXT_INPUT_STYLES}`}
-                          />
-                        )}
-                      />
+                      {rowData.teamId}
                     </div>
                     <div className={`${DATA_TABLE_CELL_STYLES} w-2/5`}>
-                      <Controller
-                        key={rowData.id}
-                        name="email"
-                        control={control}
-                        defaultValue={rowData.email}
-                        render={({ field }) => (
-                          <input
-                            type="text"
-                            {...field}
-                            onChange={(e) => field.onChange(e.target.value)}
-                            className="w-full"
-                          />
-                        )}
-                      />
+                      {rowData.email}
                     </div>
-
-                    <div className={`${DATA_TABLE_CELL_STYLES} w-1/4`}>
-                      <button className={EDIT_BUTTON_STYLES} type="submit">
-                        Save
+                    <div
+                      className={
+                        "text-md flex w-1/4 items-center justify-center overflow-x-auto border-r border-gray-300 p-3 py-4 font-light"
+                      }
+                    >
+                      {" "}
+                      <button
+                        className={EDIT_BUTTON_STYLES}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleEditMode(rowData.id as string);
+                        }}
+                      >
+                        Edit
                       </button>
                       <button
                         className="text-dark-pink"
-                        onClick={() => toggleEditMode(rowData.id)}
+                        onClick={() => handleDeleteButton(rowData.id as string)}
                       >
-                        Cancel
+                        Delete
                       </button>
                     </div>
-                  </form>
-                </>
-              ) : (
-                <div className="flex w-full">
-                  <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
-                    {rowData.lastName}
                   </div>
-                  <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
-                    {rowData.firstName}
-                  </div>
-                  <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
-                    {rowData.role}
-                  </div>
-                  <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
-                    {rowData.teamId}
-                  </div>
-                  <div className={`${DATA_TABLE_CELL_STYLES} w-2/5`}>
-                    {rowData.email}
-                  </div>
-                  <div className={`${DATA_TABLE_CELL_STYLES} w-1/4`}>
-                    {" "}
-                    <button
-                      className={EDIT_BUTTON_STYLES}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleEditMode(rowData.id);
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="text-dark-pink"
-                      onClick={() => handleDeleteButton(rowIndex)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            ),
+          )}
           <div role="row" className="h-10 bg-awesome-purple">
             {Array(tableHeaders.length + 1)
               .fill(null)
