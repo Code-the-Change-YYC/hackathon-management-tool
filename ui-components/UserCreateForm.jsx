@@ -1,6 +1,9 @@
 /* eslint-disable */
 "use client";
+
+import { generateClient } from "aws-amplify/api";
 import * as React from "react";
+
 import {
   Button,
   Flex,
@@ -8,9 +11,12 @@ import {
   SwitchField,
   TextField,
 } from "@aws-amplify/ui-react";
-import { fetchByPath, getOverrideProps, validateField } from "./utils";
-import { generateClient } from "aws-amplify/api";
+
 import { createUser } from "./graphql/mutations";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
+
+/* eslint-disable */
+
 const client = generateClient();
 export default function UserCreateForm(props) {
   const {
@@ -40,18 +46,18 @@ export default function UserCreateForm(props) {
   const [role, setRole] = React.useState(initialValues.role);
   const [email, setEmail] = React.useState(initialValues.email);
   const [institution, setInstitution] = React.useState(
-    initialValues.institution
+    initialValues.institution,
   );
   const [completedRegistration, setCompletedRegistration] = React.useState(
-    initialValues.completedRegistration
+    initialValues.completedRegistration,
   );
   const [allergies, setAllergies] = React.useState(initialValues.allergies);
   const [willEatMeals, setWillEatMeals] = React.useState(
-    initialValues.willEatMeals
+    initialValues.willEatMeals,
   );
   const [checkedIn, setCheckedIn] = React.useState(initialValues.checkedIn);
   const [profileOwner, setProfileOwner] = React.useState(
-    initialValues.profileOwner
+    initialValues.profileOwner,
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -82,7 +88,7 @@ export default function UserCreateForm(props) {
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue
+    getDisplayValue,
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -121,16 +127,16 @@ export default function UserCreateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
-                )
+                  runValidationTasks(fieldName, item),
+                ),
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(fieldName, modelFields[fieldName]),
             );
             return promises;
-          }, [])
+          }, []),
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;

@@ -8,14 +8,10 @@ export async function seedFoodEvents() {
     [
       () => {
         return client.models.FoodEvent.create({
-          name: "test Name",
-          description: "test Description",
-          start: "2016-07-20T17:30:15+05:30",
-          end: "2016-08-20T17:30:15+05:30",
-          totalGroupCount: 2,
+          // ... your event data
         });
       },
     ],
-    "Seed Food Events",
+    "FoodEvents", // Use a descriptive name for the operation
   );
 }

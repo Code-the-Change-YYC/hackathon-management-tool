@@ -1,11 +1,17 @@
 /* eslint-disable */
 "use client";
-import * as React from "react";
-import { Button, Flex, Grid } from "@aws-amplify/ui-react";
-import { fetchByPath, getOverrideProps, validateField } from "./utils";
+
 import { generateClient } from "aws-amplify/api";
-import { getUserFoodEventAttendance } from "./graphql/queries";
+import * as React from "react";
+
+import { Button, Flex, Grid } from "@aws-amplify/ui-react";
+
 import { updateUserFoodEventAttendance } from "./graphql/mutations";
+import { getUserFoodEventAttendance } from "./graphql/queries";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
+
+/* eslint-disable */
+
 const client = generateClient();
 export default function UserFoodEventAttendanceUpdateForm(props) {
   const {
@@ -48,7 +54,7 @@ export default function UserFoodEventAttendanceUpdateForm(props) {
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue
+    getDisplayValue,
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -76,16 +82,16 @@ export default function UserFoodEventAttendanceUpdateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
-                )
+                  runValidationTasks(fieldName, item),
+                ),
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(fieldName, modelFields[fieldName]),
             );
             return promises;
-          }, [])
+          }, []),
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;

@@ -1,11 +1,17 @@
 /* eslint-disable */
 "use client";
-import * as React from "react";
-import { Button, Flex, Grid, TextAreaField } from "@aws-amplify/ui-react";
-import { fetchByPath, getOverrideProps, validateField } from "./utils";
+
 import { generateClient } from "aws-amplify/api";
-import { getScore } from "./graphql/queries";
+import * as React from "react";
+
+import { Button, Flex, Grid, TextAreaField } from "@aws-amplify/ui-react";
+
 import { updateScore } from "./graphql/mutations";
+import { getScore } from "./graphql/queries";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
+
+/* eslint-disable */
+
 const client = generateClient();
 export default function ScoreUpdateForm(props) {
   const {
@@ -31,7 +37,7 @@ export default function ScoreUpdateForm(props) {
     setScore(
       typeof cleanValues.score === "string" || cleanValues.score === null
         ? cleanValues.score
-        : JSON.stringify(cleanValues.score)
+        : JSON.stringify(cleanValues.score),
     );
     setErrors({});
   };
@@ -57,7 +63,7 @@ export default function ScoreUpdateForm(props) {
   const runValidationTasks = async (
     fieldName,
     currentValue,
-    getDisplayValue
+    getDisplayValue,
   ) => {
     const value =
       currentValue && getDisplayValue
@@ -87,16 +93,16 @@ export default function ScoreUpdateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
-                )
+                  runValidationTasks(fieldName, item),
+                ),
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(fieldName, modelFields[fieldName]),
             );
             return promises;
-          }, [])
+          }, []),
         );
         if (validationResponses.some((r) => r.hasError)) {
           return;

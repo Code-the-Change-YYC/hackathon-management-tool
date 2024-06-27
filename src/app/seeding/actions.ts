@@ -4,32 +4,43 @@
 import { seedFoodEvents } from "./models/FoodEvent";
 import { seedHackathon } from "./models/Hackathon";
 
-const data_seeding = [seedHackathon, seedFoodEvents];
-
-export const getSeedingData = () => {
-  return ["Hackathon", "FoodEvents"];
+// Add functions here for more seeding
+const DATA_SEEDING = {
+  seedHackathon,
+  seedFoodEvents,
 };
 
-export const seedData = async () => {
+export const getSeedingData = () => {
+  return Object.keys(DATA_SEEDING);
+};
+
+export const seedData = async (selectedSeeds: string[]) => {
   let resultsLog = [];
 
-  for (const func of data_seeding) {
-    try {
-      const result = await func(); // Make sure the seeding functions return Promises
-      resultsLog.push({
-        name: func.name,
-        success: result.success,
-        message: result.message,
-      });
-    } catch (error) {
-      resultsLog.push({
-        name: func.name,
-        success: false,
-        message:
-          error instanceof Error ? error.message : "An unknown error occurred",
-      });
+  // Filter the DATA_SEEDING object to only include the selected seeds
+  const selectedFunctions = selectedSeeds.map((name) => DATA_SEEDING[name]);
+
+  for (const func of selectedFunctions) {
+    if (func) {
+      try {
+        const result = await func(); // Call the function directly
+        resultsLog.push({
+          name: func.name.replace("seed", ""), // Use the function's name property
+          success: result.success,
+          message: result.message,
+        });
+      } catch (error) {
+        resultsLog.push({
+          name: func.name.replace("seed", ""), // Use the function's name property
+          success: false,
+          message:
+            error instanceof Error
+              ? error.message
+              : "An unknown error occurred",
+        });
+      }
     }
   }
 
-  return resultsLog; // Return the results log
+  return resultsLog; // Return the resultsLog
 };
