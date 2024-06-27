@@ -7,7 +7,7 @@ import { seedHackathon } from "./models/Hackathon";
 // Define a type for the seeding functions
 type SeedingFunction = () => Promise<{ success: boolean; message: string }>;
 
-// Add an index signature to the DATA_SEEDING object
+// Add more functions here for data seeding
 const DATA_SEEDING: { [key: string]: SeedingFunction } = {
   seedHackathon,
   seedFoodEvents,
