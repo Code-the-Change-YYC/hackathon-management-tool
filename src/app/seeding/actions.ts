@@ -4,8 +4,11 @@
 import { seedFoodEvents } from "./models/FoodEvent";
 import { seedHackathon } from "./models/Hackathon";
 
-// Add functions here for more seeding
-const DATA_SEEDING = {
+// Define a type for the seeding functions
+type SeedingFunction = () => Promise<{ success: boolean; message: string }>;
+
+// Add an index signature to the DATA_SEEDING object
+const DATA_SEEDING: { [key: string]: SeedingFunction } = {
   seedHackathon,
   seedFoodEvents,
 };
@@ -17,21 +20,19 @@ export const getSeedingData = () => {
 export const seedData = async (selectedSeeds: string[]) => {
   let resultsLog = [];
 
-  // Filter the DATA_SEEDING object to only include the selected seeds
-  const selectedFunctions = selectedSeeds.map((name) => DATA_SEEDING[name]);
-
-  for (const func of selectedFunctions) {
+  for (const seedName of selectedSeeds) {
+    const func = DATA_SEEDING[seedName];
     if (func) {
       try {
-        const result = await func(); // Call the function directly
+        const result = await func();
         resultsLog.push({
-          name: func.name.replace("seed", ""), // Use the function's name property
+          name: seedName.replace("seed", ""),
           success: result.success,
           message: result.message,
         });
       } catch (error) {
         resultsLog.push({
-          name: func.name.replace("seed", ""), // Use the function's name property
+          name: seedName.replace("seed", ""),
           success: false,
           message:
             error instanceof Error
@@ -42,5 +43,5 @@ export const seedData = async (selectedSeeds: string[]) => {
     }
   }
 
-  return resultsLog; // Return the resultsLog
+  return resultsLog;
 };
