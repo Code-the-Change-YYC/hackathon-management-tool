@@ -2,8 +2,24 @@ import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 import type { AppSyncIdentityCognito } from "aws-lambda";
 
+import { ConfirmForgotPasswordRequestFilterSensitiveLog } from "@aws-sdk/client-cognito-identity-provider";
+
 import type { Schema } from "../../../data/resource";
-import { listHackathons } from "./graphql/queries";
+import { ScoreComponentTypeInput } from "./graphql/API";
+import {
+  deleteScore,
+  deleteTeam,
+  deleteTeamRoom,
+  deleteUser,
+  updateHackathon,
+} from "./graphql/mutations";
+import {
+  listHackathons,
+  listScores,
+  listTeamRooms,
+  listTeams,
+  listUsers,
+} from "./graphql/queries";
 
 Amplify.configure(
   {
@@ -53,7 +69,6 @@ export const handler: Handler = async (event) => {
       scoreComponents,
       scoringSidepots,
     } = event.arguments;
-    console.log(event.arguments);
     if (safetyCheck !== "deletehackathon") {
       return {
         statusCode: 403,
@@ -61,94 +76,198 @@ export const handler: Handler = async (event) => {
       };
     }
     // hackathon-related data
-    const hackathonData = (
-      await client.graphql({
-        query: listHackathons,
-      })
-    ).data.listHackathons.items[0];
+    const hackathonData = await client.graphql({
+      query: listHackathons,
+    });
+    const HackathonItems = hackathonData.data.listHackathons.items;
+    if (HackathonItems.length > 1) {
+      return {
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+      };
+    }
 
+    // Assuming there is only 1 Hackathon
+    const HackathonID = HackathonItems[0].id;
     // Resetting Users variable
     const resettingUsers: boolean = resetUsers ?? false;
     // Reset teams if users are being reset
-    const resettingTeams: boolean = resetTeams || resettingUsers;
+    const resettingTeams: boolean = (resetTeams ?? false) || resettingUsers;
     // Reset Rooms if teams are being reset
-    const resettingRooms: boolean = resetRooms || resettingTeams;
+    const resettingRooms: boolean = (resetRooms ?? false) || resettingTeams;
     // Reset scores if teams are being reset
-    const resettingScores: boolean = resetScores || resettingTeams;
+    const resettingScores: boolean = (resetScores ?? false) || resettingTeams;
+
+    // Reset Users
+    if (resettingUsers) {
+      console.log("resetting all users");
+      const usersResponse = await client.graphql({
+        query: listUsers,
+      });
+      const users = usersResponse.data.listUsers.items;
+      for (const user of users) {
+        const id = user.id;
+        if (user.role === "Participant") {
+          await client.graphql({
+            query: deleteUser,
+            variables: {
+              input: {
+                id: id,
+              },
+            },
+          });
+        }
+      }
+    }
+
+    // Reset Teams
+    if (resettingTeams) {
+      console.log("resetting all teams");
+      const teamsResponse = await client.graphql({
+        query: listTeams,
+      });
+      const teams = teamsResponse.data.listTeams.items;
+      for (const team of teams) {
+        const id = team.id;
+        await client.graphql({
+          query: deleteTeam,
+          variables: {
+            input: {
+              id: id,
+            },
+          },
+        });
+      }
+    }
 
     // Reset rooms
     if (resettingRooms) {
       console.log("resetting all teamRooms");
-      const teamRooms = (await client.models.TeamRoom.list()).data;
-      teamRooms.forEach((room) => {
+      const teamRooms = (
+        await client.graphql({
+          query: listTeamRooms,
+        })
+      ).data.listTeamRooms.items;
+      teamRooms.forEach(async (room) => {
         const id = room.id;
-        client.models.TeamRoom.delete({ id: id });
+        await client.graphql({
+          query: deleteTeamRoom,
+          variables: {
+            input: {
+              id: id,
+            },
+          },
+        });
       });
     }
 
     // Reset Scores
     if (resettingScores) {
-      console.log("resetting all resetScores");
-
-      const scores = (await client.models.Score.list()).data;
-      scores.forEach((score) => {
+      console.log("resetting all scores");
+      const scoresResponse = await client.graphql({
+        query: listScores,
+      });
+      const scores = scoresResponse.data.listScores.items;
+      for (const score of scores) {
         const id = score.id;
-        client.models.Score.delete({ id: id });
-      });
-    }
-
-    // Reset Users
-    if (resettingUsers) {
-      console.log("resetting all resetUsers");
-
-      const users = (await client.models.User.list()).data;
-      users.forEach((user) => {
-        const id = user.id;
-        const role = user.role;
-        if (role === "Participant") {
-          client.models.User.delete({ id: id });
-        }
-      });
+        await client.graphql({
+          query: deleteScore,
+          variables: {
+            input: {
+              id: id,
+            },
+          },
+        });
+      }
     }
 
     // Reset Teams
     if (resetTeams) {
-      console.log("resetting all resetTeams");
-
-      const teams = (await client.models.Team.list()).data;
-      teams.forEach((team) => {
-        const id = team.id;
-        client.models.Team.delete({ id: id });
+      console.log("resetting all teams");
+      const teamsResponse = await client.graphql({
+        query: listTeams,
       });
+      const teams = teamsResponse.data.listTeams.items;
+      for (const team of teams) {
+        const id = team.id;
+        await client.graphql({
+          query: deleteTeam,
+          variables: {
+            input: {
+              id: id,
+            },
+          },
+        });
+      }
     }
 
     // Edit start date
     if (startDate) {
-      console.log("editting startDate");
-
-      client.models.Hackathon.update({
-        id: hackathonData.id,
-        startDate: startDate,
+      console.log("editing start date");
+      await client.graphql({
+        query: updateHackathon,
+        variables: {
+          input: {
+            id: HackathonID,
+            startDate: startDate,
+          },
+        },
       });
     }
 
     // Edit end date
     if (endDate) {
-      console.log("editting endDate");
-
-      client.models.Hackathon.update({
-        id: hackathonData.id,
-        endDate: endDate,
+      console.log("editing end date");
+      await client.graphql({
+        query: updateHackathon,
+        variables: {
+          input: {
+            id: HackathonID,
+            endDate: endDate,
+          },
+        },
       });
     }
 
-    // Edit scoring component
+    // edit the scoringComponents
     if (scoreComponents) {
-      console.log("editting scoreComponents");
-      console.log(scoreComponents);
-      console.log(typeof scoreComponents);
+      console.log("editing scoreComponents data");
+      console.log(scoreComponents as string);
+
+      const scoreComponentsArray: ScoreComponentTypeInput[] =
+        typeof scoreComponents === "string"
+          ? JSON.parse(scoreComponents)
+          : scoreComponents;
+      await client.graphql({
+        query: updateHackathon,
+        variables: {
+          input: {
+            id: HackathonID,
+            scoringComponents: scoreComponentsArray,
+          },
+        },
+      });
     }
-    // Edit side pots
+
+    // edit the scoringSidepots
+    if (scoringSidepots) {
+      console.log("editing scoringSidepots data");
+      console.log(scoringSidepots);
+
+      const scoringSidepotsArray: ScoreComponentTypeInput[] =
+        typeof scoringSidepots === "string"
+          ? JSON.parse(scoringSidepots)
+          : scoringSidepots;
+      await client.graphql({
+        query: updateHackathon,
+        variables: {
+          input: {
+            id: HackathonID,
+            scoringSidepots: scoringSidepotsArray,
+          },
+        },
+      });
+    }
 
     return {
       statusCode: 200,

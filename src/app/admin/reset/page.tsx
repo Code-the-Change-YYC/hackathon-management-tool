@@ -35,6 +35,7 @@ export default function Teams() {
     const { data: statusCode, errors } = await client.mutations.ResetHackathon({
       ...formData,
     });
+    console.log({ ...formData });
     if (errors) {
       console.log(errors);
     }
