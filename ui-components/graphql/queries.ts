@@ -40,101 +40,6 @@ export const getFoodEvent = /* GraphQL */ `
     }
   }
 `;
-export const getHackathon = /* GraphQL */ `
-  query GetHackathon($id: ID!) {
-    getHackathon(id: $id) {
-      createdAt
-      endDate
-      id
-      scores {
-        nextToken
-        __typename
-      }
-      scoringComponents {
-        friendlyName
-        id
-        isSidepot
-        __typename
-      }
-      scoringSidepots {
-        friendlyName
-        id
-        isSidepot
-        __typename
-      }
-      startDate
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const getRoom = /* GraphQL */ `
-  query GetRoom($id: ID!) {
-    getRoom(id: $id) {
-      createdAt
-      id
-      judges {
-        nextToken
-        __typename
-      }
-      name
-      teamRoom {
-        nextToken
-        __typename
-      }
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const getScore = /* GraphQL */ `
-  query GetScore($id: ID!) {
-    getScore(id: $id) {
-      createdAt
-      hackathon {
-        createdAt
-        endDate
-        id
-        startDate
-        updatedAt
-        __typename
-      }
-      hackathonId
-      id
-      judge {
-        JUDGE_roomId
-        allergies
-        checkedIn
-        completedRegistration
-        createdAt
-        email
-        firstName
-        id
-        institution
-        lastName
-        profileOwner
-        role
-        teamId
-        updatedAt
-        willEatMeals
-        __typename
-      }
-      judgeId
-      score
-      team {
-        approved
-        createdAt
-        id
-        name
-        updatedAt
-        __typename
-      }
-      teamId
-      updatedAt
-      __typename
-    }
-  }
-`;
 export const getTeam = /* GraphQL */ `
   query GetTeam($id: ID!) {
     getTeam(id: $id) {
@@ -146,44 +51,8 @@ export const getTeam = /* GraphQL */ `
         __typename
       }
       name
-      scores {
-        nextToken
-        __typename
-      }
-      teamRooms {
-        nextToken
-        __typename
-      }
+      owner
       updatedAt
-      __typename
-    }
-  }
-`;
-export const getTeamRoom = /* GraphQL */ `
-  query GetTeamRoom($id: ID!) {
-    getTeamRoom(id: $id) {
-      createdAt
-      id
-      room {
-        createdAt
-        id
-        name
-        updatedAt
-        __typename
-      }
-      roomId
-      team {
-        approved
-        createdAt
-        id
-        name
-        updatedAt
-        __typename
-      }
-      teamId
-      time
-      updatedAt
-      zoomLink
       __typename
     }
   }
@@ -191,18 +60,6 @@ export const getTeamRoom = /* GraphQL */ `
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
-      JUDGE_givenScores {
-        nextToken
-        __typename
-      }
-      JUDGE_room {
-        createdAt
-        id
-        name
-        updatedAt
-        __typename
-      }
-      JUDGE_roomId
       allergies
       attendedEvents {
         nextToken
@@ -217,12 +74,12 @@ export const getUser = /* GraphQL */ `
       institution
       lastName
       profileOwner
-      role
       team {
         approved
         createdAt
         id
         name
+        owner
         updatedAt
         __typename
       }
@@ -252,7 +109,6 @@ export const getUserFoodEventAttendance = /* GraphQL */ `
       id
       updatedAt
       user {
-        JUDGE_roomId
         allergies
         checkedIn
         completedRegistration
@@ -263,7 +119,6 @@ export const getUserFoodEventAttendance = /* GraphQL */ `
         institution
         lastName
         profileOwner
-        role
         teamId
         updatedAt
         willEatMeals
@@ -305,121 +160,6 @@ export const listFoodEvents = /* GraphQL */ `
     }
   }
 `;
-export const listHackathons = /* GraphQL */ `
-  query ListHackathons(
-    $filter: ModelHackathonFilterInput
-    $id: ID
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listHackathons(
-      filter: $filter
-      id: $id
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        createdAt
-        endDate
-        id
-        startDate
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const listRooms = /* GraphQL */ `
-  query ListRooms(
-    $filter: ModelRoomFilterInput
-    $id: ID
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listRooms(
-      filter: $filter
-      id: $id
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        createdAt
-        id
-        name
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const listScores = /* GraphQL */ `
-  query ListScores(
-    $filter: ModelScoreFilterInput
-    $id: ID
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listScores(
-      filter: $filter
-      id: $id
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        createdAt
-        hackathonId
-        id
-        judgeId
-        score
-        teamId
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const listTeamRooms = /* GraphQL */ `
-  query ListTeamRooms(
-    $filter: ModelTeamRoomFilterInput
-    $id: ID
-    $limit: Int
-    $nextToken: String
-    $sortDirection: ModelSortDirection
-  ) {
-    listTeamRooms(
-      filter: $filter
-      id: $id
-      limit: $limit
-      nextToken: $nextToken
-      sortDirection: $sortDirection
-    ) {
-      items {
-        createdAt
-        id
-        roomId
-        teamId
-        time
-        updatedAt
-        zoomLink
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
 export const listTeams = /* GraphQL */ `
   query ListTeams(
     $filter: ModelTeamFilterInput
@@ -440,6 +180,7 @@ export const listTeams = /* GraphQL */ `
         createdAt
         id
         name
+        owner
         updatedAt
         __typename
       }
@@ -492,7 +233,6 @@ export const listUsers = /* GraphQL */ `
       sortDirection: $sortDirection
     ) {
       items {
-        JUDGE_roomId
         allergies
         checkedIn
         completedRegistration
@@ -503,7 +243,6 @@ export const listUsers = /* GraphQL */ `
         institution
         lastName
         profileOwner
-        role
         teamId
         updatedAt
         willEatMeals

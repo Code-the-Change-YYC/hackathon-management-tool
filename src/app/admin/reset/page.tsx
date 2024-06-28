@@ -6,8 +6,6 @@ import { useState } from "react";
 
 import type { Schema } from "@/amplify/data/resource";
 
-import HackathonCreateForm from "../../../../ui-components/HackathonCreateForm";
-
 export default function Teams() {
   const client = generateClient<Schema>();
 
@@ -15,7 +13,7 @@ export default function Teams() {
 
   const [formData, setFormData] = useState<Handler>({} as Handler);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -46,7 +44,6 @@ export default function Teams() {
 
   return (
     <>
-      <HackathonCreateForm></HackathonCreateForm>
       <form onSubmit={handleSubmit}>
         <label>
           Score Components (JSON):
@@ -54,6 +51,19 @@ export default function Teams() {
             name="scoreComponents"
             value={formData.scoreComponents?.toString()}
             onChange={handleChange}
+            defaultValue={`
+              [
+                {
+                  id: "Cool beans, this should be a uuid",
+                  friendlyName: "no name for you",
+                  isSidepot: false,
+                },
+                {
+                  id: "uuid v2",
+                  friendlyName: "I love eating free food",
+                  isSidepot: false,
+                },
+              ]`}
           />
         </label>
         <label>
