@@ -75,4 +75,5 @@ export async function seedFoodEvents() {
 
 ### Trouble-Shooting
 
-- If you have the error message: `no federated jwt`, it means you need to login/sign up, you can even have the user be just a participant, they will still have the privellege to run the seeding page and actions. But, you need to be logged in.
+- `no federated jwt`, you need to login/sign up to do data seeding.
+- `Not Authorized to access createHackathon on type Mutation` You can only seed data that your user has privellege to seed, setting your user to Admin using the amazon web console in Cognito is an easy fix to seed all data.

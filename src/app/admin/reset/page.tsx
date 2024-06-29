@@ -9,6 +9,8 @@ import { useState } from "react";
 
 import type { Schema } from "@/amplify/data/resource";
 
+import { getHackathonEditCode } from "./actions";
+
 export default function Teams() {
   const client = generateClient<Schema>();
 
@@ -27,9 +29,9 @@ export default function Teams() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // This will prevent the default form submit action which is to refresh the page
 
-    if (formData.safetyCheck !== process.env.EDIT_HACKATHON_CODE) {
+    if (formData.safetyCheck !== (await getHackathonEditCode())) {
       console.log(
-        `must complete safety check, looking for ${process.env.EDIT_HACKATHON_CODE}`,
+        `must complete safety check, looking for ${await getHackathonEditCode()}`,
       );
       return;
     }
@@ -38,12 +40,10 @@ export default function Teams() {
     const { data: statusCode, errors } = await client.mutations.ResetHackathon({
       ...formData,
     });
-    console.log({ ...formData });
     if (errors) {
       console.log(errors);
     }
-    console.log(statusCode);
-    console.log("Form Data Submitted:", formData, statusCode);
+    console.log("Form Data Submitted:", formData, statusCode?.statusCode);
     return;
   };
 

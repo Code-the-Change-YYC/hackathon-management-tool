@@ -31,6 +31,7 @@ const DataSeeder = () => {
 
   const handleSeedData = async () => {
     setIsSeeding(true);
+    setResultsLog([]);
     try {
       const results: SeedResult[] = await seedData(selectedSeeds);
       setResultsLog(results);

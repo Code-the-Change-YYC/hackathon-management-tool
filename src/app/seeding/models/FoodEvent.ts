@@ -7,7 +7,8 @@ export async function seedFoodEvents() {
   return await withDatabaseOperations(
     [
       () => {
-        console.log("hi there");
+        console.log("Food Event 1");
+
         return client.models.FoodEvent.create({
           name: "Eat It",
           description: "Don't wanna argue, I don't wanna debate",
@@ -17,7 +18,7 @@ export async function seedFoodEvents() {
         });
       },
       () => {
-        console.log("hi there 2");
+        console.log("Food Event 2");
 
         return client.models.FoodEvent.create({
           name: "The White Album",

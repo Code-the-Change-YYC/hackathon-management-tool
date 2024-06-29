@@ -1,8 +1,14 @@
 // dbUtils.ts
 
+// Defined type for the operation result of CRUD application data Amplify
+export type OperationResult = {
+  data?: any;
+  errors?: any[];
+};
+
 // Higher-order function for handling common database operations
 export async function withDatabaseOperations<T>(
-  operations: (() => Promise<T>)[],
+  operations: (() => Promise<OperationResult>)[],
   operationName: string,
 ): Promise<{
   success: boolean;
@@ -14,7 +20,11 @@ export async function withDatabaseOperations<T>(
 
   for (const operation of operations) {
     try {
-      const data = await operation();
+      const { data, errors } = await operation();
+
+      if (errors && errors.length > 0) {
+        throw new Error(errors.map((e) => e.message).join("\n"));
+      }
       results.push({
         success: true,
         message: "Operation successful",
