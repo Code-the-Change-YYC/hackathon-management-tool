@@ -66,17 +66,18 @@ export const handler: Handler = async (event) => {
       scoreComponents,
       scoringSidepots,
     } = event.arguments;
-    if (safetyCheck !== "deletehackathon") {
+    if (safetyCheck !== process.env.EDIT_HACKATHON_CODE) {
       return {
         statusCode: 403,
         headers: { "Content-Type": "application/json" },
       };
     }
-    // hackathon-related data
-    const hackathonData = await client.graphql({
-      query: listHackathons,
-    });
-    const HackathonItems = hackathonData.data.listHackathons.items;
+    // get the current hackathon model data items
+    const HackathonItems = (
+      await client.graphql({
+        query: listHackathons,
+      })
+    ).data.listHackathons.items;
 
     // Assuming there is only 1 Hackathon
     if (HackathonItems.length === 0) {

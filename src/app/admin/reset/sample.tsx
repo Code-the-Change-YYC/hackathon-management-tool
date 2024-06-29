@@ -27,8 +27,10 @@ export default function Teams() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // This will prevent the default form submit action which is to refresh the page
 
-    if (formData.safetyCheck !== "deletehackathon") {
-      console.log("must complete safety check");
+    if (formData.safetyCheck !== process.env.EDIT_HACKATHON_CODE) {
+      console.log(
+        `must complete safety check, looking for ${process.env.EDIT_HACKATHON_CODE}`,
+      );
       return;
     }
 
