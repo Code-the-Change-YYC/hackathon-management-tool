@@ -1,5 +1,8 @@
 "use client";
 
+// THIS IS A SAMPLE PAGE TO SEE HOW TO RESET/EDIT A HACKTHON
+// TO VIEW THIS PAGE, RENAME IT TO PAGE.TSX
+// AFTER MAKING THE REAL PAGE, PLEASE DELETE THIS SAMPLE
 import { generateClient } from "aws-amplify/api";
 import type React from "react";
 import { useState } from "react";
@@ -51,18 +54,17 @@ export default function Teams() {
             name="scoreComponents"
             value={formData.scoreComponents?.toString()}
             onChange={handleChange}
-            defaultValue={`
-              [
+            defaultValue={`[
                 {
                   id: "Cool beans, this should be a uuid",
                   friendlyName: "no name for you",
-                  isSidepot: false,
+                  isSidepot: false
                 },
                 {
                   id: "uuid v2",
                   friendlyName: "I love eating free food",
-                  isSidepot: false,
-                },
+                  isSidepot: false
+                }
               ]`}
           />
         </label>

@@ -1,11 +1,8 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
-import type { AppSyncIdentityCognito } from "aws-lambda";
-
-import { ConfirmForgotPasswordRequestFilterSensitiveLog } from "@aws-sdk/client-cognito-identity-provider";
 
 import type { Schema } from "../../../data/resource";
-import { ScoreComponentTypeInput } from "./graphql/API";
+import type { ScoreComponentTypeInput } from "./graphql/API";
 import {
   deleteScore,
   deleteTeam,
@@ -80,15 +77,18 @@ export const handler: Handler = async (event) => {
       query: listHackathons,
     });
     const HackathonItems = hackathonData.data.listHackathons.items;
-    if (HackathonItems.length > 1) {
+
+    // Assuming there is only 1 Hackathon
+    if (HackathonItems.length === 0) {
+      console.log("Not a single Hackathon, please create one");
       return {
         statusCode: 400,
         headers: { "Content-Type": "application/json" },
       };
     }
-
-    // Assuming there is only 1 Hackathon
+    // Assuming the first Hackathon is the right one
     const HackathonID = HackathonItems[0].id;
+
     // Resetting Users variable
     const resettingUsers: boolean = resetUsers ?? false;
     // Reset teams if users are being reset
@@ -107,6 +107,7 @@ export const handler: Handler = async (event) => {
       const users = usersResponse.data.listUsers.items;
       for (const user of users) {
         const id = user.id;
+        // only delete the participants
         if (user.role === "Participant") {
           await client.graphql({
             query: deleteUser,
@@ -181,26 +182,6 @@ export const handler: Handler = async (event) => {
       }
     }
 
-    // Reset Teams
-    if (resetTeams) {
-      console.log("resetting all teams");
-      const teamsResponse = await client.graphql({
-        query: listTeams,
-      });
-      const teams = teamsResponse.data.listTeams.items;
-      for (const team of teams) {
-        const id = team.id;
-        await client.graphql({
-          query: deleteTeam,
-          variables: {
-            input: {
-              id: id,
-            },
-          },
-        });
-      }
-    }
-
     // Edit start date
     if (startDate) {
       console.log("editing start date");
@@ -234,6 +215,7 @@ export const handler: Handler = async (event) => {
       console.log("editing scoreComponents data");
       console.log(scoreComponents as string);
 
+      // get the score Components Array from the JSON input
       const scoreComponentsArray: ScoreComponentTypeInput[] =
         typeof scoreComponents === "string"
           ? JSON.parse(scoreComponents)
@@ -254,6 +236,7 @@ export const handler: Handler = async (event) => {
       console.log("editing scoringSidepots data");
       console.log(scoringSidepots);
 
+      // get the score side pots Array from the JSON input
       const scoringSidepotsArray: ScoreComponentTypeInput[] =
         typeof scoringSidepots === "string"
           ? JSON.parse(scoringSidepots)
