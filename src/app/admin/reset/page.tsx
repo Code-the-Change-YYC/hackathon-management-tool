@@ -18,8 +18,11 @@ export default function Teams() {
 
   const [formData, setFormData] = useState<Handler>({} as Handler);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
@@ -76,6 +79,18 @@ export default function Teams() {
             name="scoringSidepots"
             value={formData.scoringSidepots?.toString()}
             onChange={handleChange}
+            defaultValue={`[
+              {
+                id: "Cool beans, this should be a uuid",
+                friendlyName: "no name for you",
+                isSidepot: false
+              },
+              {
+                id: "uuid v2",
+                friendlyName: "I love eating free food",
+                isSidepot: false
+              }
+            ]`}
           />
         </label>
         <label>
