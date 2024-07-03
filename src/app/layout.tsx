@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "react-toastify/dist/ReactToastify.css";
 
-import Providers from "@/app/QueryProvider";
 import "@/app/globals.css";
 import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
+import Provider from "@/components/contexts/Provider";
+import ToastProvider from "@/components/contexts/ToastProvider";
 import { UserContextProvider } from "@/components/contexts/UserContext";
-// import { UserContextProvider } from "@/components/contexts/UserContext";
 import MainLayout from "@/components/layouts/MainLayout";
 import "@aws-amplify/ui-react/styles.css";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -34,13 +34,15 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       <body
         className={`${Omnes.className} flex size-full min-h-screen flex-col`}
       >
-        <Providers>
-          <ConfigureAmplifyClientSide />
-          <UserContextProvider>
-            <MainLayout>{children}</MainLayout>
-          </UserContextProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Providers>
+        <ToastProvider>
+          <Provider>
+            <ConfigureAmplifyClientSide />
+            <UserContextProvider>
+              <MainLayout>{children}</MainLayout>
+            </UserContextProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Provider>
+        </ToastProvider>
       </body>
     </html>
   );
