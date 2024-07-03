@@ -42,11 +42,15 @@ interface DataTableProps {
 const DataTableSectionUser = (props: DataTableProps) => {
   const { control, handleSubmit, reset } = useForm<Schema["User"]["type"]>();
 
-  const onSubmit: SubmitHandler<Schema["User"]["type"]> = (
-    data,
-    userId: any,
-  ) => {
-    data.id = userId;
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [recordToDeleteId, setRecordToDeleteId] = useState("" as string);
+  const [editingId, setEditingId] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const onSubmit: SubmitHandler<Schema["User"]["type"]> = (data) => {
+    data.id = editingId;
     console.log(data);
     try {
       tableDataMutation.mutate(data);
@@ -65,16 +69,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
     setEditingId("");
   };
 
-  const { tableHeaders, userData = [], tableDataMutation } = props;
-
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [recordToDeleteId, setRecordToDeleteId] = useState("" as string);
-  const [editingId, setEditingId] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPageData, setCurrentPageData] =
-    useState<Array<Partial<Schema["User"]["type"]>>>(userData);
+  const { tableHeaders, userData, tableDataMutation } = props;
 
   const filteredData = useMemo(() => {
     return userData.filter((rowData) =>
@@ -92,8 +87,6 @@ const DataTableSectionUser = (props: DataTableProps) => {
   useEffect(() => {
     const totalPages = Math.ceil(filteredData.length / entries_per_page);
     const currentPageData = filteredData.slice(startIndex, endIndex);
-    // // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // .map(({ id, ...allOtherFields }) => allOtherFields);
 
     setTotalPages(totalPages);
     setCurrentPageData(currentPageData);
@@ -135,6 +128,9 @@ const DataTableSectionUser = (props: DataTableProps) => {
     setShowDeletePopup(true);
     setRecordToDeleteId(userId);
   };
+
+  const [currentPageData, setCurrentPageData] =
+    useState<Array<Partial<Schema["User"]["type"]>>>(userData);
 
   return (
     <div className="flex justify-center">
@@ -187,9 +183,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
                 {editingId === rowData.id ? (
                   <>
                     <form
-                      onSubmit={handleSubmit((data) =>
-                        onSubmit(data, rowData.id as any),
-                      )}
+                      onSubmit={handleSubmit((data) => onSubmit(data))}
                       className="text-md flex items-center justify-start overflow-x-auto border-r border-gray-300 font-light"
                     >
                       <div className={`${DATA_TABLE_CELL_STYLES} w-1/6`}>
