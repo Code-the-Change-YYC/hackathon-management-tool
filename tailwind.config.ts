@@ -26,6 +26,7 @@ const config: Config = {
         "pastel-pink": "#FFD2DC",
         "dark-pink": "#FF4D6F",
         "pastel-green": "#BAFBE4",
+        "dark-grey": "#333333",
         "medium-grey": "#D9D9D9",
         "light-grey": "#F2F2F2",
       },
@@ -35,6 +36,23 @@ const config: Config = {
     },
   },
 
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        "::-webkit-scrollbar": {
+          width: "2px",
+          height: "6px",
+        },
+        "::-webkit-scrollbar-thumb": {
+          backgroundColor: "#FF4D6F",
+        },
+        "::-webkit-scrollbar-track": {
+          backgroundColor: "#D2D2D2",
+        },
+      };
+
+      addUtilities(newUtilities, ["responsive", "hover"]);
+    },
+  ],
 };
 export default config;
