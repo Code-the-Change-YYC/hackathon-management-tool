@@ -26,7 +26,7 @@ const schema = a
           .default(false)
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read"]),
-            allow.groups(["Admin"]).to(["read", "update"]),
+            allow.groups(["Admin"]).to(["read", "update", "delete"]),
           ]),
         teamId: a
           .id()
@@ -48,6 +48,7 @@ const schema = a
         JUDGE_room: a.belongsTo("Room", "JUDGE_roomId"),
       })
       .authorization((allow) => [
+        allow.groups(["Admin"]).to(["read", "update"]),
         allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
