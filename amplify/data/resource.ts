@@ -103,7 +103,7 @@ const schema = a
       })
       .authorization((allow) => [
         allow.group("Admin").to(["create", "read", "update", "delete"]),
-        allow.group("Judge").to(["create", "update"]),
+        allow.group("Judge").to(["create", "read", "update"]),
       ]),
     Room: a
       .model({
@@ -113,7 +113,7 @@ const schema = a
         judges: a.hasMany("User", "JUDGE_roomId"),
       })
       .authorization((allow) => [
-        allow.group("Admin").to(["read", "update"]),
+        allow.group("Admin").to(["read", "create", "update"]),
         allow.authenticated().to(["read"]),
       ]),
     // For handling a many to many relationship of teams and rooms
@@ -127,7 +127,10 @@ const schema = a
         team: a.belongsTo("Team", "teamId"),
         room: a.belongsTo("Room", "roomId"),
       })
-      .authorization((allow) => [allow.authenticated().to(["read"])]),
+      .authorization((allow) => [
+        allow.authenticated().to(["read"]),
+        allow.group("Admin").to(["read", "create", "update"]),
+      ]),
     // Table to provide metadata for the hackathon
     Hackathon: a
       .model({

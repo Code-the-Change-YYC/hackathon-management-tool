@@ -24,11 +24,13 @@ const config: Config = {
         "fuzzy-peach": "#FFD7C5",
         blackish: "#222222",
         "pastel-pink": "#FFD2DC",
+        "medium-pink": "#FF859C",
         "dark-pink": "#FF4D6F",
         "pastel-green": "#BAFBE4",
         "dark-grey": "#333333",
         "medium-grey": "#D9D9D9",
         "light-grey": "#F2F2F2",
+        "dashboard-grey": "#E5E5E5",
       },
       borderRadius: {
         "20": "20px",
