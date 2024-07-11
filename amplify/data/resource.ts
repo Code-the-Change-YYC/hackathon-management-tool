@@ -1,3 +1,5 @@
+import { Schedule } from "aws-cdk-lib/aws-events";
+
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { AddUserToGroup } from "@/amplify/function/BusinessLogic/AddUserToGroup/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
@@ -7,6 +9,8 @@ import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMess
 import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+
+import { ScheduleTeamsAndJudges } from "../function/BusinessLogic/ScheduleTeamsAndJudges/resource";
 
 const schema = a
   .schema({
@@ -224,6 +228,16 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(CreateTeamWithCode)),
+    ScheduleTeamsAndJudges: a
+      .mutation()
+      .arguments({
+        numOfTeams: a.integer().required(),
+        numOfJudges: a.integer().required(),
+        judgingSessionsPerTeam: a.integer().required(),
+      })
+      .returns(a.ref("GenericFunctionResponse"))
+      .authorization((allow) => [allow.group("Admin")])
+      .handler(a.handler.function(ScheduleTeamsAndJudges)),
 
     // Custom resolvers
     SetUserAsCheckedIn: a
