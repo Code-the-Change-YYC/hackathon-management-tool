@@ -3,10 +3,10 @@
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { QrReader } from "react-qr-reader";
 import { toast } from "react-toastify";
 
 import type { Schema } from "@/amplify/data/resource";
+import { Scanner } from "@yudiel/react-qr-scanner";
 
 import {
   setUserAsAttendedAtFoodEventFromCode,
@@ -150,11 +150,11 @@ const AdminFoodTickets = () => {
               ))}
             </select>
             <div className={QR_READER_CONTAINER_STYLES}>
-              <QrReader
+              <Scanner
                 scanDelay={50}
-                onResult={(result) => {
+                onScan={(result) => {
                   if (result) {
-                    setScanResult(result.getText());
+                    setScanResult(result[0].rawValue);
                   }
                 }}
                 constraints={{ facingMode: "environment" }}
