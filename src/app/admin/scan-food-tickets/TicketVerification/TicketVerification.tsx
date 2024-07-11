@@ -5,6 +5,10 @@ import { useState } from "react";
 
 import { verifyFoodTicket } from "./actions";
 
+const INPUT_STYLES = "rounded-md border p-4 ";
+const SUBMIT_STYLES =
+  "bg-awesomer-purple p-4 text-white rounded-md hover:bg-[#A689FF]";
+
 export default function TicketVerification() {
   const [inputUserCode, setUserCode] = useState("");
   const [canEatBoolean, setCanEatBoolean] = useState(false);
@@ -25,28 +29,30 @@ export default function TicketVerification() {
 
   return (
     <>
-      {canEatBoolean === true && <p>They can Eat!</p>}
-      {eatDescription !== "" && <p>{eatDescription}</p>}
+      <div className="flex min-h-screen items-center justify-center">
+        {canEatBoolean === true && <p>They can Eat!</p>}
+        {eatDescription !== "" && <p>{eatDescription}</p>}
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={inputUserCode}
-          onChange={(e) => setUserCode(e.target.value)}
-          className="border p-2"
-          placeholder="Enter ticket code"
-        />
-        <input
-          type="text"
-          value={inputEventIDValue}
-          onChange={(e) => setEventIDValue(e.target.value)}
-          className="border p-2"
-          placeholder="Enter Food Event ID"
-        />
-        <button type="submit" className="bg-blue-500 p-2 text-white">
-          Submit
-        </button>
-      </form>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={inputUserCode}
+            onChange={(e) => setUserCode(e.target.value)}
+            className={INPUT_STYLES}
+            placeholder="Enter ticket code"
+          />
+          <input
+            type="text"
+            value={inputEventIDValue}
+            onChange={(e) => setEventIDValue(e.target.value)}
+            className={INPUT_STYLES}
+            placeholder="Enter Food Event ID"
+          />
+          <button type="submit" className={SUBMIT_STYLES}>
+            Submit
+          </button>
+        </form>
+      </div>
     </>
   );
 }
