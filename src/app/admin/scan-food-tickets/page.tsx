@@ -1,19 +1,13 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 import type { Schema } from "@/amplify/data/resource";
 import { Scanner } from "@yudiel/react-qr-scanner";
 
-import {
-  setUserAsAttendedAtFoodEventFromCode,
-  verifyFoodTicket,
-} from "./TicketVerification/actions";
-
-const question_icon = "/svgs/admin/chat_question.svg";
+import { verifyFoodTicket } from "./TicketVerification/actions";
 
 const QR_SCANNER_SECTION_STYLES =
   "overflow-x-hidden bg-medium-grey text-blackish";
@@ -22,8 +16,6 @@ const QR_SCANNER_CONTENT_STYLES =
 const QR_SCANNER_CONTAINER_STYLES =
   "w-full max-w-[500px] rounded-lg bg-white p-6 drop-shadow-md md:w-auto";
 
-const MARK_ATTENDED_BUTTON_STYLES =
-  "flex justify-center items-center w-full mb-4 block rounded-md border-2 border-awesomer-purple bg-white text-awesomer-purple py-2 font-medium hover:bg-medium-grey";
 const SELECT_FOOD_EVENT_STYLES =
   "mb-4 w-full rounded-md border border-blackish p-2 focus:border-2 focus:border-awesomer-purple focus:outline-none";
 const QR_READER_CONTAINER_STYLES =
@@ -39,23 +31,8 @@ const AdminFoodTickets = () => {
   const [eatDescription, setEatDescription] = useState("");
   const [inputEventIDValue, setEventIDValue] = useState("");
   const [foodEvents, setFoodEvents] = useState<FoodEvent[]>([]);
-  const [markAttendedButton, setMarkAttendedButton] = useState(false);
   const isVerifying = useRef(false);
   const client = generateClient<Schema>();
-
-  const handleClickSetAttended = async () => {
-    if (scanResult) {
-      const success = await setUserAsAttendedAtFoodEventFromCode(
-        scanResult,
-        inputEventIDValue,
-      );
-      if (success) {
-        setEatDescription("Set user as attended outside their timeslot");
-      } else {
-        setEatDescription("Error setting user as attended");
-      }
-    }
-  };
 
   // Fetch food events for selection
   useEffect(() => {
@@ -71,20 +48,16 @@ const AdminFoodTickets = () => {
     fetchData();
   }, []);
 
-  const verifyTicket = async () => {
-    if (scanResult && inputEventIDValue && !isVerifying.current) {
+  const verifyTicket = async (scanCode: string) => {
+    if (scanCode && inputEventIDValue && !isVerifying.current) {
       isVerifying.current = true;
       toast.info("Verifying ticket...");
       const { canEat, description } = await verifyFoodTicket(
-        scanResult,
+        scanCode,
         inputEventIDValue,
       );
       setCanEatBoolean(canEat);
       setEatDescription(description);
-      // If this isn't their timeslot let the admin decide if they can eat now or not
-      setMarkAttendedButton(
-        description.includes("Person should be in timeslot"),
-      );
       toast.dismiss();
       if (canEat) {
         toast.success("Ticket verified successfully!");
@@ -95,17 +68,12 @@ const AdminFoodTickets = () => {
     }
   };
 
-  // When QR code is scanned verify and perform actions
-  useEffect(() => {
-    verifyTicket();
-  }, [scanResult]);
-
   const handleEventChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setEventIDValue(event.target.value);
   };
 
   const handleManualScan = () => {
-    verifyTicket();
+    verifyTicket(scanResult);
   };
 
   return (
@@ -116,20 +84,6 @@ const AdminFoodTickets = () => {
           <div className="mb-2">
             {canEatBoolean && <p>They can Eat!</p>}
             {eatDescription && <p>{eatDescription}</p>}
-            {markAttendedButton && scanResult && (
-              <button
-                className={MARK_ATTENDED_BUTTON_STYLES}
-                onClick={handleClickSetAttended}
-              >
-                <p className="mr-2">Mark as attended anyway</p>
-                <Image
-                  src={question_icon}
-                  height={20}
-                  width={20}
-                  alt="Question icon"
-                />
-              </button>
-            )}
           </div>
           <div className="relative">
             <select
@@ -155,6 +109,7 @@ const AdminFoodTickets = () => {
                 onScan={(result) => {
                   if (result) {
                     setScanResult(result[0].rawValue);
+                    verifyTicket(result[0].rawValue);
                   }
                 }}
                 constraints={{ facingMode: "environment" }}
