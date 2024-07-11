@@ -5,9 +5,9 @@ import { useState } from "react";
 
 import { verifyFoodTicket } from "./actions";
 
-const INPUT_STYLES = "rounded-md border p-4 ";
+const INPUT_STYLES = "rounded-md border w-full p-4 my-1";
 const SUBMIT_STYLES =
-  "bg-awesomer-purple p-4 text-white rounded-md hover:bg-[#A689FF]";
+  "bg-awesomer-purple p-4 w-full my-1 text-white rounded-md hover:bg-[#A689FF]";
 
 export default function TicketVerification() {
   const [inputUserCode, setUserCode] = useState("");
