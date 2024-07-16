@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { type Schema } from "@/amplify/data/resource";
 import TicketVerification from "@/app/admin/scan-food-tickets/TicketVerification/TicketVerification";
 
+import TicketVerificationNY from "./TicketVerification/TicketVerificationNY";
+
 type FoodEvent = Schema["FoodEvent"]["type"];
 
 const ScanFoodTickets = () => {
@@ -28,7 +30,8 @@ const ScanFoodTickets = () => {
     <>
       <div className="h-full bg-[#d9d9d9]">
         <div className="m-6 rounded-md bg-white">
-          <TicketVerification></TicketVerification>
+          <TicketVerification />
+          <TicketVerificationNY />
           <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
             {foodData &&
               foodData.map((event) => (
