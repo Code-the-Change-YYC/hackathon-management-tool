@@ -11,9 +11,6 @@ import { PostConfirmation } from "./PostConfirmation/resource";
  */
 
 export const auth = defineAuth({
-  name: process.env.CDK_CONTEXT_JSON
-    ? JSON.parse(process.env.CDK_CONTEXT_JSON as string)["amplify-backend-name"]
-    : "",
   groups: ["Admin", "Participant", "Judge"],
   triggers: {
     preSignUp: PreSignUp,
