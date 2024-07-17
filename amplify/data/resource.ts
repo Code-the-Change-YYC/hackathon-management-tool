@@ -80,7 +80,7 @@ const schema = a
         attended: a.hasMany("UserFoodEventAttendance", "foodEventId"),
       })
       .authorization((allow) => [
-        allow.group("Admin"),
+        allow.group("Admin").to(["create"]),
         allow.authenticated().to(["read"]),
       ]),
     Team: a

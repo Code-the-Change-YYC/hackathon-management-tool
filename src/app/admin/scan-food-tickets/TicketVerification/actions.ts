@@ -61,9 +61,9 @@ export async function verifyFoodTicket(
           "Could not find the specified food event, had trouble calling food event",
       };
     }
-
+    const hasEaten = await hasAlreadyAteAtFoodEvent(userID, eventID);
     // User has already at the event
-    if (await hasAlreadyAteAtFoodEvent(userID, eventID)) {
+    if (hasEaten) {
       return {
         canEat: false,
         description: "Person has already ate at this event",
@@ -82,14 +82,14 @@ export async function verifyFoodTicket(
       };
     }
     // If the user is not in the correct time, they will still eat anyways, we will just let the scanner know that they should be at a different time
-    const { description } = await isCorrectTimeSlot(
+    const { description, correct } = await isCorrectTimeSlot(
       user?.teamId,
       foodEvent,
       timeSlot,
     );
 
-    //Mark user as eaten automatically
-    if (automaticMarking) {
+    //Mark user as eaten automatically if this is their timeslot
+    if (automaticMarking && correct) {
       await setUserAsAttendedAtFoodEvent(userID, eventID);
     }
     return { canEat: true, description: description };
@@ -140,6 +140,7 @@ async function isCorrectTimeSlot(
   if (currentGroupPositionNumber === userGroupPositionNumber) {
     return {
       description: "valid code & correct timeslot",
+      correct: true,
     };
   } else {
     const actualTimeSlot = getTimeForFoodGroupPositionNumber(
@@ -149,7 +150,8 @@ async function isCorrectTimeSlot(
       foodEvent.end,
     );
     return {
-      description: `Person should be in timeslot ${actualTimeSlot}`,
+      description: `Person should be in timeslot ${actualTimeSlot}, marked them as attended anyway.`,
+      correct: true,
     };
   }
 }
@@ -166,4 +168,23 @@ async function setUserAsAttendedAtFoodEvent(
     foodEventId: foodEventID,
   });
   return attendanceRecord;
+}
+
+/**
+ *  Sets user as eaten at the food event from their QR mac
+ */
+export async function setUserAsAttendedAtFoodEventFromCode(
+  userCode: string,
+  foodEventID: string,
+): Promise<boolean> {
+  const [userID] = getMessageAndCode(userCode);
+  // Create a new UserFoodEventAttendance record to represent the user's attendance
+  const { errors } = await client.models.UserFoodEventAttendance.create({
+    userId: userID,
+    foodEventId: foodEventID,
+  });
+  if (errors) {
+    return false;
+  }
+  return true;
 }
