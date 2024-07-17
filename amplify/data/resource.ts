@@ -233,19 +233,19 @@ const schema = a
     ResetHackathon: a
       .mutation()
       .arguments({
-        scoreComponents: a.json(),
-        scoringSidepots: a.json(),
-        startDate: a.date(),
-        endDate: a.date(),
-        resetUsers: a.boolean(),
-        resetTeams: a.boolean(),
-        resetRooms: a.boolean(),
-        resetScores: a.boolean(),
+        scoreComponents: a.json().required(),
+        scoringSidepots: a.json().required(),
+        startDate: a.date().required(),
+        endDate: a.date().required(),
+        resetUsers: a.boolean().required(),
+        resetTeams: a.boolean().required(),
+        resetRooms: a.boolean().required(),
+        resetScores: a.boolean().required(),
         safetyCheck: a.string().required(),
       })
-      .returns(a.ref("StatusCodeFunctionResponse"))
       .authorization((allow) => [allow.group("Admin")])
-      .handler(a.handler.function(ResetHackathon)),
+      .handler(a.handler.function(ResetHackathon))
+      .returns(a.ref("StatusCodeFunctionResponse")),
 
     // Custom resolvers
     SetUserAsCheckedIn: a

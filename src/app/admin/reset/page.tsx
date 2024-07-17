@@ -9,14 +9,14 @@ import { useState } from "react";
 
 import type { Schema } from "@/amplify/data/resource";
 
-import { getHackathonEditCode } from "./actions";
-
 export default function Teams() {
   const client = generateClient<Schema>();
 
-  type Handler = Schema["ResetHackathon"]["args"];
+  type ResetHackathonArguments = Schema["ResetHackathon"]["args"];
 
-  const [formData, setFormData] = useState<Handler>({} as Handler);
+  const [formData, setFormData] = useState<ResetHackathonArguments>(
+    {} as ResetHackathonArguments,
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -32,9 +32,9 @@ export default function Teams() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // This will prevent the default form submit action which is to refresh the page
 
-    if (formData.safetyCheck !== (await getHackathonEditCode())) {
+    if (formData.safetyCheck !== "delete hackathon") {
       console.log(
-        `must complete safety check, looking for ${await getHackathonEditCode()}`,
+        `must complete safety check, looking for \'delete hackathon\'}`,
       );
       return;
     }

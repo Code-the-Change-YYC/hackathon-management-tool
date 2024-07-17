@@ -1,6 +1,11 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 
+import {
+  AdminDeleteUserCommand,
+  CognitoIdentityProviderClient,
+} from "@aws-sdk/client-cognito-identity-provider";
+
 import type { Schema } from "../../../data/resource";
 import type { ScoreComponentTypeInput } from "./graphql/API";
 import {
@@ -46,6 +51,8 @@ Amplify.configure(
   },
 );
 
+const cognitoClient = new CognitoIdentityProviderClient({});
+
 const client = generateClient<Schema>({
   authMode: "iam",
 });
@@ -66,18 +73,18 @@ export const handler: Handler = async (event) => {
       scoreComponents,
       scoringSidepots,
     } = event.arguments;
-    if (safetyCheck !== process.env.EDIT_HACKATHON_CODE) {
+    if (safetyCheck !== "delete hackathon") {
       return {
         statusCode: 403,
         headers: { "Content-Type": "application/json" },
       };
     }
     // get the current hackathon model data items
-    const HackathonItems = (
-      await client.graphql({
-        query: listHackathons,
-      })
-    ).data.listHackathons.items;
+    const { data: hackathonItems, errors } = await client.graphql({
+      query: listHackathons,
+    });
+    const HackathonItems = hackathonItems.listHackathons.items;
+    if (errors) throw errors;
 
     // Assuming there is only 1 Hackathon
     if (HackathonItems.length === 0) {
@@ -91,26 +98,37 @@ export const handler: Handler = async (event) => {
     const HackathonID = HackathonItems[0].id;
 
     // Resetting Users variable
-    const resettingUsers: boolean = resetUsers ?? false;
+    const resettingUsers: boolean = resetUsers;
     // Reset teams if users are being reset
-    const resettingTeams: boolean = (resetTeams ?? false) || resettingUsers;
+    const resettingTeams: boolean = resetTeams || resettingUsers;
     // Reset Rooms if teams are being reset
-    const resettingRooms: boolean = (resetRooms ?? false) || resettingTeams;
+    const resettingRooms: boolean = resetRooms || resettingTeams;
     // Reset scores if teams are being reset
-    const resettingScores: boolean = (resetScores ?? false) || resettingTeams;
+    const resettingScores: boolean = resetScores || resettingTeams;
 
     // Reset Users
     if (resettingUsers) {
       console.log("resetting all users");
-      const usersResponse = await client.graphql({
+      const { data: usersResponse, errors } = await client.graphql({
         query: listUsers,
       });
-      const users = usersResponse.data.listUsers.items;
+
+      if (errors) throw errors;
+
+      const users = usersResponse.listUsers.items;
       for (const user of users) {
         const id = user.id;
         // only delete the participants
         if (user.role === "Participant") {
-          await client.graphql({
+          // Delete the user from Cognito
+          const deleteUserCommand = new AdminDeleteUserCommand({
+            Username: id,
+            UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
+          });
+
+          cognitoClient.send(deleteUserCommand);
+
+          const { errors } = await client.graphql({
             query: deleteUser,
             variables: {
               input: {
@@ -118,6 +136,7 @@ export const handler: Handler = async (event) => {
               },
             },
           });
+          if (errors) throw errors;
         }
       }
     }
@@ -125,13 +144,15 @@ export const handler: Handler = async (event) => {
     // Reset Teams
     if (resettingTeams) {
       console.log("resetting all teams");
-      const teamsResponse = await client.graphql({
+      const { data: teamsResponse, errors } = await client.graphql({
         query: listTeams,
       });
-      const teams = teamsResponse.data.listTeams.items;
+      if (errors) throw errors;
+
+      const teams = teamsResponse.listTeams.items;
       for (const team of teams) {
         const id = team.id;
-        await client.graphql({
+        const { errors } = await client.graphql({
           query: deleteTeam,
           variables: {
             input: {
@@ -139,20 +160,21 @@ export const handler: Handler = async (event) => {
             },
           },
         });
+        if (errors) throw errors;
       }
     }
 
     // Reset rooms
     if (resettingRooms) {
       console.log("resetting all teamRooms");
-      const teamRooms = (
-        await client.graphql({
-          query: listTeamRooms,
-        })
-      ).data.listTeamRooms.items;
+      const { data: rooms, errors } = await client.graphql({
+        query: listTeamRooms,
+      });
+      if (errors) throw errors;
+      const teamRooms = rooms.listTeamRooms.items;
       teamRooms.forEach(async (room) => {
         const id = room.id;
-        await client.graphql({
+        const { errors } = await client.graphql({
           query: deleteTeamRoom,
           variables: {
             input: {
@@ -160,19 +182,21 @@ export const handler: Handler = async (event) => {
             },
           },
         });
+        if (errors) throw errors;
       });
     }
 
     // Reset Scores
     if (resettingScores) {
       console.log("resetting all scores");
-      const scoresResponse = await client.graphql({
+      const { data: scoresResponse, errors } = await client.graphql({
         query: listScores,
       });
-      const scores = scoresResponse.data.listScores.items;
+      if (errors) throw errors;
+      const scores = scoresResponse.listScores.items;
       for (const score of scores) {
         const id = score.id;
-        await client.graphql({
+        const { errors } = await client.graphql({
           query: deleteScore,
           variables: {
             input: {
@@ -180,13 +204,14 @@ export const handler: Handler = async (event) => {
             },
           },
         });
+        if (errors) throw errors;
       }
     }
 
     // Edit start date
     if (startDate) {
       console.log("editing start date");
-      await client.graphql({
+      const { errors } = await client.graphql({
         query: updateHackathon,
         variables: {
           input: {
@@ -195,12 +220,13 @@ export const handler: Handler = async (event) => {
           },
         },
       });
+      if (errors) throw errors;
     }
 
     // Edit end date
     if (endDate) {
       console.log("editing end date");
-      await client.graphql({
+      const { errors } = await client.graphql({
         query: updateHackathon,
         variables: {
           input: {
@@ -209,6 +235,7 @@ export const handler: Handler = async (event) => {
           },
         },
       });
+      if (errors) throw errors;
     }
 
     // edit the scoringComponents
@@ -217,11 +244,10 @@ export const handler: Handler = async (event) => {
       console.log(scoreComponents as string);
 
       // get the score Components Array from the JSON input
-      const scoreComponentsArray: ScoreComponentTypeInput[] =
-        typeof scoreComponents === "string"
-          ? JSON.parse(scoreComponents)
-          : scoreComponents;
-      await client.graphql({
+      const scoreComponentsArray: ScoreComponentTypeInput[] = JSON.parse(
+        scoreComponents as string,
+      );
+      const { errors } = await client.graphql({
         query: updateHackathon,
         variables: {
           input: {
@@ -230,6 +256,7 @@ export const handler: Handler = async (event) => {
           },
         },
       });
+      if (errors) throw errors;
     }
 
     // edit the scoringSidepots
@@ -242,7 +269,7 @@ export const handler: Handler = async (event) => {
         typeof scoringSidepots === "string"
           ? JSON.parse(scoringSidepots)
           : scoringSidepots;
-      await client.graphql({
+      const { errors } = await client.graphql({
         query: updateHackathon,
         variables: {
           input: {
@@ -251,6 +278,7 @@ export const handler: Handler = async (event) => {
           },
         },
       });
+      if (errors) throw errors;
     }
 
     return {

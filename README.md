@@ -84,10 +84,11 @@ In your local dev environment, create a file: `.env.local`
 
 ### Environment Variables used in project
 
-| Variable            | value                       | Description                                 |
-| ------------------- | --------------------------- | ------------------------------------------- |
-| TIME_ZONE           | "America/Edmonton"          | For consistent timezones in the application |
-| EDIT_HACKATHON_CODE | [any string value you want] | The code inputted for editting/deleting     |
+| Variable  | value              | Description                                 |
+| --------- | ------------------ | ------------------------------------------- |
+| TIME_ZONE | "America/Edmonton" | For consistent timezones in the application |
+
+Copy the file `.env.local.example` and rename the file to `.env.local`
 
 ## Architecture
 
