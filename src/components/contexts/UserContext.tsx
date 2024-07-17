@@ -68,6 +68,8 @@ export function UserContextProvider({ children }: Props) {
             id: user.userSub as string,
           });
 
+          if (response.errors) throw new Error(response.errors[0].message);
+
           if (response.data === null) {
             // Logout User record does not exist in DB
             signOut();

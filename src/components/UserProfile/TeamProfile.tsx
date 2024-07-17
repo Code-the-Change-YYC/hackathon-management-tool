@@ -29,6 +29,8 @@ const TeamProfile = () => {
         id: userId,
       });
 
+      if (userResponse.errors) throw new Error(userResponse.errors[0].message);
+
       const userTeamId = userResponse.data?.teamId as string;
 
       if (!userTeamId) {
@@ -38,13 +40,21 @@ const TeamProfile = () => {
       const teamResponse = await client.models.Team.get({
         id: userTeamId,
       });
+
+      if (teamResponse.errors) throw new Error(teamResponse.errors[0].message);
+
       return teamResponse.data;
     },
   });
 
   const teamMutation = useMutation({
     mutationFn: async () => {
-      await client.models.User.update({ id: userId, teamId: null });
+      try {
+        await client.models.User.update({ id: userId, teamId: null });
+      } catch (error) {
+        console.error("Error updating ids", error);
+        throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

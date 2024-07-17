@@ -35,6 +35,9 @@ const UserProfile = () => {
       const response = await client.models.User.get({
         id: userId,
       });
+
+      if (response.errors) throw new Error(response.errors[0].message);
+
       return response.data;
     },
   });
@@ -59,7 +62,13 @@ const UserProfile = () => {
         void teamId,
         void checkedIn,
         void profileOwner;
-      await client.models.User.update(extractedFields);
+
+      try {
+        await client.models.User.update(extractedFields);
+      } catch (error) {
+        console.error("Error updating user", error);
+        throw error;
+      }
     },
   });
 
