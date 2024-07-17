@@ -55,7 +55,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   };
   const updateSelectInput = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const { name, value } = e.target;
-    if (name === "meals") {
+    if (name === "willEatMeals") {
       setFormState((prevState) => ({ ...prevState, [name]: value === "yes" }));
     }
     setFormState((prevState) => ({ ...prevState, [name]: value }));
@@ -122,14 +122,14 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       </SelectField>
       <SelectField
         required
-        name="meals"
+        name="willEatMeals"
         label="* Do you want provided food at the hackathon?"
         value={
           (formState?.willEatMeals as unknown as string) ?? "Select an option"
         }
         onChange={(e) => updateSelectInput(e)}
       >
-        <option selected disabled>
+        <option disabled selected>
           Select an option
         </option>
         <option value={"yes"}>Yes</option>
