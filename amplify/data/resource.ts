@@ -16,7 +16,13 @@ const schema = a
         id: a.id().required(),
         firstName: a.string(),
         lastName: a.string(),
-        role: a.string().default("Participant"),
+        role: a
+          .string()
+          .default("Participant")
+          .authorization((allow) => [
+            allow.ownerDefinedIn("profileOwner").to(["read"]),
+            allow.groups(["Admin"]).to(["read", "update"]),
+          ]),
         email: a.string(),
         institution: a.string(),
         completedRegistration: a.boolean(),

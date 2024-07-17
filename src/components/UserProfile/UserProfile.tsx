@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
-import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 import UserForm from "@/components/UserProfile/UserForm";
 import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -109,7 +108,7 @@ const UserProfile = () => {
             />{" "}
           </div>
           <div className="px-10 md:px-16 md:py-10">
-            <ProfileLinks />
+            {/* <ProfileLinks /> */}
             <div className="mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
               <h1 className="mt-3 text-lg font-bold md:text-2xl">My Details</h1>
               <button className={BUTTON_STYLES} onClick={handleEditClick}>
