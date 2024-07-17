@@ -150,8 +150,8 @@ async function isCorrectTimeSlot(
       foodEvent.end,
     );
     return {
-      description: `Person should be in timeslot ${actualTimeSlot}`,
-      correct: false,
+      description: `Person should be in timeslot ${actualTimeSlot}, marked them as attended anyway.`,
+      correct: true,
     };
   }
 }

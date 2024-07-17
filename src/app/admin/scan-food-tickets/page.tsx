@@ -1,10 +1,11 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 import type { Schema } from "@/amplify/data/resource";
+import { useQuery } from "@tanstack/react-query";
 import { Scanner } from "@yudiel/react-qr-scanner";
 
 import { verifyFoodTicket } from "./TicketVerification/actions";
@@ -23,30 +24,31 @@ const QR_READER_CONTAINER_STYLES =
 const MANUAL_SCAN_BUTTON_STYLES =
   "hover:bg-lilac-purple mx-auto mt-6 block rounded-xl bg-awesomer-purple px-4 py-2 font-medium text-white";
 
-type FoodEvent = Schema["FoodEvent"]["type"];
-
 const AdminFoodTickets = () => {
   const [scanResult, setScanResult] = useState("");
   const [canEatBoolean, setCanEatBoolean] = useState(false);
   const [eatDescription, setEatDescription] = useState("");
   const [inputEventIDValue, setEventIDValue] = useState("");
-  const [foodEvents, setFoodEvents] = useState<FoodEvent[]>([]);
   const isVerifying = useRef(false);
   const client = generateClient<Schema>();
 
-  // Fetch food events for selection
-  useEffect(() => {
-    async function fetchData() {
+  // In your component
+  const {
+    data: foodEvents,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["foodEvents"],
+    queryFn: async () => {
       const { data, errors } = await client.models.FoodEvent.list();
-      if (!errors) {
-        setFoodEvents(data);
-      } else {
-        console.error(errors);
+      if (errors) {
+        throw errors;
       }
-    }
-
-    fetchData();
-  }, []);
+      return data;
+    },
+    initialData: [],
+    initialDataUpdatedAt: 0,
+  });
 
   const verifyTicket = async (scanCode: string) => {
     if (scanCode && inputEventIDValue && !isVerifying.current) {
@@ -91,17 +93,26 @@ const AdminFoodTickets = () => {
               id="foodEvent"
               className={SELECT_FOOD_EVENT_STYLES}
               onChange={handleEventChange}
+              disabled={isLoading}
             >
-              <option value="">Select a food event</option>
-              {foodEvents.map((event) => (
-                <option key={event.id} value={event.id}>
-                  <span>{event.name}: </span>
-                  <span>
-                    {new Date(event.start).toLocaleString()} -{" "}
-                    {new Date(event.end).toLocaleString()}
-                  </span>
-                </option>
-              ))}
+              {isLoading ? (
+                <option>Loading food events...</option>
+              ) : error ? (
+                <option>Error loading food events</option>
+              ) : (
+                <>
+                  <option value="">Select a food event</option>
+                  {foodEvents.map((event) => (
+                    <option key={event.id} value={event.id}>
+                      <span>{event.name}: </span>
+                      <span>
+                        {new Date(event.start).toLocaleString()} -{" "}
+                        {new Date(event.end).toLocaleString()}
+                      </span>
+                    </option>
+                  ))}
+                </>
+              )}
             </select>
             <div className={QR_READER_CONTAINER_STYLES}>
               <Scanner
