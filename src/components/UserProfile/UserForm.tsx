@@ -20,7 +20,6 @@ const FORM_STYLES = "md:mx-10 flex flex-col";
 
 export default function UserForm({
   data,
-  checkedIn,
   userMutation,
   setIsEditing,
   isEditing,
@@ -140,7 +139,7 @@ export default function UserForm({
       <input
         className={`${INPUT_STYLES} ${TEXT_COLOR_GRAY}`}
         type="text"
-        value={checkedIn ? "Yes" : "No"}
+        value={formState.checkedIn ? "Yes" : "No"}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
         readOnly
       />
