@@ -1,7 +1,7 @@
 "use client";
 
 import FoodEventCreateForm from "@/../ui-components/FoodEventCreateForm";
-import { createFoodEvent } from "@/components/actions/userFoodTicketActions";
+import { createFoodEvent } from "@/app/admin/food-tickets/userFoodTicketActions";
 
 export default function EventForm() {
   // FIXME: No idea why there is a TypeScript error here, everything works fine though.
