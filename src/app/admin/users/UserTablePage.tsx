@@ -46,6 +46,10 @@ const UserTablePage = () => {
         ],
       });
 
+      if (response.errors) {
+        throw new Error(response.errors[0].message);
+      }
+
       // Set the initial filtered data to the response data
       setFilteredData(response.data);
 
@@ -83,6 +87,9 @@ const UserTablePage = () => {
       console.log("Updating data:", updatedData);
       try {
         const response = await client.models.User.update(updatedData);
+        if (response.errors) {
+          throw new Error(response.errors[0].message);
+        }
         return response.data;
       } catch (error) {
         console.error("Error updating table data:", error);

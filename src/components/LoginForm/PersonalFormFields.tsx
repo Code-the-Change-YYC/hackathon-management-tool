@@ -15,20 +15,31 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const { isPending, isError } = useQuery({
     queryKey: ["user", user?.userId],
     queryFn: async () => {
-      return (await client.models.User.get({ id: user.userId as string })).data;
+      const response = await client.models.User.get({
+        id: user.userId as string,
+      });
+
+      if (response.errors) throw new Error(response.errors[0].message);
+
+      return response.data;
     },
   });
   const userMutation = useMutation({
     mutationFn: async (input: Schema["User"]["type"]) => {
-      await client.models.User.update({
-        id: user.userId,
-        firstName: input.firstName,
-        lastName: input.lastName,
-        institution: input.institution,
-        willEatMeals: input.willEatMeals,
-        allergies: input.allergies,
-        completedRegistration: true,
-      });
+      try {
+        await client.models.User.update({
+          id: user.userId,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          institution: input.institution,
+          willEatMeals: input.willEatMeals,
+          allergies: input.allergies,
+          completedRegistration: true,
+        });
+      } catch (error) {
+        console.error("Error updating user", error);
+        throw error;
+      }
     },
     onSuccess: () => {
       // TODO: ADD TOAST

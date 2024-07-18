@@ -16,7 +16,6 @@ const client = generateClient<Schema>();
 
 export interface UserFormProp {
   data: Schema["User"]["type"];
-  checkedIn: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
   setEnableCancelSave: React.Dispatch<React.SetStateAction<boolean>>;
   enableCancelSave: boolean;
@@ -35,6 +34,9 @@ const UserProfile = () => {
       const response = await client.models.User.get({
         id: userId,
       });
+
+      if (response.errors) throw new Error(response.errors[0].message);
+
       return response.data;
     },
   });
@@ -59,7 +61,13 @@ const UserProfile = () => {
         void teamId,
         void checkedIn,
         void profileOwner;
-      await client.models.User.update(extractedFields);
+
+      try {
+        await client.models.User.update(extractedFields);
+      } catch (error) {
+        console.error("Error updating user", error);
+        throw error;
+      }
     },
   });
 
@@ -73,7 +81,6 @@ const UserProfile = () => {
       setEnableCancelSave(true);
     }
   };
-  const checkedIn = false;
 
   return (
     <div>
@@ -118,7 +125,6 @@ const UserProfile = () => {
             {data ? (
               <UserForm
                 data={data}
-                checkedIn={checkedIn}
                 setIsEditing={setIsEditing}
                 isEditing={isEditing}
                 enableCancelSave={enableCancelSave}
