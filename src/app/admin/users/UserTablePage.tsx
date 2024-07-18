@@ -46,6 +46,10 @@ const UserTablePage = () => {
         ],
       });
 
+      if (response.errors) {
+        throw new Error(response.errors[0].message);
+      }
+
       // Set the initial filtered data to the response data
       setFilteredData(response.data);
 

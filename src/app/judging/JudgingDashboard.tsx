@@ -53,7 +53,6 @@ const JudgingDashboard = () => {
 
   const { currentUser } = useUser();
   const userId = currentUser.username;
-  console.log(userId);
 
   const { data, isFetching } = useQuery({
     initialDataUpdatedAt: 0,
@@ -62,6 +61,10 @@ const JudgingDashboard = () => {
       try {
         const userResponse = await client.models.User.get({ id: userId });
         const userData = userResponse.data;
+
+        if (userResponse.errors)
+          throw new Error(userResponse.errors[0].message);
+
         if (!userData) throw new Error("User data not found");
 
         const judgeRoomId = userData.JUDGE_roomId;
