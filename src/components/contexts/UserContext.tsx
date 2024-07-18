@@ -45,6 +45,11 @@ export function UserContextProvider({ children }: Props) {
   // TO DO load other user info from table
 
   const { data: currentUser } = useQuery({
+    initialData: {
+      username: "",
+      type: UserType.Guest,
+      populated: false,
+    },
     queryKey: ["Users"],
     queryFn: async () => {
       try {
