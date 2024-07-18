@@ -2,11 +2,10 @@
 
 import { generateClient } from "aws-amplify/api";
 import { useState } from "react";
-import { Bounce, toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
 import { UserType } from "@/components/contexts/UserContext";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import DataTableSectionUser from "../components/DataTableSectionUser";
 import FilterUser from "../components/FilterUser";
@@ -33,7 +32,7 @@ const UserTablePage = () => {
   const { data, isFetching } = useQuery({
     initialData: [],
     initialDataUpdatedAt: 0,
-    queryKey: ["User"],
+    queryKey: ["Users"],
     queryFn: async () => {
       const response = await client.models.User.list({
         selectionSet: [
@@ -77,51 +76,6 @@ const UserTablePage = () => {
     setFilteredData(newFilteredData);
   };
 
-  const queryClient = useQueryClient();
-  const tableDataMutation = useMutation({
-    mutationFn: async (updatedData: Schema["User"]["type"]) => {
-      console.log("Updating data:", updatedData);
-      try {
-        const response = await client.models.User.update(updatedData);
-
-        await client.mutations.AddUserToGroup({
-          userId: updatedData.id,
-          groupName: updatedData.role ?? "",
-        });
-
-        return response.data;
-      } catch (error) {
-        console.error("Error updating table data:", error);
-        throw error;
-      }
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["User"] });
-      console.log("Table data updated successfully:", data);
-      toast.success("✅ Table data updated succesfully", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        progress: 0,
-        theme: "light",
-        transition: Bounce,
-      });
-    },
-    onError: (error) => {
-      console.error("Error updating table data:", error);
-      toast.error("❌ Error updating table data", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        progress: 0,
-        theme: "light",
-        transition: Bounce,
-      });
-    },
-  });
-
   return (
     <div>
       {isFetching ? (
@@ -134,7 +88,6 @@ const UserTablePage = () => {
           <DataTableSectionUser
             tableHeaders={tableHeaders}
             userData={filteredData}
-            tableDataMutation={tableDataMutation}
           />
         </>
       )}
