@@ -80,7 +80,6 @@ const UserTablePage = () => {
     setFilteredData(newFilteredData);
   };
 
-
   return (
     <div>
       {isFetching ? (
