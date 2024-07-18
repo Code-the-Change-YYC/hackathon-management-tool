@@ -4,6 +4,7 @@ import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsers
 import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMessageCode/resource";
+import { ResetHackathon } from "@/amplify/function/BusinessLogic/ResetHackathon/resource";
 import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
@@ -235,6 +236,23 @@ const schema = a
       .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(CreateTeamWithCode)),
 
+    ResetHackathon: a
+      .mutation()
+      .arguments({
+        scoreComponents: a.json().required(),
+        scoringSidepots: a.json().required(),
+        startDate: a.date().required(),
+        endDate: a.date().required(),
+        resetUsers: a.boolean().required(),
+        resetTeams: a.boolean().required(),
+        resetRooms: a.boolean().required(),
+        resetScores: a.boolean().required(),
+        safetyCheck: a.string().required(),
+      })
+      .authorization((allow) => [allow.group("Admin")])
+      .handler(a.handler.function(ResetHackathon))
+      .returns(a.ref("StatusCodeFunctionResponse")),
+
     // Custom resolvers
     SetUserAsCheckedIn: a
       .mutation()
@@ -255,6 +273,7 @@ const schema = a
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
     allow.resource(VerifyUserMessage).to(["query", "mutate"]),
+    allow.resource(ResetHackathon).to(["mutate", "query"]),
     allow.resource(AddUserToGroup).to(["mutate"]),
     allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
   ]);

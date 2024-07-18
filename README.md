@@ -88,6 +88,8 @@ In your local dev environment, create a file: `.env.local`
 | --------- | ------------------ | ------------------------------------------- |
 | TIME_ZONE | "America/Edmonton" | For consistent timezones in the application |
 
+Copy the file `.env.local.example` and rename the file to `.env.local`
+
 ## Architecture
 
 ### Food Scanning

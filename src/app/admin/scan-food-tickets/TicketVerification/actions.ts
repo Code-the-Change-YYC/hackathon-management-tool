@@ -118,7 +118,7 @@ async function hasAlreadyAteAtFoodEvent(userID: string, foodEventID: string) {
  */
 async function isCorrectTimeSlot(
   teamID: string,
-  foodEvent: Schema["FoodEvent"]["type"], //FIXME: if you know how to get around this, please fix it
+  foodEvent: Schema["FoodEvent"]["type"],
   timeSlot: number = -1, //by default will be automatic, unless a specific timeslot was chosen
 ) {
   let currentGroupPositionNumber = timeSlot;
