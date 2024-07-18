@@ -16,7 +16,6 @@ const client = generateClient<Schema>();
 
 export interface UserFormProp {
   data: Schema["User"]["type"];
-  checkedIn: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
   setEnableCancelSave: React.Dispatch<React.SetStateAction<boolean>>;
   enableCancelSave: boolean;
@@ -82,7 +81,6 @@ const UserProfile = () => {
       setEnableCancelSave(true);
     }
   };
-  const checkedIn = false;
 
   return (
     <div>
@@ -127,7 +125,6 @@ const UserProfile = () => {
             {data ? (
               <UserForm
                 data={data}
-                checkedIn={checkedIn}
                 setIsEditing={setIsEditing}
                 isEditing={isEditing}
                 enableCancelSave={enableCancelSave}
