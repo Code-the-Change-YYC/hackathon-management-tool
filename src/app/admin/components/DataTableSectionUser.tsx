@@ -51,6 +51,7 @@ const DataTableSectionUser = (props: DataTableProps) => {
     formState: { dirtyFields },
   } = useForm<Schema["User"]["type"]>();
 
+
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [recordToDeleteId, setRecordToDeleteId] = useState("" as string);
   const [editingId, setEditingId] = useState("");

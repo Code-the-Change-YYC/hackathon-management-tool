@@ -26,6 +26,7 @@
     "@tanstack/react-query-devtools": "^5.32.0",
     "@tanstack/react-query-persist-client": "^5.36.0",
     "@typescript-eslint/parser": "^7.11.0",
+    "@yudiel/react-qr-scanner": "^2.0.4",
     "aws-amplify": "^6.0.18",
     "aws-lambda": "^1.0.7",
     "concurrently": "^8.2.2",

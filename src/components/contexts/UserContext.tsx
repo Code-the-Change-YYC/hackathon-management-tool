@@ -45,6 +45,11 @@ export function UserContextProvider({ children }: Props) {
   // TO DO load other user info from table
 
   const { data: currentUser } = useQuery({
+    initialData: {
+      username: "",
+      type: UserType.Guest,
+      populated: false,
+    },
     queryKey: ["Users"],
     queryFn: async () => {
       try {
@@ -67,6 +72,8 @@ export function UserContextProvider({ children }: Props) {
           const response = await client.models.User.get({
             id: user.userSub as string,
           });
+
+          if (response.errors) throw new Error(response.errors[0].message);
 
           if (response.data === null) {
             // Logout User record does not exist in DB

@@ -46,6 +46,11 @@ const TeamsTablePage = () => {
       const response = await client.models.Team.list({
         selectionSet: ["members.*", "id", "name", "approved"],
       });
+
+      if (response.errors) {
+        throw new Error(response.errors[0].message);
+      }
+
       return response.data;
     },
   });
