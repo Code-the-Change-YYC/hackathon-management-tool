@@ -40,6 +40,7 @@ interface DataTableProps {
 }
 
 const DataTableSectionUser = (props: DataTableProps) => {
+  const { tableHeaders, userData, tableDataMutation } = props;
   const { control, handleSubmit, reset } = useForm<Schema["User"]["type"]>();
 
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -68,8 +69,6 @@ const DataTableSectionUser = (props: DataTableProps) => {
     }
     setEditingId("");
   };
-
-  const { tableHeaders, userData, tableDataMutation } = props;
 
   const filteredData = useMemo(() => {
     return userData.filter((rowData) =>
