@@ -87,6 +87,9 @@ const UserTablePage = () => {
       console.log("Updating data:", updatedData);
       try {
         const response = await client.models.User.update(updatedData);
+        if (response.errors) {
+          throw new Error(response.errors[0].message);
+        }
         return response.data;
       } catch (error) {
         console.error("Error updating table data:", error);
