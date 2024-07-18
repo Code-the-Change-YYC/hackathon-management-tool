@@ -21,11 +21,11 @@ export declare type ValidationFunction<T> = (
   validationResponse: ValidationResponse,
 ) => ValidationResponse | Promise<ValidationResponse>;
 export declare type FoodEventCreateFormInputValues = {
-  name: string;
-  description: string;
-  start: string;
-  end: string;
-  totalGroupCount: number;
+  name?: string;
+  description?: string;
+  start?: string;
+  end?: string;
+  totalGroupCount?: number;
 };
 export declare type FoodEventCreateFormValidationValues = {
   name?: ValidationFunction<string>;
