@@ -83,6 +83,12 @@ const UserTablePage = () => {
       console.log("Updating data:", updatedData);
       try {
         const response = await client.models.User.update(updatedData);
+
+        await client.mutations.AddUserToGroup({
+          userId: updatedData.id,
+          groupName: updatedData.role ?? "",
+        });
+
         return response.data;
       } catch (error) {
         console.error("Error updating table data:", error);
