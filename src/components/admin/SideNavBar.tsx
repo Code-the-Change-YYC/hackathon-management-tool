@@ -10,6 +10,7 @@ const judge_icon = "/svgs/admin/judges_icon.svg";
 const users_icon = "/svgs/admin/users_icon.svg";
 const team_icon = "/svgs/admin/team_icon.svg";
 const ticket_icon = "/svgs/admin/ticket_icon.svg";
+const reset_icon = "/svgs/admin/reset_icon.svg";
 
 const NAV_BAR_SECTION_STYLES =
   "flex flex-col items-center bg-awesomer-purple h-full transition-width duration-300 md:w-80";
@@ -71,6 +72,28 @@ const SideNavBar = () => {
                       height={8}
                     />
                   </Link>
+                  <Link
+                    className={NAV_LINK_CONTAINER_STYLES}
+                    href="/admin/reset"
+                  >
+                    <div className={NAV_LINK_ICON_CONTAINER_STYLES}>
+                      <div className={NAV_LINK_ICON_STYLES}>
+                        <Image
+                          src={reset_icon}
+                          alt="Hackathon configuration icon"
+                          width={20}
+                          height={20}
+                        />
+                      </div>
+                      Hackathon Configuration
+                    </div>
+                    <Image
+                      src={arrow_icon}
+                      alt="Simple arrow"
+                      width={8}
+                      height={8}
+                    />
+                  </Link>
                 </div>
                 <div className="mb-8">
                   <h2>PARTICIPANTS</h2>
@@ -97,7 +120,6 @@ const SideNavBar = () => {
                       height={8}
                     />
                   </Link>
-                  <br />
                   <Link
                     className={NAV_LINK_CONTAINER_STYLES}
                     href="/admin/teams"
