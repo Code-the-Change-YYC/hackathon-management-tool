@@ -2,6 +2,7 @@ import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { defineAuth, secret } from "@aws-amplify/backend";
 
 import { AddUserToGroup } from "../function/BusinessLogic/AddUserToGroup/resource";
+import { ResetHackathon } from "../function/BusinessLogic/ResetHackathon/resource";
 import { PostConfirmation } from "./PostConfirmation/resource";
 
 /**
@@ -11,9 +12,6 @@ import { PostConfirmation } from "./PostConfirmation/resource";
  */
 
 export const auth = defineAuth({
-  name: process.env.CDK_CONTEXT_JSON
-    ? JSON.parse(process.env.CDK_CONTEXT_JSON as string)["amplify-backend-name"]
-    : "",
   groups: ["Admin", "Participant", "Judge"],
   triggers: {
     preSignUp: PreSignUp,
@@ -24,6 +22,8 @@ export const auth = defineAuth({
     allow
       .resource(AddUserToGroup)
       .to(["addUserToGroup", "removeUserFromGroup", "listGroupsForUser"]),
+
+    allow.resource(ResetHackathon).to(["deleteUser"]),
   ],
   loginWith: {
     email: {

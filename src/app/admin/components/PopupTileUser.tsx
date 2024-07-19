@@ -1,8 +1,10 @@
 "use client";
 
+import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
+import { Bounce, toast } from "react-toastify";
 
-import { client } from "@/app/QueryProvider";
+import { type Schema } from "@/amplify/data/resource";
 import { useMutation } from "@tanstack/react-query";
 
 const exit_icon = "/svgs/admin/exit_icon.svg";
@@ -28,11 +30,13 @@ interface PopupProps {
   selectedMemberStatus: string | string[];
   popupType: string;
   teamName: string;
-  recordToDelete: string;
+  recordToDelete: string | undefined;
   onClose: () => void;
 }
 
-const Popup = ({
+const client = generateClient<Schema>();
+
+const PopupUser = ({
   selectedMembersData,
   selectedMemberStatus,
   popupType,
@@ -41,19 +45,36 @@ const Popup = ({
   teamName,
 }: PopupProps) => {
   const deleteRecord = useMutation({
-    mutationFn: async (recordId: string) => {
-      try {
-        await client.models.Team.delete({ id: recordId });
-      } catch (error) {
-        console.error("Error deleting record", error);
-        throw error;
+    mutationFn: async (recordId: string | undefined) => {
+      if (typeof recordId === "string") {
+        await client.models.User.delete({ id: recordId });
+      } else {
+        throw new Error("Record ID is not a string");
       }
     },
     onError: (error) => {
       console.log("Error deleting record:", error);
+      toast.error("❌ Error updating table data", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: 0,
+        theme: "light",
+        transition: Bounce,
+      });
     },
     onSuccess: () => {
       onClose();
+      toast.success("✅ Table data updated succesfully", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: 0,
+        theme: "light",
+        transition: Bounce,
+      });
     },
   });
 
@@ -146,4 +167,4 @@ const Popup = ({
   );
 };
 
-export default Popup;
+export default PopupUser;

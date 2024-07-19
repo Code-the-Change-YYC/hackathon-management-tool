@@ -18,7 +18,13 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const { isPending, isError, data } = useQuery({
     queryKey: ["User", user?.userId],
     queryFn: async () => {
-      return (await client.models.User.get({ id: user.userId as string })).data;
+      const response = await client.models.User.get({
+        id: user.userId as string,
+      });
+
+      if (response.errors) throw new Error(response.errors[0].message);
+
+      return response.data;
     },
   });
   const toastRef = useRef<Id>("");
@@ -26,14 +32,18 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     mutationKey: ["User", user?.userId],
     mutationFn: async (input: Schema["User"]["type"]) => {
       toastRef.current = toast.loading("Updating user information...");
-      return await client.models.User.update({
+      const response = await client.models.User.update({
         id: user.userId,
         firstName: input.firstName,
         lastName: input.lastName,
         institution: input.institution,
         willEatMeals: input.willEatMeals,
         allergies: input.allergies,
+        completedRegistration: true,
       });
+      if (response.errors) throw Error(response.errors[0].message);
+
+      return response.data;
     },
     onSuccess: () => {
       toast.update(toastRef.current, {
@@ -161,7 +171,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         }
         onChange={(e) => updateForm(e)}
       >
-        <option selected disabled>
+        <option disabled selected>
           Select an option
         </option>
         {(Object.keys(MealOptions) as Array<keyof typeof MealOptions>).map(

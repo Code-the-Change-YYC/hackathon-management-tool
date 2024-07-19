@@ -5,7 +5,6 @@ import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
-import ProfileLinks from "@/components/UserProfile/ProfileLinks";
 import UserForm from "@/components/UserProfile/UserForm";
 import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -15,7 +14,6 @@ const BUTTON_STYLES =
 
 export interface UserFormProp {
   data: Schema["User"]["type"];
-  checkedIn: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
   setEnableCancelSave: React.Dispatch<React.SetStateAction<boolean>>;
   enableCancelSave: boolean;
@@ -34,6 +32,9 @@ const UserProfile = () => {
       const response = await client.models.User.get({
         id: userId,
       });
+
+      if (response.errors) throw new Error(response.errors[0].message);
+
       return response.data;
     },
   });
@@ -58,7 +59,13 @@ const UserProfile = () => {
         void teamId,
         void checkedIn,
         void profileOwner;
-      await client.models.User.update(extractedFields);
+
+      try {
+        await client.models.User.update(extractedFields);
+      } catch (error) {
+        console.error("Error updating user", error);
+        throw error;
+      }
     },
   });
 
@@ -72,7 +79,6 @@ const UserProfile = () => {
       setEnableCancelSave(true);
     }
   };
-  const checkedIn = false;
 
   return (
     <div>
@@ -107,7 +113,7 @@ const UserProfile = () => {
             />{" "}
           </div>
           <div className="px-10 md:px-16 md:py-10">
-            <ProfileLinks />
+            {/* <ProfileLinks /> */}
             <div className="mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
               <h1 className="mt-3 text-lg font-bold md:text-2xl">My Details</h1>
               <button className={BUTTON_STYLES} onClick={handleEditClick}>
@@ -117,7 +123,6 @@ const UserProfile = () => {
             {data ? (
               <UserForm
                 data={data}
-                checkedIn={checkedIn}
                 setIsEditing={setIsEditing}
                 isEditing={isEditing}
                 enableCancelSave={enableCancelSave}

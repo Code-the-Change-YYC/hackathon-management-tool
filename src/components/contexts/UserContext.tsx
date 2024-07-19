@@ -1,10 +1,13 @@
 "use client";
 
+import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession, signOut } from "aws-amplify/auth";
+import { Hub } from "aws-amplify/utils";
 import { useContext } from "react";
-import { type ReactNode, createContext, useEffect, useState } from "react";
+import { type ReactNode, createContext, useEffect } from "react";
 
-import { getUserInfo } from "../hooks/useGetUser";
+import { type Schema } from "@/amplify/data/resource";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   children: ReactNode | ReactNode[];
@@ -33,24 +36,24 @@ interface IUserReturn {
   // setCurrentUser: (state: IUser) => void;
 }
 
+const client = generateClient<Schema>();
+
 export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 
 export function UserContextProvider({ children }: Props) {
-  const [currentUser, setCurrentUser] = useState<IUser>({
-    username: "",
-    type: UserType.Guest,
-    populated: false,
-  });
+  const queryClient = useQueryClient();
+  // TO DO load other user info from table
 
-  const { data } = getUserInfo(currentUser.username);
-
-  useEffect(() => {
-    async function currentAuthenticatedUser() {
+  const { data: currentUser } = useQuery({
+    initialData: {
+      username: "",
+      type: UserType.Guest,
+      populated: false,
+    },
+    queryKey: ["Users"],
+    queryFn: async () => {
       try {
         const user = await fetchAuthSession();
-        if (!user.userSub) {
-          throw new Error("No user");
-        }
 
         if (
           (
@@ -61,47 +64,91 @@ export function UserContextProvider({ children }: Props) {
           signOut();
           console.error("User not in group");
         }
-
-        // const response = await client.models.User.get({
-        //   id: user.tokens?.accessToken.payload.username as string,
-        // });
-
-        if (data === null) {
-          // Logout User record does not exist in DB
-          signOut();
-          console.error("User not in DB");
+        if (!user.userSub) {
+          throw new Error("No user");
         }
 
-        setCurrentUser({
-          username: user.tokens?.accessToken.payload.username as string,
-          type: (
-            user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
-          )?.[0],
-          populated: true,
-          completedProfile: data?.completedRegistration ?? false,
-          email: data?.email ?? "",
-          firstName: data?.firstName ?? "",
-          lastName: data?.lastName ?? "",
-          teamId: data?.teamId ?? "",
-        });
-      } catch (err) {
-        if (String(err).includes("No user")) {
-          setCurrentUser({
+        try {
+          const response = await client.models.User.get({
+            id: user.userSub as string,
+          });
+
+          if (response.errors) throw new Error(response.errors[0].message);
+
+          if (response.data === null) {
+            // Logout User record does not exist in DB
+            signOut();
+            console.error("User not in DB");
+          }
+
+          return {
+            username: user.tokens?.accessToken.payload.username as string,
+            type: (
+              user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
+            )?.[0],
+            populated: true,
+            completedProfile: response.data?.completedRegistration ?? false,
+            email: response.data?.email ?? "",
+            firstName: response.data?.firstName ?? "",
+            lastName: response.data?.lastName ?? "",
+          } as IUser;
+        } catch (error) {
+          console.error(error);
+        }
+        // Set user information based on the authentication session...
+      } catch (error) {
+        if (String(error).includes("No user")) {
+          console.info("Not Logged in");
+          return {
             username: "",
             type: UserType.Guest,
             populated: true,
-          });
-          console.info("Not Logged in");
+          } as IUser;
         } else {
-          console.error(err);
+          console.error(error);
         }
       }
-    }
-    void currentAuthenticatedUser();
-  }, [data]);
+    },
+  });
+
+  useEffect(() => {
+    const hubListenerCancel = Hub.listen("auth", (data) => {
+      switch (data.payload.event) {
+        case "signedIn":
+          queryClient.invalidateQueries({
+            queryKey: ["Users"],
+            exact: true,
+          });
+          console.log("Signed In");
+          break;
+        case "signedOut":
+          queryClient.setQueryData(["Users"], {
+            username: "",
+            type: UserType.Guest,
+            populated: true,
+          } as IUser);
+          console.log("Signed Out");
+          break;
+      }
+    });
+
+    // Clean up the listener
+    return () => {
+      hubListenerCancel();
+    };
+  }, []);
+
   return (
-    <UserContext.Provider value={{ currentUser }}>
-      {currentUser.populated && children}
+    <UserContext.Provider
+      value={{
+        currentUser: currentUser || {
+          username: "",
+          type: UserType.Guest,
+          populated: true,
+        },
+      }}
+    >
+      {currentUser?.populated && children}
     </UserContext.Provider>
   );
 }
