@@ -1,12 +1,9 @@
 .clear-button:hover {
-    opacity: 0.5;
-    background: #eae5fa;
-    color: #7055FD;
-    border-color: #7055FD;
+  opacity: 0.5;
+  background: #eae5fa;
+  color: #7055fd;
+  border-color: #7055fd;
 }
-
-
-
 
 /* borderColor: {
     value: "#A689FF"

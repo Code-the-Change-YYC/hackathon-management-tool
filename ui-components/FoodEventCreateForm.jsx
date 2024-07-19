@@ -378,10 +378,15 @@ import { fetchByPath, getOverrideProps, validateField } from "./utils";
 
 /* eslint-disable */
 
-const HEADER_STYLES = "text-lg";
-const INPUT_STYLES = "rounded-md border w-full p-4 my-1 border-2";
-const SUBMIT_STYLES =
-  "bg-awesomer-purple p-4 w-full my-1 text-white rounded-md hover:bg-[#A689FF]";
+/* eslint-disable */
+
+/* eslint-disable */
+
+/* eslint-disable */
+
+/* eslint-disable */
+
+/* eslint-disable */
 
 const client = generateClient();
 export default function FoodEventCreateForm(props) {
@@ -397,12 +402,12 @@ export default function FoodEventCreateForm(props) {
             },
           },
         },
-        textfield: {
-          borderColor: { value: "#A689FF" },
-          _focus: {
-            borderColor: { value: "#7055FD" },
-          },
-        },
+        // textfield: {
+        //   borderColor: { value: "#A689FF" },
+        //   _focus: {
+        //     borderColor: { value: "#7055FD" },
+        //   },
+        // },
       },
     },
   };

@@ -7,12 +7,13 @@ import { useEffect, useState } from "react";
 import FoodEventCreateForm from "@../../../ui-components/FoodEventCreateForm";
 import { type Schema } from "@/amplify/data/resource";
 
+import CreateFoodTicketForm from "./createFoodTicketForm";
 import { createFoodEvent, deleteFoodEvent } from "./userFoodTicketActions";
 
-const HEADER_STYLES = "text-lg";
-const INPUT_STYLES = "rounded-md border w-full p-4 my-1 border-2";
-const SUBMIT_STYLES =
-  "bg-awesomer-purple p-4 w-full my-1 text-white rounded-md hover:bg-[#A689FF]";
+// const HEADER_STYLES = "text-lg";
+// const INPUT_STYLES = "rounded-md border w-full p-4 my-1 border-2";
+// const SUBMIT_STYLES =
+//   "bg-awesomer-purple p-4 w-full my-1 text-white rounded-md hover:bg-[#A689FF]";
 
 type FoodEvent = Schema["FoodEvent"]["type"];
 
@@ -40,6 +41,7 @@ export default function AdminFoodTickets() {
         {/* FoodEventCreateForm is the temporary form used, use a new component later on*/}
         {/* @ts-ignore - Temporarily since this will all be replaced */}
         <FoodEventCreateForm onSubmit={createFoodEvent} />
+        <CreateFoodTicketForm />
         <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
           {foodData !== undefined &&
             foodData.map((event: FoodEvent) => (
