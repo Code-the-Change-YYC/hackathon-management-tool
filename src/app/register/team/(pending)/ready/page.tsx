@@ -2,11 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import PurpleButton from "@/components/PurpleButton";
+import JoinTeamInstructions from "@/components/teamRegistration/JoinTeamInstructions";
 import NewMember1 from "@/images/register/NewMember1.png";
 import NewTeam1 from "@/images/register/NewTeam1.png";
 import { Underline } from "@/utils/text-utils";
-
-import JoinTeamInstructions from "../../../../../components/teamRegistration/JoinTeamInstructions";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
