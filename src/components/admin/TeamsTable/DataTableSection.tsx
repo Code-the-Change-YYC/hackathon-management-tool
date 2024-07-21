@@ -4,19 +4,16 @@ import { useEffect, useState } from "react";
 import Popup from "@/components/admin/TeamsTable/PopupTile";
 
 const search_icon = "/svgs/admin/search_icon.svg";
-
 const entries_per_page = 10;
 
 const DATA_TABLE_SECTION_STYLES =
   "bg-light-grey border border-awesomer-purple m-4 p-4 rounded-md text-lg text-black w-full max-w-[1500px]";
-
 const SEARCH_RESULTS_SECTION_STYLES =
   "bg-white rounded-t-md flex justify-between items-center px-4 py-2 relative";
 const SEARCH_RESULTS_TEXT_STYLES = "py-6 text-2xl font-semibold";
 const SEARCH_BAR_STYLES =
   "border rounded-md border-black p-4 font-light h-3/5 w-2/5 max-w-[500px]";
 const SEARCH_ICON_STYLES = "absolute right-8 top-1/2 -translate-y-1/2";
-
 const DATA_TABLE_CONTENT_STYLES =
   "w-full border-separate border-spacing-x-0.5 text-left";
 const DATA_TABLE_HEADER_CELL_STYLES = "p-3 font-normal text-xl";
@@ -24,7 +21,6 @@ const DATA_TABLE_CELL_STYLES = "p-3 py-4 text-md font-light";
 const EDIT_BUTTON_STYLES = "mr-6 text-awesomer-purple";
 const EDIT_MODE_TEXT_INPUT_STYLES =
   "w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple";
-
 const CHANGE_PAGE_BUTTON_STYLING =
   "rounded-md border border-awesomer-purple bg-white px-6 hover:bg-awesomer-purple hover:text-white";
 const CHANGE_PAGE_BUTTON_TEXT_STYLING = "rounded-md bg-white p-2 px-8";
@@ -50,14 +46,6 @@ const DataTableSection = (props: DataTableProps) => {
     Array(tableData.length).fill(false),
   );
   const [editedValues, setEditedValues] = useState<string[][]>([]);
-
-  useEffect(() => {
-    if (tableData.length > 0) {
-      const formattedEditedValues = tableData.map((rowData) => [...rowData]);
-      setEditedValues(formattedEditedValues);
-    }
-  }, [tableData]);
-
   const [showViewPopup, setShowViewPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [recordToDeleteId, setRecordToDeleteId] = useState("");
@@ -67,25 +55,35 @@ const DataTableSection = (props: DataTableProps) => {
   const [selectedMemberStatus, setSelectedMemberStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [currentPageData, setCurrentPageData] =
-    useState<Array<Array<string>>>(tableData);
-
-  const filteredData = tableData.filter((rowData) =>
-    rowData.some((cellData) =>
-      cellData.toLowerCase().includes(searchQuery.toLowerCase()),
-    ),
+  const [currentPageData, setCurrentPageData] = useState<Array<Array<string>>>(
+    [],
   );
 
-  const startIndex = (currentPage - 1) * entries_per_page;
-  const endIndex = Math.min(startIndex + entries_per_page, filteredData.length);
+  useEffect(() => {
+    if (tableData.length > 0) {
+      const formattedEditedValues = tableData.map((rowData) => [...rowData]);
+      setEditedValues(formattedEditedValues);
+    }
+  }, [tableData]);
 
   useEffect(() => {
-    const totalPages = Math.ceil(tableData.length / entries_per_page);
+    const filteredData = tableData.filter((rowData) =>
+      rowData.some((cellData) =>
+        cellData.toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
+    );
+
+    const totalPages = Math.ceil(filteredData.length / entries_per_page);
+    const startIndex = (currentPage - 1) * entries_per_page;
+    const endIndex = Math.min(
+      startIndex + entries_per_page,
+      filteredData.length,
+    );
     const currentPageData = filteredData.slice(startIndex, endIndex);
 
     setTotalPages(totalPages);
     setCurrentPageData(currentPageData);
-  }, [filteredData]);
+  }, [tableData, searchQuery, currentPage]);
 
   const handlePreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -109,8 +107,7 @@ const DataTableSection = (props: DataTableProps) => {
   };
 
   const handleSaveButtonClick = (index: number) => {
-    const actualIndex = startIndex + index;
-
+    const actualIndex = (currentPage - 1) * entries_per_page + index;
     const editedTeamName = editedValues[actualIndex][0];
     const approvalStatus = editedValues[actualIndex][2] === "Approved";
     const teamId = teamData[actualIndex].teamId;
@@ -125,8 +122,7 @@ const DataTableSection = (props: DataTableProps) => {
   };
 
   const toggleEditMode = (index: number) => {
-    const actualIndex = startIndex + index;
-
+    const actualIndex = (currentPage - 1) * entries_per_page + index;
     const newEditModes = [...editModes];
     newEditModes[actualIndex] = !newEditModes[actualIndex];
     setEditModes(newEditModes);
@@ -137,7 +133,7 @@ const DataTableSection = (props: DataTableProps) => {
     rowIndex: number,
     cellIndex: number,
   ) => {
-    const actualIndex = startIndex + rowIndex;
+    const actualIndex = (currentPage - 1) * entries_per_page + rowIndex;
     const newEditedValues = [...editedValues];
     newEditedValues[actualIndex][cellIndex] = value;
     setEditedValues(newEditedValues);
@@ -160,7 +156,7 @@ const DataTableSection = (props: DataTableProps) => {
         <div className={SEARCH_RESULTS_SECTION_STYLES}>
           <h1 className={SEARCH_RESULTS_TEXT_STYLES}>
             Search Results (
-            {searchQuery === "" ? tableData.length : filteredData.length}{" "}
+            {searchQuery === "" ? tableData.length : currentPageData.length}{" "}
             {searchQuery === ""
               ? tableData.length === 1
                 ? "record"
@@ -201,17 +197,23 @@ const DataTableSection = (props: DataTableProps) => {
               {currentPageData.map((rowData, rowIndex) => (
                 <tr
                   key={rowIndex}
-                  className={`${rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"}`}
+                  className={`${
+                    rowIndex % 2 === 0 ? "bg-white" : "bg-light-grey"
+                  }`}
                 >
                   {rowData.map((cellData, cellIndex) => (
                     <td className={DATA_TABLE_CELL_STYLES} key={cellIndex}>
                       {/* ONLY FOR TEAMS DATA */}
-                      {editModes[startIndex + rowIndex] ? (
+                      {editModes[
+                        (currentPage - 1) * entries_per_page + rowIndex
+                      ] ? (
                         cellIndex === 0 ? (
                           <input
                             type="text"
                             value={
-                              editedValues[startIndex + rowIndex][cellIndex]
+                              editedValues[
+                                (currentPage - 1) * entries_per_page + rowIndex
+                              ][cellIndex]
                             }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
                             onChange={(e) =>
@@ -225,7 +227,9 @@ const DataTableSection = (props: DataTableProps) => {
                         ) : cellIndex === 2 ? (
                           <select
                             value={
-                              editedValues[startIndex + rowIndex][cellIndex]
+                              editedValues[
+                                (currentPage - 1) * entries_per_page + rowIndex
+                              ][cellIndex]
                             }
                             className={EDIT_MODE_TEXT_INPUT_STYLES}
                             onChange={(e) =>
@@ -248,7 +252,9 @@ const DataTableSection = (props: DataTableProps) => {
                     </td>
                   ))}
                   <td className="min-w-[250px] p-3 text-center">
-                    {editModes[startIndex + rowIndex] ? (
+                    {editModes[
+                      (currentPage - 1) * entries_per_page + rowIndex
+                    ] ? (
                       <>
                         <button
                           className={EDIT_BUTTON_STYLES}
@@ -284,7 +290,9 @@ const DataTableSection = (props: DataTableProps) => {
                           className="text-dark-pink"
                           onClick={() =>
                             handleDeleteButton(
-                              teamData[startIndex + rowIndex].teamId,
+                              teamData[
+                                (currentPage - 1) * entries_per_page + rowIndex
+                              ].teamId,
                             )
                           }
                         >
