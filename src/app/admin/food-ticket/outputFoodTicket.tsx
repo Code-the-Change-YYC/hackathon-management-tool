@@ -32,13 +32,12 @@ const OutputFoodTicket = () => {
   const handleDelete = async (event: FoodEvent) => {
     await deleteFoodEvent(event.id);
     setDeleting(true);
-    // setDeleting(false); // Reset deleting state after deletion
   };
 
   return (
     <div>
       {foodData && foodData.length > 0 && (
-        <h2 className="mb-6 text-xl font-bold">Display created food events:</h2>
+        <h2 className="my-6 text-xl font-bold">Display created food events:</h2>
       )}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {foodData !== undefined &&

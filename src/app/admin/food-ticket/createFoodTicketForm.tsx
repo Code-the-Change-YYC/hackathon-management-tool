@@ -5,9 +5,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 
 import { createFoodEvent, deleteFoodEvent } from "./userFoodTicketActions";
 
-const HEADER_STYLES = "text-2xl mb-4";
+const HEADER_STYLES = "text-2xl my-8";
 const INPUT_STYLES =
-  "rounded-lg border w-full p-3 my-2 border-2 border-[#A689FF] focus:border-[#b91c1c] focus-outline-none focus:ring-0";
+  "rounded-lg border w-full p-3 my-2 border-2 border-[#A689FF] focus:bg-[#ede9fe] ";
 const SUBMIT_STYLES =
   "bg-awesomer-purple px-5 py-3 text-white rounded-md hover:bg-[#A689FF]";
 const CLEAR_STYLES =
@@ -71,12 +71,12 @@ const CreateFoodTicketForm = () => {
   return (
     <>
       <div className=" flex min-h-screen flex-col items-center justify-center">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
           <h1 className={HEADER_STYLES}>Create Food Event</h1>
           <label>Team Name</label>
           <input
             {...register("name", {
-              required: "Ticket code is required ",
+              required: "Team name is required ",
             })}
             type="text"
             className={INPUT_STYLES}
@@ -132,7 +132,11 @@ const CreateFoodTicketForm = () => {
             <div className="text-red-500">{errors.totalGroupCount.message}</div>
           )}
           <div className="my-4 flex items-center justify-between text-white">
-            <button type="submit" className={CLEAR_STYLES}>
+            <button
+              onClick={() => reset()}
+              type="submit"
+              className={CLEAR_STYLES}
+            >
               Clear
             </button>
             <button

@@ -13,14 +13,6 @@ export async function createFoodEvent(fields: FormFields) {
     end: fields.end ? fields.end : "",
     totalGroupCount: fields.totalGroupCount ? fields.totalGroupCount : 1,
   });
-  // export async function createFoodEvent(fields: FoodEventCreateFormInputValues) {
-  //   const { errors } = await client.models.FoodEvent.create({
-  //     name: fields.name ? fields.name : "",
-  //     description: fields.description ? fields.description : "",
-  //     start: fields.start ? fields.start : "",
-  //     end: fields.end ? fields.end : "",
-  //     totalGroupCount: fields.totalGroupCount ? fields.totalGroupCount : 1,
-  //   });
 
   if (errors) {
     console.log(errors);
