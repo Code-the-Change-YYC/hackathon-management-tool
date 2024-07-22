@@ -3,7 +3,7 @@
 import { DateTime } from "luxon";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { createFoodEvent } from "./userFoodTicketActions";
+import { createFoodEvent, deleteFoodEvent } from "./userFoodTicketActions";
 
 const HEADER_STYLES = "text-xl my-2";
 const INPUT_STYLES =
@@ -26,8 +26,8 @@ const CreateFoodTicketForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormFields>(); // most basic version
+    formState: { errors, isSubmitting },
+  } = useForm<FormFields>();
 
   //When form gets submitted, first call handleSubmit from react hook, then it will ensure form fields are valid before calling onSubmit with the form field data
   //aka helps with verification
@@ -60,11 +60,11 @@ const CreateFoodTicketForm = () => {
       end: endDateTime.toJSDate(),
       currentTime,
     };
-    //console.log(data);
+
     console.log(formattedData);
     await createFoodEvent(formattedData);
-    // reset(); // Reset form fields after submission
   };
+
   return (
     <>
       <div className="m-8 flex min-h-screen flex-col items-center justify-center">
@@ -132,8 +132,12 @@ const CreateFoodTicketForm = () => {
             <button type="submit" className={CLEAR_STYLES}>
               Clear
             </button>
-            <button type="submit" className={SUBMIT_STYLES}>
-              Submit
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={SUBMIT_STYLES}
+            >
+              {isSubmitting ? "Loading..." : "Submit"}
             </button>
           </div>
         </form>
