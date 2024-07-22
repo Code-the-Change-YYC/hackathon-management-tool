@@ -26,6 +26,7 @@ const CreateFoodTicketForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>();
 
@@ -63,6 +64,8 @@ const CreateFoodTicketForm = () => {
 
     console.log(formattedData);
     await createFoodEvent(formattedData);
+
+    reset();
   };
 
   return (
