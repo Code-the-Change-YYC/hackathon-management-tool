@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 
 import { createFoodEvent, deleteFoodEvent } from "./userFoodTicketActions";
 
-const HEADER_STYLES = "text-xl my-2";
+const HEADER_STYLES = "text-2xl mb-4";
 const INPUT_STYLES =
   "rounded-lg border w-full p-3 my-2 border-2 border-[#A689FF] focus:border-[#b91c1c] focus-outline-none focus:ring-0";
 const SUBMIT_STYLES =
@@ -67,9 +67,9 @@ const CreateFoodTicketForm = () => {
 
   return (
     <>
-      <div className="m-8 flex min-h-screen flex-col items-center justify-center">
+      <div className=" flex min-h-screen flex-col items-center justify-center">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h1 className={HEADER_STYLES}>Create Food Ticket for Team</h1>
+          <h1 className={HEADER_STYLES}>Create Food Event</h1>
           <label>Team Name</label>
           <input
             {...register("name", {
