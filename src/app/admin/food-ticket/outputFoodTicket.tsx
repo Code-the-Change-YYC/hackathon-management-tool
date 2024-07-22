@@ -14,19 +14,26 @@ type FoodEvent = Schema["FoodEvent"]["type"];
 const OutputFoodTicket = () => {
   const client = generateClient<Schema>();
   const [foodData, setFoodData] = useState<FoodEvent[]>(); // Use useState to manage foodData
+  const [deleting, setDeleting] = useState(false);
+
+  const fetchData = async () => {
+    const { data, errors } = await client.models.FoodEvent.list();
+    if (!errors) {
+      setFoodData(data); // Update state with fetched data
+    } else {
+      console.error(errors);
+    }
+  };
 
   useEffect(() => {
-    async function fetchData() {
-      const { data, errors } = await client.models.FoodEvent.list();
-      if (!errors) {
-        setFoodData(data); // Update state with fetched data
-      } else {
-        console.error(errors);
-      }
-    }
-
     fetchData();
-  }, []);
+  }, [deleting]); // Re-fetch data when deleting state changes
+
+  const handleDelete = async (event: FoodEvent) => {
+    await deleteFoodEvent(event.id);
+    setDeleting(true);
+    // setDeleting(false); // Reset deleting state after deletion
+  };
 
   return (
     <div>
@@ -65,9 +72,9 @@ const OutputFoodTicket = () => {
               </p>
               <button
                 className={DELETE_STYLES}
-                onClick={() => deleteFoodEvent(event.id)}
+                onClick={() => handleDelete(event)}
               >
-                Delete
+                {deleting ? "Deleting..." : "Delete"}
               </button>
             </div>
           ))}
