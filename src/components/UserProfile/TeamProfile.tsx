@@ -3,6 +3,7 @@
 import { generateClient } from "aws-amplify/data";
 
 import { type Schema } from "@/amplify/data/resource";
+import LoadingRing from "@/components/LoadingRing";
 import TeamForm from "@/components/UserProfile/TeamForm";
 import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -66,8 +67,8 @@ const TeamProfile = () => {
   return (
     <>
       {isFetching ? (
-        <div className="flex w-full items-center justify-center bg-fuzzy-peach">
-          <h1 className="text-2xl">Loading...</h1>
+        <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
+          <LoadingRing />
         </div>
       ) : (
         <>
