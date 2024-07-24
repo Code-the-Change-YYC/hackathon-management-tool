@@ -3,7 +3,7 @@
 import { DateTime } from "luxon";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { createFoodEvent, deleteFoodEvent } from "./userFoodEventActions";
+import { createFoodEvent } from "./userFoodEventActions";
 
 const HEADER_STYLES = "text-2xl my-8";
 const INPUT_STYLES =
@@ -21,7 +21,11 @@ export declare type FormFields = {
   numberOfGroups: number;
 };
 
-const CreateFoodTicketForm = () => {
+type CreateFoodEventFormProps = {
+  fetchData: () => void;
+};
+
+const CreateFoodTicketForm = ({ fetchData }: CreateFoodEventFormProps) => {
   //register input fields to react hook form
   const {
     register,
@@ -65,6 +69,7 @@ const CreateFoodTicketForm = () => {
     console.log(formattedData);
     await createFoodEvent(formattedData);
     reset();
+    fetchData();
   };
 
   return (

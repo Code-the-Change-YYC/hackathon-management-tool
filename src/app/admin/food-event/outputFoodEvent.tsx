@@ -4,36 +4,22 @@ import { useEffect, useState } from "react";
 //import FoodEventCreateForm from "@../../../ui-components/FoodEventCreateForm";
 import { type Schema } from "@/amplify/data/resource";
 
-import { deleteFoodEvent } from "./userFoodEventActions";
-
 const DELETE_STYLES =
   "bg-awesomer-purple px-5 py-2 mt-6 mb-3 text-white rounded-md hover:bg-[#A689FF]";
 
 type FoodEvent = Schema["FoodEvent"]["type"];
 
-const OutputFoodTicket = () => {
-  const client = generateClient<Schema>();
-  const [foodData, setFoodData] = useState<FoodEvent[]>(); // Use useState to manage foodData
-  const [deleting, setDeleting] = useState(false);
+type OutputFoodEventProps = {
+  foodData: any; //tried making type as FoodEvent[];
+  handleDelete: (eventId: string) => Promise<void>;
+  isDeleting: boolean;
+};
 
-  const fetchData = async () => {
-    const { data, errors } = await client.models.FoodEvent.list();
-    if (!errors) {
-      setFoodData(data); // Update state with fetched data
-    } else {
-      console.error(errors);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [deleting]); // Re-fetch data when deleting state changes
-
-  const handleDelete = async (event: FoodEvent) => {
-    await deleteFoodEvent(event.id);
-    setDeleting(true);
-  };
-
+const OutputFoodEvent = ({
+  handleDelete,
+  foodData,
+  isDeleting,
+}: OutputFoodEventProps) => {
   return (
     <div>
       {foodData && foodData.length > 0 && (
@@ -71,9 +57,9 @@ const OutputFoodTicket = () => {
               </p>
               <button
                 className={DELETE_STYLES}
-                onClick={() => handleDelete(event)}
+                onClick={() => handleDelete(event.id)}
               >
-                {deleting ? "Deleting..." : "Delete"}
+                {isDeleting ? "Deleting..." : "Delete"}
               </button>
             </div>
           ))}
@@ -82,4 +68,4 @@ const OutputFoodTicket = () => {
   );
 };
 
-export default OutputFoodTicket;
+export default OutputFoodEvent;
