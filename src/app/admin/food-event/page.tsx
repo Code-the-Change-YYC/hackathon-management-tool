@@ -17,7 +17,7 @@ import OutputFoodEvent from "./outputFoodEvent";
 
 // type FoodEvent = Schema["FoodEvent"]["type"];
 
-export default function AdminFoodEvents() {
+export default function FoodEvents() {
   // const client = generateClient<Schema>();
 
   // const [foodData, setFoodData] = useState<FoodEvent[]>(); // Use useState to manage foodData

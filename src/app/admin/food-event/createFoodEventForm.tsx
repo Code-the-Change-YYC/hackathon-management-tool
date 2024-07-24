@@ -14,14 +14,14 @@ const CLEAR_STYLES =
   "bg-white px-5 py-3 text-black rounded-md border border-[#94a3b8] hover:bg-[#eae5fa] hover:text-[#7055fd]";
 
 export declare type FormFields = {
-  name: string;
+  mealType: string;
   description: string;
   start: string;
   end: string;
-  totalGroupCount: number;
+  numberOfGroups: number;
 };
 
-const CreateFoodTicketForm = ({}) => {
+const CreateFoodTicketForm = () => {
   //register input fields to react hook form
   const {
     register,
@@ -64,7 +64,6 @@ const CreateFoodTicketForm = ({}) => {
 
     console.log(formattedData);
     await createFoodEvent(formattedData);
-
     reset();
   };
 
@@ -73,26 +72,25 @@ const CreateFoodTicketForm = ({}) => {
       <div className=" flex min-h-screen flex-col items-center justify-center">
         <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
           <h1 className={HEADER_STYLES}>Create Food Event</h1>
-          <label>Team Name</label>
+          <label>Meal Type</label>
           <input
-            {...register("name", {
-              required: "Team name is required ",
+            {...register("mealType", {
+              required: "Type of meal is required ",
             })}
             type="text"
             className={INPUT_STYLES}
-            placeholder="Enter Team Name"
+            placeholder="Breakfast, Lunch, or Dinner"
           />
-          {errors.name && (
-            <div className="text-red-500">{errors.name.message}</div>
+          {errors.mealType && (
+            <div className="text-red-500">{errors.mealType.message}</div>
           )}
-          <label>Description</label>
-          <input
+          <label>Description of Food Event</label>
+          <textarea
             {...register("description", {
               required: "Description is required.",
             })}
-            type="text"
             className={INPUT_STYLES}
-            placeholder="Enter description of ticket"
+            placeholder="Description"
           />
           {errors.description && (
             <div className="text-red-500">{errors.description.message}</div>
@@ -119,17 +117,17 @@ const CreateFoodTicketForm = ({}) => {
           {errors.end && (
             <div className="text-red-500">{errors.end.message}</div>
           )}
-          <label>Total group count</label>
+          <label>Number of Groups for Scheduled Meal Pick Up</label>
           <input
-            {...register("totalGroupCount", {
-              required: "Total group count is required.",
+            {...register("numberOfGroups", {
+              required: "Number of groups is required.",
             })}
             type="text"
             className={INPUT_STYLES}
-            placeholder="Enter total group count"
+            placeholder="Number of Groups"
           />
-          {errors.totalGroupCount && (
-            <div className="text-red-500">{errors.totalGroupCount.message}</div>
+          {errors.numberOfGroups && (
+            <div className="text-red-500">{errors.numberOfGroups.message}</div>
           )}
           <div className="my-4 flex items-center justify-between text-white">
             <button
