@@ -1,7 +1,3 @@
-import { generateClient } from "aws-amplify/data";
-import { useEffect, useState } from "react";
-
-//import FoodEventCreateForm from "@../../../ui-components/FoodEventCreateForm";
 import { type Schema } from "@/amplify/data/resource";
 
 const DELETE_STYLES =
@@ -11,12 +7,14 @@ type FoodEvent = Schema["FoodEvent"]["type"];
 
 type OutputFoodEventProps = {
   foodData: any; //tried making type as FoodEvent[] but didn't work;
-  handleDelete: (eventId: string) => Promise<void>;
+  // handleDelete: (eventId: string) => Promise<void>;
   deleteFoodEventId: string | null;
+  handleDeletePopUp: () => void;
 };
 
 const OutputFoodEvent = ({
-  handleDelete,
+  // handleDelete,
+  handleDeletePopUp,
   foodData,
   deleteFoodEventId,
 }: OutputFoodEventProps) => {
@@ -57,9 +55,11 @@ const OutputFoodEvent = ({
               </p>
               <button
                 className={DELETE_STYLES}
-                onClick={() => handleDelete(event.id)}
+                // onClick={() => handleDelete(event.id)}
+                onClick={() => handleDeletePopUp()}
               >
-                {deleteFoodEventId === event.id ? "Deleting..." : "Delete"}
+                Delete
+                {/* {deleteFoodEventId === event.id ? "Deleting..." : "Delete"} */}
               </button>
             </div>
           ))}
