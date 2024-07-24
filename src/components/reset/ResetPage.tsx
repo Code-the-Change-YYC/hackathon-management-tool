@@ -1,16 +1,10 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-import { useState } from "react";
+import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 
 import type { Schema } from "@/amplify/data/resource";
-import {
-  Button,
-  CheckboxField,
-  Input,
-  Label,
-  TextAreaField,
-} from "@aws-amplify/ui-react";
+import { Button, CheckboxField, Input, Label } from "@aws-amplify/ui-react";
 import { useMutation } from "@tanstack/react-query";
 
 const client = generateClient<Schema>();
@@ -43,26 +37,59 @@ export default function ResetPage() {
       }
     },
   });
+  type Arguments = Pick<
+    Schema["ResetHackathon"]["args"],
+    | "resetUsers"
+    | "resetRooms"
+    | "resetScores"
+    | "resetTeams"
+    | "startDate"
+    | "endDate"
+    | "safetyCheck"
+  > &
+    Pick<Schema["Hackathon"]["type"], "scoringComponents" | "scoringSidepots">;
 
-  const [formState, setFormState] = useState<Schema["ResetHackathon"]["args"]>(
-    {} as Schema["ResetHackathon"]["args"],
-  );
-
-  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    userMutation.mutate(formState);
+  const onSubmit: SubmitHandler<Arguments> = (data) => {
+    userMutation.mutate(data);
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement;
+  const generateId = () => "_" + Math.random().toString(36).substr(2, 9);
 
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+  const { register, control, handleSubmit } = useForm({
+    defaultValues: {
+      scoringComponents: [
+        { friendlyName: "", isSidepot: false, id: generateId() },
+      ],
+      scoringSidepots: [
+        { friendlyName: "", isSidepot: true, id: generateId() },
+      ],
+      resetUsers: false,
+      resetTeams: false,
+      resetRooms: false,
+      resetScores: false,
+      startDate: "",
+      endDate: "",
+      safetyCheck: "",
+    },
+  });
+
+  const {
+    fields: scoringComponents,
+    append: appendScoringComponent,
+    remove: removeScoringComponent,
+  } = useFieldArray({
+    control,
+    name: "scoringComponents",
+  });
+
+  const {
+    fields: scoringSidepots,
+    append: appendScoringSidepot,
+    remove: removeScoringSidepot,
+  } = useFieldArray({
+    control,
+    name: "scoringSidepots",
+  });
 
   if (userMutation.isPending) {
     return (
@@ -80,138 +107,143 @@ export default function ResetPage() {
   }
   return (
     <form
-      onSubmit={submitForm}
+      onSubmit={handleSubmit(onSubmit)}
       className="relative flex w-full flex-col justify-center gap-4 bg-white p-4 md:p-8"
     >
       <div className="flex w-full flex-col justify-between gap-2 md:gap-12">
-        <div className="flex flex-col gap-2">
-          <TextAreaField
-            descriptiveText="Score Components "
-            label="Score Components (JSON): "
-            required
-            id="scoreComponents"
-            name="scoreComponents"
-            placeholder={`[
-              {
-                id: "Cool beans, this should be a uuid",
-                friendlyName: "no name for you",
-                isSidepot: false
-              },
-              {
-                id: "uuid v2",
-                friendlyName: "I love eating free food",
-                isSidepot: false
+        <div className="flex w-full flex-row">
+          <div className="mr-24 flex w-1/3 flex-col gap-2">
+            <Label>Score Components (JSON): </Label>
+            {scoringComponents.map((field, index) => (
+              <div key={field?.id} className="flex flex-row gap-2">
+                <Input
+                  required
+                  id="scoringComponents"
+                  {...register(`scoringComponents.${index}.friendlyName`)}
+                  placeholder="Usability, Creativity, etc."
+                />
+                <Button
+                  type="button"
+                  variation="primary"
+                  colorTheme="error"
+                  onClick={() => removeScoringComponent(index)}
+                >
+                  X
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={() =>
+                appendScoringComponent({
+                  friendlyName: "",
+                  isSidepot: false,
+                  id: generateId(),
+                })
               }
-            ]`}
-            value={formState.scoreComponents?.toString()}
-            onChange={handleChange}
-            resize="vertical"
-            rows={12}
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <TextAreaField
-            required
-            descriptiveText="Scoring Sidepots "
-            label="Scoring Sidepots (JSON): "
-            id="scoringSidepots"
-            name="scoringSidepots"
-            placeholder={`[
-                {
-                  id: "Cool beans, this should be a uuid",
-                  friendlyName: "no name for you",
-                  isSidepot: false
-                },
-                {
-                  id: "uuid v2",
-                  friendlyName: "I love eating free food",
-                  isSidepot: false
-                }
-              ]`}
-            value={formState.scoringSidepots?.toString() ?? ""}
-            onChange={handleChange}
-            resize="vertical"
-            rows={12}
-          />
-        </div>
-        <div className="flex w-1/3 flex-col gap-2">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="startDate">Start Date:</Label>
-            <Input
-              required
-              type="date"
-              id="startDate"
-              name="startDate"
-              placeholder="Last Name"
-              value={formState.startDate?.toString() ?? ""}
-              onChange={handleChange}
-            />
+            >
+              Add Score Component
+            </Button>
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="endDate">End Date: </Label>
-            <Input
-              required
-              type="date"
-              id="endDate"
-              name="endDate"
-              placeholder="Last Name"
-              value={formState.endDate?.toString() ?? ""}
-              onChange={handleChange}
+          <div className="flex w-1/3 flex-col gap-2">
+            <Label htmlFor="scoringSidepots">Scoring Sidepots (JSON): </Label>
+            {scoringSidepots.map((field, index) => (
+              <div key={field?.id} className="flex flex-row gap-2">
+                <Input
+                  required
+                  id="scoringSidepots"
+                  {...register(`scoringSidepots.${index}.friendlyName`)}
+                  placeholder="Usability, Creativity, etc."
+                />
+                <Button
+                  variation="primary"
+                  colorTheme="error"
+                  type="button"
+                  onClick={() => removeScoringSidepot(index)}
+                >
+                  X
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={() =>
+                appendScoringSidepot({
+                  friendlyName: "",
+                  isSidepot: true,
+                  id: generateId(),
+                })
+              }
+            >
+              Add Scoring Sidepot
+            </Button>
+          </div>
+        </div>
+        <div className="flex flex-row">
+          {" "}
+          <div className="mr-24 flex w-1/3 flex-col gap-2">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="startDate">Start Date:</Label>
+              <Input
+                required
+                type="date"
+                id="startDate"
+                placeholder="Last Name"
+                {...register("startDate")}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="endDate">End Date: </Label>
+              <Input
+                required
+                type="date"
+                id="endDate"
+                placeholder="Last Name"
+                {...register("endDate")}
+              />
+            </div>
+          </div>{" "}
+          <div className="flex w-1/3 flex-col gap-2">
+            <Label>Reset Fields</Label>
+            <CheckboxField label="Reset users: " {...register("resetUsers")} />
+            <CheckboxField label="Reset Teams: " {...register("resetTeams")} />
+            <CheckboxField label="Reset Rooms: " {...register("resetRooms")} />
+            <CheckboxField
+              label="Reset Scores: "
+              {...register("resetScores")}
             />
           </div>
         </div>
 
-        <div className="flex w-1/3 flex-col gap-2">
-          <Label>Reset Fields</Label>
-          <CheckboxField
-            name="resetUsers"
-            value="yes"
-            checked={formState.resetUsers === true}
-            onChange={handleChange}
-            label="Reset users: "
-          />
-          <CheckboxField
-            name="resetTeams"
-            value="yes"
-            checked={formState.resetTeams === true}
-            onChange={handleChange}
-            label="Reset Teams"
-          />
-          <CheckboxField
-            name="resetRooms"
-            value="yes"
-            checked={formState.resetRooms === true}
-            onChange={handleChange}
-            label="Reset Rooms"
-          />
-          <CheckboxField
-            name="resetScores"
-            value="yes"
-            checked={formState.resetScores === true}
-            onChange={handleChange}
-            label="Reset Scores: "
-          />
-        </div>
-        <div className="flex items-center">
-          <Button
-            variation="primary"
-            colorTheme={
-              userMutation.isSuccess
-                ? "success"
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="safetyCheck">Safety Check: </Label>
+          <div className="flex w-1/2 flex-row gap-2">
+            <Input
+              required
+              id="safetyCheck"
+              {...register("safetyCheck")}
+              className="w-20"
+            />
+            <Button
+              variation="primary"
+              colorTheme={
+                userMutation.isSuccess
+                  ? "success"
+                  : userMutation.isError
+                    ? "error"
+                    : undefined // Set the colorTheme to undefined if none of the conditions are met
+              }
+              loadingText="Loading..."
+              type="submit"
+              isLoading={userMutation.isPending}
+            >
+              {userMutation.isSuccess
+                ? "Success"
                 : userMutation.isError
-                  ? "error"
-                  : undefined // Set the colorTheme to undefined if none of the conditions are met
-            }
-            loadingText="Loading..."
-            type="submit"
-            isLoading={userMutation.isPending}
-          >
-            {userMutation.isSuccess
-              ? "Success"
-              : userMutation.isError
-                ? "Error"
-                : "Submit"}
-          </Button>
+                  ? "Error"
+                  : "Submit"}
+            </Button>
+          </div>
         </div>
       </div>
     </form>

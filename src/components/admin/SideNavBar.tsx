@@ -10,7 +10,7 @@ const judge_icon = "/svgs/admin/judges_icon.svg";
 const users_icon = "/svgs/admin/users_icon.svg";
 const team_icon = "/svgs/admin/team_icon.svg";
 const ticket_icon = "/svgs/admin/ticket_icon.svg";
-const reset_icon = "/svgs/admin/reset_icon.svg";
+const reset_hackathon_icon = "/svgs/admin/reset_hackathon_icon.svg";
 
 const NAV_BAR_SECTION_STYLES =
   "flex flex-col items-center bg-awesomer-purple h-full transition-width duration-300 md:w-80";
@@ -79,7 +79,7 @@ const SideNavBar = () => {
                     <div className={NAV_LINK_ICON_CONTAINER_STYLES}>
                       <div className={NAV_LINK_ICON_STYLES}>
                         <Image
-                          src={reset_icon}
+                          src={reset_hackathon_icon}
                           alt="Hackathon configuration icon"
                           width={20}
                           height={20}

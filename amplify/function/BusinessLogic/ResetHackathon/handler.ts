@@ -70,7 +70,7 @@ export const handler: Handler = async (event) => {
       resetUsers,
       startDate,
       endDate,
-      scoreComponents,
+      scoringComponents,
       scoringSidepots,
     } = event.arguments;
     if (safetyCheck !== "delete hackathon") {
@@ -239,20 +239,20 @@ export const handler: Handler = async (event) => {
     }
 
     // edit the scoringComponents
-    if (scoreComponents) {
+    if (scoringComponents) {
       console.log("editing scoreComponents data");
-      console.log(scoreComponents as string);
+      console.log(scoringComponents as string);
 
       // get the score Components Array from the JSON input
-      const scoreComponentsArray: ScoreComponentTypeInput[] = JSON.parse(
-        scoreComponents as string,
+      const scoringComponentsArray: ScoreComponentTypeInput[] = JSON.parse(
+        scoringComponents as string,
       );
       const { errors } = await client.graphql({
         query: updateHackathon,
         variables: {
           input: {
             id: HackathonID,
-            scoringComponents: scoreComponentsArray,
+            scoringComponents: scoringComponentsArray,
           },
         },
       });
