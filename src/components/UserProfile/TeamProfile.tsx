@@ -3,6 +3,7 @@
 import { generateClient } from "aws-amplify/data";
 
 import { type Schema } from "@/amplify/data/resource";
+import LoadingRing from "@/components/LoadingRing";
 import TeamForm from "@/components/UserProfile/TeamForm";
 import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -29,6 +30,8 @@ const TeamProfile = () => {
         id: userId,
       });
 
+      if (userResponse.errors) throw new Error(userResponse.errors[0].message);
+
       const userTeamId = userResponse.data?.teamId as string;
 
       if (!userTeamId) {
@@ -38,13 +41,21 @@ const TeamProfile = () => {
       const teamResponse = await client.models.Team.get({
         id: userTeamId,
       });
+
+      if (teamResponse.errors) throw new Error(teamResponse.errors[0].message);
+
       return teamResponse.data;
     },
   });
 
   const teamMutation = useMutation({
     mutationFn: async () => {
-      await client.models.User.update({ id: userId, teamId: null });
+      try {
+        await client.models.User.update({ id: userId, teamId: null });
+      } catch (error) {
+        console.error("Error updating ids", error);
+        throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -56,8 +67,8 @@ const TeamProfile = () => {
   return (
     <>
       {isFetching ? (
-        <div className="flex w-full items-center justify-center bg-fuzzy-peach">
-          <h1 className="text-2xl">Loading...</h1>
+        <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
+          <LoadingRing />
         </div>
       ) : (
         <>

@@ -6,6 +6,7 @@ import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsers
 import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMessageCode/resource";
+import { ResetHackathon } from "@/amplify/function/BusinessLogic/ResetHackathon/resource";
 import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
@@ -19,7 +20,13 @@ const schema = a
         id: a.id().required(),
         firstName: a.string(),
         lastName: a.string(),
-        role: a.string().default("Participant"),
+        role: a
+          .string()
+          .default("Participant")
+          .authorization((allow) => [
+            allow.ownerDefinedIn("profileOwner").to(["read"]),
+            allow.groups(["Admin"]).to(["read", "update"]),
+          ]),
         email: a.string(),
         institution: a.string(),
         completedRegistration: a.boolean(),
@@ -30,7 +37,7 @@ const schema = a
           .default(false)
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read"]),
-            allow.groups(["Admin"]).to(["read", "update"]),
+            allow.groups(["Admin"]).to(["read", "update", "delete"]),
           ]),
         teamId: a
           .id()
@@ -52,6 +59,7 @@ const schema = a
         JUDGE_room: a.belongsTo("Room", "JUDGE_roomId"),
       })
       .authorization((allow) => [
+        allow.groups(["Admin"]).to(["read", "update"]),
         allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
         allow.authenticated().to(["read"]),
       ]),
@@ -77,7 +85,7 @@ const schema = a
         attended: a.hasMany("UserFoodEventAttendance", "foodEventId"),
       })
       .authorization((allow) => [
-        allow.group("Admin"),
+        allow.group("Admin").to(["create"]),
         allow.authenticated().to(["read"]),
       ]),
     Team: a
@@ -106,7 +114,7 @@ const schema = a
       })
       .authorization((allow) => [
         allow.group("Admin").to(["create", "read", "update", "delete"]),
-        allow.group("Judge").to(["create", "update"]),
+        allow.group("Judge").to(["create", "read", "update"]),
       ]),
     Room: a
       .model({
@@ -116,7 +124,7 @@ const schema = a
         judges: a.hasMany("User", "JUDGE_roomId"),
       })
       .authorization((allow) => [
-        allow.group("Admin").to(["read", "update"]),
+        allow.group("Admin").to(["read", "create", "update"]),
         allow.authenticated().to(["read"]),
       ]),
     // For handling a many to many relationship of teams and rooms
@@ -130,7 +138,10 @@ const schema = a
         team: a.belongsTo("Team", "teamId"),
         room: a.belongsTo("Room", "roomId"),
       })
-      .authorization((allow) => [allow.authenticated().to(["read"])]),
+      .authorization((allow) => [
+        allow.authenticated().to(["read"]),
+        allow.group("Admin").to(["read", "create", "update"]),
+      ]),
     // Table to provide metadata for the hackathon
     Hackathon: a
       .model({
@@ -239,6 +250,23 @@ const schema = a
       .authorization((allow) => [allow.group("Admin")])
       .handler(a.handler.function(ScheduleTeamsAndJudges)),
 
+    ResetHackathon: a
+      .mutation()
+      .arguments({
+        scoreComponents: a.json().required(),
+        scoringSidepots: a.json().required(),
+        startDate: a.date().required(),
+        endDate: a.date().required(),
+        resetUsers: a.boolean().required(),
+        resetTeams: a.boolean().required(),
+        resetRooms: a.boolean().required(),
+        resetScores: a.boolean().required(),
+        safetyCheck: a.string().required(),
+      })
+      .authorization((allow) => [allow.group("Admin")])
+      .handler(a.handler.function(ResetHackathon))
+      .returns(a.ref("StatusCodeFunctionResponse")),
+
     // Custom resolvers
     SetUserAsCheckedIn: a
       .mutation()
@@ -259,6 +287,7 @@ const schema = a
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PreSignUp).to(["mutate"]),
     allow.resource(VerifyUserMessage).to(["query", "mutate"]),
+    allow.resource(ResetHackathon).to(["mutate", "query"]),
     allow.resource(AddUserToGroup).to(["mutate"]),
     allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
   ]);
