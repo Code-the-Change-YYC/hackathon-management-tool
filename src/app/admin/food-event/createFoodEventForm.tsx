@@ -66,7 +66,6 @@ const CreateFoodTicketForm = ({ fetchData }: CreateFoodEventFormProps) => {
       currentTime,
     };
 
-    console.log(formattedData);
     await createFoodEvent(formattedData);
     reset();
     fetchData();

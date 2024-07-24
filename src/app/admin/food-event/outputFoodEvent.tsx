@@ -10,15 +10,15 @@ const DELETE_STYLES =
 type FoodEvent = Schema["FoodEvent"]["type"];
 
 type OutputFoodEventProps = {
-  foodData: any; //tried making type as FoodEvent[];
+  foodData: any; //tried making type as FoodEvent[] but didn't work;
   handleDelete: (eventId: string) => Promise<void>;
-  isDeleting: boolean;
+  deleteFoodEventId: string | null;
 };
 
 const OutputFoodEvent = ({
   handleDelete,
   foodData,
-  isDeleting,
+  deleteFoodEventId,
 }: OutputFoodEventProps) => {
   return (
     <div>
@@ -59,7 +59,7 @@ const OutputFoodEvent = ({
                 className={DELETE_STYLES}
                 onClick={() => handleDelete(event.id)}
               >
-                {isDeleting ? "Deleting..." : "Delete"}
+                {deleteFoodEventId === event.id ? "Deleting..." : "Delete"}
               </button>
             </div>
           ))}
