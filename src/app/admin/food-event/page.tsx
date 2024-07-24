@@ -66,7 +66,10 @@ export default function FoodEvents() {
           handleDeletePopUp={handleDeletePopUp}
           deleteFoodEventId={deleteFoodEventId}
         />
-        <DeletePopUp isPopUpVisible={showDeletePopup} />
+        <DeletePopUp
+          isPopUpVisible={showDeletePopup}
+          onClose={() => setShowDeletePopup(false)}
+        />
       </div>
     </div>
   );

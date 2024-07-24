@@ -7,9 +7,10 @@ const DELETE_RECORD_POPUP_TILE_STYLES =
 
 type DeletePopUpProps = {
   isPopUpVisible: boolean;
+  onClose: () => void;
 };
 
-const DeletePopUp = ({ isPopUpVisible }: DeletePopUpProps) => {
+const DeletePopUp = ({ isPopUpVisible, onClose }: DeletePopUpProps) => {
   if (!isPopUpVisible) return null;
   return (
     <div className={DELETE_RECORD_POPUP_TILE_STYLES}>
@@ -18,7 +19,7 @@ const DeletePopUp = ({ isPopUpVisible }: DeletePopUpProps) => {
           <h1 className="mb-4 text-2xl font-bold">
             Are you sure you want to delete this record?
           </h1>
-          <button>
+          <button onClick={onClose}>
             <Image
               src={exit_icon}
               alt="Exit page icon"
