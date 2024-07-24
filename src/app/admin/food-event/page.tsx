@@ -37,23 +37,27 @@ export default function FoodEvents() {
     fetchData();
   }, []);
 
-  const handleDeletePopUp = () => {
-    setShowDeletePopup(true);
-  };
-
-  const handleDelete = async (eventID: string) => {
+  const handleDeletePopUp = (eventID: string) => {
     setDeleteFoodEventId(eventID);
-    try {
-      await deleteFoodEvent(eventID);
-      const newFoodData = foodData?.filter((event) => event.id !== eventID);
-      setFoodData(newFoodData);
-    } catch (error) {
-      console.error("Failed to delete Food Event", error);
-    }
+    setShowDeletePopup(true);
   };
 
   const handleClosePopUp = () => {
     setShowDeletePopup(false);
+    setDeleteFoodEventId(null); // Reset deleteFoodEventId if popup is closed
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteFoodEvent(deleteFoodEventId as string);
+      const newFoodData = foodData?.filter(
+        (event) => event.id !== deleteFoodEventId,
+      );
+      setFoodData(newFoodData);
+      setShowDeletePopup(false);
+    } catch (error) {
+      console.error("Failed to delete Food Event", error);
+    }
   };
 
   return (
@@ -62,13 +66,14 @@ export default function FoodEvents() {
         <CreateFoodEventForm fetchData={fetchData} />
         <OutputFoodEvent
           foodData={foodData}
-          // handleDelete={handleDelete}
           handleDeletePopUp={handleDeletePopUp}
-          deleteFoodEventId={deleteFoodEventId}
+          deleteFoodEventId={deleteFoodEventId ?? ""}
         />
         <DeletePopUp
           isPopUpVisible={showDeletePopup}
-          onClose={() => setShowDeletePopup(false)}
+          onClose={handleClosePopUp}
+          handleDelete={handleDelete}
+          deleteFoodEventId={deleteFoodEventId ?? ""}
         />
       </div>
     </div>

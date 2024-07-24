@@ -7,16 +7,13 @@ type FoodEvent = Schema["FoodEvent"]["type"];
 
 type OutputFoodEventProps = {
   foodData: any; //tried making type as FoodEvent[] but didn't work;
-  // handleDelete: (eventId: string) => Promise<void>;
-  deleteFoodEventId: string | null;
-  handleDeletePopUp: () => void;
+  deleteFoodEventId: string;
+  handleDeletePopUp: (eventID: string) => void;
 };
 
 const OutputFoodEvent = ({
-  // handleDelete,
   handleDeletePopUp,
   foodData,
-  deleteFoodEventId,
 }: OutputFoodEventProps) => {
   return (
     <div>
@@ -56,10 +53,9 @@ const OutputFoodEvent = ({
               <button
                 className={DELETE_STYLES}
                 // onClick={() => handleDelete(event.id)}
-                onClick={() => handleDeletePopUp()}
+                onClick={() => handleDeletePopUp(event.id)}
               >
                 Delete
-                {/* {deleteFoodEventId === event.id ? "Deleting..." : "Delete"} */}
               </button>
             </div>
           ))}

@@ -103,6 +103,7 @@ const CreateFoodTicketForm = ({ fetchData }: CreateFoodEventFormProps) => {
           <input
             {...register("start", {
               required: "Start date & time is required.",
+              valueAsDate: true,
             })}
             type="datetime-local"
             className={INPUT_STYLES}
@@ -114,6 +115,7 @@ const CreateFoodTicketForm = ({ fetchData }: CreateFoodEventFormProps) => {
           <input
             {...register("end", {
               required: "End date & time is required.",
+              valueAsDate: true,
             })}
             type="datetime-local"
             className={INPUT_STYLES}
@@ -125,6 +127,7 @@ const CreateFoodTicketForm = ({ fetchData }: CreateFoodEventFormProps) => {
           <input
             {...register("numberOfGroups", {
               required: "Number of groups is required.",
+              valueAsNumber: true,
             })}
             type="text"
             className={INPUT_STYLES}

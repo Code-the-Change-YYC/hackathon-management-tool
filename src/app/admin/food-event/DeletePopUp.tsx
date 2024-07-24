@@ -8,9 +8,16 @@ const DELETE_RECORD_POPUP_TILE_STYLES =
 type DeletePopUpProps = {
   isPopUpVisible: boolean;
   onClose: () => void;
+  handleDelete: () => void;
+  deleteFoodEventId: string;
 };
 
-const DeletePopUp = ({ isPopUpVisible, onClose }: DeletePopUpProps) => {
+const DeletePopUp = ({
+  isPopUpVisible,
+  onClose,
+  handleDelete,
+  deleteFoodEventId,
+}: DeletePopUpProps) => {
   if (!isPopUpVisible) return null;
   return (
     <div className={DELETE_RECORD_POPUP_TILE_STYLES}>
@@ -40,8 +47,11 @@ const DeletePopUp = ({ isPopUpVisible, onClose }: DeletePopUpProps) => {
           <button className="mr-4 rounded-md border border-black p-2 px-6 hover:opacity-40">
             Cancel
           </button>
-          <button className="rounded-md border bg-dark-pink p-2 px-6 text-white hover:bg-pastel-pink">
-            Delete
+          <button
+            onClick={handleDelete}
+            className="rounded-md border bg-dark-pink p-2 px-6 text-white hover:bg-pastel-pink"
+          >
+            Delete{" "}
           </button>
         </div>
       </div>
