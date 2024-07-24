@@ -4,20 +4,20 @@
 //import { generateClient } from "aws-amplify/data";
 //import { useEffect, useState } from "react";
 //import { type Schema } from "@/amplify/data/resource";
-import CreateFoodTicketForm from "./createFoodTicketForm";
-import OutputFoodTicket from "./outputFoodTicket";
+import CreateFoodEventForm from "./createFoodEventForm";
+import OutputFoodEvent from "./outputFoodEvent";
 
 //import FoodEventCreateForm from "@../../../ui-components/FoodEventCreateForm";
 //import { type Schema } from "@/amplify/data/resource";
 
-//import { deleteFoodEvent } from "./userFoodTicketActions";
+//import { deleteFoodEvent } from "./userFoodEventActions";
 
 // const DELETE_STYLES =
 //   "bg-awesomer-purple px-5 py-2 my-2 text-white rounded-md hover:bg-[#A689FF]";
 
 // type FoodEvent = Schema["FoodEvent"]["type"];
 
-export default function AdminFoodTickets() {
+export default function AdminFoodEvents() {
   // const client = generateClient<Schema>();
 
   // const [foodData, setFoodData] = useState<FoodEvent[]>(); // Use useState to manage foodData
@@ -41,8 +41,8 @@ export default function AdminFoodTickets() {
         {/* FoodEventCreateForm is the temporary form used, use a new component later on*/}
         {/* @ts-ignore - Temporarily since this will all be replaced */}
         {/* <FoodEventCreateForm onSubmit={createFoodEvent} /> */}
-        <CreateFoodTicketForm />
-        <OutputFoodTicket />
+        <CreateFoodEventForm />
+        <OutputFoodEvent />
       </div>
     </div>
   );

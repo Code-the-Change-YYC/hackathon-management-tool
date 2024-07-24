@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 //import FoodEventCreateForm from "@../../../ui-components/FoodEventCreateForm";
 import { type Schema } from "@/amplify/data/resource";
 
-import { deleteFoodEvent } from "./userFoodTicketActions";
+import { deleteFoodEvent } from "./userFoodEventActions";
 
 const DELETE_STYLES =
   "bg-awesomer-purple px-5 py-2 mt-6 mb-3 text-white rounded-md hover:bg-[#A689FF]";
