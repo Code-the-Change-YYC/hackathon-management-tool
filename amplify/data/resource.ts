@@ -253,7 +253,7 @@ const schema = a
     ResetHackathon: a
       .mutation()
       .arguments({
-        scoreComponents: a.json().required(),
+        scoringComponents: a.json().required(),
         scoringSidepots: a.json().required(),
         startDate: a.date().required(),
         endDate: a.date().required(),
