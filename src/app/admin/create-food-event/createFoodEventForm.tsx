@@ -3,6 +3,9 @@
 import { DateTime } from "luxon";
 import { SubmitHandler, useForm } from "react-hook-form";
 
+import { type Schema } from "@/amplify/data/resource";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { createFoodEvent } from "./userFoodEventActions";
 
 const HEADER_STYLES = "text-2xl my-8";
@@ -13,33 +16,31 @@ const SUBMIT_STYLES =
 const CLEAR_STYLES =
   "bg-white px-5 py-3 text-black rounded-md border border-[#94a3b8] hover:bg-[#eae5fa] hover:text-[#7055fd]";
 
-export declare type FormFields = {
-  mealType: string;
-  description: string;
-  start: string;
-  end: string;
-  numberOfGroups: number;
-};
+// type CreateFoodEventFormProps = {
+//   foodData: Array<Partial<Schema["FoodEvent"]["type"]>>;
+// };
 
-type CreateFoodEventFormProps = {
-  fetchData: () => void;
-};
-
-const CreateFoodTicketForm = ({ fetchData }: CreateFoodEventFormProps) => {
+const CreateFoodTicketForm = () => {
+  const queryClient = useQueryClient();
   //register input fields to react hook form
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FormFields>();
+  } = useForm<Schema["FoodEvent"]["type"]>();
 
-  //When form gets submitted, first call handleSubmit from react hook, then it will ensure form fields are valid before calling onSubmit with the form field data
-  //aka helps with verification
-  const onSubmit: SubmitHandler<FormFields> = async (data: any) => {
+  const foodEventMutation = useMutation({
+    mutationFn: createFoodEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["FoodEvent"] });
+      reset();
+    },
+  });
+  const onSubmit: SubmitHandler<Schema["FoodEvent"]["type"]> = async (data) => {
     const currentTime = DateTime.now()
       .setZone(process.env.TIME_ZONE)
-      .toJSDate(); //currentlocal time in the time zone
+      .toJSDate(); //current local time in the time zone
 
     // Parse and validate the start date
     const startDateTime = DateTime.fromISO(data.start, {
@@ -61,14 +62,12 @@ const CreateFoodTicketForm = ({ fetchData }: CreateFoodEventFormProps) => {
 
     const formattedData = {
       ...data,
-      start: startDateTime.toJSDate(),
-      end: endDateTime.toJSDate(),
+      start: startDateTime.toISO(),
+      end: endDateTime.toISO(),
       currentTime,
     };
-
-    await createFoodEvent(formattedData);
     reset();
-    fetchData();
+    foodEventMutation.mutate(formattedData);
   };
 
   return (
@@ -78,15 +77,15 @@ const CreateFoodTicketForm = ({ fetchData }: CreateFoodEventFormProps) => {
           <h1 className={HEADER_STYLES}>Create Food Event</h1>
           <label>Meal Type</label>
           <input
-            {...register("mealType", {
+            {...register("name", {
               required: "Type of meal is required ",
             })}
             type="text"
             className={INPUT_STYLES}
             placeholder="Breakfast, Lunch, or Dinner"
           />
-          {errors.mealType && (
-            <div className="text-red-500">{errors.mealType.message}</div>
+          {errors.name && (
+            <div className="text-red-500">{errors.name.message}</div>
           )}
           <label>Description of Food Event</label>
           <textarea
@@ -123,15 +122,15 @@ const CreateFoodTicketForm = ({ fetchData }: CreateFoodEventFormProps) => {
           )}
           <label>Number of Groups for Scheduled Meal Pick Up</label>
           <input
-            {...register("numberOfGroups", {
+            {...register("totalGroupCount", {
               required: "Number of groups is required.",
             })}
             type="text"
             className={INPUT_STYLES}
             placeholder="Number of Groups"
           />
-          {errors.numberOfGroups && (
-            <div className="text-red-500">{errors.numberOfGroups.message}</div>
+          {errors.totalGroupCount && (
+            <div className="text-red-500">{errors.totalGroupCount.message}</div>
           )}
           <div className="my-4 flex items-center justify-between text-white">
             <button

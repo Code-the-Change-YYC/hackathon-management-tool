@@ -1,17 +1,15 @@
 "use server";
 
-// import type { FoodEventCreateFormInputValues } from "@../../../ui-components/FoodEventCreateForm";
+import type { FoodEventCreateFormInputValues } from "@../../../ui-components/FoodEventCreateForm";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
-import type { FormFields } from "./createFoodEventForm";
-
-export async function createFoodEvent(fields: FormFields) {
+export async function createFoodEvent(fields: FoodEventCreateFormInputValues) {
   const { errors } = await client.models.FoodEvent.create({
-    name: fields.mealType ? fields.mealType : "",
+    name: fields.name ? fields.name : "",
     description: fields.description ? fields.description : "",
     start: fields.start ? fields.start : "",
     end: fields.end ? fields.end : "",
-    totalGroupCount: fields.numberOfGroups ? fields.numberOfGroups : 1,
+    totalGroupCount: fields.totalGroupCount ? fields.totalGroupCount : 1,
   });
 
   if (errors) {
