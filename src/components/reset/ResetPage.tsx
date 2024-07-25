@@ -13,7 +13,6 @@ export default function ResetPage() {
     mutationFn: async (input: Schema["ResetHackathon"]["args"]) => {
       console.log(input);
       try {
-        // e.preventDefault(); // This will prevent the default form submit action which is to refresh the page
         if (input.safetyCheck !== "delete hackathon") {
           console.log(
             `must complete safety check, looking for \'delete hackathon\'}`,
@@ -37,19 +36,8 @@ export default function ResetPage() {
       }
     },
   });
-  type Arguments = Pick<
-    Schema["ResetHackathon"]["args"],
-    | "resetUsers"
-    | "resetRooms"
-    | "resetScores"
-    | "resetTeams"
-    | "startDate"
-    | "endDate"
-    | "safetyCheck"
-  > &
-    Pick<Schema["Hackathon"]["type"], "scoringComponents" | "scoringSidepots">;
 
-  const onSubmit: SubmitHandler<Arguments> = (data) => {
+  const onSubmit: SubmitHandler<Schema["ResetHackathon"]["args"]> = (data) => {
     userMutation.mutate(data);
   };
 
@@ -113,7 +101,7 @@ export default function ResetPage() {
       <div className="flex w-full flex-col justify-between gap-2 md:gap-12">
         <div className="flex w-full flex-row">
           <div className="mr-24 flex w-1/3 flex-col gap-2">
-            <Label>Score Components (JSON): </Label>
+            <Label>Score Components: </Label>
             {scoringComponents.map((field, index) => (
               <div key={field?.id} className="flex flex-row gap-2">
                 <Input
@@ -146,7 +134,7 @@ export default function ResetPage() {
             </Button>
           </div>
           <div className="flex w-1/3 flex-col gap-2">
-            <Label htmlFor="scoringSidepots">Scoring Sidepots (JSON): </Label>
+            <Label htmlFor="scoringSidepots">Scoring Sidepots: </Label>
             {scoringSidepots.map((field, index) => (
               <div key={field?.id} className="flex flex-row gap-2">
                 <Input
@@ -216,11 +204,14 @@ export default function ResetPage() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="safetyCheck">Safety Check: </Label>
+          <Label htmlFor="safetyCheck">
+            Enter &quot;delete hackathon&quot; to confirm{" "}
+          </Label>
           <div className="flex w-1/2 flex-row gap-2">
             <Input
               required
               id="safetyCheck"
+              placeholder="delete hackathon"
               {...register("safetyCheck")}
               className="w-20"
             />
