@@ -24,8 +24,8 @@ const schema = a
           .string()
           .default("Participant")
           .authorization((allow) => [
-            allow.ownerDefinedIn("profileOwner").to(["read"]),
-            allow.groups(["Admin"]).to(["read", "update"]),
+            allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
+            allow.groups(["Admin"]).to(["read", "update", "create"]),
           ]),
         email: a.string(),
         institution: a.string(),
@@ -37,7 +37,7 @@ const schema = a
           .default(false)
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read"]),
-            allow.groups(["Admin"]).to(["read", "update", "delete"]),
+            allow.groups(["Admin"]).to(["read", "update", "delete", "create"]),
           ]),
         teamId: a
           .id()
@@ -45,7 +45,7 @@ const schema = a
             allow
               .ownerDefinedIn("profileOwner")
               .to(["read", "update", "delete"]),
-            allow.groups(["Admin"]).to(["read", "update", "delete"]),
+            allow.groups(["Admin"]).to(["read", "update", "delete", "create"]),
           ]),
         team: a.belongsTo("Team", "teamId"),
         attendedEvents: a.hasMany("UserFoodEventAttendance", "userId"),
@@ -59,9 +59,9 @@ const schema = a
         JUDGE_room: a.belongsTo("Room", "JUDGE_roomId"),
       })
       .authorization((allow) => [
-        allow.groups(["Admin"]).to(["read", "update"]),
-        allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
-        allow.authenticated().to(["read"]),
+        allow.groups(["Admin"]).to(["read", "update", "create"]),
+        allow.ownerDefinedIn("profileOwner").to(["read", "update", "create"]),
+        allow.authenticated().to(["read", "create"]),
       ]),
     // For handling a many to many relationship of users and food events
     UserFoodEventAttendance: a
@@ -98,7 +98,7 @@ const schema = a
         teamRooms: a.hasMany("TeamRoom", "teamId"),
       })
       .authorization((allow) => [
-        allow.group("Admin").to(["read", "update"]),
+        allow.group("Admin").to(["read", "update", "create"]),
         allow.authenticated().to(["read"]),
       ]),
     Score: a
@@ -168,6 +168,11 @@ const schema = a
       headers: a.json(),
     }),
     AddUserToGroupResponse: a.customType({
+      body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
+    ScheduleTeamsAndJudgesResponse: a.customType({
       body: a.json(),
       statusCode: a.integer(),
       headers: a.json(),
@@ -242,13 +247,12 @@ const schema = a
     ScheduleTeamsAndJudges: a
       .mutation()
       .arguments({
-        numOfTeams: a.integer().required(),
-        numOfJudges: a.integer().required(),
+        numOfJudgingRooms: a.integer().required(),
         judgingSessionsPerTeam: a.integer().required(),
       })
-      .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.group("Admin")])
-      .handler(a.handler.function(ScheduleTeamsAndJudges)),
+      .handler(a.handler.function(ScheduleTeamsAndJudges))
+      .returns(a.ref("ScheduleTeamsAndJudgesResponse")),
 
     ResetHackathon: a
       .mutation()

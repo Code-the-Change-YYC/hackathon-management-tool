@@ -11,6 +11,7 @@ type GeneratedQuery<InputType, OutputType> = string & {
 
 export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
   getTeam(id: $id) {
+    approved
     createdAt
     id
     members {
@@ -36,7 +37,9 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     lastName
     meals
     owner
+    role
     team {
+      approved
       createdAt
       id
       name
@@ -65,6 +68,7 @@ export const listTeams = /* GraphQL */ `query ListTeams(
     sortDirection: $sortDirection
   ) {
     items {
+      approved
       createdAt
       id
       name
@@ -94,6 +98,7 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       lastName
       meals
       owner
+      role
       teamId
       updatedAt
       __typename

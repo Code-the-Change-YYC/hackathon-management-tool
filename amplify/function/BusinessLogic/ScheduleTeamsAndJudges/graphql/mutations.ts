@@ -35,11 +35,25 @@ export const DemoFunction =
     APITypes.DemoFunctionMutationVariables,
     APITypes.DemoFunctionMutation
   >;
+export const addUserToGroup =
+  /* GraphQL */ `mutation AddUserToGroup($groupName: String!, $userId: String!) {
+  addUserToGroup(groupName: $groupName, userId: $userId) {
+    body
+    headers
+    statusCode
+    __typename
+  }
+}
+` as GeneratedMutation<
+    APITypes.AddUserToGroupMutationVariables,
+    APITypes.AddUserToGroupMutation
+  >;
 export const createTeam = /* GraphQL */ `mutation CreateTeam(
   $condition: ModelTeamConditionInput
   $input: CreateTeamInput!
 ) {
   createTeam(condition: $condition, input: $input) {
+    approved
     createdAt
     id
     members {
@@ -71,7 +85,9 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     lastName
     meals
     owner
+    role
     team {
+      approved
       createdAt
       id
       name
@@ -93,6 +109,7 @@ export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
   $input: DeleteTeamInput!
 ) {
   deleteTeam(condition: $condition, input: $input) {
+    approved
     createdAt
     id
     members {
@@ -124,7 +141,9 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     lastName
     meals
     owner
+    role
     team {
+      approved
       createdAt
       id
       name
@@ -146,6 +165,7 @@ export const updateTeam = /* GraphQL */ `mutation UpdateTeam(
   $input: UpdateTeamInput!
 ) {
   updateTeam(condition: $condition, input: $input) {
+    approved
     createdAt
     id
     members {
@@ -177,7 +197,9 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     lastName
     meals
     owner
+    role
     team {
+      approved
       createdAt
       id
       name

@@ -14,6 +14,7 @@ export const onCreateTeam = /* GraphQL */ `subscription OnCreateTeam(
   $owner: String
 ) {
   onCreateTeam(filter: $filter, owner: $owner) {
+    approved
     createdAt
     id
     members {
@@ -45,7 +46,9 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     lastName
     meals
     owner
+    role
     team {
+      approved
       createdAt
       id
       name
@@ -67,6 +70,7 @@ export const onDeleteTeam = /* GraphQL */ `subscription OnDeleteTeam(
   $owner: String
 ) {
   onDeleteTeam(filter: $filter, owner: $owner) {
+    approved
     createdAt
     id
     members {
@@ -98,7 +102,9 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     lastName
     meals
     owner
+    role
     team {
+      approved
       createdAt
       id
       name
@@ -120,6 +126,7 @@ export const onUpdateTeam = /* GraphQL */ `subscription OnUpdateTeam(
   $owner: String
 ) {
   onUpdateTeam(filter: $filter, owner: $owner) {
+    approved
     createdAt
     id
     members {
@@ -151,7 +158,9 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     lastName
     meals
     owner
+    role
     team {
+      approved
       createdAt
       id
       name

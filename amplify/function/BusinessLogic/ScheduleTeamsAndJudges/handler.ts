@@ -38,8 +38,20 @@ const client = generateClient<Schema>({
 export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
   async (event) => {
     var judgingSessionsPerTeam = event.arguments.judgingSessionsPerTeam;
-    var numOfJudgingRooms = event.arguments.numOfJudges;
-    var numOfTeams = event.arguments.numOfTeams;
+    var numOfJudgingRooms = event.arguments.numOfJudgingRooms;
+
+    console.log("judgingSessionsPerTeam: ", judgingSessionsPerTeam);
+
+    let teams = await client.models.Team.list({
+      filter: {
+        approved: { eq: true },
+      },
+      selectionSet: ["id", "name"],
+    });
+
+    console.log("tHere");
+
+    var numOfTeams = teams.data.length;
 
     if (judgingSessionsPerTeam > numOfJudgingRooms) {
       return {
@@ -54,8 +66,7 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
     if (numOfJudgingRooms > numOfTeams && judgingSessionsPerTeam > 1) {
       return {
         body: {
-          value:
-            "Not enough teams and too many judges, unrealistic case (will not account for)",
+          value: "Not enough teams and too many judges",
         },
         statusCode: 400,
         headers: { "Content-Type": "application/json" },
@@ -100,14 +111,33 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
         }
 
         schedulingMatrix[row][column] = teamNumber;
-
         teamNumber = (teamNumber + 1) % numOfTeams;
       }
     }
 
+    schedulingMatrix.map((row) =>
+      row.map((teamNumber) => teams.data[teamNumber]),
+    );
+
+    let judges = await client.models.User.list({
+      filter: {
+        role: { eq: "JUDGE" },
+      },
+      selectionSet: ["id", "firstName", "lastName"],
+    });
+
+    let judgingRooms = new Array(numOfJudgingRooms);
+
+    for (var i = 0; i < judges.data.length; i++) {
+      judgingRooms[i % numOfJudgingRooms].push(judges.data[i]);
+    }
+
     return {
-      body: { value: `No return condition reached` },
-      statusCode: 500,
+      body: {
+        judges: judgingRooms,
+        schedule: schedulingMatrix,
+      },
+      statusCode: 200,
       headers: { "Content-Type": "application/json" },
     };
   };

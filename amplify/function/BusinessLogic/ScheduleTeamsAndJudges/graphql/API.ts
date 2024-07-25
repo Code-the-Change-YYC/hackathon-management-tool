@@ -4,6 +4,7 @@
 
 export type Team = {
   __typename: "Team";
+  approved?: boolean | null;
   createdAt: string;
   id: string;
   members?: ModelUserConnection | null;
@@ -30,6 +31,7 @@ export type User = {
   lastName?: string | null;
   meals?: boolean | null;
   owner?: string | null;
+  role?: string | null;
   team?: Team | null;
   teamId?: string | null;
   updatedAt: string;
@@ -37,6 +39,7 @@ export type User = {
 
 export type ModelTeamFilterInput = {
   and?: Array<ModelTeamFilterInput | null> | null;
+  approved?: ModelBooleanInput | null;
   createdAt?: ModelStringInput | null;
   id?: ModelIDInput | null;
   name?: ModelStringInput | null;
@@ -45,6 +48,26 @@ export type ModelTeamFilterInput = {
   owner?: ModelStringInput | null;
   updatedAt?: ModelStringInput | null;
 };
+
+export type ModelBooleanInput = {
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
+  eq?: boolean | null;
+  ne?: boolean | null;
+};
+
+export enum ModelAttributeTypes {
+  _null = "_null",
+  binary = "binary",
+  binarySet = "binarySet",
+  bool = "bool",
+  list = "list",
+  map = "map",
+  number = "number",
+  numberSet = "numberSet",
+  string = "string",
+  stringSet = "stringSet",
+}
 
 export type ModelStringInput = {
   attributeExists?: boolean | null;
@@ -61,19 +84,6 @@ export type ModelStringInput = {
   notContains?: string | null;
   size?: ModelSizeInput | null;
 };
-
-export enum ModelAttributeTypes {
-  _null = "_null",
-  binary = "binary",
-  binarySet = "binarySet",
-  bool = "bool",
-  list = "list",
-  map = "map",
-  number = "number",
-  numberSet = "numberSet",
-  string = "string",
-  stringSet = "stringSet",
-}
 
 export type ModelSizeInput = {
   between?: Array<number | null> | null;
@@ -126,15 +136,9 @@ export type ModelUserFilterInput = {
   not?: ModelUserFilterInput | null;
   or?: Array<ModelUserFilterInput | null> | null;
   owner?: ModelStringInput | null;
+  role?: ModelStringInput | null;
   teamId?: ModelIDInput | null;
   updatedAt?: ModelStringInput | null;
-};
-
-export type ModelBooleanInput = {
-  attributeExists?: boolean | null;
-  attributeType?: ModelAttributeTypes | null;
-  eq?: boolean | null;
-  ne?: boolean | null;
 };
 
 export type GenericFunctionResponse = {
@@ -146,6 +150,7 @@ export type GenericFunctionResponse = {
 
 export type ModelTeamConditionInput = {
   and?: Array<ModelTeamConditionInput | null> | null;
+  approved?: ModelBooleanInput | null;
   createdAt?: ModelStringInput | null;
   name?: ModelStringInput | null;
   not?: ModelTeamConditionInput | null;
@@ -155,6 +160,7 @@ export type ModelTeamConditionInput = {
 };
 
 export type CreateTeamInput = {
+  approved?: boolean | null;
   id?: string | null;
   name?: string | null;
 };
@@ -172,6 +178,7 @@ export type ModelUserConditionInput = {
   not?: ModelUserConditionInput | null;
   or?: Array<ModelUserConditionInput | null> | null;
   owner?: ModelStringInput | null;
+  role?: ModelStringInput | null;
   teamId?: ModelIDInput | null;
   updatedAt?: ModelStringInput | null;
 };
@@ -185,6 +192,7 @@ export type CreateUserInput = {
   institution?: string | null;
   lastName?: string | null;
   meals?: boolean | null;
+  role?: string | null;
   teamId?: string | null;
 };
 
@@ -197,6 +205,7 @@ export type DeleteUserInput = {
 };
 
 export type UpdateTeamInput = {
+  approved?: boolean | null;
   id: string;
   name?: string | null;
 };
@@ -210,17 +219,24 @@ export type UpdateUserInput = {
   institution?: string | null;
   lastName?: string | null;
   meals?: boolean | null;
+  role?: string | null;
   teamId?: string | null;
 };
 
 export type ModelSubscriptionTeamFilterInput = {
   and?: Array<ModelSubscriptionTeamFilterInput | null> | null;
+  approved?: ModelSubscriptionBooleanInput | null;
   createdAt?: ModelSubscriptionStringInput | null;
   id?: ModelSubscriptionIDInput | null;
   name?: ModelSubscriptionStringInput | null;
   or?: Array<ModelSubscriptionTeamFilterInput | null> | null;
   owner?: ModelStringInput | null;
   updatedAt?: ModelSubscriptionStringInput | null;
+};
+
+export type ModelSubscriptionBooleanInput = {
+  eq?: boolean | null;
+  ne?: boolean | null;
 };
 
 export type ModelSubscriptionStringInput = {
@@ -266,13 +282,9 @@ export type ModelSubscriptionUserFilterInput = {
   meals?: ModelSubscriptionBooleanInput | null;
   or?: Array<ModelSubscriptionUserFilterInput | null> | null;
   owner?: ModelStringInput | null;
+  role?: ModelSubscriptionStringInput | null;
   teamId?: ModelSubscriptionIDInput | null;
   updatedAt?: ModelSubscriptionStringInput | null;
-};
-
-export type ModelSubscriptionBooleanInput = {
-  eq?: boolean | null;
-  ne?: boolean | null;
 };
 
 export type GetTeamQueryVariables = {
@@ -282,6 +294,7 @@ export type GetTeamQueryVariables = {
 export type GetTeamQuery = {
   getTeam?: {
     __typename: "Team";
+    approved?: boolean | null;
     createdAt: string;
     id: string;
     members?: {
@@ -311,8 +324,10 @@ export type GetUserQuery = {
     lastName?: string | null;
     meals?: boolean | null;
     owner?: string | null;
+    role?: string | null;
     team?: {
       __typename: "Team";
+      approved?: boolean | null;
       createdAt: string;
       id: string;
       name?: string | null;
@@ -337,6 +352,7 @@ export type ListTeamsQuery = {
     __typename: "ModelTeamConnection";
     items: Array<{
       __typename: "Team";
+      approved?: boolean | null;
       createdAt: string;
       id: string;
       name?: string | null;
@@ -368,6 +384,7 @@ export type ListUsersQuery = {
       lastName?: string | null;
       meals?: boolean | null;
       owner?: string | null;
+      role?: string | null;
       teamId?: string | null;
       updatedAt: string;
     } | null>;
@@ -402,6 +419,20 @@ export type DemoFunctionMutation = {
   } | null;
 };
 
+export type AddUserToGroupMutationVariables = {
+  groupName: string;
+  userId: string;
+};
+
+export type AddUserToGroupMutation = {
+  addUserToGroup?: {
+    __typename: "GenericFunctionResponse";
+    body?: string | null;
+    headers?: string | null;
+    statusCode?: number | null;
+  } | null;
+};
+
 export type CreateTeamMutationVariables = {
   condition?: ModelTeamConditionInput | null;
   input: CreateTeamInput;
@@ -410,6 +441,7 @@ export type CreateTeamMutationVariables = {
 export type CreateTeamMutation = {
   createTeam?: {
     __typename: "Team";
+    approved?: boolean | null;
     createdAt: string;
     id: string;
     members?: {
@@ -440,8 +472,10 @@ export type CreateUserMutation = {
     lastName?: string | null;
     meals?: boolean | null;
     owner?: string | null;
+    role?: string | null;
     team?: {
       __typename: "Team";
+      approved?: boolean | null;
       createdAt: string;
       id: string;
       name?: string | null;
@@ -461,6 +495,7 @@ export type DeleteTeamMutationVariables = {
 export type DeleteTeamMutation = {
   deleteTeam?: {
     __typename: "Team";
+    approved?: boolean | null;
     createdAt: string;
     id: string;
     members?: {
@@ -491,8 +526,10 @@ export type DeleteUserMutation = {
     lastName?: string | null;
     meals?: boolean | null;
     owner?: string | null;
+    role?: string | null;
     team?: {
       __typename: "Team";
+      approved?: boolean | null;
       createdAt: string;
       id: string;
       name?: string | null;
@@ -512,6 +549,7 @@ export type UpdateTeamMutationVariables = {
 export type UpdateTeamMutation = {
   updateTeam?: {
     __typename: "Team";
+    approved?: boolean | null;
     createdAt: string;
     id: string;
     members?: {
@@ -542,8 +580,10 @@ export type UpdateUserMutation = {
     lastName?: string | null;
     meals?: boolean | null;
     owner?: string | null;
+    role?: string | null;
     team?: {
       __typename: "Team";
+      approved?: boolean | null;
       createdAt: string;
       id: string;
       name?: string | null;
@@ -563,6 +603,7 @@ export type OnCreateTeamSubscriptionVariables = {
 export type OnCreateTeamSubscription = {
   onCreateTeam?: {
     __typename: "Team";
+    approved?: boolean | null;
     createdAt: string;
     id: string;
     members?: {
@@ -593,8 +634,10 @@ export type OnCreateUserSubscription = {
     lastName?: string | null;
     meals?: boolean | null;
     owner?: string | null;
+    role?: string | null;
     team?: {
       __typename: "Team";
+      approved?: boolean | null;
       createdAt: string;
       id: string;
       name?: string | null;
@@ -614,6 +657,7 @@ export type OnDeleteTeamSubscriptionVariables = {
 export type OnDeleteTeamSubscription = {
   onDeleteTeam?: {
     __typename: "Team";
+    approved?: boolean | null;
     createdAt: string;
     id: string;
     members?: {
@@ -644,8 +688,10 @@ export type OnDeleteUserSubscription = {
     lastName?: string | null;
     meals?: boolean | null;
     owner?: string | null;
+    role?: string | null;
     team?: {
       __typename: "Team";
+      approved?: boolean | null;
       createdAt: string;
       id: string;
       name?: string | null;
@@ -665,6 +711,7 @@ export type OnUpdateTeamSubscriptionVariables = {
 export type OnUpdateTeamSubscription = {
   onUpdateTeam?: {
     __typename: "Team";
+    approved?: boolean | null;
     createdAt: string;
     id: string;
     members?: {
@@ -695,8 +742,10 @@ export type OnUpdateUserSubscription = {
     lastName?: string | null;
     meals?: boolean | null;
     owner?: string | null;
+    role?: string | null;
     team?: {
       __typename: "Team";
+      approved?: boolean | null;
       createdAt: string;
       id: string;
       name?: string | null;
