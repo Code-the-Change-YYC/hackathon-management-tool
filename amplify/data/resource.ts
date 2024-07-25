@@ -86,9 +86,9 @@ const schema = a
       ]),
     Team: a
       .model({
-        name: a.string(),
-        id: a.id(),
-        approved: a.boolean(),
+        name: a.string().required(),
+        id: a.id().required(),
+        approved: a.boolean().default(false),
         members: a.hasMany("User", "teamId"),
         scores: a.hasMany("Score", "teamId"),
         teamRooms: a.hasMany("TeamRoom", "teamId"),
@@ -99,7 +99,7 @@ const schema = a
       ]),
     Score: a
       .model({
-        id: a.id().required(),
+        id: a.id(),
         score: a.json().required(),
         hackathonId: a.id().required(),
         hackathon: a.belongsTo("Hackathon", "hackathonId"),
@@ -108,6 +108,7 @@ const schema = a
         teamId: a.id().required(),
         team: a.belongsTo("Team", "teamId"),
       })
+      .identifier(["teamId", "judgeId"])
       .authorization((allow) => [
         allow.group("Admin").to(["create", "read", "update", "delete"]),
         allow.group("Judge").to(["create", "read", "update"]),
@@ -144,8 +145,16 @@ const schema = a
         id: a.id().required(),
         startDate: a.date().required(),
         endDate: a.date().required(),
-        scoringComponents: a.ref("ScoreComponentType").array().required(),
-        scoringSidepots: a.ref("ScoreComponentType").array().required(),
+        scoringComponents: a
+          .ref("ScoreComponentType")
+          .required()
+          .array()
+          .required(),
+        scoringSidepots: a
+          .ref("ScoreComponentType")
+          .required()
+          .array()
+          .required(),
         scores: a.hasMany("Score", "hackathonId"),
       })
       .authorization((allow) => [
