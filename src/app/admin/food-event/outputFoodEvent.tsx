@@ -52,7 +52,6 @@ const OutputFoodEvent = ({
               </p>
               <button
                 className={DELETE_STYLES}
-                // onClick={() => handleDelete(event.id)}
                 onClick={() => handleDeletePopUp(event.id)}
               >
                 Delete
