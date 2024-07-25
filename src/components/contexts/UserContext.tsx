@@ -29,6 +29,7 @@ export interface IUser {
   email?: string;
   teamId?: string;
   populated: boolean;
+  JUDGE_roomId: string;
 }
 
 interface IUserReturn {
@@ -49,6 +50,7 @@ export function UserContextProvider({ children }: Props) {
       username: "",
       type: UserType.Guest,
       populated: false,
+      JUDGE_roomId: "",
     },
     queryKey: ["Users"],
     queryFn: async () => {
@@ -91,6 +93,7 @@ export function UserContextProvider({ children }: Props) {
             email: response.data?.email ?? "",
             firstName: response.data?.firstName ?? "",
             lastName: response.data?.lastName ?? "",
+            JUDGE_roomId: response.data?.JUDGE_roomId,
           } as IUser;
         } catch (error) {
           console.error(error);
@@ -145,6 +148,7 @@ export function UserContextProvider({ children }: Props) {
           username: "",
           type: UserType.Guest,
           populated: true,
+          JUDGE_roomId: "",
         },
       }}
     >
