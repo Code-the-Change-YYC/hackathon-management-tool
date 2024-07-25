@@ -1,6 +1,6 @@
 import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import LoadingRing from "@/components/LoadingRing";
@@ -27,163 +27,99 @@ const SUBHEADER_TEXT_STYLES = "mb-4 text-xl font-semibold";
 const client = generateClient<Schema>();
 
 const JudgingDashboard = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTeamName, setSelectedTeamName] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
-  const [tableData, setTableData] = useState<string[][]>([]);
-  const [tableHeaders, setTableHeaders] = useState<
-    { columnHeader: string; className: string }[]
-  >([]);
-  const [panelData, setPanelData] = useState<
-    Array<{ icon: string; alt: string; stat: number; text: string }>
-  >([
+  const [selectedTeam, setSelectedTeamId] = useState("");
+
+  const { currentUser } = useUser();
+
+  const { data: roomData, isFetching: roomIsFetching } = useQuery({
+    queryKey: ["Room"],
+    queryFn: async () => {
+      const { data, errors } = await client.models.Room.get({
+        id: currentUser.JUDGE_roomId,
+      });
+      if (errors) throw Error(errors[0].message);
+
+      return data;
+    },
+  });
+
+  const { data: hackathonData, isFetching: hackathonIsFetching } = useQuery({
+    queryKey: ["Hackathon"],
+    queryFn: async () => {
+      const { data, errors } = await client.models.Hackathon.list();
+      if (errors) throw Error(errors[0].message);
+
+      return data[0];
+    },
+  });
+
+  const { data: teamsForRoomData, isFetching: teamsForRoomIsFetching } =
+    useQuery({
+      queryKey: ["TeamsForRoom"],
+      queryFn: async () => {
+        const teamRooms = (await roomData?.teamRoom())?.data;
+        if (!teamRooms) return [];
+        const teams = await Promise.all(
+          teamRooms.map(async (teamRoom) => (await teamRoom.team()).data),
+        );
+        if (!teams) return [];
+
+        return teams;
+      },
+    });
+
+  if (!hackathonData || !teamsForRoomData || !roomData) return;
+
+  const tableHeaders = [
+    { columnHeader: "Team Name", className: "w-1/3 rounded-tl-lg" },
+    ...hackathonData.scoringComponents.map((component) => ({
+      columnHeader: component.friendlyName,
+      className: "w-fit",
+    })),
+    ...hackathonData.scoringSidepots.map((component) => ({
+      columnHeader: (
+        <div className="flex flex-col">
+          <p>Sidepot:</p>
+          {component.friendlyName}
+        </div>
+      ),
+      className: "w-fit bg-pastel-pink",
+    })),
+  ];
+
+  const panelData = [
     {
       icon: "/svgs/judging/team_icon.svg",
       alt: "Teams assigned icon",
-      stat: 0,
-      text: "Loading...",
+      stat: teamsForRoomData.length,
+      text: `Teams Assigned to ${roomData.name}`,
     },
     {
       icon: "/svgs/judging/teams_left.svg",
       alt: "Teams left icon",
-      stat: 0,
+      stat: teamsForRoomData.filter(
+        async (team) =>
+          (await team?.scores())?.data.filter(
+            (score) => score.judgeId === currentUser.username,
+          ).length === 0,
+      ).length,
       text: "Teams Left To Score",
     },
-  ]);
+  ];
 
-  const { currentUser } = useUser();
-  const userId = currentUser.username;
+  const isFetching =
+    roomIsFetching || hackathonIsFetching || teamsForRoomIsFetching;
 
-  const { data, isFetching } = useQuery({
-    initialDataUpdatedAt: 0,
-    queryKey: ["JudgeData"],
-    queryFn: async () => {
-      try {
-        const userResponse = await client.models.User.get({ id: userId });
-        const userData = userResponse.data;
-
-        if (userResponse.errors)
-          throw new Error(userResponse.errors[0].message);
-
-        if (!userData) throw new Error("User data not found");
-
-        const judgeRoomId = userData.JUDGE_roomId;
-        if (!judgeRoomId) throw new Error("Judge room ID not found");
-
-        const roomResponse = await client.models.Room.get({ id: judgeRoomId });
-        const roomData = roomResponse.data;
-        if (!roomData) throw new Error("Room data not found");
-
-        const hackathonResponse = await client.models.Hackathon.list();
-        const hackathonData = hackathonResponse.data[0];
-        if (!hackathonData) throw new Error("Hackathon data not found");
-
-        const teamRoomResponse = await roomData.teamRoom();
-        const teamRoomData = teamRoomResponse.data;
-        if (!teamRoomData || teamRoomData.length === 0)
-          throw new Error("Team room data not found or empty");
-
-        const teams = await Promise.all(
-          teamRoomData.map(async (teamRoom: any) => {
-            const teamResponse = await client.models.Team.get({
-              id: teamRoom.teamId,
-            });
-            const teamData = teamResponse.data;
-            if (!teamData)
-              throw new Error(
-                `Team data not found for teamId: ${teamRoom.teamId}`,
-              );
-
-            const scoresResponse = await teamData.scores();
-            const scoresData = scoresResponse.data;
-
-            return {
-              id: teamData.id,
-              name: teamData.name,
-              scores: scoresData || [],
-              scored: scoresData && scoresData.length > 0,
-            };
-          }),
-        );
-
-        return {
-          room: roomData,
-          teams,
-          scoringComponents: hackathonData.scoringComponents || [],
-        };
-      } catch (error) {
-        console.error("Error fetching judge data:", error);
-        throw error;
-      }
-    },
-  });
-
-  useEffect(() => {
-    if (data) {
-      const updatedTableHeaders = [
-        { columnHeader: "Team Name", className: "w-1/3 rounded-tl-lg" },
-        ...(data.scoringComponents ?? []).map((component: any) => ({
-          columnHeader: component?.friendlyName ?? "N/A",
-          className: "w-1/7",
-        })),
-      ];
-
-      const updatedTableData = data.teams.map((team: any) => {
-        const parsedScores =
-          team.scores.length > 0
-            ? team.scores.flatMap((scoreData: any) => {
-                try {
-                  const parsedScore = JSON.parse(scoreData.score);
-                  return Object.values(parsedScore);
-                } catch (error) {
-                  console.error("Error parsing score JSON:", error);
-                  return Array(data.scoringComponents.length).fill(
-                    "Invalid Score",
-                  );
-                }
-              })
-            : Array(data.scoringComponents.length).fill("N/A");
-
-        return [team.name, ...parsedScores, team.scores.length > 0];
-      });
-
-      const updatedPanelData = [
-        {
-          icon: "/svgs/judging/team_icon.svg",
-          alt: "Teams assigned icon",
-          stat: data.teams.length,
-          text: `Teams Assigned to Room ${data.room.name}`,
-        },
-        {
-          icon: "/svgs/judging/teams_left.svg",
-          alt: "Teams left icon",
-          stat: data.teams.filter((team: any) => team.scores.length === 0)
-            .length,
-          text: "Teams Left To Score",
-        },
-      ];
-
-      setPanelData(updatedPanelData);
-      setTableHeaders(updatedTableHeaders);
-      setTableData(updatedTableData);
-    }
-  }, [data]);
-
-  const handleCreateScoreClick = (teamName: string) => {
-    setSelectedTeamName(teamName);
-    setIsEditing(false);
-    setIsModalOpen(true);
+  const handleCreateScoreClick = (teamId: string) => {
+    setSelectedTeamId(teamId);
   };
 
-  const handleEditScoreClick = (teamName: string) => {
-    setSelectedTeamName(teamName);
-    setIsEditing(true);
-    setIsModalOpen(true);
+  const handleEditScoreClick = (teamId: string) => {
+    setSelectedTeamId(teamId);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedTeamName("");
+    setSelectedTeamId("");
   };
 
   return (
@@ -228,7 +164,7 @@ const JudgingDashboard = () => {
               <div className="w-3/4">
                 <ScoresTable
                   tableHeaders={tableHeaders}
-                  tableData={tableData}
+                  tableData={teamsForRoomData as Schema["Team"]["type"][]}
                   onCreateScoreClick={handleCreateScoreClick}
                   onEditScoreClick={handleEditScoreClick}
                   colorScheme="pink"
@@ -237,12 +173,13 @@ const JudgingDashboard = () => {
               </div>
             </div>
           </div>
-          <ModalPopup
-            isOpen={isModalOpen}
-            onClose={closeModal}
-            teamName={selectedTeamName}
-            isEditing={isEditing}
-          />
+          {selectedTeam !== "" && (
+            <ModalPopup
+              hackathon={hackathonData}
+              onClose={closeModal}
+              teamId={selectedTeam}
+            />
+          )}
         </div>
       )}
     </>

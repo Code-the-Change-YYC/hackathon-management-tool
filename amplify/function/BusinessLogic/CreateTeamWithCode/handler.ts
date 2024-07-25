@@ -119,8 +119,8 @@ export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
         headers: { "Content-Type": "application/json" },
       };
     }
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return {
       body: { value: `Unhandled Internal Server Error` },
       statusCode: 500,
