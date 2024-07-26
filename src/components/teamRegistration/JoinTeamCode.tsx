@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type ChangeEvent, useRef, useState } from "react";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import type { Id } from "react-toastify";
 import { toast } from "react-toastify";
 
@@ -13,6 +13,22 @@ import PurpleButton from "../PurpleButton";
 import { useUser } from "../contexts/UserContext";
 
 export default function JoinTeamCode() {
+  useEffect(() => {
+    const handlePasteEvent = (e: ClipboardEvent) => {
+      const clipboardContentsText = e.clipboardData?.getData("text");
+      if (clipboardContentsText?.length === 4) {
+        e.preventDefault();
+        setTeamIDInput(clipboardContentsText.split(""));
+        const teamID = teamIDInput.join("");
+        toastRef.current = toast.loading("Joining team...");
+        joinTeamMutation.mutate(teamID);
+      }
+    };
+    window.addEventListener("paste", handlePasteEvent);
+    return () => {
+      window.removeEventListener("paste", handlePasteEvent);
+    };
+  }, []);
   const [teamIDInput, setTeamIDInput] = useState(Array(4).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const toastRef = useRef<Id>("");

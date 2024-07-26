@@ -3,7 +3,7 @@ import { Underline } from "@/utils/text-utils";
 
 export default function page() {
   const instructions = [
-    "Obtain the unique 6-digit Team ID from your team member who registered your group.",
+    "Obtain the unique 4-digit Team ID from your team member who registered your group.",
     "Enter the Team ID below.",
     "Click on “Join.”",
     "Its official! You joined the team!",
