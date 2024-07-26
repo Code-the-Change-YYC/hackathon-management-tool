@@ -52,7 +52,7 @@ export function UserContextProvider({ children }: Props) {
       populated: false,
       JUDGE_roomId: "",
     },
-    queryKey: ["Users"],
+    queryKey: ["User"],
     queryFn: async () => {
       try {
         const user = await fetchAuthSession();
@@ -119,13 +119,13 @@ export function UserContextProvider({ children }: Props) {
       switch (data.payload.event) {
         case "signedIn":
           queryClient.invalidateQueries({
-            queryKey: ["Users"],
+            queryKey: ["User"],
             exact: true,
           });
           console.log("Signed In");
           break;
         case "signedOut":
-          queryClient.setQueryData(["Users"], {
+          queryClient.setQueryData(["User"], {
             username: "",
             type: UserType.Guest,
             populated: true,
