@@ -38,30 +38,20 @@ const client = generateClient<Schema>({
 
 export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
   async (event) => {
-    var judgingSessionsPerTeam = event.arguments.judgingSessionsPerTeam;
-    var numOfJudgingRooms = event.arguments.numOfJudgingRooms;
+    let judgingSessionsPerTeam = event.arguments.judgingSessionsPerTeam;
+    let numOfJudgingRooms = event.arguments.numOfJudgingRooms;
 
-    console.log("judgingSessionsPerTeam: ", judgingSessionsPerTeam);
     let teams = null;
-    try {
-      teams = await client.graphql({
-        query: listTeams,
-        variables: {
-          filter: {
-            approved: { eq: true },
-          },
+    teams = await client.graphql({
+      query: listTeams,
+      variables: {
+        filter: {
+          approved: { eq: true },
         },
-      });
-    } catch (error) {
-      console.error("Error fetching teams: ", error);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: "Internal server error" }),
-        headers: { "Content-Type": "application/json" },
-      };
-    }
+      },
+    });
 
-    var numOfTeams = teams.data.listTeams.items.length;
+    let numOfTeams = teams.data.listTeams.items.length;
 
     if (judgingSessionsPerTeam > numOfJudgingRooms) {
       return {
@@ -86,9 +76,10 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
     let totalSessions = numOfTeams * judgingSessionsPerTeam;
     let numberOfRows = Math.ceil(totalSessions / numOfJudgingRooms);
     let numberOfColumns = numOfJudgingRooms;
-    let schedulingMatrix = new Array(numberOfRows).map(() =>
-      new Array(numberOfColumns).fill(null),
-    );
+    let schedulingMatrix = [];
+    for (let i = 0; i < numberOfRows; i++) {
+      schedulingMatrix.push(new Array(numberOfColumns).fill(null));
+    }
 
     let teamNumber = 0;
 
@@ -104,8 +95,8 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
 
     // Populate the scheduling matrix with team numbers
     // Each team number will only appear once in each column and each row
-    for (var row = 0; row < numberOfRows; row++) {
-      for (var column = 0; column < numberOfColumns; column++) {
+    for (let row = 0; row < numberOfRows; row++) {
+      for (let column = 0; column < numberOfColumns; column++) {
         let curSessionIndex = row * numberOfColumns + column;
         if (curSessionIndex >= totalSessions) {
           break;
@@ -127,7 +118,11 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
 
     // Convert team numbers to team IDs
     schedulingMatrix.map((row) =>
-      row.map((teamNumber) => teams.data.listTeams.items[teamNumber].id),
+      row.map((teamNumber, index) => {
+        if (teamNumber !== null) {
+          row[index] = teams.data.listTeams.items[teamNumber].id;
+        }
+      }),
     );
 
     let judges = await client.graphql({
@@ -140,9 +135,13 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
     });
 
     let judgingRooms = new Array(numOfJudgingRooms);
-
-    for (var i = 0; i < judges.data.listUsers.items.length; i++) {
-      judgingRooms[i % numOfJudgingRooms].push(judges.data.listUsers.items[i]);
+    for (let i = 0; i < numOfJudgingRooms; i++) {
+      judgingRooms[i] = [];
+    }
+    for (let i = 0; i < judges.data.listUsers.items.length; i++) {
+      judgingRooms[i % numOfJudgingRooms].push(
+        judges.data.listUsers.items[i].id,
+      );
     }
 
     return {
