@@ -52,13 +52,15 @@ export default function JoinTeamCode() {
   const { currentUser } = useUser();
   const joinTeamMutation = useMutation({
     mutationFn: async (teamID: string) => {
-      return await client.mutations.AssignUsersToTeams({
+      const res = await client.mutations.AssignUsersToTeams({
         teamId: teamID,
         userId: currentUser.username,
       });
+      if (res.errors) throw new Error(res.errors[0].message);
+      return res.data;
     },
-    onSuccess: (res) => {
-      if (res.data?.body && res.data.statusCode === 200) {
+    onSuccess: (data) => {
+      if (data?.statusCode === 200) {
         toast.update(toastRef.current, {
           render: "Team joined successfully",
           type: "success",
@@ -66,15 +68,6 @@ export default function JoinTeamCode() {
           autoClose: 3000,
         });
         router.push(`/join/team/${teamIDInput.join("")}`);
-      } else {
-        const errorMessage =
-          JSON.parse(res.data?.body as string).value ?? "Failed to join team";
-        toast.update(toastRef.current, {
-          render: errorMessage,
-          type: "error",
-          isLoading: false,
-          autoClose: 3000,
-        });
       }
     },
     onError: () => {
