@@ -9,6 +9,8 @@ import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMe
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
+import { ScheduleTeamsAndJudges } from "../function/BusinessLogic/ScheduleTeamsAndJudges/resource";
+
 const schema = a
   .schema({
     User: a
@@ -20,8 +22,8 @@ const schema = a
           .string()
           .default("Participant")
           .authorization((allow) => [
-            allow.ownerDefinedIn("profileOwner").to(["read"]),
-            allow.groups(["Admin"]).to(["read", "update"]),
+            allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
+            allow.groups(["Admin"]).to(["read", "update", "create"]),
           ]),
         email: a.string(),
         institution: a.string(),
@@ -33,7 +35,7 @@ const schema = a
           .default(false)
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read"]),
-            allow.groups(["Admin"]).to(["read", "update", "delete"]),
+            allow.groups(["Admin"]).to(["read", "update", "delete", "create"]),
           ]),
         teamId: a
           .id()
@@ -41,7 +43,7 @@ const schema = a
             allow
               .ownerDefinedIn("profileOwner")
               .to(["read", "update", "delete"]),
-            allow.groups(["Admin"]).to(["read", "update", "delete"]),
+            allow.groups(["Admin"]).to(["read", "update", "delete", "create"]),
           ]),
         team: a.belongsTo("Team", "teamId"),
         attendedEvents: a.hasMany("UserFoodEventAttendance", "userId"),
@@ -55,9 +57,9 @@ const schema = a
         JUDGE_room: a.belongsTo("Room", "JUDGE_roomId"),
       })
       .authorization((allow) => [
-        allow.groups(["Admin"]).to(["read", "update"]),
-        allow.ownerDefinedIn("profileOwner").to(["read", "update"]),
-        allow.authenticated().to(["read"]),
+        allow.groups(["Admin"]).to(["read", "update", "create"]),
+        allow.ownerDefinedIn("profileOwner").to(["read", "update", "create"]),
+        allow.authenticated().to(["read", "create"]),
       ]),
     // For handling a many to many relationship of users and food events
     UserFoodEventAttendance: a
@@ -94,7 +96,7 @@ const schema = a
         teamRooms: a.hasMany("TeamRoom", "teamId"),
       })
       .authorization((allow) => [
-        allow.group("Admin").to(["read", "update"]),
+        allow.group("Admin").to(["read", "update", "create"]),
         allow.authenticated().to(["read"]),
       ]),
     Score: a
@@ -177,6 +179,11 @@ const schema = a
       statusCode: a.integer(),
       headers: a.json(),
     }),
+    ScheduleTeamsAndJudgesResponse: a.customType({
+      body: a.json(),
+      statusCode: a.integer(),
+      headers: a.json(),
+    }),
     /** Score Type Model */
     ScoreComponentType: a.customType({
       id: a.id().required(),
@@ -244,6 +251,15 @@ const schema = a
       .returns(a.ref("GenericFunctionResponse"))
       .authorization((allow) => [allow.authenticated()])
       .handler(a.handler.function(CreateTeamWithCode)),
+    ScheduleTeamsAndJudges: a
+      .mutation()
+      .arguments({
+        numOfJudgingRooms: a.integer().required(),
+        judgingSessionsPerTeam: a.integer().required(),
+      })
+      .authorization((allow) => [allow.group("Admin")])
+      .handler(a.handler.function(ScheduleTeamsAndJudges))
+      .returns(a.ref("ScheduleTeamsAndJudgesResponse")),
 
     ResetHackathon: a
       .mutation()
@@ -285,6 +301,7 @@ const schema = a
     allow.resource(ResetHackathon).to(["mutate", "query"]),
     allow.resource(AddUserToGroup).to(["mutate"]),
     allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
+    allow.resource(ScheduleTeamsAndJudges).to(["query", "mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;
 
