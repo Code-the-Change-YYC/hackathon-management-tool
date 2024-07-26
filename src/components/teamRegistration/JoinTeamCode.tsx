@@ -13,15 +13,16 @@ import PurpleButton from "../PurpleButton";
 import { useUser } from "../contexts/UserContext";
 
 export default function JoinTeamCode() {
+  const [teamIDInput, setTeamIDInput] = useState(Array(4).fill(""));
   useEffect(() => {
     const handlePasteEvent = (e: ClipboardEvent) => {
       const clipboardContentsText = e.clipboardData?.getData("text");
       if (clipboardContentsText?.length === 4) {
+        const teamIDArray = clipboardContentsText.split("");
         e.preventDefault();
-        setTeamIDInput(clipboardContentsText.split(""));
-        const teamID = teamIDInput.join("");
+        setTeamIDInput(teamIDArray);
         toastRef.current = toast.loading("Joining team...");
-        joinTeamMutation.mutate(teamID);
+        joinTeamMutation.mutate(teamIDArray.join(""));
       }
     };
     window.addEventListener("paste", handlePasteEvent);
@@ -29,7 +30,6 @@ export default function JoinTeamCode() {
       window.removeEventListener("paste", handlePasteEvent);
     };
   }, []);
-  const [teamIDInput, setTeamIDInput] = useState(Array(4).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const toastRef = useRef<Id>("");
   const handleTeamIDInput = (

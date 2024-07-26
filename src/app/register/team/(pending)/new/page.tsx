@@ -19,32 +19,25 @@ export default function page() {
   const teamMutation = useMutation({
     mutationFn: async (input: string) => {
       if (user.currentUser.teamId) {
-        return await Promise.reject(new Error("User already has a team"));
+        throw new Error("User already has a team");
       }
-      return await client.mutations.CreateTeamWithCode({
+      const res = await client.mutations.CreateTeamWithCode({
         teamName: input,
         addCallerToTeam: true,
       });
+      if (res.errors) throw new Error(res.errors[0].message);
+      return res.data;
     },
-    onSuccess: (res) => {
-      if (res.data?.body && res.data.statusCode === 200) {
+    onSuccess: (data) => {
+      if (data?.statusCode === 200) {
         toast.update(toastRef.current, {
           render: "Team created successfully",
           type: "success",
           isLoading: false,
           autoClose: 3000,
         });
-        const teamID = JSON.parse(res.data.body.toString()).value;
+        const teamID = JSON.parse(data.body?.toString() || "").value;
         router.push(`/register/team/${teamID}`);
-      } else {
-        const errorMessage =
-          JSON.parse(res.data?.body as string).value ?? "Failed to create team";
-        toast.update(toastRef.current, {
-          render: errorMessage,
-          type: "error",
-          isLoading: false,
-          autoClose: 3000,
-        });
       }
     },
     onError: (error) => {
