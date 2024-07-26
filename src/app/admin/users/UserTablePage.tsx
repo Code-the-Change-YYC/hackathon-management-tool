@@ -4,6 +4,7 @@ import { generateClient } from "aws-amplify/api";
 import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
+import LoadingRing from "@/components/LoadingRing";
 import { UserType } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 
@@ -84,7 +85,7 @@ const UserTablePage = () => {
     <div>
       {isFetching ? (
         <div className={LOADING_SCREEN_STYLES}>
-          <h1 className="text-2xl">Loading...</h1>
+          <LoadingRing />
         </div>
       ) : (
         <>

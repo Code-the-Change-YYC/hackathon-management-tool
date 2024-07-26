@@ -82,7 +82,7 @@ export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
 
     if (teamCreation) {
       if (event.arguments.addCallerToTeam) {
-        await client
+        return await client
           .graphql({
             query: updateUser,
             variables: {
@@ -120,16 +120,12 @@ export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
         headers: { "Content-Type": "application/json" },
       };
     }
-  } catch {
+  } catch (error) {
+    console.error(error);
     return {
       body: { value: `Unhandled Internal Server Error` },
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
     };
   }
-  return {
-    body: { value: `No return condition reached` },
-    statusCode: 500,
-    headers: { "Content-Type": "application/json" },
-  };
 };

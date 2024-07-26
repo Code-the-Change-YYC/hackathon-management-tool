@@ -1,5 +1,12 @@
+import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import { useState } from "react";
+
+import { type Schema } from "@/amplify/data/resource";
+import { useQuery } from "@tanstack/react-query";
+
+import { useUser } from "../contexts/UserContext";
+import { type ScoreObject } from "./ModalPopup";
 
 const edit_icon = "/svgs/judging/edit_icon.svg";
 const filter_icon = "/svgs/judging/filter_arrows.svg";
@@ -29,9 +36,14 @@ const COLOR_SCHEMES = {
   },
 };
 
+const client = generateClient<Schema>();
+
 interface JudgingTableProps {
-  tableHeaders: Array<{ columnHeader: string; className: string }>;
-  tableData: Array<(string | boolean)[]>;
+  tableHeaders: Array<{
+    columnHeader: string | JSX.Element;
+    className: string;
+  }>;
+  tableData: Schema["Team"]["type"][];
   onCreateScoreClick: (teamName: string) => void;
   onEditScoreClick: (teamName: string) => void;
   colorScheme: "pink" | "purple";
@@ -39,6 +51,8 @@ interface JudgingTableProps {
 }
 
 const JudgingTable = (props: JudgingTableProps) => {
+  const { currentUser } = useUser();
+
   const {
     tableHeaders,
     tableData,
@@ -48,7 +62,7 @@ const JudgingTable = (props: JudgingTableProps) => {
     entriesPerPage,
   } = props;
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortedData, setSortedData] = useState([...tableData]);
+  const [sortedData, setSortedData] = useState(tableData);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const entries_per_page = entriesPerPage;
 
@@ -64,9 +78,9 @@ const JudgingTable = (props: JudgingTableProps) => {
 
   //sorts team names (first index of data)
   const handleSortClick = () => {
-    const sorted = [...sortedData].sort((a, b) => {
-      const nameA = a[0].toString().toLowerCase();
-      const nameB = b[0].toString().toLowerCase();
+    const sorted = tableData.sort((a, b) => {
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase();
       if (sortDirection === "asc") {
         return nameA.localeCompare(nameB);
       } else {
@@ -106,47 +120,71 @@ const JudgingTable = (props: JudgingTableProps) => {
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className={`${
-                  rowIndex % 2 === 0 ? "bg-[#f1f1f1]" : "bg-[#e1e1e1]"
-                }`}
-              >
-                {/* iterates through all rows except last (boolean for scored status) */}
-                {row.slice(0, -1).map((cell, cellIndex) => (
-                  <td key={cellIndex} className={JUDGE_TABLE_CELL_STYLES}>
-                    {cell}
+            {paginatedData.map((team, rowIndex) => {
+              const { data: scoreData } = useQuery({
+                queryKey: ["Score", currentUser.username, team.id],
+                queryFn: async () => {
+                  try {
+                    const { data, errors } = await client.models.Score.get({
+                      judgeId: currentUser.username,
+                      teamId: team.id,
+                    });
+                    if (errors) throw Error(errors[0].message);
+                    console.log(data);
+                    return data;
+                  } catch (error) {
+                    console.error(error);
+                  }
+                },
+              });
+
+              const scoreObject = (
+                scoreData?.score ? JSON.parse(scoreData?.score as string) : {}
+              ) as ScoreObject;
+
+              return (
+                <tr
+                  key={rowIndex}
+                  className={`${
+                    rowIndex % 2 === 0 ? "bg-[#f1f1f1]" : "bg-[#e1e1e1]"
+                  }`}
+                >
+                  <td className={JUDGE_TABLE_CELL_STYLES}>{team.name}</td>
+                  {scoreData &&
+                    Object.keys(scoreObject).map((cell, cellIndex) => (
+                      <td key={cellIndex} className={JUDGE_TABLE_CELL_STYLES}>
+                        {scoreObject[cell]}
+                      </td>
+                    ))}
+                  <td className={JUDGE_TABLE_CELL_STYLES}>
+                    {scoreData ? (
+                      <button
+                        className={`${SCORE_BUTTON_STYLES} ${colorStyles.scoreButtonStyles}`}
+                        onClick={() => onEditScoreClick(team.id)}
+                      >
+                        <div className="flex">
+                          <Image
+                            src={edit_icon}
+                            height={10}
+                            width={10}
+                            alt="Edit score icon"
+                            className="mr-2"
+                          />
+                          <p>Edit Score</p>
+                        </div>
+                      </button>
+                    ) : (
+                      <button
+                        className={`${SCORE_BUTTON_STYLES} ${colorStyles.scoreButtonStyles}`}
+                        onClick={() => onCreateScoreClick(team.id)}
+                      >
+                        + Create Score
+                      </button>
+                    )}
                   </td>
-                ))}
-                <td className={JUDGE_TABLE_CELL_STYLES}>
-                  {row[row.length - 1] ? (
-                    <button
-                      className={`${SCORE_BUTTON_STYLES} ${colorStyles.scoreButtonStyles}`}
-                      onClick={() => onEditScoreClick(row[0] as string)}
-                    >
-                      <div className="flex">
-                        <Image
-                          src={edit_icon}
-                          height={10}
-                          width={10}
-                          alt="Edit score icon"
-                          className="mr-2"
-                        />
-                        <p>Edit Score</p>
-                      </div>
-                    </button>
-                  ) : (
-                    <button
-                      className={`${SCORE_BUTTON_STYLES} ${colorStyles.scoreButtonStyles}`}
-                      onClick={() => onCreateScoreClick(row[0] as string)}
-                    >
-                      + Create Score
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
         <div className="mt-6 flex justify-between">

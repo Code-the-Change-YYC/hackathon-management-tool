@@ -24,6 +24,8 @@ export default function ResetPage() {
         const { data: statusCode, errors } =
           await client.mutations.ResetHackathon({
             ...input,
+            scoringComponents: JSON.stringify(input.scoringComponents),
+            scoringSidepots: JSON.stringify(input.scoringSidepots),
           });
         if (errors) {
           console.log(errors);

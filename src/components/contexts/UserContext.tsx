@@ -29,6 +29,7 @@ export interface IUser {
   email?: string;
   teamId?: string;
   populated: boolean;
+  JUDGE_roomId: string;
 }
 
 interface IUserReturn {
@@ -49,8 +50,9 @@ export function UserContextProvider({ children }: Props) {
       username: "",
       type: UserType.Guest,
       populated: false,
+      JUDGE_roomId: "",
     },
-    queryKey: ["Users"],
+    queryKey: ["User"],
     queryFn: async () => {
       try {
         const user = await fetchAuthSession();
@@ -91,6 +93,7 @@ export function UserContextProvider({ children }: Props) {
             email: response.data?.email ?? "",
             firstName: response.data?.firstName ?? "",
             lastName: response.data?.lastName ?? "",
+            JUDGE_roomId: response.data?.JUDGE_roomId,
           } as IUser;
         } catch (error) {
           console.error(error);
@@ -116,13 +119,13 @@ export function UserContextProvider({ children }: Props) {
       switch (data.payload.event) {
         case "signedIn":
           queryClient.invalidateQueries({
-            queryKey: ["Users"],
+            queryKey: ["User"],
             exact: true,
           });
           console.log("Signed In");
           break;
         case "signedOut":
-          queryClient.setQueryData(["Users"], {
+          queryClient.setQueryData(["User"], {
             username: "",
             type: UserType.Guest,
             populated: true,
@@ -145,6 +148,7 @@ export function UserContextProvider({ children }: Props) {
           username: "",
           type: UserType.Guest,
           populated: true,
+          JUDGE_roomId: "",
         },
       }}
     >

@@ -1335,15 +1335,15 @@ export type DemoFunctionMutation = {
 };
 
 export type ResetHackathonMutationVariables = {
-  endDate?: string | null;
-  resetRooms?: boolean | null;
-  resetScores?: boolean | null;
-  resetTeams?: boolean | null;
-  resetUsers?: boolean | null;
+  endDate: string;
+  resetRooms: boolean;
+  resetScores: boolean;
+  resetTeams: boolean;
+  resetUsers: boolean;
   safetyCheck: string;
-  scoreComponents?: string | null;
-  scoringSidepots?: string | null;
-  startDate?: string | null;
+  scoreComponents: string;
+  scoringSidepots: string;
+  startDate: string;
 };
 
 export type ResetHackathonMutation = {
