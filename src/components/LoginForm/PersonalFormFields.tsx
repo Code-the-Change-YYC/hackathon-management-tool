@@ -11,7 +11,7 @@ import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingRing from "../LoadingRing";
 
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();
@@ -98,7 +98,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     }
   };
   if (isPending) {
-    return <LoadingSpinner />;
+    return <LoadingRing />;
   }
   if (isError) {
     return <div>Error, please try again later.</div>;

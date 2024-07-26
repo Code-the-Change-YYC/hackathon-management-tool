@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { client } from "@/app/QueryProvider";
+import LoadingRing from "@/components/LoadingRing";
 import DataTableSection from "@/components/admin/TeamsTable/DataTableSection";
 import FilterSection from "@/components/admin/TeamsTable/FilterSection";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -143,7 +144,7 @@ const TeamsTablePage = () => {
     <div>
       {isFetching ? (
         <div className={LOADING_SCREEN_STYLES}>
-          <h1 className="text-2xl">Loading...</h1>
+          <LoadingRing />
         </div>
       ) : (
         <>

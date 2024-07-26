@@ -1,8 +1,9 @@
 "use client";
 
 import { client } from "@/app/QueryProvider";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { useQuery } from "@tanstack/react-query";
+
+import LoadingRing from "../LoadingRing";
 
 export default function TeamInformation({
   state = "Registered",
@@ -18,7 +19,7 @@ export default function TeamInformation({
     },
   });
   const teamName = data?.name ?? "Unknown";
-  if (isPending) return <LoadingSpinner />;
+  if (isPending) return <LoadingRing />;
   if (state === "Joined")
     return (
       <div className=" flex flex-col gap-4 text-center text-5xl font-bold">
