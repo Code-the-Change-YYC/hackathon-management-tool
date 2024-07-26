@@ -1,5 +1,3 @@
-import { Schedule } from "aws-cdk-lib/aws-events";
-
 import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { AddUserToGroup } from "@/amplify/function/BusinessLogic/AddUserToGroup/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";

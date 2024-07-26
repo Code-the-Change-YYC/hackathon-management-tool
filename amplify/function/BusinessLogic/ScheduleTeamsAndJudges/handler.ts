@@ -83,6 +83,7 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
 
     let teamNumber = 0;
 
+    // Helper Function to check if a team number already exists in a column (A team can only visit a judging room once)
     const alreadyExistsInColumn = (
       target: number,
       columnIndex: number,
@@ -125,6 +126,7 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
       }),
     );
 
+    // Fetch and Assign judges to judging rooms
     let judges = await client.graphql({
       query: listUsers,
       variables: {
