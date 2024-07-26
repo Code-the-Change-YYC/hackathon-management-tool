@@ -19,9 +19,9 @@ const client = generateClient<Schema>();
 export default function FoodEvents() {
   // type FoodEvent = Schema["FoodEvent"]["type"];
   // const [foodData, setFoodData] = useState<FoodEvent[]>(); // Use useState to manage foodData
-  // const [foodData, setFoodData] = useState<
-  //   Array<Partial<Schema["FoodEvent"]["type"]>>
-  // >([]); // Use useState to manage foodData
+  const [foodData, setFoodData] = useState<
+    Array<Partial<Schema["FoodEvent"]["type"]>>
+  >([]); // Use useState to manage foodData
   const [deleteFoodEventId, setDeleteFoodEventId] = useState<string | null>(
     null,
   );
@@ -29,7 +29,7 @@ export default function FoodEvents() {
 
   const queryClient = useQueryClient();
 
-  const { data: foodData, isFetching } = useQuery({
+  const { data, isFetching } = useQuery({
     initialData: [],
     initialDataUpdatedAt: 0,
     queryKey: ["FoodEvent"],
@@ -43,7 +43,7 @@ export default function FoodEvents() {
           "totalGroupCount",
         ],
       });
-      // setFoodData(response.data);
+      setFoodData(response.data);
 
       return response.data;
     },
@@ -67,6 +67,7 @@ export default function FoodEvents() {
   }, []);
 
   const handleDeletePopUp = (eventID: string) => {
+    console.log(eventID);
     setDeleteFoodEventId(eventID);
     setShowDeletePopup(true);
   };
@@ -77,14 +78,16 @@ export default function FoodEvents() {
   };
 
   const handleDelete = async () => {
+    // rremove try catch if using tanstack
     try {
       await deleteFoodEvent(deleteFoodEventId as string);
       queryClient.invalidateQueries({ queryKey: ["FoodEvent"] });
 
-      // const newFoodData = foodData?.filter(
-      //   (event) => event.id !== deleteFoodEventId,
-      // );
-      // setFoodData(newFoodData);
+      const newFoodData = foodData?.filter(
+        (event) => event.id !== deleteFoodEventId,
+      );
+      console.log(newFoodData);
+      setFoodData(newFoodData);
       setShowDeletePopup(false);
     } catch (error) {
       console.error("Failed to delete Food Event", error);
@@ -100,7 +103,7 @@ export default function FoodEvents() {
       ) : (
         <div className="w-full bg-medium-grey py-8">
           <div className="m-6 rounded-md bg-white px-10 pb-10">
-            <CreateFoodEventForm />
+            <CreateFoodEventForm foodData={foodData} />
             <OutputFoodEvent
               foodData={foodData}
               handleDeletePopUp={handleDeletePopUp}

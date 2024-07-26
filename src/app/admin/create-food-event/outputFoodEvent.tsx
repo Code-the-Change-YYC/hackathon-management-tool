@@ -3,10 +3,11 @@ import { type Schema } from "@/amplify/data/resource";
 const DELETE_STYLES =
   "bg-awesomer-purple px-5 py-2 mt-6 mb-3 text-white rounded-md hover:bg-[#A689FF]";
 
-type FoodEvent = Schema["FoodEvent"]["type"];
+//type FoodEvent = Schema["FoodEvent"]["type"];
 
 type OutputFoodEventProps = {
-  foodData: any; //tried making type as FoodEvent[] but didn't work;
+  // foodData: any; //tried making type as FoodEvent[] but didn't work;
+  foodData: Array<Partial<Schema["FoodEvent"]["type"]>>;
   deleteFoodEventId: string;
   handleDeletePopUp: (eventID: string) => void;
 };
@@ -22,7 +23,7 @@ const OutputFoodEvent = ({
       )}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {foodData !== undefined &&
-          foodData.map((event: FoodEvent) => (
+          foodData.map((event) => (
             <div
               key={event.id}
               className="w-auto rounded-lg border border-slate-100 bg-white p-6 shadow-md"
@@ -44,15 +45,15 @@ const OutputFoodEvent = ({
               </p>
               <p className="text-sm">
                 <strong>Created At:</strong>{" "}
-                {new Date(event.createdAt).toLocaleString()}
+                {new Date(event.createdAt as string).toLocaleString()}
               </p>
               <p className="text-sm">
                 <strong>Updated At:</strong>{" "}
-                {new Date(event.updatedAt).toLocaleString()}
+                {new Date(event.updatedAt as string).toLocaleString()}
               </p>
               <button
                 className={DELETE_STYLES}
-                onClick={() => handleDeletePopUp(event.id)}
+                onClick={() => handleDeletePopUp(event.id as string)}
               >
                 Delete
               </button>

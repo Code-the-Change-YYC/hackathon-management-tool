@@ -16,11 +16,11 @@ const SUBMIT_STYLES =
 const CLEAR_STYLES =
   "bg-white px-5 py-3 text-black rounded-md border border-[#94a3b8] hover:bg-[#eae5fa] hover:text-[#7055fd]";
 
-// type CreateFoodEventFormProps = {
-//   foodData: Array<Partial<Schema["FoodEvent"]["type"]>>;
-// };
+type CreateFoodEventFormProps = {
+  foodData: Array<Partial<Schema["FoodEvent"]["type"]>>;
+};
 
-const CreateFoodTicketForm = () => {
+const CreateFoodTicketForm = ({ foodData }: CreateFoodEventFormProps) => {
   const queryClient = useQueryClient();
   //register input fields to react hook form
   const {
@@ -66,7 +66,7 @@ const CreateFoodTicketForm = () => {
       end: endDateTime.toISO(),
       currentTime,
     };
-    reset();
+    console.log(formattedData);
     foodEventMutation.mutate(formattedData);
   };
 
