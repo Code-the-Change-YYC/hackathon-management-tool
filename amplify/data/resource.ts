@@ -294,6 +294,7 @@ const schema = a
     allow.resource(ResetHackathon).to(["mutate", "query"]),
     allow.resource(AddUserToGroup).to(["mutate"]),
     allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
+    allow.resource(ScheduleTeamsAndJudges).to(["query", "mutate"]),
   ]);
 export type Schema = ClientSchema<typeof schema>;
 

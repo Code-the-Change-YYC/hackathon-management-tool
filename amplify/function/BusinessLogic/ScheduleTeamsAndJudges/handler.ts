@@ -2,6 +2,7 @@ import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 
 import type { Schema } from "../../../data/resource";
+import { listTeams, listUsers } from "./graphql/queries";
 
 Amplify.configure(
   {
@@ -41,17 +42,26 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
     var numOfJudgingRooms = event.arguments.numOfJudgingRooms;
 
     console.log("judgingSessionsPerTeam: ", judgingSessionsPerTeam);
+    let teams = null;
+    try {
+      teams = await client.graphql({
+        query: listTeams,
+        variables: {
+          filter: {
+            approved: { eq: true },
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching teams: ", error);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Internal server error" }),
+        headers: { "Content-Type": "application/json" },
+      };
+    }
 
-    let teams = await client.models.Team.list({
-      filter: {
-        approved: { eq: true },
-      },
-      selectionSet: ["id", "name"],
-    });
-
-    console.log("tHere");
-
-    var numOfTeams = teams.data.length;
+    var numOfTeams = teams.data.listTeams.items.length;
 
     if (judgingSessionsPerTeam > numOfJudgingRooms) {
       return {
@@ -115,21 +125,24 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
       }
     }
 
+    // Convert team numbers to team IDs
     schedulingMatrix.map((row) =>
-      row.map((teamNumber) => teams.data[teamNumber]),
+      row.map((teamNumber) => teams.data.listTeams.items[teamNumber].id),
     );
 
-    let judges = await client.models.User.list({
-      filter: {
-        role: { eq: "JUDGE" },
+    let judges = await client.graphql({
+      query: listUsers,
+      variables: {
+        filter: {
+          role: { eq: "JUDGE" },
+        },
       },
-      selectionSet: ["id", "firstName", "lastName"],
     });
 
     let judgingRooms = new Array(numOfJudgingRooms);
 
-    for (var i = 0; i < judges.data.length; i++) {
-      judgingRooms[i % numOfJudgingRooms].push(judges.data[i]);
+    for (var i = 0; i < judges.data.listUsers.items.length; i++) {
+      judgingRooms[i % numOfJudgingRooms].push(judges.data.listUsers.items[i]);
     }
 
     return {
