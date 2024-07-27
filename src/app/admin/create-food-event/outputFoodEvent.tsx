@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 import { type Schema } from "@/amplify/data/resource";
 
 const DELETE_STYLES =
@@ -9,7 +11,8 @@ type OutputFoodEventProps = {
   // foodData: any; //tried making type as FoodEvent[] but didn't work;
   foodData: Array<Partial<Schema["FoodEvent"]["type"]>>;
   deleteFoodEventId: string;
-  handleDeletePopUp: (eventID: string) => void;
+  // handleDeletePopUp: (eventID: string) => void;
+  handleDeletePopUp: (id: string) => void;
 };
 
 const OutputFoodEvent = ({
@@ -45,11 +48,21 @@ const OutputFoodEvent = ({
               </p>
               <p className="text-sm">
                 <strong>Created At:</strong>{" "}
-                {new Date(event.createdAt as string).toLocaleString()}
+                {/* {new Date(event.createdAt as string).toLocaleString()} */}
+                {event.createdAt
+                  ? DateTime.fromISO(event.createdAt).toLocaleString(
+                      DateTime.DATETIME_MED,
+                    )
+                  : "Date not available"}{" "}
               </p>
               <p className="text-sm">
                 <strong>Updated At:</strong>{" "}
-                {new Date(event.updatedAt as string).toLocaleString()}
+                {event.updatedAt
+                  ? DateTime.fromISO(event.updatedAt).toLocaleString(
+                      DateTime.DATETIME_MED,
+                    )
+                  : "Date not available"}
+                {/* {new Date(event.updatedAt).toLocaleString()} */}
               </p>
               <button
                 className={DELETE_STYLES}

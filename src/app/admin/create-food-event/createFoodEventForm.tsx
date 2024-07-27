@@ -1,6 +1,7 @@
 "use client";
 
 import { DateTime } from "luxon";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { type Schema } from "@/amplify/data/resource";
@@ -18,9 +19,10 @@ const CLEAR_STYLES =
 
 type CreateFoodEventFormProps = {
   foodData: Array<Partial<Schema["FoodEvent"]["type"]>>;
+  //foodEventMutation: any;
 };
 
-const CreateFoodTicketForm = ({ foodData }: CreateFoodEventFormProps) => {
+const CreateFoodTicketForm = (foodData: CreateFoodEventFormProps) => {
   const queryClient = useQueryClient();
   //register input fields to react hook form
   const {
@@ -37,7 +39,10 @@ const CreateFoodTicketForm = ({ foodData }: CreateFoodEventFormProps) => {
       reset();
     },
   });
-  const onSubmit: SubmitHandler<Schema["FoodEvent"]["type"]> = async (data) => {
+
+  const onSubmit: SubmitHandler<Schema["FoodEvent"]["type"]> = (data) => {
+    console.log(data);
+
     const currentTime = DateTime.now()
       .setZone(process.env.TIME_ZONE)
       .toJSDate(); //current local time in the time zone

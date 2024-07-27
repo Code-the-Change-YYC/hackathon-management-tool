@@ -4,7 +4,7 @@ import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import DeletePopUp from "./DeletePopUp";
 import CreateFoodEventForm from "./createFoodEventForm";
@@ -21,13 +21,11 @@ export default function FoodEvents() {
   // const [foodData, setFoodData] = useState<FoodEvent[]>(); // Use useState to manage foodData
   const [foodData, setFoodData] = useState<
     Array<Partial<Schema["FoodEvent"]["type"]>>
-  >([]); // Use useState to manage foodData
+  >([]);
   const [deleteFoodEventId, setDeleteFoodEventId] = useState<string | null>(
     null,
   );
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-
-  const queryClient = useQueryClient();
 
   const { data, isFetching } = useQuery({
     initialData: [],
@@ -36,6 +34,7 @@ export default function FoodEvents() {
     queryFn: async () => {
       const response = await client.models.FoodEvent.list({
         selectionSet: [
+          "id",
           "name",
           "description",
           "start",
@@ -43,6 +42,8 @@ export default function FoodEvents() {
           "totalGroupCount",
         ],
       });
+
+      //Set the initial food event data to response data
       setFoodData(response.data);
 
       return response.data;
@@ -63,30 +64,55 @@ export default function FoodEvents() {
   // };
 
   useEffect(() => {
-    foodData;
-  }, []);
+    if (data) {
+      foodData;
+    }
+  }, [data]);
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   const handleDeletePopUp = (eventID: string) => {
     console.log(eventID);
     setDeleteFoodEventId(eventID);
     setShowDeletePopup(true);
   };
+  // const handleDeletePopUp = (eventID: string) => {
+  //   console.log(eventID);
+  //   setDeleteFoodEventId(eventID);
+  //   setShowDeletePopup(true);
+  // };
 
   const handleClosePopUp = () => {
     setShowDeletePopup(false);
     setDeleteFoodEventId(null); // Reset deleteFoodEventId if popup is closed
   };
 
+  const queryClient = useQueryClient();
+  // const handleDelete = async () => {
+  //   // rremove try catch if using tanstack
+  //   // try {
+  //   await deleteFoodEvent(deleteFoodEventId as string);
+  //   queryClient.invalidateQueries({ queryKey: ["FoodEvent"] });
+
+  //   const newFoodData = foodData?.filter(
+  //     (event) => event.id !== deleteFoodEventId,
+  //   );
+  //   console.log(newFoodData);
+  //   setFoodData(newFoodData);
+  //   setShowDeletePopup(false);
+  //   // } catch (error) {
+  //   //   console.error("Failed to delete Food Event", error);
+  //   // }
+  // };
+
   const handleDelete = async () => {
-    // rremove try catch if using tanstack
     try {
       await deleteFoodEvent(deleteFoodEventId as string);
-      queryClient.invalidateQueries({ queryKey: ["FoodEvent"] });
-
       const newFoodData = foodData?.filter(
         (event) => event.id !== deleteFoodEventId,
       );
-      console.log(newFoodData);
       setFoodData(newFoodData);
       setShowDeletePopup(false);
     } catch (error) {
