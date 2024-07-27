@@ -1,7 +1,6 @@
 "use client";
 
 import { DateTime } from "luxon";
-import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { type Schema } from "@/amplify/data/resource";
@@ -17,14 +16,8 @@ const SUBMIT_STYLES =
 const CLEAR_STYLES =
   "bg-white px-5 py-3 text-black rounded-md border border-[#94a3b8] hover:bg-[#eae5fa] hover:text-[#7055fd]";
 
-type CreateFoodEventFormProps = {
-  foodData: Array<Partial<Schema["FoodEvent"]["type"]>>;
-  //foodEventMutation: any;
-};
-
-const CreateFoodTicketForm = (foodData: CreateFoodEventFormProps) => {
+const CreateFoodTicketForm = () => {
   const queryClient = useQueryClient();
-  //register input fields to react hook form
   const {
     register,
     handleSubmit,
@@ -38,11 +31,12 @@ const CreateFoodTicketForm = (foodData: CreateFoodEventFormProps) => {
       queryClient.invalidateQueries({ queryKey: ["FoodEvent"] });
       reset();
     },
+    onError: (error) => {
+      console.error("Error updating table data:", error);
+    },
   });
 
   const onSubmit: SubmitHandler<Schema["FoodEvent"]["type"]> = (data) => {
-    console.log(data);
-
     const currentTime = DateTime.now()
       .setZone(process.env.TIME_ZONE)
       .toJSDate(); //current local time in the time zone
@@ -65,13 +59,18 @@ const CreateFoodTicketForm = (foodData: CreateFoodEventFormProps) => {
       return;
     }
 
+    // Check if dates are valid
+    if (!startDateTime.isValid || !endDateTime.isValid) {
+      throw new Error("Invalid start or end date");
+    }
+
     const formattedData = {
       ...data,
       start: startDateTime.toISO(),
       end: endDateTime.toISO(),
-      currentTime,
+      createdAt: currentTime,
+      updatedAt: currentTime,
     };
-    console.log(formattedData);
     foodEventMutation.mutate(formattedData);
   };
 

@@ -13,7 +13,7 @@ export async function createFoodEvent(fields: FoodEventCreateFormInputValues) {
   });
 
   if (errors) {
-    console.log(errors);
+    throw new Error(errors[0].message);
   }
 }
 
@@ -24,6 +24,6 @@ export async function deleteFoodEvent(eventID: string) {
   const { errors } = await client.models.FoodEvent.delete(toBeDeletedFoodEvent);
 
   if (errors) {
-    console.log(errors);
+    throw new Error(errors[0].message);
   }
 }

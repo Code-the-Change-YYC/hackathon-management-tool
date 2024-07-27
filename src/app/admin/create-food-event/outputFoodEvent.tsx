@@ -1,18 +1,12 @@
-import { DateTime } from "luxon";
-
 import { type Schema } from "@/amplify/data/resource";
 
 const DELETE_STYLES =
   "bg-awesomer-purple px-5 py-2 mt-6 mb-3 text-white rounded-md hover:bg-[#A689FF]";
 
-//type FoodEvent = Schema["FoodEvent"]["type"];
-
 type OutputFoodEventProps = {
-  // foodData: any; //tried making type as FoodEvent[] but didn't work;
   foodData: Array<Partial<Schema["FoodEvent"]["type"]>>;
   deleteFoodEventId: string;
-  // handleDeletePopUp: (eventID: string) => void;
-  handleDeletePopUp: (id: string) => void;
+  handleDeletePopUp: (eventID: string) => void;
 };
 
 const OutputFoodEvent = ({
@@ -48,21 +42,15 @@ const OutputFoodEvent = ({
               </p>
               <p className="text-sm">
                 <strong>Created At:</strong>{" "}
-                {/* {new Date(event.createdAt as string).toLocaleString()} */}
                 {event.createdAt
-                  ? DateTime.fromISO(event.createdAt).toLocaleString(
-                      DateTime.DATETIME_MED,
-                    )
-                  : "Date not available"}{" "}
+                  ? new Date(event.createdAt).toLocaleString()
+                  : ""}
               </p>
               <p className="text-sm">
                 <strong>Updated At:</strong>{" "}
                 {event.updatedAt
-                  ? DateTime.fromISO(event.updatedAt).toLocaleString(
-                      DateTime.DATETIME_MED,
-                    )
-                  : "Date not available"}
-                {/* {new Date(event.updatedAt).toLocaleString()} */}
+                  ? new Date(event.updatedAt).toLocaleString()
+                  : ""}{" "}
               </p>
               <button
                 className={DELETE_STYLES}

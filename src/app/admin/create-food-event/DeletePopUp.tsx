@@ -8,7 +8,7 @@ const DELETE_RECORD_POPUP_TILE_STYLES =
 type DeletePopUpProps = {
   isPopUpVisible: boolean;
   onClose: () => void;
-  handleDelete: () => void;
+  handleDelete: (eventID: string) => void;
   deleteFoodEventId: string;
 };
 
@@ -44,11 +44,14 @@ const DeletePopUp = ({
           . You cannot undo this action.
         </p>
         <div className="flex justify-end">
-          <button className="mr-4 rounded-md border border-black p-2 px-6 hover:opacity-40">
+          <button
+            onClick={onClose}
+            className="mr-4 rounded-md border border-black p-2 px-6 hover:opacity-40"
+          >
             Cancel
           </button>
           <button
-            onClick={handleDelete}
+            onClick={() => handleDelete(deleteFoodEventId)}
             className="rounded-md border bg-dark-pink p-2 px-6 text-white hover:bg-pastel-pink"
           >
             Delete{" "}
