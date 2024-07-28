@@ -3,6 +3,8 @@
 // actions.ts
 import { seedFoodEvents } from "./models/FoodEvent";
 import { seedHackathon } from "./models/Hackathon";
+import { seedTeams } from "./models/Team";
+import { seedJudges } from "./models/User";
 
 // Define a type for the seeding functions
 type SeedingFunction = () => Promise<{ success: boolean; message: string }>;
@@ -11,6 +13,8 @@ type SeedingFunction = () => Promise<{ success: boolean; message: string }>;
 const DATA_SEEDING: { [key: string]: SeedingFunction } = {
   seedHackathon,
   seedFoodEvents,
+  seedTeams,
+  seedJudges,
 };
 
 export const getSeedingData = () => {
