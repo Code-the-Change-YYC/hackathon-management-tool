@@ -1,9 +1,9 @@
 "use server";
 
-import type { FoodEventCreateFormInputValues } from "@../../../ui-components/FoodEventCreateForm";
+import type { Schema } from "@/amplify/data/resource";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
-export async function createFoodEvent(fields: FoodEventCreateFormInputValues) {
+export async function createFoodEvent(fields: Schema["FoodEvent"]["type"]) {
   const { errors } = await client.models.FoodEvent.create({
     name: fields.name ? fields.name : "",
     description: fields.description ? fields.description : "",

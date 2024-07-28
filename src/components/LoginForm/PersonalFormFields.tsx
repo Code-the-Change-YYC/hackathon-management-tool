@@ -12,23 +12,34 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 const client = generateClient<Schema>();
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();
-  const { isPending, isError, data } = useQuery({
+  const { isPending, isError } = useQuery({
     queryKey: ["user", user?.userId],
     queryFn: async () => {
-      return (await client.models.User.get({ id: user.userId as string })).data;
+      const response = await client.models.User.get({
+        id: user.userId as string,
+      });
+
+      if (response.errors) throw new Error(response.errors[0].message);
+
+      return response.data;
     },
   });
   const userMutation = useMutation({
     mutationFn: async (input: Schema["User"]["type"]) => {
-      await client.models.User.update({
-        id: user.userId,
-        firstName: input.firstName,
-        lastName: input.lastName,
-        institution: input.institution,
-        willEatMeals: input.willEatMeals,
-        allergies: input.allergies,
-        completedRegistration: true,
-      });
+      try {
+        await client.models.User.update({
+          id: user.userId,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          institution: input.institution,
+          willEatMeals: input.willEatMeals,
+          allergies: input.allergies,
+          completedRegistration: true,
+        });
+      } catch (error) {
+        console.error("Error updating user", error);
+        throw error;
+      }
     },
     onSuccess: () => {
       // TODO: ADD TOAST
@@ -55,7 +66,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   };
   const updateSelectInput = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const { name, value } = e.target;
-    if (name === "meals") {
+    if (name === "willEatMeals") {
       setFormState((prevState) => ({ ...prevState, [name]: value === "yes" }));
     }
     setFormState((prevState) => ({ ...prevState, [name]: value }));
@@ -74,10 +85,6 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   }
   if (isError) {
     return <div>Error, please try again later.</div>;
-  }
-  if (data?.completedRegistration) {
-    router.push("/participant/profile");
-    return null;
   }
   return (
     <form
@@ -126,14 +133,14 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       </SelectField>
       <SelectField
         required
-        name="meals"
+        name="willEatMeals"
         label="* Do you want provided food at the hackathon?"
         value={
           (formState?.willEatMeals as unknown as string) ?? "Select an option"
         }
         onChange={(e) => updateSelectInput(e)}
       >
-        <option selected disabled>
+        <option disabled selected>
           Select an option
         </option>
         <option value={"yes"}>Yes</option>

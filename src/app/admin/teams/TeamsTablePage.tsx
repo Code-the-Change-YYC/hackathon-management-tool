@@ -4,6 +4,7 @@ import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
+import LoadingRing from "@/components/LoadingRing";
 import DataTableSection from "@/components/admin/TeamsTable/DataTableSection";
 import FilterSection from "@/components/admin/TeamsTable/FilterSection";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -46,6 +47,11 @@ const TeamsTablePage = () => {
       const response = await client.models.Team.list({
         selectionSet: ["members.*", "id", "name", "approved"],
       });
+
+      if (response.errors) {
+        throw new Error(response.errors[0].message);
+      }
+
       return response.data;
     },
   });
@@ -141,7 +147,7 @@ const TeamsTablePage = () => {
     <div>
       {isFetching ? (
         <div className={LOADING_SCREEN_STYLES}>
-          <h1 className="text-2xl">Loading...</h1>
+          <LoadingRing />
         </div>
       ) : (
         <>

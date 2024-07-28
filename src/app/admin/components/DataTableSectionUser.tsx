@@ -1,3 +1,4 @@
+import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, type SubmitHandler, useForm } from "react-hook-form";
@@ -5,6 +6,7 @@ import { Bounce, toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
 import PopupUser from "@/app/admin/components/PopupTileUser";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const SEARCH_RESULTS_SECTION_STYLES =
   "bg-white rounded-t-md flex justify-between items-center px-4 py-2 relative";
@@ -36,11 +38,18 @@ const entries_per_page = 10;
 interface DataTableProps {
   tableHeaders: Array<{ columnHeader: string }>;
   userData: Array<Partial<Schema["User"]["type"]>>;
-  tableDataMutation: any;
 }
 
+const client = generateClient<Schema>();
+
 const DataTableSectionUser = (props: DataTableProps) => {
-  const { control, handleSubmit, reset } = useForm<Schema["User"]["type"]>();
+  const { tableHeaders, userData } = props;
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { dirtyFields },
+  } = useForm<Schema["User"]["type"]>();
 
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [recordToDeleteId, setRecordToDeleteId] = useState("" as string);
@@ -48,6 +57,57 @@ const DataTableSectionUser = (props: DataTableProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const queryClient = useQueryClient();
+  const tableDataMutation = useMutation({
+    mutationFn: async (updatedData: Schema["User"]["type"]) => {
+      try {
+        if (dirtyFields.firstName || dirtyFields.lastName) {
+          const response = await client.models.User.update(updatedData);
+          if (response.errors) {
+            throw new Error(response.errors[0].message);
+          }
+        }
+
+        if (dirtyFields.role) {
+          const response = await client.mutations.AddUserToGroup({
+            userId: updatedData.id,
+            groupName: updatedData.role ?? "",
+          });
+          if (response.errors) {
+            throw new Error(response.errors[0].message);
+          }
+        }
+      } catch (error) {
+        console.error("Error updating table data:", error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Users"] });
+      toast.success("Table data updated succesfully", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: 0,
+        theme: "light",
+        transition: Bounce,
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating table data:", error);
+      toast.error("Error updating table data", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        progress: 0,
+        theme: "light",
+        transition: Bounce,
+      });
+    },
+  });
 
   const onSubmit: SubmitHandler<Schema["User"]["type"]> = (data) => {
     data.id = editingId;
@@ -68,8 +128,6 @@ const DataTableSectionUser = (props: DataTableProps) => {
     }
     setEditingId("");
   };
-
-  const { tableHeaders, userData, tableDataMutation } = props;
 
   const filteredData = useMemo(() => {
     return userData.filter((rowData) =>
