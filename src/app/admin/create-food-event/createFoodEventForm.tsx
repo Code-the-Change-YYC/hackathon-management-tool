@@ -28,7 +28,7 @@ const CreateFoodTicketForm = () => {
   const foodEventMutation = useMutation({
     mutationFn: createFoodEvent,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["FoodEvent"] });
+      queryClient.invalidateQueries({ queryKey: ["FoodEvents"] });
       reset();
     },
     onError: (error) => {

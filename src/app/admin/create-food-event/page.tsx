@@ -28,7 +28,7 @@ export default function FoodEvents() {
   const { data, isFetching } = useQuery({
     initialData: [],
     initialDataUpdatedAt: 0,
-    queryKey: ["FoodEvent"],
+    queryKey: ["FoodEvents"],
     queryFn: async () => {
       const response = await client.models.FoodEvent.list({
         selectionSet: [
