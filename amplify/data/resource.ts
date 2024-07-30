@@ -101,7 +101,7 @@ const schema = a
       ]),
     Score: a
       .model({
-        id: a.id().required(),
+        id: a.id(),
         score: a.json().required(),
         hackathonId: a.id().required(),
         hackathon: a.belongsTo("Hackathon", "hackathonId"),
