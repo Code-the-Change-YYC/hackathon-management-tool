@@ -1,7 +1,8 @@
 "use client";
 
 import { DateTime } from "luxon";
-import { SubmitHandler, useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { type Schema } from "@/amplify/data/resource";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -37,13 +38,9 @@ const CreateFoodTicketForm = () => {
   });
 
   const onSubmit: SubmitHandler<Schema["FoodEvent"]["type"]> = (data) => {
-    const currentTime = DateTime.now()
-      .setZone(process.env.TIME_ZONE)
-      .toJSDate(); //current local time in the time zone
-
     // Parse and validate the start date
     const startDateTime = DateTime.fromISO(data.start, {
-      zone: process.env.TIME_ZONE,
+      zone: "America/Edmonton",
     });
     if (!startDateTime.isValid) {
       console.error("Invalid start date & time");
@@ -52,7 +49,7 @@ const CreateFoodTicketForm = () => {
 
     // Parse and validate the end date
     const endDateTime = DateTime.fromISO(data.end, {
-      zone: process.env.TIME_ZONE,
+      zone: "America/Edmonton",
     });
     if (!endDateTime.isValid) {
       console.error("Invalid end date & time");
@@ -66,10 +63,8 @@ const CreateFoodTicketForm = () => {
 
     const formattedData = {
       ...data,
-      start: startDateTime.toISO(),
-      end: endDateTime.toISO(),
-      createdAt: currentTime,
-      updatedAt: currentTime,
+      start: startDateTime.toISO().toString(),
+      end: endDateTime.toISO().toString(),
     };
     foodEventMutation.mutate(formattedData);
   };
