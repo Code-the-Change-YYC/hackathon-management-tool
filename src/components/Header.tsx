@@ -33,7 +33,7 @@ export default function Header() {
                     View Team
                   </Link>
                 ) : (
-                  <Link href="/participant/register">Join a Team</Link>
+                  <Link href="/register/team">Join a Team</Link>
                 )}
               </>
             ) : user.type === UserType.Admin ? (

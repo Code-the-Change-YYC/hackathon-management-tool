@@ -57,7 +57,7 @@ const schema = a
         JUDGE_room: a.belongsTo("Room", "JUDGE_roomId"),
       })
       .authorization((allow) => [
-        allow.groups(["Admin"]).to(["read", "update", "create"]),
+        allow.groups(["Admin"]).to(["read", "update", "create", "delete"]),
         allow.ownerDefinedIn("profileOwner").to(["read", "update", "create"]),
         allow.authenticated().to(["read", "create"]),
       ]),
