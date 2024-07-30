@@ -35,6 +35,7 @@ export async function seedHackathon() {
         ];
 
         return client.models.Hackathon.create({
+          id: "f6f579a0-cc3f-4a54-a4e3-3967d3ac90f0",
           startDate: "2024-05-02",
           endDate: "2024-05-04",
           scoringComponents: sampleScoringComponents,
