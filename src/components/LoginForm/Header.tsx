@@ -2,8 +2,8 @@ import Image from "next/image";
 
 const Header = () => {
   return (
-    <div className="relative pb-4">
-      <div className="hidden md:block">
+    <div className="relative pb-4 text-center">
+      <div className="pointer-events-none hidden select-none md:block">
         <Image
           className=" absolute -top-6 right-[-130px] "
           src={"/svgs/login/Vector_4.svg"}
@@ -20,8 +20,8 @@ const Header = () => {
         />
       </div>
       <div className=" text-4xl font-bold text-white lg:text-6xl">
-        Register for Hack the Change{" "}
-        <span className="text-green-200">2024</span>
+        Register for Hack the Change
+        <span className="text-pastel-green"> 2024</span>
       </div>
     </div>
   );

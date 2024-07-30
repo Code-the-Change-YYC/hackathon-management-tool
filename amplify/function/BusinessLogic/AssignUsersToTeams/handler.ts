@@ -61,7 +61,6 @@ export const handler: AppSyncResolverHandler<
         },
       })
     ).data.getUser;
-
     const team = (
       await client.graphql({
         query: getTeam,
@@ -71,6 +70,8 @@ export const handler: AppSyncResolverHandler<
       })
     ).data.getTeam;
 
+    console.log(user);
+    console.log(team);
     if (team == null) {
       return {
         body: { value: "Error: Team does not exist" },
@@ -94,7 +95,6 @@ export const handler: AppSyncResolverHandler<
         headers: { "Content-Type": "application/json" },
       };
     }
-
     const members = (team.members as ModelUserConnection).items;
 
     if (members.length >= MAX_TEAM_MEMBERS) {
@@ -128,9 +128,10 @@ export const handler: AppSyncResolverHandler<
         headers: { "Content-Type": "application/json" },
       };
     }
-  } catch {
+  } catch (error) {
+    console.error(error);
     return {
-      body: { value: `Unhandled Internal Server Error` },
+      body: { value: (error as Error).message },
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
     };

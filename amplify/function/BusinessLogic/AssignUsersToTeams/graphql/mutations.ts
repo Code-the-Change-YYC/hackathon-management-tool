@@ -63,7 +63,7 @@ export const ResetHackathon = /* GraphQL */ `mutation ResetHackathon(
   $resetTeams: Boolean!
   $resetUsers: Boolean!
   $safetyCheck: String!
-  $scoreComponents: AWSJSON!
+  $scoringComponents: AWSJSON!
   $scoringSidepots: AWSJSON!
   $startDate: AWSDate!
 ) {
@@ -74,7 +74,7 @@ export const ResetHackathon = /* GraphQL */ `mutation ResetHackathon(
     resetTeams: $resetTeams
     resetUsers: $resetUsers
     safetyCheck: $safetyCheck
-    scoreComponents: $scoreComponents
+    scoringComponents: $scoringComponents
     scoringSidepots: $scoringSidepots
     startDate: $startDate
   ) {

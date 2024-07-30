@@ -29,7 +29,6 @@ const LINK_STYLES =
 
 const WEBPAGE_CONTAINER =
   "hidden md:block lg:block rounded-t-md bg-[#00D3A9] opacity-95 ";
-const WINDOW_BUTTONS_SVG = "/svgs/heroSection/window_control_buttons.svg";
 
 const COUNTDOWN_CONTAINER = "mx-auto p-4";
 const TIMER_CONTAINER = "flex justify-center my-12";
@@ -133,7 +132,7 @@ const HeroSectionTile = (props: HeroSectionProps) => {
             </div>
           </Link>
         ) : (
-          <Link href="/login" legacyBehavior>
+          <Link href="/register" legacyBehavior>
             <div className=" mb-4 rounded-2xl border-4 border-white bg-awesomer-purple px-6 py-2 text-sm text-white  hover:opacity-70 md:mb-0 md:px-6">
               Join Hackathon
             </div>
@@ -158,7 +157,7 @@ const HeroSectionTile = (props: HeroSectionProps) => {
       <div className={WEBPAGE_CONTAINER}>
         <div className="relative rounded-t-md border-t-[30px] border-white">
           <Image
-            src={WINDOW_BUTTONS_SVG}
+            src={"/svgs/heroSection/window_control_buttons.svg"}
             alt="check mark icon"
             width={50}
             height={50}

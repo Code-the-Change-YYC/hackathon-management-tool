@@ -100,8 +100,8 @@ export const getRoom = /* GraphQL */ `query GetRoom($id: ID!) {
   }
 }
 ` as GeneratedQuery<APITypes.GetRoomQueryVariables, APITypes.GetRoomQuery>;
-export const getScore = /* GraphQL */ `query GetScore($id: ID!) {
-  getScore(id: $id) {
+export const getScore = /* GraphQL */ `query GetScore($judgeId: ID!, $teamId: ID!) {
+  getScore(judgeId: $judgeId, teamId: $teamId) {
     createdAt
     hackathon {
       createdAt
@@ -379,17 +379,19 @@ export const listRooms = /* GraphQL */ `query ListRooms(
 ` as GeneratedQuery<APITypes.ListRoomsQueryVariables, APITypes.ListRoomsQuery>;
 export const listScores = /* GraphQL */ `query ListScores(
   $filter: ModelScoreFilterInput
-  $id: ID
+  $judgeId: ModelIDKeyConditionInput
   $limit: Int
   $nextToken: String
   $sortDirection: ModelSortDirection
+  $teamId: ID
 ) {
   listScores(
     filter: $filter
-    id: $id
+    judgeId: $judgeId
     limit: $limit
     nextToken: $nextToken
     sortDirection: $sortDirection
+    teamId: $teamId
   ) {
     items {
       createdAt
