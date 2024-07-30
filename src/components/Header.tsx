@@ -1,7 +1,9 @@
 "use client";
 
+import { signOut } from "aws-amplify/auth";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
 
 import { UserType, useUser } from "@/components/contexts/UserContext";
@@ -11,6 +13,13 @@ const headerContainerStyles =
 
 export default function Header() {
   const user = useUser().currentUser;
+
+  const router = useRouter();
+
+  const handleLogout = () => {
+    signOut();
+    router.push("/");
+  };
 
   return (
     <div className={headerContainerStyles}>
@@ -52,9 +61,14 @@ export default function Header() {
 
       <div className="flex w-48 justify-end">
         {user.completedProfile && (
-          <Link href="/participant/profile">
-            <CgProfile size={60} />
-          </Link>
+          <>
+            <Link href="/participant/profile">
+              <CgProfile size={60} />
+            </Link>
+            <button onClick={handleLogout} className="ml-4 font-semibold">
+              Logout
+            </button>
+          </>
         )}
       </div>
     </div>

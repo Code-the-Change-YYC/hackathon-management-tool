@@ -1,9 +1,9 @@
 "use client";
 
-import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
 
-import { type Schema } from "@/amplify/data/resource";
+import { client } from "@/app/QueryProvider";
+import LoadingRing from "@/components/LoadingRing";
 import DataTableSection from "@/components/admin/TeamsTable/DataTableSection";
 import FilterSection from "@/components/admin/TeamsTable/FilterSection";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -19,8 +19,6 @@ const tableHeaders = [
 ];
 
 const filters = [{ label: "Approved" }, { label: "Checked-in" }];
-
-const client = generateClient<Schema>();
 
 const TeamsTablePage = () => {
   const [teamData, setTeamData] = useState<
@@ -46,6 +44,11 @@ const TeamsTablePage = () => {
       const response = await client.models.Team.list({
         selectionSet: ["members.*", "id", "name", "approved"],
       });
+
+      if (response.errors) {
+        throw new Error(response.errors[0].message);
+      }
+
       return response.data;
     },
   });
@@ -141,7 +144,7 @@ const TeamsTablePage = () => {
     <div>
       {isFetching ? (
         <div className={LOADING_SCREEN_STYLES}>
-          <h1 className="text-2xl">Loading...</h1>
+          <LoadingRing />
         </div>
       ) : (
         <>

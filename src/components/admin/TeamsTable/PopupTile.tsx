@@ -1,9 +1,8 @@
 "use client";
 
-import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
 
-import { type Schema } from "@/amplify/data/resource";
+import { client } from "@/app/QueryProvider";
 import { useMutation } from "@tanstack/react-query";
 
 const exit_icon = "/svgs/admin/exit_icon.svg";
@@ -33,8 +32,6 @@ interface PopupProps {
   onClose: () => void;
 }
 
-const client = generateClient<Schema>();
-
 const Popup = ({
   selectedMembersData,
   selectedMemberStatus,
@@ -44,8 +41,14 @@ const Popup = ({
   teamName,
 }: PopupProps) => {
   const deleteRecord = useMutation({
-    mutationFn: async (recordId: string) =>
-      await client.models.Team.delete({ id: recordId }),
+    mutationFn: async (recordId: string) => {
+      try {
+        await client.models.Team.delete({ id: recordId });
+      } catch (error) {
+        console.error("Error deleting record", error);
+        throw error;
+      }
+    },
     onError: (error) => {
       console.log("Error deleting record:", error);
     },

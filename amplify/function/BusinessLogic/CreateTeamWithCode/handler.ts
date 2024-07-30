@@ -3,10 +3,7 @@ import { generateClient } from "aws-amplify/data";
 import type { AppSyncIdentityCognito } from "aws-lambda";
 
 import type { Schema } from "../../../data/resource";
-import {
-  createTeam,
-  updateUser,
-} from "../AssignUsersToTeams/graphql/mutations";
+import { createTeam, updateUser } from "./graphql/mutations";
 import { getTeam } from "./graphql/queries";
 
 Amplify.configure(
@@ -49,7 +46,9 @@ export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
   try {
     do {
       teamId = Array.from(Array(4), () =>
-        Math.floor(Math.random() * 36).toString(36),
+        Math.floor(Math.random() * 36)
+          .toString(36)
+          .toUpperCase(),
       ).join("");
 
       team = (
@@ -82,7 +81,7 @@ export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
 
     if (teamCreation) {
       if (event.arguments.addCallerToTeam) {
-        await client
+        return await client
           .graphql({
             query: updateUser,
             variables: {
@@ -120,16 +119,12 @@ export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
         headers: { "Content-Type": "application/json" },
       };
     }
-  } catch {
+  } catch (error) {
+    console.error(error);
     return {
       body: { value: `Unhandled Internal Server Error` },
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
     };
   }
-  return {
-    body: { value: `No return condition reached` },
-    statusCode: 500,
-    headers: { "Content-Type": "application/json" },
-  };
 };

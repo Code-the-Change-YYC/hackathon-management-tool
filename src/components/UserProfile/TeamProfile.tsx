@@ -1,8 +1,8 @@
 "use client";
 
-import { generateClient } from "aws-amplify/data";
-
 import { type Schema } from "@/amplify/data/resource";
+import { client } from "@/app/QueryProvider";
+import LoadingRing from "@/components/LoadingRing";
 import TeamForm from "@/components/UserProfile/TeamForm";
 import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -12,8 +12,6 @@ const BUTTON_STYLES =
 
 const TEAM_INSTRUCTION_STYLES =
   "bg-pink bg-white/30 mx-10 my-10 rounded-3xl  border-4 border-white bg-[#FFFFFF] px-10 py-20 md:px-20 md:py-16";
-
-const client = generateClient<Schema>();
 
 const TeamProfile = () => {
   const queryClient = useQueryClient();
@@ -29,6 +27,8 @@ const TeamProfile = () => {
         id: userId,
       });
 
+      if (userResponse.errors) throw new Error(userResponse.errors[0].message);
+
       const userTeamId = userResponse.data?.teamId as string;
 
       if (!userTeamId) {
@@ -38,13 +38,21 @@ const TeamProfile = () => {
       const teamResponse = await client.models.Team.get({
         id: userTeamId,
       });
+
+      if (teamResponse.errors) throw new Error(teamResponse.errors[0].message);
+
       return teamResponse.data;
     },
   });
 
   const teamMutation = useMutation({
     mutationFn: async () => {
-      await client.models.User.update({ id: userId, teamId: null });
+      try {
+        await client.models.User.update({ id: userId, teamId: null });
+      } catch (error) {
+        console.error("Error updating ids", error);
+        throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -56,8 +64,8 @@ const TeamProfile = () => {
   return (
     <>
       {isFetching ? (
-        <div className="flex w-full items-center justify-center bg-fuzzy-peach">
-          <h1 className="text-2xl">Loading...</h1>
+        <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
+          <LoadingRing />
         </div>
       ) : (
         <>
