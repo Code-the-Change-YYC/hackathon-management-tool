@@ -1,10 +1,10 @@
 "use client";
 
-import { generateClient } from "aws-amplify/data";
 import Image from "next/image";
 import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
+import { client } from "@/app/QueryProvider";
 import LoadingRing from "@/components/LoadingRing";
 import UserForm from "@/components/UserProfile/UserForm";
 import { useUser } from "@/components/contexts/UserContext";
@@ -12,8 +12,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
-
-const client = generateClient<Schema>();
 
 export interface UserFormProp {
   data: Schema["User"]["type"];

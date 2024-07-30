@@ -1,8 +1,7 @@
 "use client";
 
-import { generateClient } from "aws-amplify/data";
-
 import { type Schema } from "@/amplify/data/resource";
+import { client } from "@/app/QueryProvider";
 import LoadingRing from "@/components/LoadingRing";
 import TeamForm from "@/components/UserProfile/TeamForm";
 import { useUser } from "@/components/contexts/UserContext";
@@ -13,8 +12,6 @@ const BUTTON_STYLES =
 
 const TEAM_INSTRUCTION_STYLES =
   "bg-pink bg-white/30 mx-10 my-10 rounded-3xl  border-4 border-white bg-[#FFFFFF] px-10 py-20 md:px-20 md:py-16";
-
-const client = generateClient<Schema>();
 
 const TeamProfile = () => {
   const queryClient = useQueryClient();

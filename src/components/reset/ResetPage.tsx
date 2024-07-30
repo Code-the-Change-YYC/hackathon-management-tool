@@ -7,6 +7,8 @@ import type { Schema } from "@/amplify/data/resource";
 import { Button, CheckboxField, Input, Label } from "@aws-amplify/ui-react";
 import { useMutation } from "@tanstack/react-query";
 
+import LoadingRing from "../LoadingRing";
+
 const client = generateClient<Schema>();
 export default function ResetPage() {
   const userMutation = useMutation({
@@ -82,15 +84,7 @@ export default function ResetPage() {
   });
 
   if (userMutation.isPending) {
-    return (
-      // These are mandatory divs for the loading spinner
-      <div className="lds-ring">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    );
+    return <LoadingRing />;
   }
   if (userMutation.isError) {
     return <div>Error, please try again later.</div>;

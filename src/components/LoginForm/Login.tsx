@@ -13,10 +13,10 @@ import { type AuthContext } from "@aws-amplify/ui/dist/types";
 export default function Login() {
   const pathname = usePathname();
   const components: DefaultComponents = {
-    SignUp: {
+    SignIn: {
       Header: () => <FormFieldsHeader />,
     },
-    SignIn: {
+    SignUp: {
       Header: () => <FormFieldsHeader />,
     },
     Footer: () => {

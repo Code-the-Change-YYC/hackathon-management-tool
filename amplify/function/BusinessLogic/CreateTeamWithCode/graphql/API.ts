@@ -1334,26 +1334,6 @@ export type DemoFunctionMutation = {
   } | null;
 };
 
-export type ResetHackathonMutationVariables = {
-  endDate: string;
-  resetRooms: boolean;
-  resetScores: boolean;
-  resetTeams: boolean;
-  resetUsers: boolean;
-  safetyCheck: string;
-  scoreComponents: string;
-  scoringSidepots: string;
-  startDate: string;
-};
-
-export type ResetHackathonMutation = {
-  ResetHackathon?: {
-    __typename: "StatusCodeFunctionResponse";
-    headers?: string | null;
-    statusCode?: number | null;
-  } | null;
-};
-
 export type SetUserAsCheckedInMutationVariables = {
   userId: string;
 };
