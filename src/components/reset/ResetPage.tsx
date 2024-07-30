@@ -211,7 +211,7 @@ export default function ResetPage() {
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="safetyCheck">
-            Enter "delete hackathon" to confirm{" "}
+            Enter &quot;delete hackathon&quot; to confirm{" "}
           </Label>
           <div className="flex w-1/2 flex-row gap-2">
             <Input
