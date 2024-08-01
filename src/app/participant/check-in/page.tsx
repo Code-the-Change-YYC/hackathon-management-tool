@@ -6,7 +6,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
+import { UserType } from "@/components/contexts/UserContext";
 import { useUser } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 
 const check_mark_icon = "/svgs/checkin/check_mark.svg";
 const cross_icon = "/svgs/checkin/circle_cross.svg";
@@ -106,4 +108,4 @@ const CheckInPage = () => {
   );
 };
 
-export default CheckInPage;
+export default withAuthGuard(CheckInPage, [UserType.Participant]);

@@ -5,6 +5,8 @@ import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 import type { Schema } from "@/amplify/data/resource";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 import { useQuery } from "@tanstack/react-query";
 import { Scanner } from "@yudiel/react-qr-scanner";
 
@@ -139,4 +141,4 @@ const AdminFoodTickets = () => {
   );
 };
 
-export default AdminFoodTickets;
+export default withAuthGuard(AdminFoodTickets, [UserType.Admin]);

@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import PurpleButton from "@/components/PurpleButton";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 import JoinTeamInstructions from "@/components/teamRegistration/JoinTeamInstructions";
 import NewMember1 from "@/images/register/NewMember1.png";
 import NewTeam1 from "@/images/register/NewTeam1.png";
@@ -14,7 +16,7 @@ function Card({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-export default function page() {
+function page() {
   return (
     <div className="flex w-full flex-col justify-center gap-6 rounded-3xl bg-white p-4 text-3xl font-bold md:p-8">
       <div className="hidden flex-col flex-wrap items-center justify-center gap-2 text-center sm:flex sm:flex-row">
@@ -48,3 +50,5 @@ export default function page() {
     </div>
   );
 }
+
+export default withAuthGuard(page, [UserType.Participant]);

@@ -1,7 +1,9 @@
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 import JoinTeamCode from "@/components/teamRegistration/JoinTeamCode";
 import { Underline } from "@/utils/text-utils";
 
-export default function page() {
+function page() {
   const instructions = [
     "Obtain the unique 4-digit Team ID from your team member who registered your group.",
     "Enter the Team ID below.",
@@ -22,3 +24,5 @@ export default function page() {
     </div>
   );
 }
+
+export default withAuthGuard(page, [UserType.Participant]);

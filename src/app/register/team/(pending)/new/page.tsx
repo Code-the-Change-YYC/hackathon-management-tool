@@ -7,11 +7,13 @@ import { type Id, toast } from "react-toastify";
 
 import { client } from "@/app/QueryProvider";
 import PurpleButton from "@/components/PurpleButton";
+import { UserType } from "@/components/contexts/UserContext";
 import { useUser } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 import { Underline } from "@/utils/text-utils";
 import { useMutation } from "@tanstack/react-query";
 
-export default function page() {
+function page() {
   const [teamName, setTeamName] = useState("");
   const router = useRouter();
   const user = useUser();
@@ -88,3 +90,5 @@ export default function page() {
     </form>
   );
 }
+
+export default withAuthGuard(page, [UserType.Participant]);

@@ -1,8 +1,10 @@
 import Link from "next/link";
 
 import PurpleButton from "@/components/PurpleButton";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 
-export default function page() {
+function page() {
   // TODO: Add a reminder to join a team in two days
   return (
     <div className="flex w-full flex-col justify-center gap-6 rounded-3xl bg-white p-4 md:p-8">
@@ -18,3 +20,5 @@ export default function page() {
     </div>
   );
 }
+
+export default withAuthGuard(page, [UserType.Participant]);
