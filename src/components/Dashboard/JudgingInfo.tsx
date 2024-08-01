@@ -26,7 +26,9 @@ export default function JudgingInfo() {
       </div>
       <div className="flex flex-col gap-2 text-start">
         <div className="font-medium">Time Slot </div>
-        <div className="text-5xl italic text-neutral-800">{timeSlot}</div>
+        <div className=" text-3xl italic text-neutral-800 xl:text-5xl">
+          {timeSlot}
+        </div>
       </div>
       <Link
         href={href}
