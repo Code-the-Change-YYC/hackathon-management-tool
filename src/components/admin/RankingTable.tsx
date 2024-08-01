@@ -1,10 +1,15 @@
 "use client";
 
+import { generateClient } from "aws-amplify/api";
 import { useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
+import type { Schema } from "@/amplify/data/resource";
+import { useQuery } from "@tanstack/react-query";
+
 import FilterIcon from "../atoms/FilterIcon";
 
+const client = generateClient<Schema>();
 function TableRow({
   teamName = "Name",
   score = 100,
@@ -31,6 +36,30 @@ export default function RankingTable() {
     teamName: string;
     score: number;
   }
+  const getRankings = async () => {
+    const rankings = await client.models.Team.list();
+
+    const scorePromises = rankings.data.map(async (team) => {
+      const theScore = await team.scores();
+      return {
+        teamName: team.name,
+        score: theScore,
+      };
+    });
+
+    const score = await Promise.all(scorePromises);
+
+    console.log(score); // This will log the resolved values
+    console.log(rankings); // This logs the original rankings response
+
+    return score; // Return the resolved score array instead of rankings
+  };
+
+  const { data } = useQuery({
+    queryKey: ["Ranking"],
+    queryFn: getRankings,
+  });
+  console.log(data);
   const rankings: Ranking[] = [
     { teamName: "TeamA", score: 85 },
     { teamName: "TeamB", score: 72 },

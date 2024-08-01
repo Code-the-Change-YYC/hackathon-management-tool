@@ -7,11 +7,9 @@ import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
 export default async function NumFoodTickets() {
-  const href = "#";
+  const href = "/dashboard/admin/create-food-event";
   const foodTickets = await client.models.UserFoodEventAttendance.list();
-  console.log(foodTickets);
-  // TODO: Update this with foodTickets.data.length
-  const numFoodTickets = 200;
+  const numFoodTickets = foodTickets.data.length;
   return (
     <Card>
       <div className="flex items-center gap-4 ">

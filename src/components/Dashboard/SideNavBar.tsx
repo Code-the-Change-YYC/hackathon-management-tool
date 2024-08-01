@@ -20,13 +20,91 @@ const NAV_BAR_HEADER_STYLES = "my-2 text-center text-xl md:text-2xl";
 const NAV_LINK_CONTAINER_STYLES =
   "flex justify-between hover:bg-[#5E48D1] p-2 rounded-md mb-2";
 const NAV_LINK_ICON_STYLES = "mr-2 flex p-2 justify-center rounded-md bg-white";
-
+export interface DashboardLink {
+  name: string;
+  icon: string;
+  route: string;
+}
+interface DashboardRoutes {
+  group: string;
+  routes: DashboardLink[];
+}
+const NavLinkContainer = ({
+  dashboardLink,
+}: {
+  dashboardLink: DashboardLink;
+}) => {
+  return (
+    <Link href={dashboardLink.route} className={NAV_LINK_CONTAINER_STYLES}>
+      <div className="flex">
+        <div className={NAV_LINK_ICON_STYLES}>
+          <Image
+            height={20}
+            width={20}
+            src={dashboardLink.icon}
+            alt={`${dashboardLink.name} icon`}
+          />
+        </div>
+        <p>{dashboardLink.name}</p>
+      </div>
+      <Image height={10} width={10} src={arrow_icon} alt="Arrow icon" />
+    </Link>
+  );
+};
 const SideNavBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
+  const dashboardRoutes: DashboardRoutes[] = [
+    {
+      group: "ADMIN",
+      routes: [
+        { name: "Dashboard", icon: dashboard_icon, route: "/dashboard/admin" },
+      ],
+    },
+    {
+      group: "PARTICIPANTS",
+      routes: [
+        {
+          name: "View All Participants",
+          icon: users_icon,
+          route: "/dashboard/admin/users",
+        },
+        {
+          name: "View All Teams",
+          icon: team_icon,
+          route: "/dashboard/admin/teams",
+        },
+      ],
+    },
+    {
+      group: "FOOD TICKETS",
+      routes: [
+        {
+          name: "Scan Food Tickets",
+          icon: ticket_icon,
+          route: "/dashboard/admin/scan-food-tickets",
+        },
+        {
+          name: "Create Food Event",
+          icon: add_icon,
+          route: "/dashboard/admin/create-food-event",
+        },
+      ],
+    },
+    {
+      group: "RESET",
+      routes: [
+        {
+          name: "Reset Hackathon",
+          icon: reset_icon,
+          route: "/dashboard/admin/reset",
+        },
+      ],
+    },
+  ];
 
   return (
     <div className="relative text-sm md:text-lg">
@@ -46,139 +124,18 @@ const SideNavBar = () => {
           />
         </button>
         {!isCollapsed && (
-          <nav className="w-full">
-            <div className="p-6">
-              <h1 className={NAV_BAR_HEADER_STYLES}>HACK THE CHANGE</h1>
-              <div className="mt-2">
-                <h2>ADMIN</h2>
-                <hr className="my-2" />
-                <Link href="/admin" className={NAV_LINK_CONTAINER_STYLES}>
-                  <div className="flex">
-                    <div className={NAV_LINK_ICON_STYLES}>
-                      <Image
-                        height={20}
-                        width={20}
-                        src={dashboard_icon}
-                        alt="Dashboard icon"
-                      />
-                    </div>
-                    <p>Dashboard</p>
-                  </div>
-                  <Image
-                    height={10}
-                    width={10}
-                    src={arrow_icon}
-                    alt="Arrow icon"
-                  />
-                </Link>
-                <h2 className="mt-8">PARTICIPANTS</h2>
-                <hr className="my-2" />
-                <Link href="/admin/users" className={NAV_LINK_CONTAINER_STYLES}>
-                  <div className="flex">
-                    <div className={NAV_LINK_ICON_STYLES}>
-                      <Image
-                        height={20}
-                        width={20}
-                        src={users_icon}
-                        alt="User icon"
-                      />
-                    </div>
-                    <p>View All Participants</p>
-                  </div>
-                  <Image
-                    height={10}
-                    width={10}
-                    src={arrow_icon}
-                    alt="Arrow icon"
-                  />
-                </Link>
-                <Link href="/admin/teams" className={NAV_LINK_CONTAINER_STYLES}>
-                  <div className="flex">
-                    <div className={NAV_LINK_ICON_STYLES}>
-                      <Image
-                        height={20}
-                        width={20}
-                        src={team_icon}
-                        alt="Team icon"
-                      />
-                    </div>
-                    <p>View All Teams</p>
-                  </div>
-                  <Image
-                    height={10}
-                    width={10}
-                    src={arrow_icon}
-                    alt="Arrow icon"
-                  />
-                </Link>
-                <h2 className="mt-8">FOOD TICKETS</h2>
-                <hr className="my-2" />
-                <Link
-                  href="/admin/scan-food-tickets"
-                  className={NAV_LINK_CONTAINER_STYLES}
-                >
-                  <div className="flex">
-                    <div className={NAV_LINK_ICON_STYLES}>
-                      <Image
-                        height={20}
-                        width={20}
-                        src={ticket_icon}
-                        alt="Ticket icon"
-                      />
-                    </div>
-                    <p>Scan Food Tickets</p>
-                  </div>
-                  <Image
-                    height={10}
-                    width={10}
-                    src={arrow_icon}
-                    alt="Arrow icon"
-                  />
-                </Link>
-                <Link
-                  href="/admin/create-food-tickets"
-                  className={NAV_LINK_CONTAINER_STYLES}
-                >
-                  <div className="flex">
-                    <div className={NAV_LINK_ICON_STYLES}>
-                      <Image
-                        height={20}
-                        width={20}
-                        src={add_icon}
-                        alt="Create icon"
-                      />
-                    </div>
-                    <p>Create Food Tickets</p>
-                  </div>
-                  <Image
-                    height={10}
-                    width={10}
-                    src={arrow_icon}
-                    alt="Arrow icon"
-                  />
-                </Link>
-                <h2 className="mt-8">RESET</h2>
-                <hr className="my-2" />
-                <Link href="/admin/reset" className={NAV_LINK_CONTAINER_STYLES}>
-                  <div className="flex">
-                    <div className={NAV_LINK_ICON_STYLES}>
-                      <Image
-                        height={20}
-                        width={20}
-                        src={reset_icon}
-                        alt="Reset icon"
-                      />
-                    </div>
-                    <p>Reset Hackathon</p>
-                  </div>
-                  <Image
-                    height={10}
-                    width={10}
-                    src={arrow_icon}
-                    alt="Arrow icon"
-                  />
-                </Link>
-              </div>
+          <nav className="w-full p-6">
+            <h1 className={NAV_BAR_HEADER_STYLES}>HACK THE CHANGE</h1>
+            <div className="mt-2">
+              {dashboardRoutes.map((route) => (
+                <div key={route.group}>
+                  <h2>{route.group}</h2>
+                  <hr className="my-2" />
+                  {route.routes.map((r, index) => (
+                    <NavLinkContainer key={index} dashboardLink={r} />
+                  ))}
+                </div>
+              ))}
             </div>
           </nav>
         )}

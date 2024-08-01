@@ -12,9 +12,11 @@ export default function Greetings() {
       : "text-emerald-500";
   return (
     <Card>
-      <div className=" flex w-full flex-col justify-start p-4 text-start text-6xl">
-        <h2 className="text-2xl font-normal">Hack the Change 2024</h2>
-        <h1>
+      <div className=" flex w-full flex-col justify-start p-2 text-start md:p-4 ">
+        <h2 className="text-lg font-normal md:text-xl lg:text-2xl">
+          Hack the Change 2024
+        </h2>
+        <h1 className="text-3xl md:text-4xl lg:text-6xl">
           Hello,
           <span className={`capitalize italic ${nameColor}`}>
             {` ${name}`}!

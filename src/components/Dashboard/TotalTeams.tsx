@@ -7,7 +7,7 @@ import Card from "./Card";
 export default async function TotalTeams() {
   const teams = await client.models.Team.list();
   const numTeams = teams.data.length;
-  const href = "#";
+  const href = "/dashboard/admin/teams";
   return (
     <Card>
       <Link href={href}>

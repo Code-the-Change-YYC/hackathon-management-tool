@@ -6,10 +6,10 @@ import Card from "./Card";
 
 export default function TeamRankings() {
   return (
-    <Card>
-      <div className="flex w-full flex-row items-center justify-between">
+    <Card className="h-full">
+      <div className="flex w-full flex-row items-center justify-between pb-2">
         <div className=" font-medium">View Team Rankings</div>
-        <Link href="#">
+        <Link href="/dashboard/admin/teams">
           <Image
             src={"/images/admin/RightArrow.png"}
             className="transition duration-300 hover:opacity-90"
