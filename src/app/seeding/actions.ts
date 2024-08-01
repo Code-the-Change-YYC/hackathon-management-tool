@@ -3,6 +3,7 @@
 // actions.ts
 import { seedFoodEvents } from "./models/FoodEvent";
 import { seedHackathon } from "./models/Hackathon";
+import { seedScore } from "./models/Score";
 import { seedTeams } from "./models/Team";
 import { seedJudges } from "./models/User";
 
@@ -15,6 +16,7 @@ const DATA_SEEDING: { [key: string]: SeedingFunction } = {
   seedFoodEvents,
   seedTeams,
   seedJudges,
+  seedScore,
 };
 
 export const getSeedingData = () => {

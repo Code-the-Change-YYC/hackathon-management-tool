@@ -195,12 +195,15 @@ export const handler: Handler = async (event) => {
       if (errors) throw errors;
       const scores = scoresResponse.listScores.items;
       for (const score of scores) {
-        const id = score.id;
+        // teamId is the partition key
+        const teamId = score.teamId;
+        const judgeId = score.judgeId;
         const { errors } = await client.graphql({
           query: deleteScore,
           variables: {
             input: {
-              id: id,
+              teamId: teamId,
+              judgeId: judgeId,
             },
           },
         });
@@ -244,9 +247,10 @@ export const handler: Handler = async (event) => {
       console.log(scoringComponents as string);
 
       // get the score Components Array from the JSON input
-      const scoringComponentsArray: ScoreComponentTypeInput[] = JSON.parse(
-        scoringComponents as string,
-      );
+      const scoringComponentsArray: ScoreComponentTypeInput[] =
+        typeof scoringComponents === "string"
+          ? JSON.parse(scoringComponents)
+          : scoringComponents;
       const { errors } = await client.graphql({
         query: updateHackathon,
         variables: {

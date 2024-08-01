@@ -115,7 +115,7 @@ const TeamProfile = () => {
               </div>
               <div className="my-6 flex justify-end">
                 <button className={`${BUTTON_STYLES} mx-10 w-full md:w-auto`}>
-                  <a href="/">Join Team</a>
+                  <a href="/register/team">Join Team</a>
                 </button>
               </div>
             </div>

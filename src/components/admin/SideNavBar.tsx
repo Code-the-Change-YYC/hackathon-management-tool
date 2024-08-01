@@ -136,7 +136,7 @@ const SideNavBar = () => {
                   />
                 </Link>
                 <Link
-                  href="/admin/create-food-tickets"
+                  href="/admin/create-food-event"
                   className={NAV_LINK_CONTAINER_STYLES}
                 >
                   <div className="flex">

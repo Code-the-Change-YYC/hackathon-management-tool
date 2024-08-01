@@ -1,16 +1,14 @@
 /* tslint:disable */
-
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
-import * as APITypes from "./API";
 
+import * as APITypes from "./API";
 type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryInput: InputType;
   __generatedQueryOutput: OutputType;
 };
 
-export const GetUserMessageCode =
-  /* GraphQL */ `query GetUserMessageCode($userMessage: String) {
+export const GetUserMessageCode = /* GraphQL */ `query GetUserMessageCode($userMessage: String) {
   GetUserMessageCode(userMessage: $userMessage) {
     body
     headers
@@ -19,11 +17,10 @@ export const GetUserMessageCode =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetUserMessageCodeQueryVariables,
-    APITypes.GetUserMessageCodeQuery
-  >;
-export const VerifyUserMessage =
-  /* GraphQL */ `query VerifyUserMessage($userCode: String) {
+  APITypes.GetUserMessageCodeQueryVariables,
+  APITypes.GetUserMessageCodeQuery
+>;
+export const VerifyUserMessage = /* GraphQL */ `query VerifyUserMessage($userCode: String) {
   VerifyUserMessage(userCode: $userCode) {
     headers
     statusCode
@@ -31,9 +28,9 @@ export const VerifyUserMessage =
   }
 }
 ` as GeneratedQuery<
-    APITypes.VerifyUserMessageQueryVariables,
-    APITypes.VerifyUserMessageQuery
-  >;
+  APITypes.VerifyUserMessageQueryVariables,
+  APITypes.VerifyUserMessageQuery
+>;
 export const getFoodEvent = /* GraphQL */ `query GetFoodEvent($id: ID!) {
   getFoodEvent(id: $id) {
     attended {
@@ -103,8 +100,8 @@ export const getRoom = /* GraphQL */ `query GetRoom($id: ID!) {
   }
 }
 ` as GeneratedQuery<APITypes.GetRoomQueryVariables, APITypes.GetRoomQuery>;
-export const getScore = /* GraphQL */ `query GetScore($id: ID!) {
-  getScore(id: $id) {
+export const getScore = /* GraphQL */ `query GetScore($judgeId: ID!, $teamId: ID!) {
+  getScore(judgeId: $judgeId, teamId: $teamId) {
     createdAt
     hackathon {
       createdAt
@@ -248,8 +245,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
   }
 }
 ` as GeneratedQuery<APITypes.GetUserQueryVariables, APITypes.GetUserQuery>;
-export const getUserFoodEventAttendance =
-  /* GraphQL */ `query GetUserFoodEventAttendance($id: ID!) {
+export const getUserFoodEventAttendance = /* GraphQL */ `query GetUserFoodEventAttendance($id: ID!) {
   getUserFoodEventAttendance(id: $id) {
     createdAt
     foodEvent {
@@ -289,9 +285,9 @@ export const getUserFoodEventAttendance =
   }
 }
 ` as GeneratedQuery<
-    APITypes.GetUserFoodEventAttendanceQueryVariables,
-    APITypes.GetUserFoodEventAttendanceQuery
-  >;
+  APITypes.GetUserFoodEventAttendanceQueryVariables,
+  APITypes.GetUserFoodEventAttendanceQuery
+>;
 export const listFoodEvents = /* GraphQL */ `query ListFoodEvents(
   $filter: ModelFoodEventFilterInput
   $id: ID
@@ -383,17 +379,19 @@ export const listRooms = /* GraphQL */ `query ListRooms(
 ` as GeneratedQuery<APITypes.ListRoomsQueryVariables, APITypes.ListRoomsQuery>;
 export const listScores = /* GraphQL */ `query ListScores(
   $filter: ModelScoreFilterInput
-  $id: ID
+  $judgeId: ModelIDKeyConditionInput
   $limit: Int
   $nextToken: String
   $sortDirection: ModelSortDirection
+  $teamId: ID
 ) {
   listScores(
     filter: $filter
-    id: $id
+    judgeId: $judgeId
     limit: $limit
     nextToken: $nextToken
     sortDirection: $sortDirection
+    teamId: $teamId
   ) {
     items {
       createdAt
@@ -472,8 +470,7 @@ export const listTeams = /* GraphQL */ `query ListTeams(
   }
 }
 ` as GeneratedQuery<APITypes.ListTeamsQueryVariables, APITypes.ListTeamsQuery>;
-export const listUserFoodEventAttendances =
-  /* GraphQL */ `query ListUserFoodEventAttendances(
+export const listUserFoodEventAttendances = /* GraphQL */ `query ListUserFoodEventAttendances(
   $filter: ModelUserFoodEventAttendanceFilterInput
   $id: ID
   $limit: Int
@@ -500,9 +497,9 @@ export const listUserFoodEventAttendances =
   }
 }
 ` as GeneratedQuery<
-    APITypes.ListUserFoodEventAttendancesQueryVariables,
-    APITypes.ListUserFoodEventAttendancesQuery
-  >;
+  APITypes.ListUserFoodEventAttendancesQueryVariables,
+  APITypes.ListUserFoodEventAttendancesQuery
+>;
 export const listUsers = /* GraphQL */ `query ListUsers(
   $filter: ModelUserFilterInput
   $id: ID
