@@ -2,6 +2,7 @@
 
 import { generateClient } from "aws-amplify/api";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 
 import type { Schema } from "@/amplify/data/resource";
 import { Button, CheckboxField, Input, Label } from "@aws-amplify/ui-react";
@@ -17,7 +18,7 @@ export default function ResetPage() {
       try {
         if (input.safetyCheck !== "delete hackathon") {
           console.log(
-            `must complete safety check, looking for \'delete hackathon\'}`,
+            `must complete safety check, looking for 'delete hackathon'}`,
           );
           return;
         }
@@ -42,10 +43,13 @@ export default function ResetPage() {
   });
 
   const onSubmit: SubmitHandler<Schema["ResetHackathon"]["args"]> = (data) => {
+    // Convert scoringComponents and scoringSidepots to JSON strings
+    data.scoringComponents = JSON.stringify(data.scoringComponents);
+    data.scoringSidepots = JSON.stringify(data.scoringSidepots);
     userMutation.mutate(data);
   };
 
-  const generateId = () => "_" + Math.random().toString(36).substr(2, 9);
+  const generateId = () => uuidv4();
 
   const { register, control, handleSubmit } = useForm({
     defaultValues: {
