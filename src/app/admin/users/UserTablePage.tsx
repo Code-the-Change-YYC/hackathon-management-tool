@@ -6,6 +6,7 @@ import { useState } from "react";
 import { type Schema } from "@/amplify/data/resource";
 import LoadingRing from "@/components/LoadingRing";
 import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 import { useQuery } from "@tanstack/react-query";
 
 import DataTableSectionUser from "../components/DataTableSectionUser";
@@ -100,4 +101,4 @@ const UserTablePage = () => {
   );
 };
 
-export default UserTablePage;
+export default withAuthGuard(UserTablePage, [UserType.Admin]);
