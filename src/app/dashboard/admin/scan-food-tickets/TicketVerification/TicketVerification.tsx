@@ -3,7 +3,7 @@
 // THIS PAGE IS A SAMPLE, PLEASE REPLACE IT AND IMPROVE IT FROM HERE
 import { useState } from "react";
 
-import { verifyFoodTicket } from "./actions";
+import { verifyFoodTicket } from "../actions";
 
 export default function TicketVerification() {
   const [inputUserCode, setUserCode] = useState("");

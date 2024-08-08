@@ -1,15 +1,20 @@
+import { twMerge } from "tailwind-merge";
+
 function CountdownTimer({
   name,
   value,
+  className,
 }: {
   name?: string;
   value: React.ReactNode;
+  className?: string;
 }) {
   return (
     <div
-      className={
-        " relative flex flex-col items-center justify-center rounded-lg bg-awesome-purple p-4 text-white sm:p-8"
-      }
+      className={twMerge(
+        " relative flex flex-col items-center justify-center rounded-lg bg-awesome-purple p-4 text-white sm:p-8",
+        className,
+      )}
     >
       <div
         className={
