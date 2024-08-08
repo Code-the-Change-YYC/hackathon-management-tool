@@ -13,7 +13,7 @@ Ensure you run `npm i` in the root of the repo before continuing. Please respond
 
 - It is recommended to use Node v20 or higher. All deployed code is run in environments using Node version 20. Run `node -v` to see your current version.
 
-- Note: The Hackathon Management Tool's officialy-supported package managers shall be `npm` and `yarn`. Although you can use others, please be advised there will be limited support if you encounter issues.
+- Note: The Hackathon Management Tool's officialy-supported package manager shall be `npm`. Although you can use others, please be advised there will be limited support if you encounter issues.
 
 ### Amplify Backend Setup
 
