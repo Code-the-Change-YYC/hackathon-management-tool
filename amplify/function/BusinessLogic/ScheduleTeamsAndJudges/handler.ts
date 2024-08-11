@@ -54,23 +54,27 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
     let numOfTeams = teams.data.listTeams.items.length;
 
     if (judgingSessionsPerTeam > numOfJudgingRooms) {
-      return {
-        body: {
-          value: "Cannot have more judging sessions than there are judges",
-        },
-        statusCode: 400,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          body: {
+            value: "Cannot have more judging sessions than there are judges",
+          },
+          statusCode: 400,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
 
     if (numOfJudgingRooms > numOfTeams && judgingSessionsPerTeam > 1) {
-      return {
-        body: {
-          value: "Not enough teams and too many judges",
-        },
-        statusCode: 400,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          body: {
+            value: "Not enough teams and too many judges",
+          },
+          statusCode: 400,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
 
     let totalSessions = numOfTeams * judgingSessionsPerTeam;

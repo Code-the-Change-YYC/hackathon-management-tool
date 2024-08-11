@@ -72,11 +72,13 @@ export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
         },
       })
       .catch(() => {
-        return {
-          body: { value: `Error creating team` },
-          statusCode: 500,
-          headers: { "Content-Type": "application/json" },
-        };
+        throw new Error(
+          JSON.stringify({
+            body: { value: `Error creating team` },
+            statusCode: 500,
+            headers: { "Content-Type": "application/json" },
+          }),
+        );
       });
 
     if (teamCreation) {
@@ -99,11 +101,13 @@ export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
             };
           })
           .catch(() => {
-            return {
-              body: { value: `Error updating user (team was created)` },
-              statusCode: 500,
-              headers: { "Content-Type": "application/json" },
-            };
+            throw new Error(
+              JSON.stringify({
+                body: { value: `Error updating user (team was created)` },
+                statusCode: 500,
+                headers: { "Content-Type": "application/json" },
+              }),
+            );
           });
       } else {
         return {
@@ -113,18 +117,22 @@ export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
         };
       }
     } else {
-      return {
-        body: { value: `Error creating team` },
-        statusCode: 500,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          body: { value: `Error creating team` },
+          statusCode: 500,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
   } catch (error) {
     console.error(error);
-    return {
-      body: { value: `Unhandled Internal Server Error` },
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-    };
+    throw new Error(
+      JSON.stringify({
+        body: { value: `Unhandled Internal Server Error` },
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
   }
 };
