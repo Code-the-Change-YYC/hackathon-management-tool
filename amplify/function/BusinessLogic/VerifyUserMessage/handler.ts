@@ -59,8 +59,13 @@ export const handler: AppSyncResolverHandler<
   );
 
   //return 200 on success, otherwise 422 (HTTP 422 Unprocessable Content)
-  return {
-    statusCode: isValidCode ? 200 : 422,
-    headers: header,
-  };
+
+  if (isValidCode) {
+    return {
+      statusCode: 200,
+      headers: header,
+    };
+  } else {
+    throw new Error(JSON.stringify({ statusCode: 422, headers: header }));
+  }
 };

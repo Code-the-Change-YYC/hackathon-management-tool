@@ -73,36 +73,44 @@ export const handler: AppSyncResolverHandler<
     console.log(user);
     console.log(team);
     if (team == null) {
-      return {
-        body: { value: "Error: Team does not exist" },
-        statusCode: 404,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          body: { value: "Error: Team does not exist" },
+          statusCode: 404,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
 
     if (user == null) {
-      return {
-        body: { value: "Error: User does not exist" },
-        statusCode: 404,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          body: { value: "Error: User does not exist" },
+          statusCode: 404,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
 
     if (user.team) {
-      return {
-        body: { value: "Error: User is already part of a team" },
-        statusCode: 400,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          body: { value: "Error: User is already part of a team" },
+          statusCode: 400,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
     const members = (team.members as ModelUserConnection).items;
 
     if (members.length >= MAX_TEAM_MEMBERS) {
-      return {
-        body: { value: "Error: Team is full" },
-        statusCode: 400,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          body: { value: "Error: Team is full" },
+          statusCode: 400,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
 
     const result = await client.graphql({
@@ -122,18 +130,21 @@ export const handler: AppSyncResolverHandler<
         headers: { "Content-Type": "application/json" },
       };
     } else {
-      return {
-        body: { value: `Error while updating database` },
+      throw new Error(
+        JSON.stringify({
+          body: { value: `Error while updating database` },
+          statusCode: 500,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+    }
+  } catch {
+    throw new Error(
+      JSON.stringify({
+        body: { value: `Unhandled Internal Server Error` },
         statusCode: 500,
         headers: { "Content-Type": "application/json" },
-      };
-    }
-  } catch (error) {
-    console.error(error);
-    return {
-      body: { value: (error as Error).message },
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-    };
+      }),
+    );
   }
 };

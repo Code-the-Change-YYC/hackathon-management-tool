@@ -74,10 +74,13 @@ export const handler: Handler = async (event) => {
       scoringSidepots,
     } = event.arguments;
     if (safetyCheck !== "delete hackathon") {
-      return {
-        statusCode: 403,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          statusCode: 403,
+          body: { value: "Safety check failed" },
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
     // get the current hackathon model data items
     const { data: hackathonItems, errors } = await client.graphql({
@@ -88,11 +91,13 @@ export const handler: Handler = async (event) => {
 
     // Assuming there is only 1 Hackathon
     if (HackathonItems.length === 0) {
-      console.log("Not a single Hackathon, please create one");
-      return {
-        statusCode: 400,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          statusCode: 400,
+          body: { value: "Not a single Hackaton, please create one" },
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
     // Assuming the first Hackathon is the right one
     const HackathonID = HackathonItems[0].id;
@@ -290,10 +295,12 @@ export const handler: Handler = async (event) => {
       headers: { "Content-Type": "application/json" },
     };
   } catch (error) {
-    console.error("Error resetting hackathon:", error);
-    return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-    };
+    throw new Error(
+      JSON.stringify({
+        statusCode: 500,
+        body: { value: "Error resetting hackathon" },
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
   }
 };
