@@ -69,11 +69,13 @@ export const handler: Handler = async (event) => {
       );
 
       if (removeUserRepsonse.$metadata.httpStatusCode !== 200) {
-        return {
-          body: { value: `Error while removing user from group` },
-          statusCode: 500,
-          headers: { "Content-Type": "application/json" },
-        };
+        throw new Error(
+          JSON.stringify({
+            body: { value: `Error while removing user from group` },
+            statusCode: 500,
+            headers: { "Content-Type": "application/json" },
+          }),
+        );
       }
     }
 
@@ -86,11 +88,13 @@ export const handler: Handler = async (event) => {
     const addUserResponse = await cognitoClient.send(addUserToGroupCommand);
 
     if (addUserResponse.$metadata.httpStatusCode !== 200) {
-      return {
-        body: { value: `Error while adding user to group` },
-        statusCode: 500,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          body: { value: `Error while adding user to group` },
+          statusCode: 500,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
 
     // Edit the data in dynamoDB
@@ -112,17 +116,21 @@ export const handler: Handler = async (event) => {
         headers: { "Content-Type": "application/json" },
       };
     } else {
-      return {
-        body: { value: `Error while updating database` },
-        statusCode: 500,
-        headers: { "Content-Type": "application/json" },
-      };
+      throw new Error(
+        JSON.stringify({
+          body: { value: `Error while updating database` },
+          statusCode: 500,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
     }
   } catch (error) {
-    return {
-      body: { value: `Unhandled Internal Server Error` },
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-    };
+    throw new Error(
+      JSON.stringify({
+        body: { value: `Unhandled Internal Server Error` },
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
   }
 };
