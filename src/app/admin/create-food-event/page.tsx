@@ -4,6 +4,8 @@ import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import DeletePopUp from "./DeletePopUp";
@@ -16,7 +18,7 @@ const LOADING_SCREEN_STYLES =
 
 const client = generateClient<Schema>();
 
-export default function FoodEvents() {
+function FoodEvents() {
   const [foodData, setFoodData] = useState<
     Array<Partial<Schema["FoodEvent"]["type"]>>
   >([]);
@@ -109,3 +111,5 @@ export default function FoodEvents() {
     </div>
   );
 }
+
+export default withAuthGuard(FoodEvents, [UserType.Admin]);

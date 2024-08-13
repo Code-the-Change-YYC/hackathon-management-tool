@@ -1,8 +1,10 @@
 import TeamsTablePage from "@/app/admin/teams/TeamsTablePage";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 
 // eslint-disable-next-line no-restricted-imports
 
-export default function Teams() {
+function Teams() {
   /*== STEP 2 ===============================================================
 Go to your frontend source code. From your client-side code, generate a
 Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
@@ -38,3 +40,5 @@ Fetch records from the database and use them in your frontend component.
     </main>
   );
 }
+
+export default withAuthGuard(Teams, [UserType.Admin]);
