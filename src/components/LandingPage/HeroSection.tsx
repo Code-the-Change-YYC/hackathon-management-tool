@@ -61,6 +61,23 @@ const HeroSectionDetails: HeroSectionProps = {
   eventDate: 1731394799, //UNIX Time stamp: Nov 10, 2024
 };
 
+export const calculateDateDifference = (
+  targetDate: Date,
+  referenceDate = new Date(),
+): {
+  d: number;
+  h: number;
+  m: number;
+  s: number;
+} => {
+  const difference = targetDate.getTime() - referenceDate.getTime();
+
+  const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+  const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  const s = Math.floor((difference % (1000 * 60)) / 1000);
+  return { d, h, m, s };
+};
 const HeroSectionTile = (props: HeroSectionProps) => {
   //Destructure props object to access specific properties
   const { eventName, eventYear, eventBlurb, eventDate } = props;
@@ -77,34 +94,20 @@ const HeroSectionTile = (props: HeroSectionProps) => {
   };
 
   const eventDateFormatted = formatDate(eventDate);
-  const calculateDifference = () => {
-    const target = new Date(eventDateFormatted);
-    const now = new Date();
-    const difference = target.getTime() - now.getTime();
-
-    const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-    setDays(d);
-
-    const h = Math.floor(
-      (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-    );
-    setHours(h);
-
-    const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-    setMinutes(m);
-
-    const s = Math.floor((difference % (1000 * 60)) / 1000);
-    setSeconds(s);
-    if (d <= 0 && h <= 0 && m <= 0 && s <= 0) {
-      setHackathonTime(true);
-    }
-  };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      calculateDifference();
+      const { d, h, m, s } = calculateDateDifference(
+        new Date(eventDateFormatted),
+      );
+      setDays(d);
+      setHours(h);
+      setMinutes(m);
+      setSeconds(s);
+      if (d <= 0 && h <= 0 && m <= 0 && s <= 0) {
+        setHackathonTime(true);
+      }
     }, 1000);
-    calculateDifference();
     return () => clearInterval(interval);
   }, []);
 

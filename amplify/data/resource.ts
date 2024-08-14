@@ -47,11 +47,7 @@ const schema = a
           ]),
         team: a.belongsTo("Team", "teamId"),
         attendedEvents: a.hasMany("UserFoodEventAttendance", "userId"),
-        profileOwner: a
-          .string()
-          .authorization((allow) => [
-            allow.ownerDefinedIn("profileOwner").to(["read"]),
-          ]),
+        profileOwner: a.string(),
         JUDGE_givenScores: a.hasMany("Score", "judgeId"),
         JUDGE_roomId: a.id(),
         JUDGE_room: a.belongsTo("Room", "JUDGE_roomId"),

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import SideNavBar from "@/components/admin/SideNavBar";
+import SideNavBar from "@/components/Dashboard/SideNavBar";
+import TopNavBar from "@/components/Dashboard/TopNavBar";
 
 export const metadata: Metadata = {
   title: "Hack the Change - Admin",
@@ -17,9 +18,12 @@ export const metadata: Metadata = {
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex w-full">
+    <div className="flex w-full flex-1 ">
       <SideNavBar />
-      <div className="flex-1">{children}</div>
+      <div className="flex h-screen w-full flex-1 flex-col">
+        <TopNavBar />
+        {children}
+      </div>
     </div>
   );
 }
