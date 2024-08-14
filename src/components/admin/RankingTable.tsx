@@ -97,7 +97,9 @@ export default function RankingTable() {
             return {
               teamId: score.teamId,
               teamName: (await score.team()).data?.name ?? "",
-              score: score.score as IScoreRaw["score"],
+              score: JSON.parse(
+                score.score as unknown as string,
+              ) as IScoreRaw["score"],
             };
           }),
         );
@@ -107,17 +109,8 @@ export default function RankingTable() {
     }
   }, [scoreData]);
 
-  const scoringComponents = hackathonData?.scoringComponents;
-  if (!scoringComponents && !isHackathonFetching) {
-    throw new Error("No scoring components found");
-  }
-
-  const scoringSidepots = hackathonData?.scoringSidepots;
-  if (!scoringSidepots && !isHackathonFetching) {
-    console.warn("No scoring sidepots found");
-  }
-
   let computedScores: ITeamScores = {};
+  console.log("Formatted Scores", formattedScores);
 
   computedScores = formattedScores.reduce((acc, score) => {
     if (!acc[score.teamId]) {
@@ -128,15 +121,18 @@ export default function RankingTable() {
       };
     }
 
-    const teamScore = scoringComponents.reduce((total, component) => {
+    const teamScore = [
+      ...hackathonData.scoringComponents,
+      ...hackathonData.scoringSidepots,
+    ].reduce((total, component) => {
       const scoreComponentId = component?.id ?? "";
       acc[score.teamId].components[scoreComponentId] = acc[score.teamId]
         .components[scoreComponentId]
-        ? acc[score.teamId].components[scoreComponentId] +
-          score.score[scoreComponentId]
+        ? Number(acc[score.teamId].components[scoreComponentId]) +
+          Number(score.score[scoreComponentId])
         : score.score[scoreComponentId];
 
-      return total + score.score[scoreComponentId];
+      return total + Number(score.score[scoreComponentId]);
     }, 0);
 
     acc[score.teamId].total += teamScore;
@@ -182,11 +178,15 @@ export default function RankingTable() {
               <th className=" px-6 py-3">
                 <div className="flex items-center capitalize">Team</div>
               </th>
-              {hackathonData.scoringComponents.map((component) => {
+              {[
+                ...hackathonData.scoringComponents,
+                ...hackathonData.scoringSidepots,
+              ].map((component) => {
                 return (
                   <th key={component.id} className=" px-6 py-3">
                     <div className="flex items-center capitalize">
                       {component.friendlyName}
+                      {component.isSidepot ? " (Sidepot)" : null}
                       <button
                         onClick={() => {
                           setSortKey(component.id);
