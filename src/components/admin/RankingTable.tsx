@@ -1,7 +1,7 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import type { Schema } from "@/amplify/data/resource";
@@ -10,133 +10,225 @@ import { useQuery } from "@tanstack/react-query";
 import FilterIcon from "../atoms/FilterIcon";
 
 const client = generateClient<Schema>();
+
+type ITeamScores = {
+  [teamId: string]: {
+    total: number;
+    name: string;
+    components: {
+      [x: string]: number;
+    };
+  };
+};
+type IScoreRaw = {
+  teamId: string;
+  teamName: string;
+  score: {
+    [x: string]: number;
+  };
+};
+
 function TableRow({
   teamName = "Name",
-  score = 100,
+  components = {},
   index = 0,
+  total = 0,
 }: {
   teamName?: string;
-  score?: number;
+  components?: ITeamScores[string]["components"];
   index?: number;
+  total?: number;
 }) {
   const bgColor = index % 2 === 1 ? "bg-white" : "bg-gray-200";
   return (
     <tr className={twMerge("border-b", bgColor)}>
-      <th className="truncate whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+      <td className="truncate whitespace-nowrap px-6 py-4 font-medium text-gray-900">
         {teamName}
-      </th>
+      </td>
+      {Object.keys(components).map((componentId) => {
+        return (
+          <td
+            key={componentId}
+            className="border-l-2 border-l-white px-6 py-4 text-black"
+          >
+            {components[componentId]}
+          </td>
+        );
+      })}
       <td className="border-l-2 border-l-white px-6 py-4 text-black">
-        {score}
+        {total}
       </td>
     </tr>
   );
 }
+
 export default function RankingTable() {
-  interface Ranking {
-    teamName: string;
-    score: number;
-  }
-  const getRankings = async () => {
-    const rankings = await client.models.Team.list();
+  // Load Data
+  const { data: scoreData, isFetching: isScoreFetching } = useQuery({
+    queryKey: ["Scores"],
+    initialData: [],
+    queryFn: async () => {
+      const { data, errors } = await client.models.Score.list();
+      if (errors) throw Error(errors[0].message);
 
-    const scorePromises = rankings.data.map(async (team) => {
-      const theScore = await team.scores();
-      return {
-        teamName: team.name,
-        score: theScore,
-      };
-    });
-
-    const score = await Promise.all(scorePromises);
-
-    console.log(score); // This will log the resolved values
-    console.log(rankings); // This logs the original rankings response
-
-    return score; // Return the resolved score array instead of rankings
-  };
-
-  const { data } = useQuery({
-    queryKey: ["Ranking"],
-    queryFn: getRankings,
+      return data;
+    },
   });
-  console.log(data);
-  const rankings: Ranking[] = [
-    { teamName: "TeamA", score: 85 },
-    { teamName: "TeamB", score: 72 },
-    { teamName: "TeamC", score: 94 },
-    { teamName: "TeamD", score: 68 },
-    { teamName: "TeamE", score: 76 },
-    { teamName: "TeamF", score: 88 },
-    { teamName: "TeamG", score: 53 },
-    { teamName: "TeamH", score: 95 },
-    { teamName: "TeamI", score: 47 },
-    { teamName: "TeamJ", score: 69 },
-    { teamName: "Thunderbolts", score: 85 },
-    { teamName: "LightningStrikers", score: 72 },
-    { teamName: "BlazingComets", score: 94 },
-    { teamName: "ShadowHunters", score: 68 },
-    { teamName: "MysticWarriors", score: 76 },
-    { teamName: "CosmicVoyagers", score: 88 },
-    { teamName: "IronGiants", score: 53 },
-    { teamName: "PhantomRiders", score: 95 },
-    { teamName: "SolarFlares", score: 47 },
-    { teamName: "GalacticTitans", score: 69 },
-  ];
 
-  const [sortKey, setSortKey] = useState<keyof Ranking>("teamName");
+  const { data: hackathonData, isFetching: isHackathonFetching } = useQuery({
+    queryKey: ["Hackathon"],
+    initialData: {} as Schema["Hackathon"]["type"],
+    queryFn: async () => {
+      const { data, errors } = await client.models.Hackathon.list();
+      if (errors) throw Error(errors[0].message);
+
+      return data[0];
+    },
+  });
+
+  // Do some local data reformatting
+  const [formattedScores, setFormattedScores] = useState<IScoreRaw[]>([]);
+
+  useEffect(() => {
+    if (scoreData) {
+      const decorateScoreData = async () => {
+        const formattedData = await Promise.all(
+          scoreData.map(async (score) => {
+            return {
+              teamId: score.teamId,
+              teamName: (await score.team()).data?.name ?? "",
+              score: score.score as IScoreRaw["score"],
+            };
+          }),
+        );
+        setFormattedScores(formattedData);
+      };
+      decorateScoreData();
+    }
+  }, [scoreData]);
+
+  const scoringComponents = hackathonData?.scoringComponents;
+  if (!scoringComponents && !isHackathonFetching) {
+    throw new Error("No scoring components found");
+  }
+
+  const scoringSidepots = hackathonData?.scoringSidepots;
+  if (!scoringSidepots && !isHackathonFetching) {
+    console.warn("No scoring sidepots found");
+  }
+
+  let computedScores: ITeamScores = {};
+
+  computedScores = formattedScores.reduce((acc, score) => {
+    if (!acc[score.teamId]) {
+      acc[score.teamId] = {
+        total: 0,
+        name: score.teamName,
+        components: {},
+      };
+    }
+
+    const teamScore = scoringComponents.reduce((total, component) => {
+      const scoreComponentId = component?.id ?? "";
+      acc[score.teamId].components[scoreComponentId] = acc[score.teamId]
+        .components[scoreComponentId]
+        ? acc[score.teamId].components[scoreComponentId] +
+          score.score[scoreComponentId]
+        : score.score[scoreComponentId];
+
+      return total + score.score[scoreComponentId];
+    }, 0);
+
+    acc[score.teamId].total += teamScore;
+
+    return acc;
+  }, computedScores);
+
+  const [sortKey, setSortKey] = useState<string>("total");
   const [sortAscending, setSortAscending] = useState(true);
-  function sortByKey(key: keyof Ranking, direction: boolean) {
-    return rankings.sort((a, b) => {
-      if (a[key] < b[key]) {
+
+  function sortByKey(key: string, direction: boolean) {
+    return Object.keys(computedScores).sort((a, b) => {
+      const teamA =
+        key === "total"
+          ? computedScores[a].total
+          : computedScores[a].components[key];
+      const teamB =
+        key === "total"
+          ? computedScores[b].total
+          : computedScores[b].components[key];
+
+      if (teamA < teamB) {
         return direction ? -1 : 1;
       }
-      if (a[key] > b[key]) {
+      if (teamA > teamB) {
         return direction ? 1 : -1;
       }
       return 0;
     });
   }
-  const sortedRankings = useMemo(
+  const sortedTeamIds = useMemo(
     () => sortByKey(sortKey, sortAscending),
     [sortKey, sortAscending],
   );
+  console.log("Sorted Team Ids", computedScores);
   return (
-    <div className="flex size-full justify-start overflow-auto rounded-xl">
-      <table className=" w-full text-left text-lg font-medium text-gray-500">
-        <thead className=" rounded-xl bg-awesome-purple text-lg  font-medium text-white">
-          <tr>
-            {Object.keys(rankings[0]).map((key) => {
+    !isScoreFetching &&
+    !isHackathonFetching && (
+      <div className="flex size-full justify-start overflow-auto rounded-xl">
+        <table className=" w-full text-left text-lg font-medium text-gray-500">
+          <thead className=" rounded-xl bg-awesome-purple text-lg  font-medium text-white">
+            <tr>
+              <th className=" px-6 py-3">
+                <div className="flex items-center capitalize">Team</div>
+              </th>
+              {hackathonData.scoringComponents.map((component) => {
+                return (
+                  <th key={component.id} className=" px-6 py-3">
+                    <div className="flex items-center capitalize">
+                      {component.friendlyName}
+                      <button
+                        onClick={() => {
+                          setSortKey(component.id);
+                          setSortAscending(!sortAscending);
+                        }}
+                      >
+                        <FilterIcon />
+                      </button>
+                    </div>
+                  </th>
+                );
+              })}
+              <th className=" px-6 py-3">
+                <div className="flex items-center capitalize">
+                  Total
+                  <button
+                    onClick={() => {
+                      setSortKey("total");
+                      setSortAscending(!sortAscending);
+                    }}
+                  >
+                    <FilterIcon />
+                  </button>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedTeamIds.map((teamId, index) => {
               return (
-                <th key={key} className=" px-6 py-3">
-                  <div className="flex items-center capitalize">
-                    {key}
-                    <button
-                      onClick={() => {
-                        setSortKey(key as keyof Ranking);
-                        setSortAscending(!sortAscending);
-                      }}
-                    >
-                      <FilterIcon />
-                    </button>
-                  </div>
-                </th>
+                <TableRow
+                  teamName={computedScores[teamId].name}
+                  components={computedScores[teamId].components}
+                  total={computedScores[teamId].total}
+                  key={index}
+                  index={index}
+                />
               );
             })}
-          </tr>
-        </thead>
-        <tbody>
-          {sortedRankings.map((ranking, index) => {
-            return (
-              <TableRow
-                teamName={ranking.teamName}
-                score={ranking.score}
-                key={index}
-                index={index}
-              />
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      </div>
+    )
   );
 }
