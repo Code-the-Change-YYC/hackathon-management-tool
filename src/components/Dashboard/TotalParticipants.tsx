@@ -9,7 +9,7 @@ export default async function TotalParticipants() {
   // TODO: "user.role should be an enum, not a string."
   const participants = users.data.filter((user) => user.role === "Participant");
   const numParticipants = participants.length;
-  const href = "/dashboard/admin/users";
+  const href = "/admin/users";
   return (
     <Card>
       <Link href={href}>

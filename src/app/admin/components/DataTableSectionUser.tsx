@@ -5,7 +5,7 @@ import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 import { Bounce, toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
-import PopupUser from "@/app/dashboard/admin/components/PopupTileUser";
+import PopupUser from "@/app/admin/components/PopupTileUser";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const SEARCH_RESULTS_SECTION_STYLES =

@@ -9,7 +9,7 @@ const ACTIVE_LINK_STYLES = "underline";
 
 export default function ProfileLinks() {
   const { currentUser } = useUser();
-  const dashboardLink = `/dashboard/${currentUser.type === UserType.Admin ? "admin" : "participant"}`;
+  const dashboardLink = `/${currentUser.type === UserType.Admin ? "admin" : "participant"}`;
   const links = [
     { href: "/participant/profile", text: "My Details" },
     { href: "/participant/profile/team-details", text: "Team Details" },

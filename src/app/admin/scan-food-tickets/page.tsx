@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 import type { Schema } from "@/amplify/data/resource";
-import { verifyFoodTicket } from "@/app/dashboard/admin/scan-food-tickets/actions";
+import { verifyFoodTicket } from "@/app/admin/scan-food-tickets/actions";
 import { useQuery } from "@tanstack/react-query";
 import { Scanner } from "@yudiel/react-qr-scanner";
 

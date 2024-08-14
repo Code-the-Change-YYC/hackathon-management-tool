@@ -60,9 +60,7 @@ const SideNavBar = () => {
   const dashboardRoutes: DashboardRoutes[] = [
     {
       group: "ADMIN",
-      routes: [
-        { name: "Dashboard", icon: dashboard_icon, route: "/dashboard/admin" },
-      ],
+      routes: [{ name: "Dashboard", icon: dashboard_icon, route: "/admin" }],
     },
     {
       group: "PARTICIPANTS",
@@ -70,12 +68,12 @@ const SideNavBar = () => {
         {
           name: "View All Participants",
           icon: users_icon,
-          route: "/dashboard/admin/users",
+          route: "/admin/users",
         },
         {
           name: "View All Teams",
           icon: team_icon,
-          route: "/dashboard/admin/teams",
+          route: "/admin/teams",
         },
       ],
     },
@@ -85,12 +83,12 @@ const SideNavBar = () => {
         {
           name: "Scan Food Tickets",
           icon: ticket_icon,
-          route: "/dashboard/admin/scan-food-tickets",
+          route: "/admin/scan-food-tickets",
         },
         {
           name: "Create Food Event",
           icon: add_icon,
-          route: "/dashboard/admin/create-food-event",
+          route: "/admin/create-food-event",
         },
       ],
     },
@@ -100,7 +98,7 @@ const SideNavBar = () => {
         {
           name: "Reset Hackathon",
           icon: reset_icon,
-          route: "/dashboard/admin/reset",
+          route: "/admin/reset",
         },
       ],
     },

@@ -4,8 +4,8 @@ import { generateClient } from "aws-amplify/api";
 import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
-import DataTableSectionUser from "@/app/dashboard/admin/components/DataTableSectionUser";
-import FilterUser from "@/app/dashboard/admin/components/FilterUser";
+import DataTableSectionUser from "@/app/admin/components/DataTableSectionUser";
+import FilterUser from "@/app/admin/components/FilterUser";
 import LoadingRing from "@/components/LoadingRing";
 import { UserType } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";

@@ -7,7 +7,7 @@ import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
 export default async function NumFoodTickets() {
-  const href = "/dashboard/admin/create-food-event";
+  const href = "/admin/create-food-event";
   const foodTickets = await client.models.UserFoodEventAttendance.list();
   const numFoodTickets = foodTickets.data.length;
   return (
