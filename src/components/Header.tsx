@@ -24,7 +24,7 @@ export default function Header() {
   return (
     <div className={headerContainerStyles}>
       <div className="flex w-48 font-semibold">
-        {user.completedProfile ? (
+        {user.username ? (
           <>
             {user.type === UserType.Participant ? (
               <>
@@ -36,9 +36,9 @@ export default function Header() {
               </>
             ) : user.type === UserType.Admin ? (
               <Link href="/admin/teams">Admin Dashboard</Link>
-            ) : (
-              <Link href="/judge/dashboard">Judge Dashboard</Link>
-            )}
+            ) : user.type === UserType.Judge ? (
+              <Link href="/judging">Judge Dashboard</Link>
+            ) : null}
           </>
         ) : (
           <Link href="/login">Join Hackathon</Link>
@@ -59,14 +59,14 @@ export default function Header() {
 
       <div className="flex w-48 justify-end">
         {user.completedProfile && (
-          <>
-            <Link href="/participant/profile">
-              <CgProfile size={60} />
-            </Link>
-            <button onClick={handleLogout} className="ml-4 font-semibold">
-              Logout
-            </button>
-          </>
+          <Link href="/participant/profile">
+            <CgProfile size={60} />
+          </Link>
+        )}
+        {user.username && (
+          <button onClick={handleLogout} className="ml-4 font-semibold">
+            Logout
+          </button>
         )}
       </div>
     </div>

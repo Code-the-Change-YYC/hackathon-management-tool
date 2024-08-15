@@ -22,7 +22,9 @@ const withAuthGuard = (
       .then((user) => {
         if (user?.tokens) {
           return userTypeHasPagePermission(
-            (user?.tokens?.idToken?.payload["cognito:groups"] as UserType[])[0],
+            (
+              user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
+            ).filter((group) => Object.keys(UserType).includes(group))?.[0],
           );
         } else {
           return userTypeHasPagePermission(UserType.Guest);

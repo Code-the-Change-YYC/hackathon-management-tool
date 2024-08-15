@@ -56,7 +56,7 @@ export function UserContextProvider({ children }: Props) {
     queryFn: async () => {
       try {
         const user = await fetchAuthSession();
-
+        console.log(user);
         if (
           (
             user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
@@ -84,10 +84,10 @@ export function UserContextProvider({ children }: Props) {
           }
 
           return {
-            username: user.tokens?.accessToken.payload.username as string,
+            username: user.userSub as string,
             type: (
               user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
-            )?.[0],
+            ).filter((group) => Object.keys(UserType).includes(group))?.[0],
             populated: true,
             completedProfile: response.data?.completedRegistration ?? false,
             email: response.data?.email ?? "",
@@ -120,7 +120,7 @@ export function UserContextProvider({ children }: Props) {
         case "signedIn":
           queryClient.invalidateQueries({
             queryKey: ["User"],
-            exact: true,
+            exact: false,
           });
           console.log("Signed In");
           break;

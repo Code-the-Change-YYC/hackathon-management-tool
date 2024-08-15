@@ -1,4 +1,3 @@
-import { PreSignUp } from "@/amplify/auth/PreSignUp/resource";
 import { AddUserToGroup } from "@/amplify/function/BusinessLogic/AddUserToGroup/resource";
 import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsersToTeams/resource";
 import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
@@ -9,6 +8,7 @@ import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMe
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
+import { PostConfirmation } from "../auth/PostConfirmation/resource";
 import { ScheduleTeamsAndJudges } from "../function/BusinessLogic/ScheduleTeamsAndJudges/resource";
 
 const schema = a
@@ -292,7 +292,7 @@ const schema = a
 
   .authorization((allow) => [
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
-    allow.resource(PreSignUp).to(["mutate"]),
+    allow.resource(PostConfirmation).to(["mutate"]),
     allow.resource(VerifyUserMessage).to(["query", "mutate"]),
     allow.resource(ResetHackathon).to(["mutate", "query"]),
     allow.resource(AddUserToGroup).to(["mutate"]),
