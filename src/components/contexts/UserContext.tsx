@@ -43,7 +43,6 @@ export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 
 export function UserContextProvider({ children }: Props) {
   const queryClient = useQueryClient();
-  // TO DO load other user info from table
 
   const { data: currentUser } = useQuery({
     initialData: {
@@ -56,7 +55,7 @@ export function UserContextProvider({ children }: Props) {
     queryFn: async () => {
       try {
         const user = await fetchAuthSession();
-        console.log(user);
+
         if (
           (
             user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
