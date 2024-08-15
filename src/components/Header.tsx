@@ -29,9 +29,7 @@ export default function Header() {
             {user.type === UserType.Participant ? (
               <>
                 {user.teamId ? (
-                  <Link href="/participant/profile/team-details">
-                    View Team
-                  </Link>
+                  <Link href="/participant/dashboard">Dashboard</Link>
                 ) : (
                   <Link href="/register/team">Join a Team</Link>
                 )}
