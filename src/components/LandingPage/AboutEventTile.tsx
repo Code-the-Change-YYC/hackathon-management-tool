@@ -1,6 +1,9 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 
+import { fetchContent } from "@/app/actions";
+import type { HackathonDetails } from "@/app/contentfulTypes";
+
 const EVENT_DETAILS_SECTION_STYLES = "flex flex-col items-center bg-white";
 const EVENT_DETAILS_CONTENT_STYLES =
   "bg-pastel-pink border-4 border-dark-pink rounded-3xl mb-20 mt-12 md:flex md:justify-center md:max-w-[1100px] md:shadow-[15px_15px_0px_0px_#FF4D6F]";
@@ -27,13 +30,6 @@ interface EventDetailProps {
   children: ReactNode;
 }
 
-const eventDetails = {
-  eventDate: 1731258000,
-  eventLocation: "University of Calgary",
-  eventImg: "/images/imgplaceholder.png",
-  eventPrizeAmount: 17000,
-};
-
 const EventDetail = (props: EventDetailProps) => {
   const { iconSrc, iconName, children } = props;
 
@@ -47,8 +43,10 @@ const EventDetail = (props: EventDetailProps) => {
   );
 };
 
-const AboutEventTile = () => {
-  const eventDate = new Date(eventDetails.eventDate * 1000);
+export default async function AboutEventTile() {
+  const data = (await fetchContent("hackathonDetails")) as HackathonDetails[];
+  const eventDetails = data[0].fields;
+  const eventDate = new Date(eventDetails.eventDate);
   const formattedDate = eventDate.toLocaleDateString("en-CA", {
     month: "short",
     day: "numeric",
@@ -61,10 +59,14 @@ const AboutEventTile = () => {
         <div className={EVENT_IMAGE_CONTAINER_STYLES}>
           <Image
             className={EVENT_IMAGE_STYLES}
-            src={eventDetails.eventImg}
-            alt={eventDetails.eventLocation}
-            width={100}
-            height={100}
+            src={
+              eventDetails.locationImage.fields.file?.url
+                ?.toString()
+                .replace("//", "https://") ?? ""
+            }
+            alt={eventDetails.locationName}
+            width={500}
+            height={500}
           />
         </div>
         <div className={EVENT_DETAILS_CONTAINER_STYLES}>
@@ -73,19 +75,17 @@ const AboutEventTile = () => {
               {formattedDate}
             </EventDetail>
             <EventDetail iconSrc={icons.location} iconName="location">
-              {eventDetails.eventLocation}
+              {eventDetails.locationName}
             </EventDetail>
             <EventDetail iconSrc={icons.heart} iconName="heart">
               Public
             </EventDetail>
             <EventDetail iconSrc={icons.diamond} iconName="diamond">
-              ${eventDetails.eventPrizeAmount}
+              ${eventDetails.prizeAmount}
             </EventDetail>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default AboutEventTile;
+}
