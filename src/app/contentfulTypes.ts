@@ -20,6 +20,15 @@ export interface Judge extends BaseEntry {
     position?: string;
   };
 }
+export interface HackathonSponsor extends BaseEntry {
+  fields: {
+    sponsorOrder: number;
+    sponsorImg: Asset;
+    sponsorName: string;
+    sponsorPage: string;
+  };
+}
+
 export interface HackathonDetails extends BaseEntry {
   fields: {
     eventName: string;

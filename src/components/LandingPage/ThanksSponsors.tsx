@@ -1,57 +1,23 @@
 import Image from "next/image";
 
+import { fetchContent } from "@/app/actions";
+import type { HackathonSponsor } from "@/app/contentfulTypes";
+
 const leftSponsorSvg = "/svgs/judgingCriteria/leftSponsorSvg.svg";
 const rightSponsorSvg = "/svgs/judgingCriteria/rightSponsorSvg.svg";
 const leftSponsorSvgSmall = "/svgs/judgingCriteria/leftSponsorSvgSmall.svg";
 const rightSponsorSvgSmall = "/svgs/judgingCriteria/rightSponsorSvgSmall.svg";
-const imageplaceholder = "/images/imgplaceholder.png";
 
-const ThankSponsors = () => {
+export default async function ThankSponsors() {
   const IMAGE_CLASS =
     "relative size-12 min-w-12 overflow-hidden rounded-full duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform sm:size-28 sm:min-w-28";
 
-  type Sponsor = {
-    sponsorOrder: number;
-    sponsorImg: string;
-    sponsorName: string;
-    sponsorPage: string;
-  };
-
-  const sponsors: Sponsor[] = [
-    {
-      sponsorOrder: 3,
-      sponsorImg: imageplaceholder,
-      sponsorName: "Sponsor 1",
-      sponsorPage: "https://www.google.com",
-    },
-    {
-      sponsorOrder: 2,
-      sponsorImg: imageplaceholder,
-      sponsorName: "Sponsor 2",
-      sponsorPage: "https://www.google.com",
-    },
-    {
-      sponsorOrder: 3,
-      sponsorImg: imageplaceholder,
-      sponsorName: "Sponsor 3",
-      sponsorPage: "https://www.google.com",
-    },
-    {
-      sponsorOrder: 1,
-      sponsorImg: imageplaceholder,
-      sponsorName: "Sponsor 4",
-      sponsorPage: "https://www.google.com",
-    },
-    {
-      sponsorOrder: 1,
-      sponsorImg: imageplaceholder,
-      sponsorName: "Sponsor 5",
-      sponsorPage: "https://www.google.com",
-    },
-  ];
-
+  const sponsors: HackathonSponsor[] = (await fetchContent(
+    "hackathonSponsor",
+  )) as HackathonSponsor[];
+  console.log(sponsors);
   const sortedSponsors = sponsors.sort(
-    (a, b) => a.sponsorOrder - b.sponsorOrder,
+    (a, b) => a.fields.sponsorOrder - b.fields.sponsorOrder,
   );
 
   return (
@@ -107,20 +73,24 @@ const ThankSponsors = () => {
             <div className="group flex flex-col items-center gap-3">
               <div className={IMAGE_CLASS}>
                 <a
-                  href={sponsor.sponsorPage}
+                  href={sponsor.fields.sponsorPage}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <Image
-                    src={sponsor.sponsorImg}
+                    src={
+                      sponsor.fields.sponsorImg.fields.file?.url
+                        ?.toString()
+                        .replace("//", "https://") ?? ""
+                    }
                     alt="Sponsor Image"
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: "contain" }}
                     fill
                   />
                 </a>
               </div>
               <p className="inset-0 text-center opacity-0 transition-all duration-300 group-hover:opacity-100">
-                {sponsor.sponsorName}
+                {sponsor.fields.sponsorName}
               </p>
             </div>
           </div>
@@ -128,6 +98,4 @@ const ThankSponsors = () => {
       </div>
     </div>
   );
-};
-
-export default ThankSponsors;
+}
