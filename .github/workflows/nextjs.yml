@@ -71,3 +71,6 @@ jobs:
         run: echo "{}" >> amplify_outputs.json
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        env:
+          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
+          CONTENTFUL_DELIVERY_API_TOKEN: ${{ secrets.CONTENTFUL_DELIVERY_API_TOKEN }}
