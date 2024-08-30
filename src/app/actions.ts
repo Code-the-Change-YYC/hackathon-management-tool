@@ -14,7 +14,8 @@ export type ContentType =
   | "timeline"
   | "hackathonJudge"
   | "upcomingEvents"
-  | "hackathonSponsor";
+  | "hackathonSponsor"
+  | "hackathonDetails";
 
 export async function fetchContent(contentId: ContentType) {
   try {
