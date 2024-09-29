@@ -1,5 +1,6 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   AdminDeleteUserCommand,
@@ -9,6 +10,7 @@ import {
 import type { Schema } from "../../../data/resource";
 import type { ScoreComponentTypeInput } from "./graphql/API";
 import {
+  createHackathon,
   deleteScore,
   deleteTeam,
   deleteTeamRoom,
@@ -73,7 +75,10 @@ export const handler: Handler = async (event) => {
       scoringComponents,
       scoringSidepots,
     } = event.arguments;
-    if (safetyCheck !== "delete hackathon") {
+    if (
+      safetyCheck !== "delete hackathon" &&
+      safetyCheck !== "create hackathon"
+    ) {
       throw new Error(
         JSON.stringify({
           statusCode: 403,
@@ -82,25 +87,6 @@ export const handler: Handler = async (event) => {
         }),
       );
     }
-    // get the current hackathon model data items
-    const { data: hackathonItems, errors } = await client.graphql({
-      query: listHackathons,
-    });
-    const HackathonItems = hackathonItems.listHackathons.items;
-    if (errors) throw errors;
-
-    // Assuming there is only 1 Hackathon
-    if (HackathonItems.length === 0) {
-      throw new Error(
-        JSON.stringify({
-          statusCode: 400,
-          body: { value: "Not a single Hackaton, please create one" },
-          headers: { "Content-Type": "application/json" },
-        }),
-      );
-    }
-    // Assuming the first Hackathon is the right one
-    const HackathonID = HackathonItems[0].id;
 
     // Resetting Users variable
     const resettingUsers: boolean = resetUsers;
@@ -216,39 +202,93 @@ export const handler: Handler = async (event) => {
       }
     }
 
-    // Edit start date
-    if (startDate) {
-      console.log("editing start date");
-      const { errors } = await client.graphql({
-        query: updateHackathon,
-        variables: {
-          input: {
-            id: HackathonID,
-            startDate: startDate,
-          },
-        },
-      });
-      if (errors) throw errors;
-    }
+    // get the current hackathon model data items
+    const { data: hackathonItems } = await client.graphql({
+      query: listHackathons,
+    });
+    const HackathonItems = hackathonItems.listHackathons.items;
 
-    // Edit end date
-    if (endDate) {
-      console.log("editing end date");
-      const { errors } = await client.graphql({
-        query: updateHackathon,
-        variables: {
-          input: {
-            id: HackathonID,
-            endDate: endDate,
+    if (!(HackathonItems.length === 0)) {
+      console.log("resetting hackathon");
+      const HackathonID = HackathonItems[0].id;
+      // Edit start date
+      if (startDate) {
+        console.log("editing start date");
+        const { errors } = await client.graphql({
+          query: updateHackathon,
+          variables: {
+            input: {
+              id: HackathonID,
+              startDate: startDate,
+            },
           },
-        },
-      });
-      if (errors) throw errors;
-    }
+        });
+        if (errors) throw errors;
+      }
 
-    // edit the scoringComponents
-    if (scoringComponents) {
-      console.log("editing scoreComponents data");
+      // Edit end date
+      if (endDate) {
+        console.log("editing end date");
+        const { errors } = await client.graphql({
+          query: updateHackathon,
+          variables: {
+            input: {
+              id: HackathonID,
+              endDate: endDate,
+            },
+          },
+        });
+        if (errors) throw errors;
+      }
+
+      // edit the scoringComponents
+      if (scoringComponents) {
+        console.log("editing scoreComponents data");
+        console.log(scoringComponents as string);
+
+        // get the score Components Array from the JSON input
+        const scoringComponentsArray: ScoreComponentTypeInput[] =
+          typeof scoringComponents === "string"
+            ? JSON.parse(scoringComponents)
+            : scoringComponents;
+        const { errors } = await client.graphql({
+          query: updateHackathon,
+          variables: {
+            input: {
+              id: HackathonID,
+              scoringComponents: scoringComponentsArray,
+            },
+          },
+        });
+        if (errors) throw errors;
+      }
+
+      // edit the scoringSidepots
+      if (scoringSidepots) {
+        console.log("editing scoringSidepots data");
+        console.log(scoringSidepots);
+
+        // get the score side pots Array from the JSON input
+        const scoringSidepotsArray: ScoreComponentTypeInput[] =
+          typeof scoringSidepots === "string"
+            ? JSON.parse(scoringSidepots)
+            : scoringSidepots;
+        const { errors } = await client.graphql({
+          query: updateHackathon,
+          variables: {
+            input: {
+              id: HackathonID,
+              scoringSidepots: scoringSidepotsArray,
+            },
+          },
+        });
+        if (errors) throw errors;
+      }
+    } else {
+      // creating new hackathon
+      const HackathonID = uuidv4();
+
+      console.log("creating scoreComponents data");
       console.log(scoringComponents as string);
 
       // get the score Components Array from the JSON input
@@ -256,37 +296,27 @@ export const handler: Handler = async (event) => {
         typeof scoringComponents === "string"
           ? JSON.parse(scoringComponents)
           : scoringComponents;
-      const { errors } = await client.graphql({
-        query: updateHackathon,
-        variables: {
-          input: {
-            id: HackathonID,
-            scoringComponents: scoringComponentsArray,
-          },
-        },
-      });
-      if (errors) throw errors;
-    }
 
-    // edit the scoringSidepots
-    if (scoringSidepots) {
-      console.log("editing scoringSidepots data");
+      console.log("creating scoringSidepots data");
       console.log(scoringSidepots);
 
-      // get the score side pots Array from the JSON input
       const scoringSidepotsArray: ScoreComponentTypeInput[] =
         typeof scoringSidepots === "string"
           ? JSON.parse(scoringSidepots)
           : scoringSidepots;
       const { errors } = await client.graphql({
-        query: updateHackathon,
+        query: createHackathon,
         variables: {
           input: {
-            id: HackathonID,
+            startDate,
+            endDate,
+            scoringComponents: scoringComponentsArray,
             scoringSidepots: scoringSidepotsArray,
+            id: HackathonID,
           },
         },
       });
+
       if (errors) throw errors;
     }
 
@@ -298,7 +328,7 @@ export const handler: Handler = async (event) => {
     throw new Error(
       JSON.stringify({
         statusCode: 500,
-        body: { value: "Error resetting hackathon" },
+        body: { value: { error } },
         headers: { "Content-Type": "application/json" },
       }),
     );

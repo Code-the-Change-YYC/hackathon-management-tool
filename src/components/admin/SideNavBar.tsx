@@ -157,7 +157,7 @@ const SideNavBar = () => {
                     alt="Arrow icon"
                   />
                 </Link>
-                <h2 className="mt-8">RESET</h2>
+                <h2 className="mt-8">RESET/CREATE</h2>
                 <hr className="my-2" />
                 <Link href="/admin/reset" className={NAV_LINK_CONTAINER_STYLES}>
                   <div className="flex">
@@ -169,7 +169,7 @@ const SideNavBar = () => {
                         alt="Reset icon"
                       />
                     </div>
-                    <p>Reset Hackathon</p>
+                    <p>Reset/Create Hackathon</p>
                   </div>
                   <Image
                     height={10}
