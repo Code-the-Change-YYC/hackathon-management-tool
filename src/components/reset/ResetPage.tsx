@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import type { Schema } from "@/amplify/data/resource";
 import { Button, CheckboxField, Input, Label } from "@aws-amplify/ui-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import LoadingRing from "../LoadingRing";
 
@@ -26,8 +26,6 @@ export default function ResetPage() {
         const { data: statusCode, errors } =
           await client.mutations.ResetHackathon({
             ...input,
-            scoringComponents: JSON.stringify(input.scoringComponents),
-            scoringSidepots: JSON.stringify(input.scoringSidepots),
           });
         if (errors) {
           console.log(errors);
@@ -41,11 +39,30 @@ export default function ResetPage() {
     },
   });
 
+  const hackathonData = useQuery({
+    initialDataUpdatedAt: 0,
+    queryKey: ["Hackathon"],
+    queryFn: async () => {
+      const response = await client.models.Hackathon.list();
+
+      if (response.errors) throw new Error(response.errors[0].message);
+
+      if (response.data[0]) {
+        setValue("scoringComponents", response.data[0].scoringComponents || []);
+        setValue("scoringSidepots", response.data[0].scoringSidepots || []);
+        setValue("startDate", response.data[0].startDate || "");
+        setValue("endDate", response.data[0].endDate || "");
+        return response.data[0];
+      } else return [];
+    },
+  });
+
   const onSubmit: SubmitHandler<Schema["ResetHackathon"]["args"]> = (data) => {
     // Convert scoringComponents and scoringSidepots to JSON strings
     data.scoringComponents = JSON.stringify(data.scoringComponents);
     data.scoringSidepots = JSON.stringify(data.scoringSidepots);
-    userMutation.mutate(data);
+    // userMutation.mutate(data);
+    console.log(data);
   };
 
   const generateId = () => uuidv4();
@@ -66,7 +83,8 @@ export default function ResetPage() {
         startDate: "",
         endDate: "",
         safetyCheck: "",
-        resetOrCreate: true,
+        resetting: true,
+        creating: false,
       },
     });
 
@@ -88,20 +106,19 @@ export default function ResetPage() {
     name: "scoringSidepots",
   });
 
-  if (userMutation.isPending) {
-    return <LoadingRing />;
-  }
-  if (userMutation.isError) {
-    return <div>Error, please try again later.</div>;
-  }
+  if (hackathonData.isPending) return <LoadingRing />;
 
-  const resetOrCreate = watch("resetOrCreate");
+  if (userMutation.isPending) return <LoadingRing />;
 
-  const handleCheckboxChange = (value: boolean) => {
-    setValue("resetOrCreate", value, {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
+  if (userMutation.isError) return <div>Error, please try again later.</div>;
+
+  const [resetting, creating] = watch(["resetting", "creating"]);
+
+  const handleCheckboxChange = (value: keyof Schema["Hackathon"]["type"]) => {
+    setValue("resetting", false);
+    setValue("creating", false);
+
+    setValue(value as keyof Schema["ResetHackathon"]["args"], true);
   };
 
   return (
@@ -207,18 +224,22 @@ export default function ResetPage() {
               <Label>Resetting or Creating Hackathon</Label>
               <CheckboxField
                 label="Resetting Hackathon: "
-                {...register("resetOrCreate")}
-                checked={resetOrCreate}
+                {...register("resetting")}
+                checked={resetting}
                 onChange={() => {
-                  handleCheckboxChange(true);
+                  handleCheckboxChange(
+                    "resetting" as keyof Schema["Hackathon"]["type"],
+                  );
                 }}
               />
               <CheckboxField
                 label="Creating Hackathon: "
-                {...register("resetOrCreate")}
-                checked={!resetOrCreate}
+                {...register("resetting")}
+                checked={creating}
                 onChange={() => {
-                  handleCheckboxChange(false);
+                  handleCheckboxChange(
+                    "creating" as keyof Schema["Hackathon"]["type"],
+                  );
                   resetField("resetUsers");
                   resetField("resetTeams");
                   resetField("resetScores");
@@ -227,31 +248,27 @@ export default function ResetPage() {
               />
             </div>
           </div>
-          {resetOrCreate && (
+          {resetting && (
             <div className="flex w-1/3 flex-col gap-2">
               <Label>Reset Fields</Label>
               <CheckboxField
                 label="Reset Users: "
                 {...register("resetUsers")}
-                disabled={!resetOrCreate}
                 checked={watch("resetUsers")}
               />
               <CheckboxField
                 label="Reset Teams: "
                 {...register("resetTeams")}
-                disabled={!resetOrCreate}
                 checked={watch("resetTeams")}
               />
               <CheckboxField
                 label="Reset Rooms: "
                 {...register("resetRooms")}
-                disabled={!resetOrCreate}
                 checked={watch("resetRooms")}
               />
               <CheckboxField
                 label="Reset Scores: "
                 {...register("resetScores")}
-                disabled={!resetOrCreate}
                 checked={watch("resetScores")}
               />
             </div>
