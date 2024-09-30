@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { UserType, useUser } from "../contexts/UserContext";
 
 const LINK_STYLES =
-  "md:mx-10 align-center text-center text-1xl md:text-md my-12 flex flex-row gap-16 text-[#FF6B54]";
+  "md:mx-10 align-center text-center text-1xl md:text-md my-12 flex flex-row gap-8 sm:gap-16 text-[#FF6B54]";
 const ACTIVE_LINK_STYLES = "underline";
 
 export default function ProfileLinks() {
