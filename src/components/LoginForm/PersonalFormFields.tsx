@@ -12,6 +12,7 @@ import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import LoadingRing from "../LoadingRing";
+import { UserType } from "../contexts/UserContext";
 
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();
@@ -102,6 +103,14 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   }
   if (isError) {
     return <div>Error, please try again later.</div>;
+  }
+  if (data?.role === UserType.Admin) {
+    router.push("/admin");
+    return null;
+  }
+  if (data?.role === UserType.Judge) {
+    router.push("/judging");
+    return null;
   }
   if (data?.teamId) {
     router.push(`/register/team/${data.teamId}`);
