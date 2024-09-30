@@ -55,7 +55,7 @@ const InternalError = JSON.stringify({
 const client = generateClient<Schema>({
   authMode: "iam",
 });
-// @ts-ignore
+
 export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
   async (event) => {
     let judgingSessionsPerTeam = event.arguments.judgingSessionsPerTeam;
@@ -259,7 +259,8 @@ function validateInput(
     throw new Error(
       JSON.stringify({
         body: {
-          value: "Cannot have more judging sessions than there are judges",
+          value:
+            "Cannot have more judging sessions than there are judging rooms",
         },
         statusCode: 400,
         headers: { "Content-Type": "application/json" },
