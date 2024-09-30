@@ -142,6 +142,7 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
             throw new Error();
           }
         }
+        return "Created Rooms";
       })
       .catch((error) => {
         console.log("unable to create teamRooms" + error);
@@ -175,6 +176,7 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
             throw new Error();
           }
         }
+        return "Updates Judges";
       })
       .catch((error) => {
         console.log(error);
