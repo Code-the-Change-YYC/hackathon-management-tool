@@ -193,7 +193,7 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
 async function deleteRooms() {
   const response = await client.graphql({ query: listRooms });
   if (response.errors) {
-    return Promise.reject("Error fetching existing rooms");
+    throw new Error("Error fetching existing rooms");
   }
   const roomsToDelete = response.data.listRooms.items;
 
@@ -211,9 +211,7 @@ async function deleteRooms() {
   for (let i = 0; i < roomDeletionResult.length; i++) {
     const result = roomDeletionResult[i];
     if (result.errors) {
-      return Promise.reject(
-        `Error deleting room with Id: ${roomsToDelete[i].id}`,
-      );
+      throw new Error(`Error deleting room with Id: ${roomsToDelete[i].id}`);
     }
   }
 
@@ -223,7 +221,7 @@ async function deleteRooms() {
 async function deleteTeamRooms() {
   const response = await client.graphql({ query: listTeamRooms });
   if (response.errors) {
-    return Promise.reject("Error fetching existing team rooms");
+    throw new Error("Error fetching existing team rooms");
   }
   const teamRoomsToDelete = response.data.listTeamRooms.items;
 
@@ -241,7 +239,7 @@ async function deleteTeamRooms() {
   for (let i = 0; i < teamRoomDeletionResult.length; i++) {
     const result = teamRoomDeletionResult[i];
     if (result.errors) {
-      return Promise.reject(
+      throw new Error(
         `Error deleting teamRoom with Id: ${teamRoomsToDelete[i].id}`,
       );
     }
