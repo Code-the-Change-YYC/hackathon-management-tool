@@ -13,10 +13,10 @@ const add_icon = "/svgs/admin/add_square.svg";
 const reset_icon = "/svgs/admin/reset_icon.svg";
 
 const NAV_BAR_SECTION_STYLES =
-  "flex flex-col items-center bg-awesomer-purple h-full transition-width duration-300 md:w-80";
+  "flex flex-col items-center bg-awesomer-purple h-full text-white transition-width duration-300 md:w-80";
 const LOGO_BUTTON_STYLES =
   "mt-6 flex size-10 items-center justify-center md:size-14";
-const NAV_BAR_HEADER_STYLES = "my-2 text-center text-xl md:text-2xl";
+const NAV_BAR_HEADER_STYLES = "my-2 text-center text-xl font-bold md:text-2xl";
 const NAV_LINK_CONTAINER_STYLES =
   "flex justify-between hover:bg-[#5E48D1] p-2 rounded-md mb-2";
 const NAV_LINK_ICON_STYLES = "mr-2 flex p-2 justify-center rounded-md bg-white";
