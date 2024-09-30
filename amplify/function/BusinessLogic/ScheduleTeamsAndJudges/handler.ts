@@ -138,10 +138,10 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
       .then((res) => {
         for (let i = 0; i < res.length; i++) {
           if (res[i].errors) {
-            return Promise.reject(res[i].errors);
+            console.log(res[i].errors);
+            throw new Error();
           }
         }
-        return Promise.resolve("Created Team Rooms");
       })
       .catch((error) => {
         console.log("unable to create teamRooms" + error);
@@ -171,9 +171,9 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
       .then((res) => {
         for (let i = 0; i < res.length; i++) {
           if (res[i].errors) {
-            return Promise.reject(res[i].errors);
+            console.log(res[i].errors);
+            throw new Error();
           }
-          return Promise.resolve("Updated all judges");
         }
       })
       .catch((error) => {
@@ -289,9 +289,9 @@ async function fetchApprovedTeams() {
   });
   if (teamsResponse.errors) {
     console.log("error fetching approved teams");
-    Promise.reject("error fetching approved teams");
+    throw new Error("error fetching approved teams");
   }
-  return Promise.resolve(teamsResponse.data.listTeams.items);
+  return teamsResponse.data.listTeams.items;
 }
 
 async function createRooms(numRooms: number) {
@@ -308,7 +308,7 @@ async function createRooms(numRooms: number) {
   const createRoomsResult = await Promise.all(createRoomRequests).catch(
     (error) => {
       console.log(error);
-      return Promise.reject("unable to create rooms");
+      throw new Error("unable to create rooms");
     },
   );
 
@@ -317,12 +317,12 @@ async function createRooms(numRooms: number) {
     const result = createRoomsResult[i];
     if (result.errors) {
       console.log(result.errors);
-      return Promise.reject("unable to create rooms");
+      throw new Error("unable to create rooms");
     }
     roomIds.push(result.data.createRoom.id);
   }
 
-  return Promise.resolve(roomIds);
+  return roomIds;
 }
 
 async function fetchJudges() {
@@ -337,13 +337,13 @@ async function fetchJudges() {
     })
     .catch((error) => {
       console.log(error);
-      return Promise.reject("Unable to fetch judges");
+      throw new Error("Unable to fetch judges");
     });
 
   if (judgesResponse.errors) {
     console.log(judgesResponse.errors);
-    return Promise.reject("Unable to fetch judges");
+    throw new Error("Unable to fetch judges");
   }
 
-  return Promise.resolve(judgesResponse.data.listUsers.items);
+  return judgesResponse.data.listUsers.items;
 }
