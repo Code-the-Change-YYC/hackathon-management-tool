@@ -75,10 +75,7 @@ export const handler: Handler = async (event) => {
       scoringComponents,
       scoringSidepots,
     } = event.arguments;
-    if (
-      safetyCheck !== "delete hackathon" &&
-      safetyCheck !== "create hackathon"
-    ) {
+    if (safetyCheck !== "i love code the change") {
       throw new Error(
         JSON.stringify({
           statusCode: 403,

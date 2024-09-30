@@ -93,10 +93,10 @@ const SideNavBar = () => {
       ],
     },
     {
-      group: "RESET/CREATE",
+      group: "RESET",
       routes: [
         {
-          name: "Reset/Create Hackathon",
+          name: "Reset Hackathon",
           icon: reset_icon,
           route: "/admin/reset",
         },

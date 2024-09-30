@@ -16,12 +16,9 @@ export default function ResetPage() {
     mutationFn: async (input: Schema["ResetHackathon"]["args"]) => {
       console.log(input);
       try {
-        if (
-          input.safetyCheck !== "delete hackathon" &&
-          input.safetyCheck !== "create hackathon"
-        ) {
+        if (input.safetyCheck !== "i love code the change") {
           console.log(
-            `must complete safety check, looking for 'delete hackathon' or 'create hackathon'`,
+            `must complete safety check, looking for 'i love code the change'`,
           );
           return;
         }
@@ -113,27 +110,6 @@ export default function ResetPage() {
       className="relative flex w-full flex-col justify-center gap-4 bg-white p-4 md:p-8"
     >
       <div className="flex w-full flex-col justify-between gap-2 md:gap-12">
-        <Label>Resetting or Creating Hackathon</Label>
-        <CheckboxField
-          label="Resetting Hackathon: "
-          {...register("resetOrCreate")}
-          checked={resetOrCreate}
-          onChange={() => {
-            handleCheckboxChange(true);
-          }}
-        />
-        <CheckboxField
-          label="Creating Hackathon: "
-          {...register("resetOrCreate")}
-          checked={!resetOrCreate}
-          onChange={() => {
-            handleCheckboxChange(false);
-            resetField("resetUsers");
-            resetField("resetTeams");
-            resetField("resetScores");
-            resetField("resetRooms");
-          }}
-        />
         <div className="flex w-full flex-row">
           <div className="mr-24 flex w-1/3 flex-col gap-2">
             <Label>Score Components: </Label>
@@ -204,7 +180,7 @@ export default function ResetPage() {
         </div>
         <div className="flex flex-row">
           {" "}
-          <div className="mr-24 flex w-1/3 flex-col gap-2">
+          <div className="mr-24 flex min-w-96 flex-col gap-2">
             <div className="flex flex-col gap-2">
               <Label htmlFor="startDate">Start Date:</Label>
               <Input
@@ -226,53 +202,71 @@ export default function ResetPage() {
               />
             </div>
           </div>{" "}
-          <div className="flex w-1/3 flex-col gap-2">
-            <Label>Reset Fields</Label>
-            <CheckboxField
-              label="Reset Users: "
-              {...register("resetUsers")}
-              disabled={!resetOrCreate}
-              checked={watch("resetUsers")}
-            />
-            <CheckboxField
-              label="Reset Teams: "
-              {...register("resetTeams")}
-              disabled={!resetOrCreate}
-              checked={watch("resetTeams")}
-            />
-            <CheckboxField
-              label="Reset Rooms: "
-              {...register("resetRooms")}
-              disabled={!resetOrCreate}
-              checked={watch("resetRooms")}
-            />
-            <CheckboxField
-              label="Reset Scores: "
-              {...register("resetScores")}
-              disabled={!resetOrCreate}
-              checked={watch("resetScores")}
-            />
+          <div className="mr-24 flex min-w-20 flex-col gap-2">
+            <div className="flex flex-col gap-2">
+              <Label>Resetting or Creating Hackathon</Label>
+              <CheckboxField
+                label="Resetting Hackathon: "
+                {...register("resetOrCreate")}
+                checked={resetOrCreate}
+                onChange={() => {
+                  handleCheckboxChange(true);
+                }}
+              />
+              <CheckboxField
+                label="Creating Hackathon: "
+                {...register("resetOrCreate")}
+                checked={!resetOrCreate}
+                onChange={() => {
+                  handleCheckboxChange(false);
+                  resetField("resetUsers");
+                  resetField("resetTeams");
+                  resetField("resetScores");
+                  resetField("resetRooms");
+                }}
+              />
+            </div>
           </div>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          {resetOrCreate ? (
-            <Label htmlFor="safetyCheck">
-              Enter &quot;delete hackathon&quot; to confirm{" "}
-            </Label>
-          ) : (
-            <Label htmlFor="safetyCheck">
-              Enter &quot;create hackathon&quot; to confirm{" "}
-            </Label>
+          {resetOrCreate && (
+            <div className="flex w-1/3 flex-col gap-2">
+              <Label>Reset Fields</Label>
+              <CheckboxField
+                label="Reset Users: "
+                {...register("resetUsers")}
+                disabled={!resetOrCreate}
+                checked={watch("resetUsers")}
+              />
+              <CheckboxField
+                label="Reset Teams: "
+                {...register("resetTeams")}
+                disabled={!resetOrCreate}
+                checked={watch("resetTeams")}
+              />
+              <CheckboxField
+                label="Reset Rooms: "
+                {...register("resetRooms")}
+                disabled={!resetOrCreate}
+                checked={watch("resetRooms")}
+              />
+              <CheckboxField
+                label="Reset Scores: "
+                {...register("resetScores")}
+                disabled={!resetOrCreate}
+                checked={watch("resetScores")}
+              />
+            </div>
           )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="safetyCheck">
+            Enter &quot;i love code the change&quot; to confirm{" "}
+          </Label>
 
           <div className="flex w-1/2 flex-row gap-2">
             <Input
               required
               id="safetyCheck"
-              placeholder={
-                resetOrCreate ? "delete hackathon" : "create hackathon"
-              }
+              placeholder="i love code the change"
               {...register("safetyCheck")}
               className="w-20"
             />
