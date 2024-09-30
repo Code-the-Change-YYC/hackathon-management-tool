@@ -2,7 +2,15 @@ import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 
 import type { Schema } from "../../../data/resource";
-import { listTeams, listUsers } from "./graphql/queries";
+import { createTeamRoom, updateUser } from "./graphql/mutations";
+import {
+  createRooms,
+  deleteRooms,
+  deleteTeamRooms,
+  fetchApprovedTeams,
+  fetchJudges,
+  validateInput,
+} from "./helpers";
 
 Amplify.configure(
   {
@@ -32,7 +40,15 @@ Amplify.configure(
   },
 );
 
-const client = generateClient<Schema>({
+const InternalError = JSON.stringify({
+  body: {
+    value: "Unable to create schedule",
+  },
+  statusCode: 500,
+  headers: { "Content-Type": "application/json" },
+});
+
+export const client = generateClient<Schema>({
   authMode: "iam",
 });
 
@@ -40,66 +56,41 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
   async (event) => {
     let judgingSessionsPerTeam = event.arguments.judgingSessionsPerTeam;
     let numOfJudgingRooms = event.arguments.numOfJudgingRooms;
+    let presentationDuration = 15; // TODO: make this an input into the lambda
+    let startTime = new Date("2024-01-01T13:00:00"); // TODO: make this an input into the lambda
 
-    let teams = null;
-    teams = await client.graphql({
-      query: listTeams,
-      variables: {
-        filter: {
-          approved: { eq: true },
-        },
-      },
+    // Fetch Approved teams
+    const teams = await fetchApprovedTeams().catch(() => {
+      throw new Error(InternalError);
     });
 
-    let numOfTeams = teams.data.listTeams.items.length;
+    // Input validation
+    validateInput(judgingSessionsPerTeam, numOfJudgingRooms, teams.length);
 
-    if (judgingSessionsPerTeam > numOfJudgingRooms) {
-      throw new Error(
-        JSON.stringify({
-          body: {
-            value: "Cannot have more judging sessions than there are judges",
-          },
-          statusCode: 400,
-          headers: { "Content-Type": "application/json" },
-        }),
-      );
-    }
+    // Delete existing rooms and teamRooms
+    await Promise.all([deleteRooms(), deleteTeamRooms()]).catch((error) => {
+      console.log(error);
+      throw new Error(InternalError);
+    });
 
-    if (numOfJudgingRooms > numOfTeams && judgingSessionsPerTeam > 1) {
-      throw new Error(
-        JSON.stringify({
-          body: {
-            value: "Not enough teams and too many judges",
-          },
-          statusCode: 400,
-          headers: { "Content-Type": "application/json" },
-        }),
-      );
-    }
+    // Create empty rooms
+    const roomIds = await createRooms(numOfJudgingRooms).catch(() => {
+      throw new Error(InternalError);
+    });
 
-    let totalSessions = numOfTeams * judgingSessionsPerTeam;
+    let totalSessions = teams.length * judgingSessionsPerTeam;
     let numberOfRows = Math.ceil(totalSessions / numOfJudgingRooms);
     let numberOfColumns = numOfJudgingRooms;
-    let schedulingMatrix = [];
+    let teamIndex = 0;
+    let currTime = startTime;
+    let createTeamRoomRequests = [];
+    let schedulingMatrix: string[][] = [];
     for (let i = 0; i < numberOfRows; i++) {
       schedulingMatrix.push(new Array(numberOfColumns).fill(null));
     }
 
-    let teamNumber = 0;
-
-    // Helper Function to check if a team number already exists in a column (A team can only visit a judging room once)
-    const alreadyExistsInColumn = (
-      target: number,
-      columnIndex: number,
-      matrix: number[][],
-    ): boolean => {
-      return (
-        matrix.findIndex((row: number[]) => row[columnIndex] === target) !== -1
-      );
-    };
-
-    // Populate the scheduling matrix with team numbers
-    // Each team number will only appear once in each column and each row
+    // Populate the scheduling matrix with the teams
+    // Each team will only appear once in each column and each row
     for (let row = 0; row < numberOfRows; row++) {
       for (let column = 0; column < numberOfColumns; column++) {
         let curSessionIndex = row * numberOfColumns + column;
@@ -108,54 +99,90 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
         }
 
         // If the team has already appeared in a column (i.e. judging room), skip over the team.
-        let isStartOfNewCount = curSessionIndex % numOfTeams === 0;
+        let isStartOfNewCount = curSessionIndex % teams.length === 0;
         if (
           isStartOfNewCount &&
-          alreadyExistsInColumn(teamNumber, column, schedulingMatrix)
+          schedulingMatrix.findIndex(
+            (row: string[]) => row[column] === teams[teamIndex].id,
+          ) !== -1
         ) {
-          teamNumber = (teamNumber + 1) % numOfTeams;
+          teamIndex = (teamIndex + 1) % teams.length;
         }
 
-        schedulingMatrix[row][column] = teamNumber;
-        teamNumber = (teamNumber + 1) % numOfTeams;
+        schedulingMatrix[row][column] = teams[teamIndex].id;
+        createTeamRoomRequests.push(
+          client.graphql({
+            query: createTeamRoom,
+            variables: {
+              input: {
+                teamId: teams[teamIndex].id,
+                time: currTime.toISOString(),
+                roomId: roomIds[column],
+                zoomLink: "",
+              },
+            },
+          }),
+        );
+        teamIndex = (teamIndex + 1) % teams.length;
       }
+      // Increment time for the next set of judging sessions
+      currTime = new Date(currTime.getTime() + presentationDuration * 60000);
     }
 
-    // Convert team numbers to team IDs
-    schedulingMatrix.map((row) =>
-      row.map((teamNumber, index) => {
-        if (teamNumber !== null) {
-          row[index] = teams.data.listTeams.items[teamNumber].id;
-        }
-      }),
-    );
+    // Create all the team rooms
+    await Promise.all(createTeamRoomRequests)
+      .then((res) => {
+        res.forEach((result) => {
+          if (result.errors) {
+            console.log(result.errors);
+            throw new Error("Unable to create teamRooms");
+          }
+        });
+
+        return "Created Rooms";
+      })
+      .catch((error) => {
+        console.log("unable to create teamRooms" + error);
+        throw new Error(InternalError);
+      });
 
     // Fetch and Assign judges to judging rooms
-    let judges = await client.graphql({
-      query: listUsers,
-      variables: {
-        filter: {
-          role: { eq: "JUDGE" },
-        },
-      },
-    });
+    const judges = await fetchJudges();
 
-    let judgingRooms = new Array(numOfJudgingRooms);
-    for (let i = 0; i < numOfJudgingRooms; i++) {
-      judgingRooms[i] = [];
-    }
-    for (let i = 0; i < judges.data.listUsers.items.length; i++) {
-      judgingRooms[i % numOfJudgingRooms].push(
-        judges.data.listUsers.items[i].id,
+    const updateJudgeRequests = [];
+    for (let i = 0; i < judges.length; i++) {
+      updateJudgeRequests.push(
+        client.graphql({
+          query: updateUser,
+          variables: {
+            input: {
+              id: judges[i].id,
+              JUDGE_roomId: roomIds[i % numOfJudgingRooms],
+            },
+          },
+        }),
       );
     }
 
+    // Update all judges with the roomIds
+    await Promise.all(updateJudgeRequests)
+      .then((res) => {
+        for (let i = 0; i < res.length; i++) {
+          if (res[i].errors) {
+            console.log(res[i].errors);
+            throw new Error("Unable to update judges with roomIds");
+          }
+        }
+        return "Updates Judges";
+      })
+      .catch((error) => {
+        console.log(error);
+        throw new Error(InternalError);
+      });
+
     return {
-      body: {
-        judges: judgingRooms,
-        schedule: schedulingMatrix,
-      },
-      statusCode: 200,
+      body: {},
+      statusCode: 201,
       headers: { "Content-Type": "application/json" },
     };
   };
