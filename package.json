@@ -17,9 +17,12 @@
     ]
   },
   "dependencies": {
+    "@aldabil/react-scheduler": "^2.9.5",
     "@aws-amplify/adapter-nextjs": "^1.0.18",
     "@aws-amplify/ui-react": "^6.1.5",
     "@aws-sdk/client-ses": "^3.598.0",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@react-email/components": "^0.0.19",
     "@react-email/render": "^0.0.15",
     "@tanstack/query-async-storage-persister": "^5.36.0",
