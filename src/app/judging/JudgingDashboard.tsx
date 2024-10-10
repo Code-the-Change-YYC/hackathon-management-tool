@@ -37,6 +37,8 @@ const JudgingDashboard = () => {
       const { data, errors } = await client.models.Room.get({
         id: currentUser.JUDGE_roomId,
       });
+      console.log(currentUser);
+      console.log(data);
       if (errors) throw Error(errors[0].message);
 
       return data;
