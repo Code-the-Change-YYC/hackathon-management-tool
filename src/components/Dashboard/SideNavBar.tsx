@@ -52,7 +52,7 @@ const NavLinkContainer = ({
   );
 };
 const SideNavBar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -99,6 +99,16 @@ const SideNavBar = () => {
           name: "Reset Hackathon",
           icon: reset_icon,
           route: "/admin/reset",
+        },
+      ],
+    },
+    {
+      group: "SCHEDULE",
+      routes: [
+        {
+          name: "Judging Schedule",
+          icon: reset_icon,
+          route: "/admin/schedule",
         },
       ],
     },
