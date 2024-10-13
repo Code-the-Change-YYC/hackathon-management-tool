@@ -1,21 +1,26 @@
 import { useState } from "react";
 
 export default function RoomAssigner({
-  setNumberOfRooms,
+  judgingScheduleMutation,
 }: {
-  setNumberOfRooms: (number: number) => void;
+  judgingScheduleMutation: (params: {
+    judgingSessionsPerTeam: number;
+    numOfJudgingRooms: number;
+  }) => void;
 }) {
-  const [inputValue, setInputValue] = useState<number | "">("");
+  const [inputValue, setInputValue] = useState<string>("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(Number(e.target.value));
+    setInputValue(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (typeof inputValue === "number" && !isNaN(inputValue)) {
-      setNumberOfRooms(inputValue);
-    }
+
+    judgingScheduleMutation({
+      judgingSessionsPerTeam: 1,
+      numOfJudgingRooms: Number(inputValue),
+    });
   };
 
   return (

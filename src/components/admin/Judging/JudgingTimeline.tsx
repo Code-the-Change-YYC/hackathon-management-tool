@@ -29,7 +29,6 @@ export default function JudgingTimeline() {
         idField: "admin_id",
         textField: "title",
         subTextField: "mobile",
-        avatarField: "",
         colorField: "color",
       }}
     />
