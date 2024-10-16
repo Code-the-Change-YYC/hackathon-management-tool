@@ -252,6 +252,8 @@ const schema = a
       .arguments({
         numOfJudgingRooms: a.integer().required(),
         judgingSessionsPerTeam: a.integer().required(),
+        startDateAndTime: a.datetime().required(),
+        presentationDuration: a.integer().required(),
       })
       .authorization((allow) => [allow.group("Admin")])
       .handler(a.handler.function(ScheduleTeamsAndJudges))
