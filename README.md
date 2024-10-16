@@ -99,3 +99,13 @@ Copy the file `.env.local.example` and rename the file to `.env.local`
 **Food Ticket Code**: clients, (or hackathoners), will call a url to get their authentication code. The code is as follows: [their uuid]:[the MAC of their user ID]. MAC Stands for Message Authentication Code. We use the SHA-256 Hash function with a secret key set in _secrets_, called "USER_VERIFICATION_KEY". This code serves the purpose of providing their uuid to us admins when we scan their QR code, and we use the MAC to ensure that the user ID is not tampered with.
 
 **Food Ticket Scanning**: Admins will scan the usercode, and check the MAC to make sure it is not tampered with. They will check for other conditions to make sure that they can eat: the foodevent id being valid, the user not having attended the food event before, and they are in the right time slot. If they are in the wrong timeslot, they can still eat, but will notify the scanner of this. The scanned user will automatically be marked as having eaten at the event.
+
+## Judging
+
+**Different things that need to be initialized for judging panel to show**:
+
+- Room must exist where _Room room id_ matches the _TeamRoom room id_
+- TeamRoom must exist with roomId where the _TeamRoom room id_ matches the _Room room id_, and _Teams TeamId_ matches the _Team id_
+- User with Judge role and JUDGERoomId where the _Room_ id matches the _JUDGERoomId_
+- Team must exist where _id_ matches the _teamroom team id_
+- Hackathon must be created as well through admin page or appsync

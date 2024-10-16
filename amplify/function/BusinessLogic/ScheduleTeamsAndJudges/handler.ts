@@ -56,8 +56,8 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
   async (event) => {
     let judgingSessionsPerTeam = event.arguments.judgingSessionsPerTeam;
     let numOfJudgingRooms = event.arguments.numOfJudgingRooms;
-    let presentationDuration = 15; // TODO: make this an input into the lambda
-    let startTime = new Date("2024-01-01T13:00:00"); // TODO: make this an input into the lambda
+    let presentationDuration = event.arguments.presentationDuration;
+    let startDateAndTime = new Date(event.arguments.startDateAndTime);
 
     // Fetch Approved teams
     const teams = await fetchApprovedTeams().catch(() => {
@@ -82,7 +82,7 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
     let numberOfRows = Math.ceil(totalSessions / numOfJudgingRooms);
     let numberOfColumns = numOfJudgingRooms;
     let teamIndex = 0;
-    let currTime = startTime;
+    let currTime = startDateAndTime;
     let createTeamRoomRequests = [];
     let schedulingMatrix: string[][] = [];
     for (let i = 0; i < numberOfRows; i++) {
