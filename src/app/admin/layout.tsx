@@ -20,7 +20,7 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen w-full flex-1">
       <SideNavBar />
-      <div className="flex flex-1 flex-col">
+      <div className="flex size-full flex-1 flex-col">
         <TopNavBar />
         <main className="grow">{children}</main>
       </div>
