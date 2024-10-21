@@ -32,7 +32,7 @@ const JudgingDashboard = () => {
   const { currentUser } = useUser();
 
   const { data: roomData, isFetching: roomIsFetching } = useQuery({
-    queryKey: ["Room"],
+    queryKey: ["RoomForJudge", currentUser.JUDGE_roomId],
     queryFn: async () => {
       const { data, errors } = await client.models.Room.get({
         id: currentUser.JUDGE_roomId,
@@ -57,7 +57,7 @@ const JudgingDashboard = () => {
 
   const { data: teamsForRoomData, isFetching: teamsForRoomIsFetching } =
     useQuery({
-      queryKey: ["TeamsForRoom"],
+      queryKey: ["TeamsForRoom", roomData?.id],
       queryFn: async () => {
         const teamRooms = (await roomData?.teamRoom())?.data;
         if (!teamRooms) return [];
