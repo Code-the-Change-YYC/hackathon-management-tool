@@ -141,18 +141,15 @@ export function UserContextProvider({ children }: Props) {
   }, []);
 
   return (
-    <UserContext.Provider
-      value={{
-        currentUser: currentUser || {
-          username: "",
-          type: UserType.Guest,
-          populated: true,
-          JUDGE_roomId: "",
-        },
-      }}
-    >
-      {currentUser?.populated && children}
-    </UserContext.Provider>
+    currentUser && (
+      <UserContext.Provider
+        value={{
+          currentUser: currentUser,
+        }}
+      >
+        {children}
+      </UserContext.Provider>
+    )
   );
 }
 
