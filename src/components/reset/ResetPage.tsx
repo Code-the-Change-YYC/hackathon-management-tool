@@ -61,8 +61,7 @@ export default function ResetPage() {
     // Convert scoringComponents and scoringSidepots to JSON strings
     data.scoringComponents = JSON.stringify(data.scoringComponents);
     data.scoringSidepots = JSON.stringify(data.scoringSidepots);
-    // userMutation.mutate(data);
-    console.log(data);
+    userMutation.mutate(data);
   };
 
   const generateId = () => uuidv4();
