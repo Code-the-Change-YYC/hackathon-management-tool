@@ -1,15 +1,17 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
+import { toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
 import JudgingTimeline from "@/components/admin/Judging/JudgingTimeline";
 import RoomAssigner from "@/components/admin/Judging/RoomAssigner";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const client = generateClient<Schema>();
 
 export default function JudgingSchedule() {
+  const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: async ({
       judgingSessionsPerTeam,
@@ -23,6 +25,7 @@ export default function JudgingSchedule() {
       presentationDuration: number;
     }) => {
       try {
+        const toastObj = toast.loading("Scheduling...");
         const response = await client.mutations.ScheduleTeamsAndJudges({
           judgingSessionsPerTeam,
           numOfJudgingRooms,
@@ -31,10 +34,18 @@ export default function JudgingSchedule() {
         });
 
         if (response.errors) {
+          toast.dismiss(toastObj);
+          toast.error("Error scheduling");
           throw new Error(response.errors[0].message);
         }
 
         if (response.data && response.data.body) {
+          toast.dismiss(toastObj);
+          toast.success("Judging schedule created");
+          queryClient.invalidateQueries({ queryKey: ["Room"] });
+          queryClient.invalidateQueries({ queryKey: ["TeamRoom"] });
+          queryClient.invalidateQueries({ queryKey: ["Teams"] });
+          queryClient.invalidateQueries({ queryKey: ["User-Judge"] });
           const responseBody =
             typeof response.data.body === "string"
               ? response.data.body

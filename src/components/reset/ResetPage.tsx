@@ -2,6 +2,7 @@
 
 import { generateClient } from "aws-amplify/api";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Schema } from "@/amplify/data/resource";
@@ -15,6 +16,7 @@ export default function ResetPage() {
   const userMutation = useMutation({
     mutationFn: async (input: Schema["ResetHackathon"]["args"]) => {
       console.log(input);
+
       try {
         if (input.safetyCheck !== "i love code the change") {
           console.log(
@@ -23,14 +25,19 @@ export default function ResetPage() {
           return;
         }
         // Here you would typically handle the submission to AWS Amplify
+        const toastObj = toast.loading("Resetting...");
         const { data: statusCode, errors } =
           await client.mutations.ResetHackathon({
             ...input,
           });
         if (errors) {
+          toast.dismiss(toastObj);
+          toast.error("Error resetting hackathon");
           console.log(errors);
         }
-        console.log("Form Data Submitted:", input, statusCode?.statusCode);
+        void statusCode;
+        toast.dismiss(toastObj);
+        toast.success("Hackathon reset successfully");
         return;
       } catch (error) {
         console.error("Error updating user", error);
