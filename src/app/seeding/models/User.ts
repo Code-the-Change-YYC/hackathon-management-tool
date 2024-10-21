@@ -12,7 +12,7 @@ export async function seedJudges() {
           id: "1",
           firstName: "John",
           lastName: "Doe",
-          role: "JUDGE",
+          role: "Judge",
         });
       },
       () => {
@@ -22,7 +22,7 @@ export async function seedJudges() {
           id: "2",
           firstName: "Jane",
           lastName: "Doe",
-          role: "JUDGE",
+          role: "Judge",
         });
       },
       () => {
@@ -32,7 +32,7 @@ export async function seedJudges() {
           id: "3",
           firstName: "John",
           lastName: "Smith",
-          role: "JUDGE",
+          role: "Judge",
         });
       },
       () => {
@@ -42,7 +42,7 @@ export async function seedJudges() {
           id: "4",
           firstName: "Jane",
           lastName: "Smith",
-          role: "JUDGE",
+          role: "Judge",
         });
       },
       () => {
@@ -52,7 +52,7 @@ export async function seedJudges() {
           id: "5",
           firstName: "John",
           lastName: "Johnson",
-          role: "JUDGE",
+          role: "Judge",
         });
       },
       () => {
@@ -62,7 +62,7 @@ export async function seedJudges() {
           id: "6",
           firstName: "Jane",
           lastName: "Johnson",
-          role: "JUDGE",
+          role: "Judge",
         });
       },
       () => {
@@ -72,7 +72,7 @@ export async function seedJudges() {
           id: "7",
           firstName: "John",
           lastName: "Williams",
-          role: "JUDGE",
+          role: "Judge",
         });
       },
     ],
