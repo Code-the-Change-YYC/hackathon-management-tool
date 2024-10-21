@@ -51,7 +51,7 @@ export default function JudgingSchedule() {
   });
 
   const { data: roomData } = useQuery({
-    queryKey: ["roomData"],
+    queryKey: ["Room"],
     queryFn: async () => {
       const { data, errors } = await client.models.Room.list();
       if (errors) {
@@ -62,7 +62,7 @@ export default function JudgingSchedule() {
   });
 
   const { data: teamRoomData } = useQuery({
-    queryKey: ["teamRoomData"],
+    queryKey: ["TeamRoom"],
     queryFn: async () => {
       const { data, errors } = await client.models.TeamRoom.list();
       if (errors) {
@@ -73,7 +73,7 @@ export default function JudgingSchedule() {
   });
 
   const { data: judgeData } = useQuery({
-    queryKey: ["judgeData"],
+    queryKey: ["User-Judge"],
     queryFn: async () => {
       const { data, errors } = await client.models.User.list({
         filter: {
@@ -91,7 +91,7 @@ export default function JudgingSchedule() {
   });
 
   const { data: teamData } = useQuery({
-    queryKey: ["teamData"],
+    queryKey: ["Teams"],
 
     queryFn: async () => {
       const { data, errors } = await client.models.Team.list({
