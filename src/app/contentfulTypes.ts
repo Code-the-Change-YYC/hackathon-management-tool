@@ -39,3 +39,12 @@ export interface HackathonDetails extends BaseEntry {
     prizeAmount: number;
   };
 }
+
+export interface CeremonyDetails extends BaseEntry {
+  fields: {
+    openingCeremonyLocation: string;
+    openingCeremonyDate: string;
+    closingCeremonyLocation: string;
+    closingCeremonyDate: string;
+  };
+}
