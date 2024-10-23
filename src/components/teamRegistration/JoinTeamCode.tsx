@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
-import type { Id } from "react-toastify";
 import { toast } from "react-toastify";
 
 import { client } from "@/app/QueryProvider";
@@ -21,7 +20,6 @@ export default function JoinTeamCode() {
         const teamIDArray = clipboardContentsText.split("");
         e.preventDefault();
         setTeamIDInput(teamIDArray);
-        toastRef.current = toast.loading("Joining team...");
         joinTeamMutation.mutate(teamIDArray.join(""));
       }
     };
@@ -31,7 +29,6 @@ export default function JoinTeamCode() {
     };
   }, []);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const toastRef = useRef<Id>("");
   const handleTeamIDInput = (
     e: ChangeEvent<HTMLInputElement>,
     index: number,
@@ -52,32 +49,33 @@ export default function JoinTeamCode() {
   const { currentUser } = useUser();
   const joinTeamMutation = useMutation({
     mutationFn: async (teamID: string) => {
+      const toastObj = toast.loading("Joining team...");
       const res = await client.mutations.AssignUsersToTeams({
         teamId: teamID,
         userId: currentUser.username,
       });
-      if (res.errors) throw new Error(res.errors[0].message);
+      if (res.errors) {
+        toast.dismiss(toastObj);
+        throw new Error(res.errors[0].message);
+      }
+      toast.dismiss(toastObj);
       return res.data;
     },
     onSuccess: (data) => {
       if (data?.statusCode === 200) {
-        toast.update(toastRef.current, {
-          render: "Team joined successfully",
-          type: "success",
-          isLoading: false,
-          autoClose: 3000,
-        });
+        toast.success("Team joined successfully");
         router.push(`/join/team/${teamIDInput.join("")}`);
       }
     },
-    onError: () => {
-      toast.error("Failed to join team");
+    onError: (e) => {
+      const error = JSON.parse(e.message);
+      toast.error("Failed to join team " + error.body.value);
     },
+    mutationKey: ["JoinTeam"],
   });
   const handleJoinTeam = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const teamID = teamIDInput.join("");
-    toastRef.current = toast.loading("Joining team...");
     joinTeamMutation.mutate(teamID);
   };
   const handleCancelInput = () => {
