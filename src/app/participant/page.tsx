@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import DevPostSubmission from "@/components/Dashboard/DevPostSubmission";
 import GoToFoodTicket from "@/components/Dashboard/GoToFoodTicket";
 import Greetings from "@/components/Dashboard/Greetings";
 import ImportantInformation from "@/components/Dashboard/ImportantInformation";
@@ -28,14 +27,13 @@ export default function page() {
       <div className="grid grow grid-cols-1 gap-4 md:grid-cols-2 xl:grid-flow-col xl:grid-cols-none">
         <div className="flex flex-col gap-4">
           <NextMealScheduled />
-          <DevPostSubmission />
+          <GoToFoodTicket />
         </div>
         <div className="flex flex-col gap-4">
-          <GoToFoodTicket />
-          <JudgingInfo />
+          <ImportantInformation />
         </div>
         <div className="flex flex-col gap-4 md:col-span-2">
-          <ImportantInformation />
+          <JudgingInfo />
           <SubmissionDueClock />
         </div>
       </div>
