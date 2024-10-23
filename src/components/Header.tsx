@@ -41,7 +41,7 @@ export default function Header() {
             ) : null}
           </>
         ) : (
-          <Link href="/login">Join Hackathon</Link>
+          <Link href="/register">Join Hackathon</Link>
         )}
       </div>
 

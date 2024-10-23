@@ -7,22 +7,22 @@ import PersonalFormFields from "@/components/LoginForm/PersonalFormFields";
 import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
 import type { DefaultComponents } from "@aws-amplify/ui-react/dist/types/components/Authenticator/hooks/useCustomComponents/defaultComponents";
 
-export default function Login() {
+export default function Register() {
   const components: DefaultComponents = {
-    SignIn: {
+    SignUp: {
       Header: () => <FormFieldsHeader />,
     },
     Footer: () => {
-      const { toSignUp } = useAuthenticator();
+      const { toSignIn } = useAuthenticator();
       return (
         <Link
           className="flex w-full justify-center py-4 text-center hover:underline"
-          href="/register"
+          href="/login"
           onClick={() => {
-            toSignUp();
+            toSignIn();
           }}
         >
-          Don&apos;t have an account? Sign up
+          Already have an account?
         </Link>
       );
     },
@@ -30,7 +30,7 @@ export default function Login() {
   return (
     <Authenticator
       socialProviders={["google"]}
-      initialState={"signIn"}
+      initialState={"signUp"}
       signUpAttributes={[]}
       components={components}
     >

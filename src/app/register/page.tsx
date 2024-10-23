@@ -1,5 +1,10 @@
-import LoginPage from "@/app/login/page";
+import Register from "@/components/LoginForm/Register";
+import RegistrationLayout from "@/components/layouts/RegistrationLayout";
 
-export default function page() {
-  return <LoginPage />;
+export default function RegisterPage() {
+  return (
+    <RegistrationLayout>
+      <Register />
+    </RegistrationLayout>
+  );
 }

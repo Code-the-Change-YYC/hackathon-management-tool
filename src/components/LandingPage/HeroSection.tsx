@@ -135,7 +135,7 @@ const HeroSectionTile = ({
       {authStatus !== "authenticated" && (
         <div className={LINK_STYLES}>
           <p className="my-2">
-            Already registered?
+            Already registered?{"    "}
             <Link href="/login" legacyBehavior>
               <span className="text-awesomer-purple hover:opacity-70">
                 Sign in

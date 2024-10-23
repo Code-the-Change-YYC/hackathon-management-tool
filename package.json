@@ -19,7 +19,7 @@
   "dependencies": {
     "@aldabil/react-scheduler": "^2.9.5",
     "@aws-amplify/adapter-nextjs": "^1.0.18",
-    "@aws-amplify/ui-react": "^6.1.5",
+    "@aws-amplify/ui-react": "^6.5.4",
     "@aws-sdk/client-ses": "^3.598.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
