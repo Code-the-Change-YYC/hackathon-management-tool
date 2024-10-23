@@ -10,7 +10,7 @@ export default function JudgingInfo() {
   const teamName = "Team Name";
   const timeSlot = "10:00 AM - 10:05 AM";
   return (
-    <Card className="flex-1 items-start justify-around gap-4">
+    <Card className="flex-1 items-start justify-start gap-4 px-4">
       <div className="flex items-center gap-4">
         <Link href={href}>
           <Image
@@ -24,18 +24,12 @@ export default function JudgingInfo() {
           <div className="">Judging Information</div>
         </div>
       </div>
-      <div className="flex flex-col gap-2 text-start">
+      <div className="flex flex-col gap-2 p-4 text-start">
         <div className="font-medium">Time Slot </div>
         <div className=" text-3xl italic text-neutral-800 xl:text-5xl">
           {timeSlot}
         </div>
       </div>
-      <Link
-        href={href}
-        className="rounded-full bg-rose-500 px-8 py-4 font-semibold text-white transition-all duration-300 hover:opacity-90"
-      >
-        Zoom Link
-      </Link>
     </Card>
   );
 }
