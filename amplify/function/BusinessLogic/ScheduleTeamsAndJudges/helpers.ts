@@ -145,7 +145,7 @@ export async function fetchJudges() {
       query: listUsers,
       variables: {
         filter: {
-          role: { eq: "JUDGE" },
+          role: { eq: "Judge" },
         },
       },
     })

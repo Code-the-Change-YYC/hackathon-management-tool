@@ -87,6 +87,28 @@ export const ResetHackathon = /* GraphQL */ `mutation ResetHackathon(
   APITypes.ResetHackathonMutationVariables,
   APITypes.ResetHackathonMutation
 >;
+export const ScheduleTeamsAndJudges = /* GraphQL */ `mutation ScheduleTeamsAndJudges(
+  $judgingSessionsPerTeam: Int!
+  $numOfJudgingRooms: Int!
+  $presentationDuration: Int!
+  $startDateAndTime: AWSDateTime!
+) {
+  ScheduleTeamsAndJudges(
+    judgingSessionsPerTeam: $judgingSessionsPerTeam
+    numOfJudgingRooms: $numOfJudgingRooms
+    presentationDuration: $presentationDuration
+    startDateAndTime: $startDateAndTime
+  ) {
+    body
+    headers
+    statusCode
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.ScheduleTeamsAndJudgesMutationVariables,
+  APITypes.ScheduleTeamsAndJudgesMutation
+>;
 export const SetUserAsCheckedIn = /* GraphQL */ `mutation SetUserAsCheckedIn($userId: String!) {
   SetUserAsCheckedIn(userId: $userId) {
     JUDGE_givenScores {

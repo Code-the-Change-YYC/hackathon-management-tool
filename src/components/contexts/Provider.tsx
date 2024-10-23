@@ -31,19 +31,21 @@ export default function Provider({
             console.error("Query Boundary Caught:", error);
             toast.error(`Error loading: ${query.queryKey[0]}`);
           },
-          onSuccess(data, query) {
-            toast.success(`${query.queryKey[0]} loaded`);
-          },
+          // onSuccess(data, query) {
+          //   toast.success(`${query.queryKey[0]} loaded`);
+          // },
         }),
         mutationCache: new MutationCache({
           onError: (error, variables, context, mutation) => {
             console.error("Mutation Boundary Caught:", error);
-            toast.error(`Error loading: ${mutation.options?.mutationKey?.[0]}`);
+            toast.error(
+              `Error processing: ${mutation.options?.mutationKey?.[0]}`,
+            );
           },
-          onSuccess(data, variables, context, mutation) {
-            console.log(data, variables, context, mutation);
-            toast.success(`${mutation.options?.mutationKey?.[0]} updated`);
-          },
+          // onSuccess(data, variables, context, mutation) {
+          //   console.log(data, variables, context, mutation);
+          //   toast.success(`${mutation.options?.mutationKey?.[0]} updated`);
+          // },
         }),
       }),
   );

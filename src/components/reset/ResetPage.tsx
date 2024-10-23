@@ -2,11 +2,12 @@
 
 import { generateClient } from "aws-amplify/api";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Schema } from "@/amplify/data/resource";
 import { Button, CheckboxField, Input, Label } from "@aws-amplify/ui-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import LoadingRing from "../LoadingRing";
 
@@ -15,30 +16,51 @@ export default function ResetPage() {
   const userMutation = useMutation({
     mutationFn: async (input: Schema["ResetHackathon"]["args"]) => {
       console.log(input);
+
       try {
-        if (input.safetyCheck !== "delete hackathon") {
+        if (input.safetyCheck !== "i love code the change") {
           console.log(
-            `must complete safety check, looking for 'delete hackathon'}`,
+            `must complete safety check, looking for 'i love code the change'`,
           );
           return;
         }
-
         // Here you would typically handle the submission to AWS Amplify
+        const toastObj = toast.loading("Resetting...");
         const { data: statusCode, errors } =
           await client.mutations.ResetHackathon({
             ...input,
-            scoringComponents: JSON.stringify(input.scoringComponents),
-            scoringSidepots: JSON.stringify(input.scoringSidepots),
           });
         if (errors) {
+          toast.dismiss(toastObj);
+          toast.error("Error resetting hackathon");
           console.log(errors);
         }
-        console.log("Form Data Submitted:", input, statusCode?.statusCode);
+        void statusCode;
+        toast.dismiss(toastObj);
+        toast.success("Hackathon reset successfully");
         return;
       } catch (error) {
         console.error("Error updating user", error);
         throw error;
       }
+    },
+  });
+
+  const hackathonData = useQuery({
+    initialDataUpdatedAt: 0,
+    queryKey: ["Hackathon"],
+    queryFn: async () => {
+      const response = await client.models.Hackathon.list();
+
+      if (response.errors) throw new Error(response.errors[0].message);
+
+      if (response.data[0]) {
+        setValue("scoringComponents", response.data[0].scoringComponents || []);
+        setValue("scoringSidepots", response.data[0].scoringSidepots || []);
+        setValue("startDate", response.data[0].startDate || "");
+        setValue("endDate", response.data[0].endDate || "");
+        return response.data[0];
+      } else return [];
     },
   });
 
@@ -51,23 +73,26 @@ export default function ResetPage() {
 
   const generateId = () => uuidv4();
 
-  const { register, control, handleSubmit } = useForm({
-    defaultValues: {
-      scoringComponents: [
-        { friendlyName: "", isSidepot: false, id: generateId() },
-      ],
-      scoringSidepots: [
-        { friendlyName: "", isSidepot: true, id: generateId() },
-      ],
-      resetUsers: false,
-      resetTeams: false,
-      resetRooms: false,
-      resetScores: false,
-      startDate: "",
-      endDate: "",
-      safetyCheck: "",
-    },
-  });
+  const { register, control, handleSubmit, watch, setValue, resetField } =
+    useForm({
+      defaultValues: {
+        scoringComponents: [
+          { friendlyName: "", isSidepot: false, id: generateId() },
+        ],
+        scoringSidepots: [
+          { friendlyName: "", isSidepot: true, id: generateId() },
+        ],
+        resetUsers: false,
+        resetTeams: false,
+        resetRooms: false,
+        resetScores: false,
+        startDate: "",
+        endDate: "",
+        safetyCheck: "",
+        resetting: true,
+        creating: false,
+      },
+    });
 
   const {
     fields: scoringComponents,
@@ -87,12 +112,21 @@ export default function ResetPage() {
     name: "scoringSidepots",
   });
 
-  if (userMutation.isPending) {
-    return <LoadingRing />;
-  }
-  if (userMutation.isError) {
-    return <div>Error, please try again later.</div>;
-  }
+  if (hackathonData.isPending) return <LoadingRing />;
+
+  if (userMutation.isPending) return <LoadingRing />;
+
+  if (userMutation.isError) return <div>Error, please try again later.</div>;
+
+  const [resetting, creating] = watch(["resetting", "creating"]);
+
+  const handleCheckboxChange = (value: keyof Schema["Hackathon"]["type"]) => {
+    setValue("resetting", false);
+    setValue("creating", false);
+
+    setValue(value as keyof Schema["ResetHackathon"]["args"], true);
+  };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -155,13 +189,13 @@ export default function ResetPage() {
             ))}
             <Button
               type="button"
-              onClick={() =>
+              onClick={() => {
                 appendScoringSidepot({
                   friendlyName: "",
                   isSidepot: true,
                   id: generateId(),
-                })
-              }
+                });
+              }}
             >
               Add Scoring Sidepot
             </Button>
@@ -169,7 +203,7 @@ export default function ResetPage() {
         </div>
         <div className="flex flex-row">
           {" "}
-          <div className="mr-24 flex w-1/3 flex-col gap-2">
+          <div className="mr-24 flex min-w-96 flex-col gap-2">
             <div className="flex flex-col gap-2">
               <Label htmlFor="startDate">Start Date:</Label>
               <Input
@@ -191,27 +225,71 @@ export default function ResetPage() {
               />
             </div>
           </div>{" "}
-          <div className="flex w-1/3 flex-col gap-2">
-            <Label>Reset Fields</Label>
-            <CheckboxField label="Reset users: " {...register("resetUsers")} />
-            <CheckboxField label="Reset Teams: " {...register("resetTeams")} />
-            <CheckboxField label="Reset Rooms: " {...register("resetRooms")} />
-            <CheckboxField
-              label="Reset Scores: "
-              {...register("resetScores")}
-            />
+          <div className="mr-24 flex min-w-20 flex-col gap-2">
+            <div className="flex flex-col gap-2">
+              <Label>Resetting or Creating Hackathon</Label>
+              <CheckboxField
+                label="Resetting Hackathon: "
+                {...register("resetting")}
+                checked={resetting}
+                onChange={() => {
+                  handleCheckboxChange(
+                    "resetting" as keyof Schema["Hackathon"]["type"],
+                  );
+                }}
+              />
+              <CheckboxField
+                label="Creating Hackathon: "
+                {...register("resetting")}
+                checked={creating}
+                onChange={() => {
+                  handleCheckboxChange(
+                    "creating" as keyof Schema["Hackathon"]["type"],
+                  );
+                  resetField("resetUsers");
+                  resetField("resetTeams");
+                  resetField("resetScores");
+                  resetField("resetRooms");
+                }}
+              />
+            </div>
           </div>
+          {resetting && (
+            <div className="flex w-1/3 flex-col gap-2">
+              <Label>Reset Fields</Label>
+              <CheckboxField
+                label="Reset Users: "
+                {...register("resetUsers")}
+                checked={watch("resetUsers")}
+              />
+              <CheckboxField
+                label="Reset Teams: "
+                {...register("resetTeams")}
+                checked={watch("resetTeams")}
+              />
+              <CheckboxField
+                label="Reset Rooms: "
+                {...register("resetRooms")}
+                checked={watch("resetRooms")}
+              />
+              <CheckboxField
+                label="Reset Scores: "
+                {...register("resetScores")}
+                checked={watch("resetScores")}
+              />
+            </div>
+          )}
         </div>
-
         <div className="flex flex-col gap-2">
           <Label htmlFor="safetyCheck">
-            Enter &quot;delete hackathon&quot; to confirm{" "}
+            Enter &quot;i love code the change&quot; to confirm{" "}
           </Label>
+
           <div className="flex w-1/2 flex-row gap-2">
             <Input
               required
               id="safetyCheck"
-              placeholder="delete hackathon"
+              placeholder="i love code the change"
               {...register("safetyCheck")}
               className="w-20"
             />

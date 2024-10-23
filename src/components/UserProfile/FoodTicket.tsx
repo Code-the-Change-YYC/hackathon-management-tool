@@ -9,13 +9,31 @@ import { type Schema } from "@/amplify/data/resource";
 import { createMessageAndCode } from "@/amplify/function/BusinessLogic/utils/crytography";
 import { getUpcomingFoodEventDetails } from "@/app/get-food-ticket/actions";
 import LoadingRing from "@/components/LoadingRing";
-import { useUser } from "@/components/contexts/UserContext";
+import { UserType, useUser } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 
 export default function UserFoodTicket() {
   const client = generateClient<Schema>();
 
   const userId = useUser().currentUser.username as string;
+  const { currentUser } = useUser();
+  const isAdmin = currentUser.type === UserType.Admin;
+  const isJudge = currentUser.type === UserType.Judge;
+
+  if (isAdmin || isJudge) {
+    return (
+      <div className="flex h-screen w-full justify-center bg-fuzzy-peach">
+        <div className="mt-10 w-3/4">
+          <div className="rounded-3xl border-4 border-white bg-white/30 p-20">
+            <h1 className="text-center text-3xl font-bold text-[#FF6B54]">
+              Sorry! No Food Tickets Available for{" "}
+              {isAdmin ? "Admins" : "Judges"}
+            </h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const { data, isFetching } = useQuery({
     initialDataUpdatedAt: 0,
@@ -91,6 +109,7 @@ export default function UserFoodTicket() {
     // Clean up event listener on component unmount
     return () => window.removeEventListener("resize", updateQrSize);
   }, []);
+
   return (
     <>
       {isFetching ? (

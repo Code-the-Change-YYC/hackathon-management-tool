@@ -32,11 +32,13 @@ const JudgingDashboard = () => {
   const { currentUser } = useUser();
 
   const { data: roomData, isFetching: roomIsFetching } = useQuery({
-    queryKey: ["Room"],
+    queryKey: ["RoomForJudge", currentUser.JUDGE_roomId],
     queryFn: async () => {
       const { data, errors } = await client.models.Room.get({
         id: currentUser.JUDGE_roomId,
       });
+      console.log(currentUser);
+      console.log(data);
       if (errors) throw Error(errors[0].message);
 
       return data;
@@ -55,7 +57,7 @@ const JudgingDashboard = () => {
 
   const { data: teamsForRoomData, isFetching: teamsForRoomIsFetching } =
     useQuery({
-      queryKey: ["TeamsForRoom"],
+      queryKey: ["TeamsForRoom", roomData?.id],
       queryFn: async () => {
         const teamRooms = (await roomData?.teamRoom())?.data;
         if (!teamRooms) return [];
@@ -168,7 +170,7 @@ const JudgingDashboard = () => {
                   onCreateScoreClick={handleCreateScoreClick}
                   onEditScoreClick={handleEditScoreClick}
                   colorScheme="pink"
-                  entriesPerPage={5}
+                  entriesPerPage={150}
                 />
               </div>
             </div>

@@ -30,18 +30,7 @@ export default function FoodEvents() {
     initialDataUpdatedAt: 0,
     queryKey: ["FoodEvents"],
     queryFn: async () => {
-      const response = await client.models.FoodEvent.list({
-        selectionSet: [
-          "id",
-          "name",
-          "description",
-          "start",
-          "end",
-          "totalGroupCount",
-          "createdAt",
-          "updatedAt",
-        ],
-      });
+      const response = await client.models.FoodEvent.list();
 
       if (response.errors) throw new Error(response.errors[0].message);
 

@@ -37,7 +37,7 @@ const AdminFoodTickets = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["foodEvents"],
+    queryKey: ["FoodEvents"],
     queryFn: async () => {
       const { data, errors } = await client.models.FoodEvent.list();
       if (errors) {

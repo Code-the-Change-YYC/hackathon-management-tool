@@ -12,8 +12,13 @@ export default function ProfileLinks() {
   const dashboardLink = `/${currentUser.type === UserType.Admin ? "admin" : "participant"}`;
   const links = [
     { href: "/participant/profile", text: "My Details" },
-    { href: "/participant/profile/team-details", text: "Team Details" },
-    { href: "/participant/profile/food-ticket", text: "Food Ticket" },
+    ...(currentUser.type !== UserType.Judge &&
+    currentUser.type !== UserType.Admin
+      ? [
+          { href: "/participant/profile/team-details", text: "Team Details" },
+          { href: "/participant/profile/food-ticket", text: "Food Ticket" },
+        ]
+      : []),
     {
       href: dashboardLink,
       text: "Dashboard",
