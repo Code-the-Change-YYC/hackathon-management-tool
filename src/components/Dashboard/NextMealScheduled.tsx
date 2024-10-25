@@ -15,7 +15,7 @@ export default function NextMealScheduled() {
   const userId = useUser().currentUser.username as string;
   const { data, isFetching } = useQuery({
     initialDataUpdatedAt: 0,
-    queryKey: ["User", userId],
+    queryKey: ["FoodEventTimeSlot"],
     queryFn: async () => {
       const { timeslot } = await getUpcomingFoodEventDetails(userId);
       return {
