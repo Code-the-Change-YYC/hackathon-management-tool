@@ -71,7 +71,7 @@ export default function HackathonInformationContainer() {
   );
 
   const REQUIREMENTS_QUOTES_SVG = "/svgs/landingPage/requirements_quotes.svg";
-  const REQUIREMENTS_BLURB = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eius cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
+  const REQUIREMENTS_BLURB = `Requirements: Open to all Canadian students, at the university, college, or high school level. (Must be an accredited institution)`;
   const REQUIREMENTS_TITLE = (
     <div className="flex flex-row text-3xl font-semibold italic text-awesomer-purple">
       <Image
@@ -86,7 +86,7 @@ export default function HackathonInformationContainer() {
   );
 
   const PRIZES_QUOTES_SVG = "/svgs/landingPage/prizes_quotes.svg";
-  const PRIZES_BLURB = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eius cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
+  const PRIZES_BLURB = `Prizes: 1st place - $5,000 CAD; 2nd place - $3,000; 3rd place - $2,000; All prizes will be split between students and the charities of their choice.`;
   const PRIZES_TITLE = (
     <div className="flex flex-row text-3xl font-semibold italic text-[#00AA88]">
       Prizes

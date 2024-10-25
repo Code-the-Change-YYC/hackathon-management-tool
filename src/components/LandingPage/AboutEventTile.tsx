@@ -8,8 +8,9 @@ const EVENT_DETAILS_SECTION_STYLES = "flex flex-col items-center bg-white";
 const EVENT_DETAILS_CONTENT_STYLES =
   "bg-pastel-pink border-4 border-dark-pink rounded-3xl mb-20 mt-12 md:flex md:justify-center md:max-w-[1100px] md:shadow-[15px_15px_0px_0px_#FF4D6F]";
 const EVENT_IMAGE_CONTAINER_STYLES =
-  "bg-blackish rounded-t-20 border-b-4 border-dark-pink w-72 h-64 md:rounded-tr-none md:rounded-l-2xl md:border-b-0 md:border-r-4 md:h-[370px] md:w-[40vw]";
-const EVENT_IMAGE_STYLES = "w-full h-full object-cover";
+  "bg-blackish rounded-t-20 border-b-4 border-dark-pink w-72 h-64 md:rounded-tr-none md:rounded-l-3xl md:border-b-0 md:border-r-4 md:h-[370px] md:w-[40vw]";
+const EVENT_IMAGE_STYLES =
+  "w-full h-full object-cover md:rounded-l-2xl md:rounded-tl-2xl md:rounded-t-none rounded-t-2xl";
 const EVENT_DETAILS_CONTAINER_STYLES =
   "flex items-center w-72 h-[370px] rounded-b-20 md:w-[50vw] md:rounded-bl-none md:rounded-r-2xl";
 const EVENT_DETAIL_STYLES = "flex items-center ml-10";
