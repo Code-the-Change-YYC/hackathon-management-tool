@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { fetchContent } from "@/app/actions";
@@ -72,7 +71,7 @@ const HeroSectionTile = ({
   hackathonDetails: Partial<HackathonDetails>;
 }) => {
   const eventDate =
-    hackathonDetails?.fields?.eventDate ?? Date.now().toString();
+    hackathonDetails?.fields?.eventDate || new Date().toISOString();
   const { eventName, eventBlurb } = hackathonDetails?.fields || {};
   const eventYear = eventDate ? new Date(eventDate).getFullYear() : 0;
   const [hackathonTime, setHackathonTime] = useState(false);
@@ -85,10 +84,13 @@ const HeroSectionTile = ({
 
   useEffect(() => {
     const updateCountdown = () => {
-      const { d, h, m, s } = calculateDateDifference(new Date(eventDate));
-      setTimeRemaining({ days: d, hours: h, minutes: m, seconds: s });
-      if (d + h + m + s <= 0) {
-        setHackathonTime(true);
+      if (!isNaN(new Date(eventDate).getTime())) {
+        const { d, h, m, s } = calculateDateDifference(new Date(eventDate));
+        setTimeRemaining({ days: d, hours: h, minutes: m, seconds: s });
+
+        if (d + h + m + s <= 0) {
+          setHackathonTime(true);
+        }
       }
     };
 
@@ -107,40 +109,42 @@ const HeroSectionTile = ({
           className="mt-16 flex-wrap text-5xl font-black text-[#FFFF] drop-shadow-lg md:text-center md:text-6xl"
           style={HERO_HEADER_STYLE}
         >
-          {eventName}
-          <span className="text-pastel-green"> {eventYear}</span>
+          {eventName ? eventName : "Loading..."}
+          <span className="text-pastel-green">
+            {" "}
+            {eventYear ? eventYear : ""}
+          </span>
         </h1>
         <strong className="text-1xl my-4 flex flex-wrap justify-center text-awesomer-purple opacity-95  md:text-center md:text-xl lg:px-40">
-          {eventBlurb}
+          {eventBlurb ? eventBlurb : ""}
         </strong>
       </div>
 
       <div className={LINK_STYLES}>
-        <Link
+        <a
           href={
             authStatus === "authenticated"
               ? "/participant/profile"
               : "/register"
           }
-          legacyBehavior
         >
           <div className="mb-4 rounded-2xl border-4 border-white bg-awesomer-purple px-6 py-2 text-sm text-white  hover:opacity-70 md:mb-0 md:px-6">
             {authStatus === "authenticated"
               ? "Go to Profile"
               : "Join Hackathon"}
           </div>
-        </Link>
+        </a>
       </div>
 
       {authStatus !== "authenticated" && (
         <div className={LINK_STYLES}>
           <p className="my-2">
-            Already registered?
-            <Link href="/login" legacyBehavior>
+            Already registered?{" "}
+            <a href="/login">
               <span className="text-awesomer-purple hover:opacity-70">
                 Sign in
               </span>
-            </Link>
+            </a>
           </p>
         </div>
       )}
@@ -168,7 +172,7 @@ const HeroSectionTile = ({
               ) : (
                 <div>
                   <h1 className="pt-10 text-center text-2xl font-bold text-awesomer-purple">
-                    {eventName} begins in ...
+                    {eventName ? <>{eventName} begins in ... </> : "Loading..."}
                   </h1>
                   <div className={TIMER_CONTAINER}>
                     <div className="flex space-x-3">
