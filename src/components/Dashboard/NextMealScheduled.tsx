@@ -1,19 +1,31 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
+import { getUpcomingFoodEventDetails } from "@/app/get-food-ticket/actions";
 import CalendarIcon from "@/images/dashboard/Calendar.png";
+import { useQuery } from "@tanstack/react-query";
 
+import { useUser } from "../contexts/UserContext";
 import Card from "./Card";
 
 export default function NextMealScheduled() {
   const href = "#";
-  const mealTime = new Date().toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "numeric",
+  const userId = useUser().currentUser.username as string;
+  const { data, isFetching } = useQuery({
+    initialDataUpdatedAt: 0,
+    queryKey: ["FoodEventTimeSlot"],
+    queryFn: async () => {
+      const { timeslot } = await getUpcomingFoodEventDetails(userId);
+      return {
+        timeslot,
+      };
+    },
   });
   const location = "ICT";
   return (
-    <Card className="flex flex-row justify-start gap-8">
+    <Card className="flex flex-1 flex-row justify-start gap-8">
       <Link href={href}>
         <Image
           className="transition duration-300 hover:opacity-90"
@@ -26,7 +38,7 @@ export default function NextMealScheduled() {
           Next Meal <br /> Scheduled at
         </h1>
         <div className="text-3xl font-bold italic text-zinc-800">
-          {mealTime}
+          {isFetching ? "Loading..." : (data?.timeslot ?? "No meal scheduled")}
         </div>
         <h2>Location: {location}</h2>
       </div>
