@@ -43,7 +43,7 @@ export default function Login() {
   };
   return (
     <Authenticator
-      socialProviders={["google", "apple"]}
+      socialProviders={["google"]}
       initialState={pathname === "/login" ? "signIn" : "signUp"}
       signUpAttributes={[]}
       services={services}
