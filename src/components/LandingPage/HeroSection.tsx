@@ -116,26 +116,25 @@ const HeroSectionTile = ({
       </div>
 
       <div className={LINK_STYLES}>
-        <Link
+        <a
           href={
             authStatus === "authenticated"
               ? "/participant/profile"
               : "/register"
           }
-          legacyBehavior
         >
           <div className="mb-4 rounded-2xl border-4 border-white bg-awesomer-purple px-6 py-2 text-sm text-white  hover:opacity-70 md:mb-0 md:px-6">
             {authStatus === "authenticated"
               ? "Go to Profile"
               : "Join Hackathon"}
           </div>
-        </Link>
+        </a>
       </div>
 
       {authStatus !== "authenticated" && (
         <div className={LINK_STYLES}>
           <p className="my-2">
-            Already registered?
+            Already registered?{" "}
             <Link href="/login" legacyBehavior>
               <span className="text-awesomer-purple hover:opacity-70">
                 Sign in
