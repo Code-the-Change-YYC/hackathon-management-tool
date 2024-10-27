@@ -45,8 +45,7 @@ export default async function ThankSponsors() {
           </h1>
 
           <p className="w-11/2 text-center text-sm sm:text-base">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            {`Without their support, this event wouldn't have been possible`}
           </p>
         </div>
         <div className="absolute -right-12 z-20 size-44 sm:hidden">
