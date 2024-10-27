@@ -5,7 +5,8 @@ import Card from "./Card";
 
 export default function Greetings() {
   const user = useUser();
-  const name = user.currentUser.firstName;
+  const firstName = user.currentUser.firstName;
+  const lastName = user.currentUser.lastName;
   const nameColor =
     user?.currentUser.type === UserType.Admin
       ? "text-awesome-purple"
@@ -19,7 +20,8 @@ export default function Greetings() {
         <h1 className="text-3xl md:text-4xl lg:text-6xl">
           Hello,
           <span className={`capitalize italic ${nameColor}`}>
-            {` ${name}`}!
+            {" "}
+            {firstName} {lastName}!
           </span>
         </h1>
       </div>
