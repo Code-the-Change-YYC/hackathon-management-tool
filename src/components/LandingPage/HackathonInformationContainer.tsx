@@ -5,6 +5,85 @@ import ABOUT_THE_CHALLENGE_IMAGE from "@/images/landingpage/AboutTheChallenge.pn
 import PRIZES_IMAGE from "@/images/landingpage/prizes.png";
 import REQUIREMENTS_IMAGE from "@/images/landingpage/requirements.png";
 
+const CHALLENGE_QUOTES_SVG = "/svgs/landingPage/challenge_quotes.svg";
+const ABOUT_THE_CHALLENGE_BLURB = `Hack the Change aims to inspire students across Canada to leverage technology to enact social change. We’re looking for creative and innovative solutions to existing problems, with the goal of coding a better tomorrow.`;
+const ABOUT_THE_CHALLENGE_TITLE = (
+  <div className="flex flex-row flex-nowrap text-nowrap">
+    <h1 className="  text-3xl font-semibold">
+      About the
+      <span className=" italic text-fuzzy-peach"> Challenge</span>
+    </h1>
+    <Image
+      src={CHALLENGE_QUOTES_SVG}
+      width={20}
+      height={20}
+      alt="Challenge quotes"
+      className=" mb-4 ml-1 select-none"
+    />
+  </div>
+);
+
+const REQUIREMENTS_QUOTES_SVG = "/svgs/landingPage/requirements_quotes.svg";
+const REQUIREMENTS_BLURB = `Requirements: Open to all Canadian students, at the university, college, or high school level. (Must be an accredited institution)`;
+const REQUIREMENTS_TITLE = (
+  <div className="flex flex-row text-3xl font-semibold italic text-awesomer-purple">
+    <Image
+      src={REQUIREMENTS_QUOTES_SVG}
+      width={20}
+      height={20}
+      alt="Challenge quotes"
+      className=" mr-1 mt-2 select-none"
+    />
+    Requirements
+  </div>
+);
+
+const PRIZES_QUOTES_SVG = "/svgs/landingPage/prizes_quotes.svg";
+const PRIZES_BLURB = `Prizes: 1st place - $5,000 CAD; 2nd place - $3,000; 3rd place - $2,000; All prizes will be split between students and the charities of their choice.`;
+const PRIZES_TITLE = (
+  <div className="flex flex-row text-3xl font-semibold italic text-[#00AA88]">
+    Prizes
+    <Image
+      src={PRIZES_QUOTES_SVG}
+      width={20}
+      height={20}
+      alt="Challenge quotes"
+      className=" ml-1 mt-2 select-none"
+    />
+  </div>
+);
+interface SectionProps {
+  title: React.ReactNode;
+  sectionImage: string | StaticImageData;
+  leftPosition?: boolean;
+  blurb: string;
+  bgColor?: string;
+  fontColor?: string;
+}
+const sectionInfo: SectionProps[] = [
+  {
+    sectionImage: ABOUT_THE_CHALLENGE_IMAGE,
+    blurb: ABOUT_THE_CHALLENGE_BLURB,
+    title: ABOUT_THE_CHALLENGE_TITLE,
+    fontColor: "text-white",
+    bgColor: "bg-awesomer-purple",
+  },
+  {
+    sectionImage: REQUIREMENTS_IMAGE,
+    blurb: REQUIREMENTS_BLURB,
+    title: REQUIREMENTS_TITLE,
+    fontColor: "text-black",
+    bgColor: "bg-zinc-100",
+    leftPosition: true,
+  },
+  {
+    sectionImage: PRIZES_IMAGE,
+    blurb: PRIZES_BLURB,
+    title: PRIZES_TITLE,
+    fontColor: "text-black",
+    bgColor: "bg-fuzzy-peach",
+  },
+];
 function SectionContainer({
   title,
   sectionImage,
@@ -12,14 +91,7 @@ function SectionContainer({
   blurb,
   bgColor,
   fontColor,
-}: {
-  title: React.ReactNode;
-  sectionImage: string | StaticImageData;
-  leftPosition?: boolean;
-  blurb: string;
-  bgColor?: string;
-  fontColor?: string;
-}) {
+}: SectionProps) {
   return (
     <div
       className={twMerge(
@@ -34,7 +106,7 @@ function SectionContainer({
       </div>
       <div
         className={twMerge(
-          "relative box-content hidden aspect-square w-2/3 min-w-48 max-w-96 md:block",
+          "relative box-content hidden aspect-square w-2/3 min-w-48 max-w-96 lg:block",
           leftPosition && "order-first",
         )}
       >
@@ -52,54 +124,6 @@ function SectionContainer({
 }
 
 export default function HackathonInformationContainer() {
-  const CHALLENGE_QUOTES_SVG = "/svgs/landingPage/challenge_quotes.svg";
-  const ABOUT_THE_CHALLENGE_BLURB = `Hack the Change aims to inspire students across Canada to leverage technology to enact social change. We’re looking for creative and innovative solutions to existing problems, with the goal of coding a better tomorrow.`;
-  const ABOUT_THE_CHALLENGE_TITLE = (
-    <div className="flex flex-row flex-nowrap text-nowrap">
-      <h1 className="  text-3xl font-semibold">
-        About the
-        <span className=" italic text-fuzzy-peach"> Challenge</span>
-      </h1>
-      <Image
-        src={CHALLENGE_QUOTES_SVG}
-        width={20}
-        height={20}
-        alt="Challenge quotes"
-        className=" mb-4 ml-1 select-none"
-      />
-    </div>
-  );
-
-  const REQUIREMENTS_QUOTES_SVG = "/svgs/landingPage/requirements_quotes.svg";
-  const REQUIREMENTS_BLURB = `Requirements: Open to all Canadian students, at the university, college, or high school level. (Must be an accredited institution)`;
-  const REQUIREMENTS_TITLE = (
-    <div className="flex flex-row text-3xl font-semibold italic text-awesomer-purple">
-      <Image
-        src={REQUIREMENTS_QUOTES_SVG}
-        width={20}
-        height={20}
-        alt="Challenge quotes"
-        className=" mr-1 mt-2 select-none"
-      />
-      Requirements
-    </div>
-  );
-
-  const PRIZES_QUOTES_SVG = "/svgs/landingPage/prizes_quotes.svg";
-  const PRIZES_BLURB = `Prizes: 1st place - $5,000 CAD; 2nd place - $3,000; 3rd place - $2,000; All prizes will be split between students and the charities of their choice.`;
-  const PRIZES_TITLE = (
-    <div className="flex flex-row text-3xl font-semibold italic text-[#00AA88]">
-      Prizes
-      <Image
-        src={PRIZES_QUOTES_SVG}
-        width={20}
-        height={20}
-        alt="Challenge quotes"
-        className=" ml-1 mt-2 select-none"
-      />
-    </div>
-  );
-
   return (
     <div className="relative overflow-hidden">
       <div className=" pointer-events-none hidden select-none lg:block ">
@@ -154,28 +178,9 @@ export default function HackathonInformationContainer() {
           className="absolute top-[85rem] w-full"
         />
       </div>
-      <SectionContainer
-        bgColor="bg-awesomer-purple"
-        sectionImage={ABOUT_THE_CHALLENGE_IMAGE}
-        blurb={ABOUT_THE_CHALLENGE_BLURB}
-        title={ABOUT_THE_CHALLENGE_TITLE}
-        fontColor="text-white"
-      />
-      <SectionContainer
-        bgColor="bg-zinc-100"
-        sectionImage={REQUIREMENTS_IMAGE}
-        blurb={REQUIREMENTS_BLURB}
-        title={REQUIREMENTS_TITLE}
-        fontColor="text-black"
-        leftPosition
-      />
-      <SectionContainer
-        bgColor="bg-fuzzy-peach"
-        sectionImage={PRIZES_IMAGE}
-        blurb={PRIZES_BLURB}
-        title={PRIZES_TITLE}
-        fontColor="text-black"
-      />
+      {sectionInfo.map((section, index) => (
+        <SectionContainer key={index} {...section} />
+      ))}
     </div>
   );
 }
