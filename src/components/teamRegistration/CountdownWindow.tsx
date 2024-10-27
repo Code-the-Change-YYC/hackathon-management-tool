@@ -23,13 +23,9 @@ export default function CountdownWindow({
           height={50}
         />
       </div>
-      <div className="flex w-full flex-col items-center gap-4 rounded-b-3xl bg-white py-12 text-center text-awesomer-purple">
-        <div className="hidden sm:block">
-          <h1 className="text-5xl font-extrabold">Thank you.</h1>
-          <h1 className="text-3xl font-medium">
-            Your registration is complete!
-          </h1>
-        </div>
+      <div className="flex w-full flex-col items-center gap-2 rounded-b-3xl bg-white py-12 text-center text-awesomer-purple sm:gap-4">
+        <h1 className="text-5xl font-extrabold">Thank you.</h1>
+        <h1 className="text-3xl font-medium">Your registration is complete!</h1>
         <HackathonClock eventDate={eventDate} eventName={eventName} />
         <p className="px-4 text-center text-lg font-semibold text-black">
           Join us for the two-day for-charity hackathon hosted on November 11th
