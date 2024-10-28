@@ -15,9 +15,7 @@ const client = generateClient<Schema>();
 
 export default function JudgingInfo() {
   const href = "#";
-  const timeSlot = "10:00 AM - 10:05 AM";
   const userId = useUser().currentUser.username as string;
-  console.log(userId);
   const { data: userData } = useQuery({
     initialDataUpdatedAt: 0,
     queryKey: ["User", userId],
@@ -25,7 +23,6 @@ export default function JudgingInfo() {
       const { data, errors } = await client.models.User.get({
         id: userId,
       });
-      console.log(userId);
 
       if (errors) {
         throw new Error("Error fetching user data");
@@ -37,7 +34,8 @@ export default function JudgingInfo() {
   //Fetch team data using the teamId from userData
 
   const teamId = userData?.teamId;
-  const { data: teamData, isFetching } = useQuery({
+  console.log(teamId);
+  const { data: teamData, isFetching: isFetchingTeamName } = useQuery({
     initialDataUpdatedAt: 0,
     queryKey: ["Team", teamId],
     queryFn: async () => {
@@ -57,6 +55,49 @@ export default function JudgingInfo() {
 
   const teamName = teamData?.name || "Team Name";
 
+  //Fetch team data
+  const { data: teamRoomData, isFetching: isFetchingTeamRoom } = useQuery({
+    initialDataUpdatedAt: 0,
+    queryKey: ["TeamRoom", teamId],
+    queryFn: async () => {
+      if (!teamId) {
+        throw new Error("Team ID is undefined");
+      }
+      const { data, errors } = await client.models.TeamRoom.list({
+        filter: {
+          teamId: { eq: teamId },
+        },
+        selectionSet: ["id", "time", "zoomLink", "roomId", "teamId"],
+      });
+
+      if (errors) {
+        throw new Error("Error fetching team room data");
+      }
+      return data;
+    },
+  });
+  const timeSlot = teamRoomData?.[0]?.time
+    ? new Date(teamRoomData[0].time).toLocaleString()
+    : "Time not available";
+
+  //Fetch judge data
+  const judgeId = userData?.JUDGE_givenScores;
+  const { data: judgeData, isFetching: isFetchingJudgeData } = useQuery({
+    queryKey: ["Score", judgeId],
+    queryFn: async () => {
+      if (!judgeId) {
+        throw new Error("Team ID is undefined");
+      }
+      const { data, errors } = await client.models.Score.get({});
+
+      if (errors) {
+        throw new Error("Error fetching judge data");
+      }
+      return data;
+    },
+  });
+  const judgeNames = judgeData?.[0]?.judge || "Time not available";
+
   return (
     <Card className="flex-1 items-start justify-start gap-4 px-4">
       <div className="flex items-center gap-4">
@@ -68,18 +109,29 @@ export default function JudgingInfo() {
           />
         </Link>
         <div className="text-start font-medium">
-          {isFetching ? "Loading..." : <div>{`${teamName}'s `}</div>}
+          {isFetchingTeamName ? "Loading..." : <div>{`${teamName}'s `}</div>}
           <div className="">Judging Information</div>
         </div>
       </div>
       <div className="flex flex-col gap-2 p-4 text-start">
         <div className="font-medium">Time Slot </div>
 
-        {isFetching ? (
+        {isFetchingTeamRoom ? (
           "Loading"
         ) : (
           <div className=" text-3xl italic text-neutral-800 xl:text-5xl">
             {timeSlot}
+          </div>
+        )}
+      </div>
+      <div className="flex flex-col gap-2 p-4 text-start">
+        <div className="font-medium">Judges </div>
+
+        {isFetchingJudgeData ? (
+          "Loading"
+        ) : (
+          <div className=" text-3xl italic text-neutral-800 xl:text-5xl">
+            {judgeNames}
           </div>
         )}
       </div>
