@@ -53,7 +53,7 @@ export default function JudgingInfo() {
     },
   });
 
-  const teamName = teamData?.name || "Team Name";
+  const teamName = teamData?.name || "Team name not available";
 
   //Fetch team data
   const { data: teamRoomData, isFetching: isFetchingTeamRoom } = useQuery({
@@ -67,7 +67,6 @@ export default function JudgingInfo() {
         filter: {
           teamId: { eq: teamId },
         },
-        selectionSet: ["id", "time", "zoomLink", "roomId", "teamId"],
       });
 
       if (errors) {
@@ -80,15 +79,43 @@ export default function JudgingInfo() {
     ? new Date(teamRoomData[0].time).toLocaleString()
     : "Time not available";
 
-  //Fetch judge data
-  const judgeId = userData?.JUDGE_givenScores;
-  const { data: judgeData, isFetching: isFetchingJudgeData } = useQuery({
-    queryKey: ["Score", judgeId],
+  console.log(teamRoomData?.[0].roomId);
+
+  //Fetch room Id from Team Room
+  const { data: roomData } = useQuery({
+    queryKey: ["TeamRoom", teamId],
     queryFn: async () => {
-      if (!judgeId) {
+      if (!teamId) {
         throw new Error("Team ID is undefined");
       }
-      const { data, errors } = await client.models.Score.get({});
+      const { data, errors } = await client.models.TeamRoom.list({
+        filter: {
+          teamId: { eq: teamId },
+        },
+      });
+
+      if (errors) {
+        throw new Error("Error fetching team room data");
+      }
+      return data;
+    },
+  });
+
+  const roomId = roomData?.[0].roomId;
+  console.log(roomId);
+
+  //Fetch judges in the same room
+  const { data: judgesData, isFetching: isFetchingJudgesData } = useQuery({
+    queryKey: ["JudgesInRoom", roomId],
+    queryFn: async () => {
+      if (!roomId) {
+        throw new Error("Room ID is undefined");
+      }
+      const { data, errors } = await client.models.User.list({
+        filter: {
+          JUDGE_roomId: { eq: roomId },
+        },
+      });
 
       if (errors) {
         throw new Error("Error fetching judge data");
@@ -96,7 +123,17 @@ export default function JudgingInfo() {
       return data;
     },
   });
-  const judgeNames = judgeData?.[0]?.judge || "Time not available";
+
+  // Access and display judge names
+  const judgeNames =
+    judgesData?.map((judge) => `${judge.firstName} ${judge.lastName}`) ||
+    "No Judges available.";
+  console.log(judgeNames);
+
+  console.log("Team Room Data:", teamRoomData);
+  console.log("Room ID:", roomId);
+  console.log("Judges Data:", judgesData);
+  console.log("Judge Names:", judgeNames);
 
   return (
     <Card className="flex-1 items-start justify-start gap-4 px-4">
@@ -127,7 +164,7 @@ export default function JudgingInfo() {
       <div className="flex flex-col gap-2 p-4 text-start">
         <div className="font-medium">Judges </div>
 
-        {isFetchingJudgeData ? (
+        {isFetchingJudgesData ? (
           "Loading"
         ) : (
           <div className=" text-3xl italic text-neutral-800 xl:text-5xl">
