@@ -80,15 +80,17 @@ export default function JudgingInfo() {
     : "Time not available";
 
   //Fetch room Id from Team Room
-  const { data: roomData } = useQuery({
-    queryKey: ["TeamRoom", teamId],
+  const roomId = teamRoomData?.[0].roomId;
+  console.log(roomId);
+  const { data: judgeRoomData, isFetching: isFetchingJudgeData } = useQuery({
+    queryKey: ["Room", roomId],
     queryFn: async () => {
-      if (!teamId) {
-        throw new Error("Team ID is undefined");
+      if (!roomId) {
+        throw new Error("Room ID is undefined");
       }
-      const { data, errors } = await client.models.TeamRoom.list({
+      const { data, errors } = await client.models.User.list({
         filter: {
-          teamId: { eq: teamId },
+          JUDGE_roomId: { eq: roomId },
         },
       });
 
@@ -99,39 +101,16 @@ export default function JudgingInfo() {
     },
   });
 
-  const roomId = roomData?.[0].roomId;
-  console.log(roomId);
-
   //Fetch judges in the same room
-  const { data: judgesData, isFetching: isFetchingJudgesData } = useQuery({
-    queryKey: ["JudgesInRoom", userId],
-    queryFn: async () => {
-      if (!userId) {
-        throw new Error("Room ID is undefined");
-      }
-      const { data, errors } = await client.models.User.list({
-        filter: {
-          id: { eq: userId },
-        },
-      });
-
-      if (errors) {
-        throw new Error("Error fetching judge data");
-      }
-      return data;
-    },
-  });
-
-  // Access and display judge names
   const judgeNames =
-    judgesData?.map((judge) => `${judge.firstName} ${judge.lastName}`) ||
-    "No Judges available.";
-  console.log(judgeNames);
+    judgeRoomData
+      ?.map((judge) => `${judge.firstName} ${judge.lastName}`)
+      .join(", ") || "No judges available";
 
-  console.log("Team Room Data:", teamRoomData);
-  console.log("Room ID:", roomId);
-  console.log("Judges Data:", judgesData);
-  console.log("Judge Names:", judgeNames);
+  // console.log("Team Room Data:", teamRoomData);
+  // console.log("Room ID:", roomId);
+  // console.log("Judges Data:", judgesData);
+  // console.log("Judge Names:", judgeNames);
 
   return (
     <Card className="flex-1 items-start justify-start gap-4 px-4">
@@ -162,7 +141,7 @@ export default function JudgingInfo() {
       <div className="flex flex-col gap-2 p-4 text-start">
         <div className="font-medium">Judges </div>
 
-        {isFetchingJudgesData ? (
+        {isFetchingJudgeData ? (
           "Loading"
         ) : (
           <div className=" text-3xl italic text-neutral-800 xl:text-5xl">
