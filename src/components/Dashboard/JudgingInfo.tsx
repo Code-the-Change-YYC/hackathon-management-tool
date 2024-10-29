@@ -79,8 +79,6 @@ export default function JudgingInfo() {
     ? new Date(teamRoomData[0].time).toLocaleString()
     : "Time not available";
 
-  console.log(teamRoomData?.[0].roomId);
-
   //Fetch room Id from Team Room
   const { data: roomData } = useQuery({
     queryKey: ["TeamRoom", teamId],
@@ -106,14 +104,14 @@ export default function JudgingInfo() {
 
   //Fetch judges in the same room
   const { data: judgesData, isFetching: isFetchingJudgesData } = useQuery({
-    queryKey: ["JudgesInRoom", roomId],
+    queryKey: ["JudgesInRoom", userId],
     queryFn: async () => {
-      if (!roomId) {
+      if (!userId) {
         throw new Error("Room ID is undefined");
       }
       const { data, errors } = await client.models.User.list({
         filter: {
-          JUDGE_roomId: { eq: roomId },
+          id: { eq: userId },
         },
       });
 
