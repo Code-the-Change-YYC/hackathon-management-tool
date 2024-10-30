@@ -29,12 +29,12 @@ export default function JudgingInfo() {
       }
       return data;
     },
+    enabled: !!userId,
   });
 
   //Fetch team data using the teamId from userData
 
   const teamId = userData?.teamId;
-  console.log(teamId);
   const { data: teamData, isFetching: isFetchingTeamName } = useQuery({
     initialDataUpdatedAt: 0,
     queryKey: ["Team", teamId],
@@ -51,9 +51,10 @@ export default function JudgingInfo() {
       }
       return data;
     },
+    enabled: !!teamId,
   });
 
-  const teamName = teamData?.name || "Team name not available";
+  const teamName = teamData?.name || "Team";
 
   //Fetch team data
   const { data: teamRoomData, isFetching: isFetchingTeamRoom } = useQuery({
@@ -74,14 +75,14 @@ export default function JudgingInfo() {
       }
       return data;
     },
+    enabled: !!teamId,
   });
   const timeSlot = teamRoomData?.[0]?.time
     ? new Date(teamRoomData[0].time).toLocaleString()
-    : "Time not available";
+    : "Loading...";
 
   //Fetch room Id from Team Room
   const roomId = teamRoomData?.[0].roomId;
-  console.log(roomId);
   const { data: judgeRoomData, isFetching: isFetchingJudgeData } = useQuery({
     queryKey: ["Room", roomId],
     queryFn: async () => {
@@ -99,18 +100,14 @@ export default function JudgingInfo() {
       }
       return data;
     },
+    enabled: !!roomId,
   });
 
   //Fetch judges in the same room
   const judgeNames =
     judgeRoomData
       ?.map((judge) => `${judge.firstName} ${judge.lastName}`)
-      .join(", ") || "No judges available";
-
-  // console.log("Team Room Data:", teamRoomData);
-  // console.log("Room ID:", roomId);
-  // console.log("Judges Data:", judgesData);
-  // console.log("Judge Names:", judgeNames);
+      .join(", ") || "Loading...";
 
   return (
     <Card className="flex-1 items-start justify-start gap-4 px-4">
@@ -122,13 +119,13 @@ export default function JudgingInfo() {
             alt={"Food Ticket Icon"}
           />
         </Link>
-        <div className="text-start font-medium">
+        <div className="text-start font-medium ">
           {isFetchingTeamName ? "Loading..." : <div>{`${teamName}'s `}</div>}
           <div className="">Judging Information</div>
         </div>
       </div>
       <div className="flex flex-col gap-2 p-4 text-start">
-        <div className="font-medium">Time Slot </div>
+        <div className="font-medium">Time Slot: </div>
 
         {isFetchingTeamRoom ? (
           "Loading"
@@ -139,7 +136,7 @@ export default function JudgingInfo() {
         )}
       </div>
       <div className="flex flex-col gap-2 p-4 text-start">
-        <div className="font-medium">Judges </div>
+        <div className="font-medium">Judges: </div>
 
         {isFetchingJudgeData ? (
           "Loading"
