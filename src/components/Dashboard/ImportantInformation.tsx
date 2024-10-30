@@ -8,11 +8,11 @@ import Card from "./Card";
 export default function ImportantInformation() {
   const openingCeremony = {
     location: "ICT",
-    time: new Date("November 23, 2024 09:00:00"),
+    time: new Date("November 9, 2024 09:30:00"),
   };
   const closingCeremony = {
     location: "ICT",
-    time: new Date("November 24, 2024 18:00:00"),
+    time: new Date("November 10, 2024 17:30:00"),
   };
   return (
     <Card className="flex flex-col items-start  gap-4">

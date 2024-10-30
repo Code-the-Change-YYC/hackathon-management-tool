@@ -11,7 +11,9 @@ export default function CountdownWindow({
   children?: React.ReactNode;
 }) {
   const { eventName, eventDate } = hackathonInformation;
-
+  const firstDay = eventDate.getDate();
+  const finalDay = eventDate.getDate() + 1;
+  const month = eventDate.toLocaleString("default", { month: "long" });
   return (
     <>
       <div className="w-full rounded-t-3xl bg-awesome-purple p-4">
@@ -32,8 +34,8 @@ export default function CountdownWindow({
         </div>
         <HackathonClock eventDate={eventDate} eventName={eventName} />
         <p className="px-4 text-center text-lg font-semibold text-black">
-          Join us for the two-day for-charity hackathon hosted on November 11th
-          to 12th by{" "}
+          Join us for the two-day for-charity hackathon hosted on {month}{" "}
+          {firstDay} to {finalDay} by{" "}
           <Link
             className=" font-bold text-awesomer-purple underline"
             target="_blank"
