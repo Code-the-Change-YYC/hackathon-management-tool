@@ -20,8 +20,8 @@ const HeroSectionTile = ({
 }: {
   hackathonDetails: HackathonDetails;
 }) => {
-  const eventDate = new Date(hackathonDetails.fields.eventDate);
-  const { eventBlurb, eventName } = hackathonDetails.fields;
+  const eventDate = new Date(hackathonDetails.eventDate);
+  const { eventBlurb, eventName } = hackathonDetails;
   const eventYear = eventDate.getFullYear();
 
   return (

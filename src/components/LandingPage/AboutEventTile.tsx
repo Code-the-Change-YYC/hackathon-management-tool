@@ -2,7 +2,6 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 
 import { fetchContent } from "@/app/actions";
-import type { HackathonDetails } from "@/app/contentfulTypes";
 
 const EVENT_DETAILS_SECTION_STYLES = "flex flex-col items-center bg-white";
 const EVENT_DETAILS_CONTENT_STYLES =
@@ -45,7 +44,7 @@ const EventDetail = (props: EventDetailProps) => {
 };
 
 export default async function AboutEventTile() {
-  const data = (await fetchContent("hackathonDetails")) as HackathonDetails[];
+  const data = await fetchContent("hackathonDetails");
   const eventDetails = data[0].fields;
   const eventDate = new Date(eventDetails.eventDate);
   const formattedDate = eventDate.toLocaleDateString("en-CA", {
