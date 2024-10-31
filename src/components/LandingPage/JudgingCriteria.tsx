@@ -22,17 +22,17 @@ export const JUDGING_CRITERIA = [
   {
     category: "Judging Criteria - Technical Challenge",
     description:
-      "Does the product function as intended? Does the product execute on its idea in a way that’s effective?",
+      "Is the implementation complex? Does the product feature different parts? Does the product use interesting concepts or technologies?",
   },
   {
     category: "Judging Criteria - Presentation/Marketability",
     description:
-      "Is the implementation complex? Does the product feature different parts? Does the product use interesting concepts or technologies? (If you are unable to judge this criteria accurately, please leave it blank.)",
+      "Does the team seem organized in their presentation/demo? Does the presentation engage the judges and have real-world marketability?",
   },
   {
     category: "Judging Criteria - Design",
     description:
-      "Does the team seem organized in their presentation/demo? Does the presentation engage the judges and have real-world marketability? (If you are unable to judge this criteria accurately, please leave it blank.)",
+      "Is the product aesthetically pleasing? Is the product easy to use? Does the design of the product elevate its function and original idea?",
   },
 ];
 

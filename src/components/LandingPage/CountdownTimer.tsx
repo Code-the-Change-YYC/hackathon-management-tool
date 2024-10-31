@@ -21,7 +21,7 @@ function CountdownTimer({
   return (
     <div
       className={twMerge(
-        " relative flex aspect-square w-24 flex-col items-center justify-center rounded-lg bg-awesome-purple p-4 text-white sm:p-8 md:w-36",
+        " relative flex aspect-square w-20 flex-col items-center justify-center rounded-lg bg-awesome-purple p-2 text-white sm:w-24 sm:p-8 md:w-36",
         className,
       )}
     >
@@ -31,11 +31,7 @@ function CountdownTimer({
         }
       >
         {value}
-        <div
-          className={
-            "absolute -bottom-5 hidden flex-col items-center justify-center text-center text-xl uppercase sm:flex md:-bottom-8"
-          }
-        >
+        <div className="absolute -bottom-5 flex flex-col items-center justify-center text-center text-sm uppercase sm:text-xl md:-bottom-8 lg:text-2xl">
           {name}
         </div>
       </div>
