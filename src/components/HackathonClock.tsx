@@ -60,14 +60,10 @@ export default function HackathonClock(props: {
 
   return (
     <>
-      <h1 className="pt-10 text-center text-2xl font-bold text-awesomer-purple">
+      <h1 className="pt-4 text-center text-2xl font-bold text-awesomer-purple">
         {eventName} begins in ...
       </h1>
-      <div
-        className={
-          "my-12 flex max-w-screen-md items-center justify-center space-x-3"
-        }
-      >
+      <div className="flex max-w-screen-md flex-row items-center justify-center gap-2 py-4">
         <CountdownTimer name="Days" value={timeRemaining.days} />
         <CountdownTimer name="Hours" value={timeRemaining.hours} />
         <CountdownTimer name="Minutes" value={timeRemaining.minutes} />
