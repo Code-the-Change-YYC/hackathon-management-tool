@@ -6,7 +6,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
 
+import { type Schema } from "@/amplify/data/resource";
+import { client } from "@/app/QueryProvider";
 import { UserType, useUser } from "@/components/contexts/UserContext";
+import { useQuery } from "@tanstack/react-query";
 
 const headerContainerStyles =
   "flex flex-row items-center justify-between text-awesomer-purple h-36 bg-white px-8";
@@ -14,13 +17,35 @@ const headerContainerStyles =
 export default function Header() {
   const user = useUser().currentUser;
 
-  const router = useRouter();
+  const userId = useUser().currentUser.username as string;
 
+  const { data } = useQuery({
+    initialData: {} as Schema["Team"]["type"],
+    initialDataUpdatedAt: 0,
+    queryKey: ["Team", userId],
+    queryFn: async () => {
+      const userResponse = await client.models.User.get({
+        id: userId,
+      });
+
+      if (userResponse.errors) throw new Error(userResponse.errors[0].message);
+
+      const userTeamId = userResponse.data?.teamId as string;
+
+      const teamResponse = await client.models.Team.get({
+        id: userTeamId,
+      });
+
+      if (teamResponse.errors) throw new Error(teamResponse.errors[0].message);
+
+      return teamResponse.data;
+    },
+  });
+  const router = useRouter();
   const handleLogout = () => {
     signOut();
     router.push("/");
   };
-
   return (
     <div className={headerContainerStyles}>
       <div className="flex w-48 font-semibold">
@@ -28,7 +53,7 @@ export default function Header() {
           <>
             {user.type === UserType.Participant ? (
               <>
-                {user.teamId ? (
+                {data ? (
                   <Link href="/participant/dashboard">Dashboard</Link>
                 ) : (
                   <Link href="/register/team">Join a Team</Link>
