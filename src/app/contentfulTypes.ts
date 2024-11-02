@@ -1,41 +1,47 @@
 import type { Asset, BaseEntry } from "contentful";
 
 export interface Alumni extends BaseEntry {
-  fields: {
-    fullName: string;
-    linkedin: string;
-    orderNumber: number;
-    position: string;
-    previousRole: string;
-    testimonial: string;
-    profile: Asset;
-  };
+  fullName: string;
+  linkedin: string;
+  orderNumber: number;
+  position: string;
+  previousRole: string;
+  testimonial: string;
+  profile: Asset;
 }
 export interface Judge extends BaseEntry {
-  fields: {
-    judgeImg: Asset;
-    judgeName: string;
-    judgeCompany: string;
-    orderNumber?: number;
-    position?: string;
-  };
+  judgeImg: Asset;
+  judgeName: string;
+  judgeCompany: string;
+  orderNumber?: number;
+  position?: string;
 }
 export interface HackathonSponsor extends BaseEntry {
-  fields: {
-    sponsorOrder: number;
-    sponsorImg: Asset;
-    sponsorName: string;
-    sponsorPage: string;
-  };
+  sponsorOrder: number;
+  sponsorImg: Asset;
+  sponsorName: string;
+  sponsorPage: string;
 }
 
 export interface HackathonDetails extends BaseEntry {
-  fields: {
-    eventName: string;
-    eventBlurb: string;
-    eventDate: string;
-    locationName: string;
-    locationImage: Asset;
-    prizeAmount: number;
-  };
+  eventName: string;
+  eventBlurb: string;
+  eventDate: string;
+  locationName: string;
+  locationImage: Asset;
+  prizeAmount: number;
+  closingCeremony: string;
+}
+
+export interface ContentTypeMap {
+  alumni: Alumni;
+  hackathonJudge: Judge;
+  hackathonSponsor: HackathonSponsor;
+  hackathonDetails: HackathonDetails;
+  event: BaseEntry;
+  executive: BaseEntry;
+  pastEvents: BaseEntry;
+  timeline: BaseEntry;
+  upcomingEvents: BaseEntry;
+  // add more types as needed...
 }

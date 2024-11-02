@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { fetchContent } from "@/app/actions";
-import type { HackathonSponsor } from "@/app/contentfulTypes";
 
 const leftSponsorSvg = "/svgs/judgingCriteria/leftSponsorSvg.svg";
 const rightSponsorSvg = "/svgs/judgingCriteria/rightSponsorSvg.svg";
@@ -12,10 +11,7 @@ export default async function ThankSponsors() {
   const IMAGE_CLASS =
     "relative size-12 min-w-12 overflow-hidden rounded-full duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform sm:size-28 sm:min-w-28";
 
-  const sponsors: HackathonSponsor[] = (await fetchContent(
-    "hackathonSponsor",
-  )) as HackathonSponsor[];
-  console.log(sponsors);
+  const sponsors = await fetchContent("hackathonSponsor");
   const sortedSponsors = sponsors.sort(
     (a, b) => a.fields.sponsorOrder - b.fields.sponsorOrder,
   );

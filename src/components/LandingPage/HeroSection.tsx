@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { fetchContent } from "@/app/actions";
-import type { HackathonDetails } from "@/app/contentfulTypes";
 
 import HackathonClock from "../HackathonClock";
 import HeroSectionTile from "./HeroSectionTile";
@@ -11,9 +10,8 @@ const HERO_SECTION_BACKGROUND =
   "/images/landingpage/HeroSection/hero_section_background.png";
 
 export default async function HeroSection() {
-  const hackathonDetails = (
-    (await fetchContent("hackathonDetails")) as unknown as HackathonDetails[]
-  )[0];
+  const res = (await fetchContent("hackathonDetails"))[0];
+  const hackathonDetails = res.fields;
   return (
     <div className="md:py-15 relative flex flex-col items-center justify-center md:px-8 lg:px-32 ">
       <Image
@@ -26,8 +24,8 @@ export default async function HeroSection() {
       <HeroSectionTile hackathonDetails={hackathonDetails} />
       <WindowContainer>
         <HackathonClock
-          eventName={hackathonDetails.fields.eventName}
-          eventDate={new Date(hackathonDetails.fields.eventDate)}
+          eventName={hackathonDetails.eventName}
+          eventDate={new Date(hackathonDetails.eventDate)}
         />
       </WindowContainer>
     </div>

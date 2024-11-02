@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { fetchContent } from "@/app/actions";
-import type { HackathonDetails } from "@/app/contentfulTypes";
 import { Underline } from "@/utils/text-utils";
 
 import PurpleButton from "../PurpleButton";
@@ -16,9 +15,7 @@ export default async function TeamConfirmation({
   teamID: string;
   state: "Joined" | "Registered";
 }) {
-  const hackathonDetails = (
-    (await fetchContent("hackathonDetails")) as unknown as HackathonDetails[]
-  )[0];
+  const hackathonDetails = (await fetchContent("hackathonDetails"))[0];
   const hackathonInformation = {
     eventName: hackathonDetails.fields.eventName,
     eventDate: new Date(hackathonDetails.fields.eventDate),
