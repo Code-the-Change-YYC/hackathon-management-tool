@@ -35,6 +35,7 @@ export interface IUser {
 interface IUserReturn {
   currentUser: IUser;
   revalidateUser: () => void;
+  isFetching: boolean;
   // setCurrentUser: (state: IUser) => void;
 }
 
@@ -45,7 +46,11 @@ export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 export function UserContextProvider({ children }: Props) {
   const queryClient = useQueryClient();
 
-  const { data: currentUser, refetch } = useQuery({
+  const {
+    data: currentUser,
+    refetch,
+    isFetching,
+  } = useQuery({
     initialData: {
       username: "",
       type: UserType.Guest,
@@ -146,6 +151,7 @@ export function UserContextProvider({ children }: Props) {
         value={{
           currentUser: currentUser,
           revalidateUser: refetch,
+          isFetching: isFetching,
         }}
       >
         {children}

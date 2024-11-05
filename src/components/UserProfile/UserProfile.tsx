@@ -23,7 +23,8 @@ export interface UserFormProp {
 }
 
 const UserProfile = () => {
-  const userId = useUser().currentUser.username as string;
+  const { currentUser, isFetching: userContextIsFetching } = useUser();
+  const userId = currentUser.username as string;
 
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["User"]["type"],
@@ -38,6 +39,7 @@ const UserProfile = () => {
 
       return response.data;
     },
+    enabled: !!userId,
   });
 
   const userMutation = useMutation({
@@ -84,7 +86,7 @@ const UserProfile = () => {
   return (
     <div>
       {" "}
-      {isFetching ? (
+      {isFetching || userContextIsFetching ? (
         <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
           <LoadingRing />
         </div>

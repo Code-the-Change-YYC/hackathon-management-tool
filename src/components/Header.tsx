@@ -32,14 +32,20 @@ export default function Header() {
 
       const userTeamId = userResponse.data?.teamId as string;
 
-      const teamResponse = await client.models.Team.get({
-        id: userTeamId,
-      });
+      if (userTeamId) {
+        const teamResponse = await client.models.Team.get({
+          id: userTeamId,
+        });
 
-      if (teamResponse.errors) throw new Error(teamResponse.errors[0].message);
+        if (teamResponse.errors)
+          throw new Error(teamResponse.errors[0].message);
 
-      return teamResponse.data;
+        return teamResponse.data;
+      } else {
+        return {} as Schema["Team"]["type"];
+      }
     },
+    enabled: !!userId,
   });
   const router = useRouter();
   const handleLogout = () => {
