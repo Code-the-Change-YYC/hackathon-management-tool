@@ -28,14 +28,14 @@ export default function page() {
       <div className="grid grow grid-cols-1 gap-4 md:grid-cols-2 xl:grid-flow-col xl:grid-cols-none">
         <div className="flex flex-col gap-4">
           <NextMealScheduled />
+          <GoToFoodTicket />
           {/* <DevPostSubmission /> */}
         </div>
         <div className="flex flex-col gap-4">
           <ImportantInformation />
-          <JudgingInfo />
         </div>
         <div className="flex flex-col gap-4 md:col-span-2">
-          <ImportantInformation />
+          <JudgingInfo />
           <SuspenseWrapper>
             <SubmissionDue />
           </SuspenseWrapper>

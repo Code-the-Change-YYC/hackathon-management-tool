@@ -43,14 +43,13 @@ export interface ContentTypeMap {
   pastEvents: BaseEntry;
   timeline: BaseEntry;
   upcomingEvents: BaseEntry;
+  ceremonyDetails: CeremonyDetails;
   // add more types as needed...
 }
 
 export interface CeremonyDetails extends BaseEntry {
-  fields: {
-    openingCeremonyLocation: string;
-    openingCeremonyDate: string;
-    closingCeremonyLocation: string;
-    closingCeremonyDate: string;
-  };
+  openingCeremonyLocation: string;
+  openingCeremonyDate: string;
+  closingCeremonyLocation: string;
+  closingCeremonyDate: string;
 }

@@ -2,7 +2,6 @@
 
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
-import Link from "next/link";
 
 import { type Schema } from "@/amplify/data/resource";
 import JudgeIcon from "@/images/dashboard/JudgeIcon.png";
@@ -14,7 +13,6 @@ import Card from "./Card";
 const client = generateClient<Schema>();
 
 export default function JudgingInfo() {
-  const href = "#";
   const userId = useUser().currentUser.username as string;
   const { data: userData } = useQuery({
     initialDataUpdatedAt: 0,
@@ -112,13 +110,11 @@ export default function JudgingInfo() {
   return (
     <Card className="flex-1 items-start justify-start gap-4 px-4">
       <div className="flex items-center gap-4">
-        <Link href={href}>
-          <Image
-            className="transition duration-300 hover:opacity-90"
-            src={JudgeIcon}
-            alt={"Food Ticket Icon"}
-          />
-        </Link>
+        <Image
+          className="transition duration-300 hover:opacity-90"
+          src={JudgeIcon}
+          alt={"Judging Icon"}
+        />
         <div className="text-start font-medium ">
           {isFetchingTeamName ? "Loading..." : <div>{`${teamName}'s `}</div>}
           <div className="">Judging Information</div>
