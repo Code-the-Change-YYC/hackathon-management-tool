@@ -2,11 +2,10 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 
 import { fetchContent } from "@/app/actions";
-import type { HackathonDetails } from "@/app/contentfulTypes";
 
 const EVENT_DETAILS_SECTION_STYLES = "flex flex-col items-center bg-white";
 const EVENT_DETAILS_CONTENT_STYLES =
-  "bg-pastel-pink border-4 border-dark-pink rounded-3xl mb-20 mt-12 md:flex md:justify-center md:max-w-[1100px] md:shadow-[15px_15px_0px_0px_#FF4D6F]";
+  "bg-pastel-pink border-4 border-dark-pink rounded-3xl my-4 lg:my-8 flex md:flex md:justify-center md:max-w-[1100px] md:shadow-[15px_15px_0px_0px_#FF4D6F]";
 const EVENT_IMAGE_CONTAINER_STYLES =
   "bg-blackish rounded-t-20 border-b-4 border-dark-pink w-72 h-64 md:rounded-tr-none md:rounded-l-3xl md:border-b-0 md:border-r-4 md:h-[370px] md:w-[40vw]";
 const EVENT_IMAGE_STYLES =
@@ -45,7 +44,7 @@ const EventDetail = (props: EventDetailProps) => {
 };
 
 export default async function AboutEventTile() {
-  const data = (await fetchContent("hackathonDetails")) as HackathonDetails[];
+  const data = await fetchContent("hackathonDetails");
   const eventDetails = data[0].fields;
   const eventDate = new Date(eventDetails.eventDate);
   const formattedDate = eventDate.toLocaleDateString("en-CA", {

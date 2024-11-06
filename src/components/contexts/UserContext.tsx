@@ -34,6 +34,8 @@ export interface IUser {
 
 interface IUserReturn {
   currentUser: IUser;
+  revalidateUser: () => void;
+  isFetching: boolean;
   // setCurrentUser: (state: IUser) => void;
 }
 
@@ -44,7 +46,11 @@ export const UserContext = createContext<IUserReturn>({} as IUserReturn);
 export function UserContextProvider({ children }: Props) {
   const queryClient = useQueryClient();
 
-  const { data: currentUser } = useQuery({
+  const {
+    data: currentUser,
+    refetch,
+    isFetching,
+  } = useQuery({
     initialData: {
       username: "",
       type: UserType.Guest,
@@ -112,7 +118,6 @@ export function UserContextProvider({ children }: Props) {
       }
     },
   });
-
   useEffect(() => {
     const hubListenerCancel = Hub.listen("auth", (data) => {
       switch (data.payload.event) {
@@ -145,6 +150,8 @@ export function UserContextProvider({ children }: Props) {
       <UserContext.Provider
         value={{
           currentUser: currentUser,
+          revalidateUser: refetch,
+          isFetching: isFetching,
         }}
       >
         {children}

@@ -1,12 +1,11 @@
 import Image from "next/image";
 
 import { fetchContent } from "@/app/actions";
-import type { Judge } from "@/app/contentfulTypes";
 
 const squigglySvg = "/svgs/judgingCriteria/squiggly_line.svg";
 
 export default async function JudgeShowcase() {
-  const judges = (await fetchContent("hackathonJudge")) as Judge[];
+  const judges = await fetchContent("hackathonJudge");
   return (
     <div className="flex h-full flex-col justify-center bg-white p-10">
       <div className="flex w-fit flex-col items-center sm:w-1/4 sm:pr-5">
