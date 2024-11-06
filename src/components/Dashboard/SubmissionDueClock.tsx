@@ -1,36 +1,55 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+import { hackathonTimeRemaining } from "@/utils/date-utils";
 
 import CountdownTimer from "../LandingPage/CountdownTimer";
-import { calculateDateDifference } from "../LandingPage/HeroSection";
 import Card from "./Card";
 
-export default function SubmissionDueClock() {
-  const eventDate = 1731394799; //UNIX Time stamp: Nov 10, 2024
-  const [hour, setHour] = useState(0);
-  const [minute, setMinute] = useState(0);
+export default function SubmissionDueClock({
+  submissionTime,
+}: {
+  submissionTime: Date;
+}) {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const hackathonIsOver = useMemo(() => {
+    return currentTime >= submissionTime;
+  }, [currentTime, submissionTime]);
   useEffect(() => {
-    const intervalID = setInterval(() => {
-      const { d, h, m } = calculateDateDifference(new Date(eventDate * 1000));
-      setHour(h + 24 * d);
-      setMinute(m);
+    if (hackathonIsOver) return;
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
     }, 1000);
-    return () => clearInterval(intervalID);
-  }, []);
+    return () => clearInterval(interval);
+  }, [currentTime, submissionTime]);
+  const { hours, minutes } = useMemo(() => {
+    return hackathonTimeRemaining(submissionTime, currentTime);
+  }, [currentTime, submissionTime]);
+
+  if (hackathonIsOver) {
+    return (
+      <Card className="flex-1 gap-4">
+        <div className="text-2xl font-bold">
+          Deadline for submission has passed! <br />
+          Thank you for participating!
+        </div>
+      </Card>
+    );
+  }
   return (
     <Card className="flex-1 gap-4">
       <div className="font-extrabold italic">Submission Due In...</div>
       <div className="flex flex-row gap-4">
         <CountdownTimer
           name={"Hours"}
-          value={hour}
-          className="bg-emerald-500"
+          value={hours}
+          className="w-32 bg-emerald-500 md:w-52  lg:w-52"
         />
         <CountdownTimer
           name={"Minutes"}
-          value={minute}
-          className="bg-emerald-500"
+          value={minutes}
+          className="w-32 bg-emerald-500 md:w-52 lg:w-52"
         />
       </div>
     </Card>

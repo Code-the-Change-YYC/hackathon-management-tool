@@ -5,7 +5,8 @@ import Greetings from "@/components/Dashboard/Greetings";
 import ImportantInformation from "@/components/Dashboard/ImportantInformation";
 import JudgingInfo from "@/components/Dashboard/JudgingInfo";
 import NextMealScheduled from "@/components/Dashboard/NextMealScheduled";
-import SubmissionDueClock from "@/components/Dashboard/SubmissionDueClock";
+import SubmissionDue from "@/components/Dashboard/SubmissionDue";
+import { SuspenseWrapper } from "@/components/SuspenseWrapper";
 
 export const metadata: Metadata = {
   title: "Hack the Change - Participant",
@@ -27,14 +28,17 @@ export default function page() {
       <div className="grid grow grid-cols-1 gap-4 md:grid-cols-2 xl:grid-flow-col xl:grid-cols-none">
         <div className="flex flex-col gap-4">
           <NextMealScheduled />
-          <GoToFoodTicket />
+          {/* <DevPostSubmission /> */}
         </div>
         <div className="flex flex-col gap-4">
           <ImportantInformation />
+          <JudgingInfo />
         </div>
         <div className="flex flex-col gap-4 md:col-span-2">
-          <JudgingInfo />
-          <SubmissionDueClock />
+          <ImportantInformation />
+          <SuspenseWrapper>
+            <SubmissionDue />
+          </SuspenseWrapper>
         </div>
       </div>
     </div>

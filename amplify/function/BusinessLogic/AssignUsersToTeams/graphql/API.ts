@@ -378,6 +378,13 @@ export type AddUserToGroupResponse = {
   statusCode?: number | null;
 };
 
+export type ScheduleTeamsAndJudgesResponse = {
+  __typename: "ScheduleTeamsAndJudgesResponse",
+  body?: string | null,
+  headers?: string | null,
+  statusCode?: number | null,
+};
+
 export type ModelFoodEventConditionInput = {
   and?: Array<ModelFoodEventConditionInput | null> | null;
   createdAt?: ModelStringInput | null;
@@ -1363,6 +1370,22 @@ export type ResetHackathonMutation = {
     headers?: string | null;
     statusCode?: number | null;
   } | null;
+};
+
+export type ScheduleTeamsAndJudgesMutationVariables = {
+  judgingSessionsPerTeam: number,
+  numOfJudgingRooms: number,
+  presentationDuration: number,
+  startDateAndTime: string,
+};
+
+export type ScheduleTeamsAndJudgesMutation = {
+  ScheduleTeamsAndJudges?:  {
+    __typename: "ScheduleTeamsAndJudgesResponse",
+    body?: string | null,
+    headers?: string | null,
+    statusCode?: number | null,
+  } | null,
 };
 
 export type SetUserAsCheckedInMutationVariables = {

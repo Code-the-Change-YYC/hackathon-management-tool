@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { fetchContent } from "@/app/actions";
+import { fetchContent } from "@/app/actions"
 import type { CeremonyDetails } from "@/app/contentfulTypes";
 import ImportantInfoIcon from "@/images/dashboard/ImportantInfoIcon.png";
 import { formatDate } from "@/utils/date-utils";

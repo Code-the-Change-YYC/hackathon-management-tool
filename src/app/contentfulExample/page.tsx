@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { fetchContent } from "../actions";
-import type { Judge } from "../contentfulTypes";
 
 export const dynamic = "force-dynamic";
 // View Example: http://localhost:3000/contentfulExample
@@ -17,7 +16,7 @@ export default async function page() {
 }
 
 async function MyComponent() {
-  const alumni = (await fetchContent("hackathonJudge")) as Judge[];
+  const alumni = await fetchContent("hackathonJudge");
   const judgeImg =
     alumni[0]?.fields?.judgeImg?.fields?.file?.url
       ?.toString()
