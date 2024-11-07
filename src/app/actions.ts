@@ -9,10 +9,12 @@ const contentfulClient = createClient({
   space: process.env.CONTENTFUL_SPACE_ID ?? "",
   accessToken: process.env.CONTENTFUL_DELIVERY_API_TOKEN ?? "",
 });
+
 interface ContentfulEntry<T> extends BaseEntry {
   contentTypeId: string;
   fields: T;
 }
+
 export async function fetchContent<T extends keyof ContentTypeMap>(
   contentId: T,
 ): Promise<ContentfulEntry<ContentTypeMap[T]>[]> {

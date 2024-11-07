@@ -25,7 +25,7 @@ export default function NextMealScheduled() {
   });
   const location = "ICT";
   return (
-    <Card className="flex flex-1 flex-row justify-start gap-8">
+    <Card className="flex h-full flex-row justify-start gap-8">
       <Link href={href}>
         <Image
           className="transition duration-300 hover:opacity-90"

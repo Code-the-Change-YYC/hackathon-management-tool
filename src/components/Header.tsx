@@ -60,7 +60,7 @@ export default function Header() {
             {user.type === UserType.Participant ? (
               <>
                 {data ? (
-                  <Link href="/participant/dashboard">Dashboard</Link>
+                  <Link href="/participant">Dashboard</Link>
                 ) : (
                   <Link href="/register/team">Join a Team</Link>
                 )}
