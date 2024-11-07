@@ -9,7 +9,7 @@ import Card from "./Card";
 export default function GoToFoodTicket() {
   const href = "#";
   return (
-    <Card className="flex flex-row justify-start gap-8">
+    <Card className="flex h-full flex-row justify-start gap-8">
       <Link href={href}>
         <Image
           className="transition duration-300 hover:opacity-90"
