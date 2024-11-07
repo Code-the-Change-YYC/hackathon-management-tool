@@ -7,7 +7,7 @@ import HeroSectionTile from "./HeroSectionTile";
 import WindowContainer from "./WindowContainer";
 
 const HERO_SECTION_BACKGROUND =
-  "/images/landingpage/HeroSection/hero_section_background.png";
+  "/images/landingpage/HeroSection/htc2024graphiclight2.png";
 
 export default async function HeroSection() {
   const res = (await fetchContent("hackathonDetails"))[0];
