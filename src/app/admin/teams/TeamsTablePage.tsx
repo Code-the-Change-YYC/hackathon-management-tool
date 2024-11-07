@@ -43,6 +43,7 @@ const TeamsTablePage = () => {
     queryFn: async () => {
       const response = await client.models.Team.list({
         selectionSet: ["members.*", "id", "name", "approved"],
+        limit: 1000,
       });
 
       if (response.errors) {

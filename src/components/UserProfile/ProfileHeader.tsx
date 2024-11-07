@@ -19,6 +19,8 @@ const RIGHT_SQUIGGLE_STYLES =
 export default function ProfileHeader() {
   const user = useUser().currentUser;
 
+  console.log(user);
+
   return (
     <div className={CONTAINER_STYLES}>
       <div className={PROFILE_CONTAINER}>
@@ -39,10 +41,16 @@ export default function ProfileHeader() {
           className={LEFT_SQUIGGLE_STYLES}
         />
         <h1 className="flex text-center text-xl font-extrabold text-white md:text-4xl">
-          Hello,&nbsp;
-          <span className="italic">
-            {user?.firstName} {user.lastName}
-          </span>
+          {user.username ? (
+            <>
+              <span>Hello,&nbsp;</span>
+              <span className="italic">
+                {user?.firstName} {user.lastName}
+              </span>
+            </>
+          ) : (
+            "Loading..."
+          )}
         </h1>
         <Image
           src="/images/userProfile/Squiggly_Right.svg"
