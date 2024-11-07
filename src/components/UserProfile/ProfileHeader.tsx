@@ -19,7 +19,7 @@ const RIGHT_SQUIGGLE_STYLES =
 export default function ProfileHeader() {
   const user = useUser().currentUser;
 
-  console.log(user);
+  // console.log(user);
 
   return (
     <div className={CONTAINER_STYLES}>

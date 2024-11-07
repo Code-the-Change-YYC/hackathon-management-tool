@@ -5,7 +5,9 @@ import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
 export default async function TotalTeams() {
-  const teams = await client.models.Team.list();
+  const teams = await client.models.Team.list({
+    limit: 1000,
+  });
   const numTeams = teams.data.length;
   const href = "/admin/teams";
   return (

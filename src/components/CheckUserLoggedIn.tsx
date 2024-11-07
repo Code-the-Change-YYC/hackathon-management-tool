@@ -12,7 +12,7 @@ export default async function CheckUserLoggedIn({
     if (!user?.tokens) {
       throw new Error("User is not logged in.");
     }
-    console.log(user);
+    // console.log(user);
     return <>{children}</>;
   } catch (error) {
     console.error(error);

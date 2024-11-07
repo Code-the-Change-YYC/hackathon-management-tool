@@ -77,7 +77,7 @@ export default function JudgingInfo() {
   });
   const timeSlot = teamRoomData?.[0]?.time
     ? new Date(teamRoomData[0].time).toLocaleString()
-    : "Loading...";
+    : "N/A";
 
   //Fetch room Id from Team Room
   const roomId = teamRoomData?.[0].roomId;
@@ -105,7 +105,7 @@ export default function JudgingInfo() {
   const judgeNames =
     judgeRoomData
       ?.map((judge) => `${judge.firstName} ${judge.lastName}`)
-      .join(", ") || "Loading...";
+      .join(", ") || "N/A";
 
   return (
     <Card className="flex-1 items-start justify-start gap-4 px-4">
@@ -124,7 +124,7 @@ export default function JudgingInfo() {
         <div className="font-medium">Time Slot: </div>
 
         {isFetchingTeamRoom ? (
-          "Loading"
+          "Loading..."
         ) : (
           <div className=" text-3xl italic text-neutral-800 xl:text-5xl">
             {timeSlot}
@@ -135,7 +135,7 @@ export default function JudgingInfo() {
         <div className="font-medium">Judges: </div>
 
         {isFetchingJudgeData ? (
-          "Loading"
+          "Loading..."
         ) : (
           <div className=" text-3xl italic text-neutral-800 xl:text-5xl">
             {judgeNames}
