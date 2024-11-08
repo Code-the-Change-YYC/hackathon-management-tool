@@ -77,10 +77,10 @@ export default function JudgingInfo() {
   });
   const timeSlot = teamRoomData?.[0]?.time
     ? new Date(teamRoomData[0].time).toLocaleString()
-    : "N/A";
+    : "Room not assigned";
 
   //Fetch room Id from Team Room
-  const roomId = teamRoomData?.[0].roomId;
+  const roomId = teamRoomData?.[0]?.roomId;
   const { data: judgeRoomData, isFetching: isFetchingJudgeData } = useQuery({
     queryKey: ["Room", roomId],
     queryFn: async () => {
@@ -105,7 +105,7 @@ export default function JudgingInfo() {
   const judgeNames =
     judgeRoomData
       ?.map((judge) => `${judge.firstName} ${judge.lastName}`)
-      .join(", ") || "N/A";
+      .join(", ") || "Judges not assigned";
 
   return (
     <Card className="flex-1 items-start justify-start gap-4 px-4">
