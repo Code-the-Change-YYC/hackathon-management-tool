@@ -3,16 +3,16 @@ import Image from "next/image";
 import { fetchContent } from "@/app/actions";
 import type { CeremonyDetails } from "@/app/contentfulTypes";
 import ImportantInfoIcon from "@/images/dashboard/ImportantInfoIcon.png";
-import { formatDate } from "@/utils/date-utils";
 
+// import { formatDate } from "@/utils/date-utils";
 import Card from "./Card";
 
 export default async function ImportantInformation() {
   const ceremonyDetailsArray = await fetchContent("ceremonyDetails");
-  const ceremonyDetails = ceremonyDetailsArray[0].fields as CeremonyDetails;
+  const ceremonyDetails = ceremonyDetailsArray[0]?.fields as CeremonyDetails;
 
-  const openingCeremonyDate = new Date(ceremonyDetails.openingCeremonyDate);
-  const closingCeremonyDate = new Date(ceremonyDetails.closingCeremonyDate);
+  // const openingCeremonyDate = new Date(ceremonyDetails.openingCeremonyDate);
+  // const closingCeremonyDate = new Date(ceremonyDetails.closingCeremonyDate);
 
   return (
     <Card className="flex h-full flex-col items-start justify-around gap-4">
@@ -30,12 +30,14 @@ export default async function ImportantInformation() {
         <div className="mb-4 text-start text-2xl font-normal">
           <h1 className="pb-2 text-3xl font-bold">Opening Ceremony</h1>
           <p>Location: {ceremonyDetails.openingCeremonyLocation}</p>
-          <p>Time: {formatDate(openingCeremonyDate)}</p>
+          {/* <p>Time: {formatDate(openingCeremonyDate)}</p> */}
+          <p>Nov 9, 10:00 AM</p>
         </div>
         <div className="text-start text-2xl font-normal">
           <h1 className="pb-2 text-3xl font-bold">Closing Ceremony</h1>
           <p>Location: {ceremonyDetails.closingCeremonyLocation}</p>
-          <p>Time: {formatDate(closingCeremonyDate)}</p>
+          {/* <p>Time: {formatDate(closingCeremonyDate)}</p> */}
+          <p>Nov 10, 5:00 PM</p>
         </div>
       </div>
     </Card>
