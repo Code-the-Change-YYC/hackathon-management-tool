@@ -40,7 +40,9 @@ export default function page() {
               <NumFoodTickets />
             </SuspenseWrapper>
           </div>
-          <TeamRankings />
+          <SuspenseWrapper>
+            <TeamRankings />
+          </SuspenseWrapper>
         </div>
       </CheckUserLoggedIn>
     </div>
