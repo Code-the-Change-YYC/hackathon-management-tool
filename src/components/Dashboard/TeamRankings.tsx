@@ -6,7 +6,6 @@ import RankingTable from "../admin/RankingTable";
 import Card from "./Card";
 
 export default async function TeamRankings() {
-  const { data: scoreData } = await client.models.Score.list();
   const { data: hackathons } = await client.models.Hackathon.list();
   const hackathonData = hackathons[0];
   const scoringMetrics = [
@@ -28,7 +27,7 @@ export default async function TeamRankings() {
         </Link>
       </div>
       <div className="flex size-full justify-start overflow-auto rounded-xl">
-        <RankingTable scoringMetrics={scoringMetrics} scoreData={scoreData} />
+        <RankingTable scoringMetrics={scoringMetrics} />
       </div>
     </Card>
   );

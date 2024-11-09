@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { generateClient } from "aws-amplify/api";
+import { useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import type { Schema } from "@/amplify/data/resource";
+import { useQuery } from "@tanstack/react-query";
 
 import FilterIcon from "../atoms/FilterIcon";
 
@@ -59,60 +61,57 @@ function TableRow({
 }
 
 export default function RankingTable({
-  scoreData,
   scoringMetrics,
 }: {
-  scoreData: Schema["Score"]["type"][];
   scoringMetrics: Schema["Hackathon"]["type"]["scoringComponents"];
 }) {
-  const [formattedScores, setFormattedScores] = useState<IScoreRaw[]>([]);
+  const client = generateClient<Schema>();
+  const { data: formattedScores } = useQuery({
+    queryKey: ["Scores"],
+    initialData: [],
+    queryFn: async () => {
+      const { data, errors } = await client.models.Score.list();
+      if (errors) throw Error(errors[0].message);
+      let formattedData = data.map(async (score) => {
+        return {
+          teamId: score.teamId,
+          teamName: (await score.team()).data?.name ?? "",
+          score: JSON.parse(score.score as string) as IScoreRaw["score"],
+        };
+      });
+      const scores = await Promise.all(formattedData);
+      return scores;
+    },
+  });
 
-  useEffect(() => {
-    if (scoreData) {
-      const decorateScoreData = async () => {
-        const formattedData = await Promise.all(
-          scoreData.map(async (score) => {
-            return {
-              teamId: score.teamId,
-              teamName: (await score.team()).data?.name ?? "",
-              score: JSON.parse(
-                score.score as unknown as string,
-              ) as IScoreRaw["score"],
-            };
-          }),
-        );
-        setFormattedScores(formattedData);
-      };
-      decorateScoreData();
-    }
-  }, [scoreData]);
+  const computedScores: ITeamScores = useMemo(() => {
+    const tempScore: ITeamScores = {};
+    formattedScores.reduce((acc, score) => {
+      if (!acc[score.teamId]) {
+        acc[score.teamId] = {
+          total: 0,
+          name: score.teamName,
+          components: {},
+        };
+      }
 
-  let computedScores: ITeamScores = {};
+      const teamScore = scoringMetrics.reduce((total, metric) => {
+        const scoreComponentId = metric.id;
+        acc[score.teamId].components[scoreComponentId] = acc[score.teamId]
+          .components[scoreComponentId]
+          ? Number(acc[score.teamId].components[scoreComponentId]) +
+            Number(score.score[scoreComponentId])
+          : score.score[scoreComponentId];
 
-  computedScores = formattedScores.reduce((acc, score) => {
-    if (!acc[score.teamId]) {
-      acc[score.teamId] = {
-        total: 0,
-        name: score.teamName,
-        components: {},
-      };
-    }
+        return total + Number(score.score[scoreComponentId]);
+      }, 0);
 
-    const teamScore = scoringMetrics.reduce((total, metric) => {
-      const scoreComponentId = metric.id;
-      acc[score.teamId].components[scoreComponentId] = acc[score.teamId]
-        .components[scoreComponentId]
-        ? Number(acc[score.teamId].components[scoreComponentId]) +
-          Number(score.score[scoreComponentId])
-        : score.score[scoreComponentId];
+      acc[score.teamId].total += teamScore;
 
-      return total + Number(score.score[scoreComponentId]);
-    }, 0);
-
-    acc[score.teamId].total += teamScore;
-
-    return acc;
-  }, computedScores);
+      return acc;
+    }, tempScore);
+    return tempScore;
+  }, [formattedScores, scoringMetrics]);
 
   const [sortKey, setSortKey] = useState<string>("total");
   const [sortAscending, setSortAscending] = useState(true);
@@ -139,7 +138,7 @@ export default function RankingTable({
   }
   const sortedTeamIds = useMemo(
     () => sortByKey(sortKey, sortAscending),
-    [sortKey, sortAscending],
+    [sortKey, sortAscending, computedScores],
   );
   return (
     <table className=" w-full text-left text-lg font-medium text-gray-500">
