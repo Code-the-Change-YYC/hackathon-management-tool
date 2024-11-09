@@ -17,7 +17,10 @@ const MODAL_POPUP_TILE_STLYES = "w-4/5 max-w-[1200px] rounded-md bg-white p-6";
 interface ModalPopupProps {
   onClose: () => void;
   teamId: string;
-  hackathon: Schema["Hackathon"]["type"];
+  hackathon: Pick<
+    Schema["Hackathon"]["type"],
+    "id" | "scoringComponents" | "scoringSidepots"
+  >;
 }
 
 const client = generateClient<Schema>();
