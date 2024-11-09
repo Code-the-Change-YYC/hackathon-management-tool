@@ -8,6 +8,9 @@ import TotalParticipants from "@/components/Dashboard/TotalParticipants";
 import TotalTeams from "@/components/Dashboard/TotalTeams";
 import { SuspenseWrapper } from "@/components/SuspenseWrapper";
 
+export const dynamic = "force-dynamic";
+
+export const revalidate = 0;
 export const metadata: Metadata = {
   title: "Hack the Change - Admin",
   description: "Hack the Change Admin Portal",
@@ -40,7 +43,9 @@ export default function page() {
               <NumFoodTickets />
             </SuspenseWrapper>
           </div>
-          <TeamRankings />
+          <SuspenseWrapper>
+            <TeamRankings />
+          </SuspenseWrapper>
         </div>
       </CheckUserLoggedIn>
     </div>

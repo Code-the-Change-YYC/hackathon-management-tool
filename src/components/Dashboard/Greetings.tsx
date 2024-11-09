@@ -1,19 +1,34 @@
 "use client";
 
+import { twMerge } from "tailwind-merge";
+
 import { UserType, useUser } from "../contexts/UserContext";
 import Card from "./Card";
 
-export default function Greetings() {
+export default function Greetings({
+  className,
+  accentColor,
+}: {
+  className?: string;
+  accentColor?: string;
+}) {
   const user = useUser();
   const firstName = user.currentUser.firstName;
   const lastName = user.currentUser.lastName;
   const nameColor =
     user?.currentUser.type === UserType.Admin
       ? "text-awesome-purple"
-      : "text-emerald-500";
+      : accentColor !== undefined
+        ? accentColor
+        : "text-emerald-500";
   return (
     <Card>
-      <div className=" flex w-full flex-col justify-start p-2 text-start md:p-4 ">
+      <div
+        className={twMerge(
+          " flex w-full flex-col justify-start p-2 text-start md:p-4 ",
+          className,
+        )}
+      >
         <h2 className="text-lg font-normal md:text-xl lg:text-2xl">
           Hack the Change 2024
         </h2>
