@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 };
 export default function Judging() {
   return (
-    <main className="w-full bg-dashboard-grey">
+    <main className="flex w-full flex-1 flex-col gap-4 bg-dashboard-grey">
       <JudgingDashboard />
     </main>
   );

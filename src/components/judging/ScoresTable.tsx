@@ -1,22 +1,18 @@
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 import { type Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
 
+import Card from "../Dashboard/Card";
 import { useUser } from "../contexts/UserContext";
 import { type ScoreObject } from "./ModalPopup";
 
 const edit_icon = "/svgs/judging/edit_icon.svg";
 const filter_icon = "/svgs/judging/filter_arrows.svg";
 
-const JUDGE_TABLE_SECTION_STYLES =
-  "h-full rounded-lg bg-white p-6 drop-shadow-md";
-
-const JUDGE_TABLE_CONTENT_STYLES =
-  "w-full border-separate border-spacing-x-0.5";
-const JUDGE_TABLE_HEADER_CELL_STLYES = "text-white text-xl font-medium py-4";
 const JUDGE_TABLE_CELL_STYLES = "text-center text-lg py-4";
 const SCORE_BUTTON_STYLES =
   "rounded-full border-2 px-2 py-1 text-sm font-medium";
@@ -39,33 +35,50 @@ const COLOR_SCHEMES = {
 const client = generateClient<Schema>();
 
 interface JudgingTableProps {
-  tableHeaders: Array<{
-    columnHeader: string | JSX.Element;
-    className: string;
-  }>;
   tableData: Schema["Team"]["type"][];
   onCreateScoreClick: (teamName: string) => void;
   onEditScoreClick: (teamName: string) => void;
   colorScheme: "pink" | "purple";
   entriesPerPage: number;
+  hackathonData: Pick<
+    Schema["Hackathon"]["type"],
+    "scoringComponents" | "scoringSidepots"
+  >;
 }
 
-const JudgingTable = (props: JudgingTableProps) => {
+export default function JudgingTable(props: JudgingTableProps) {
   const { currentUser } = useUser();
 
   const {
-    tableHeaders,
     tableData,
     onCreateScoreClick,
     onEditScoreClick,
     colorScheme,
     entriesPerPage,
+    hackathonData,
   } = props;
+
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedData, setSortedData] = useState(tableData);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const entries_per_page = entriesPerPage;
 
+  const tableHeaders = [
+    { columnHeader: "Team Name", className: "px-6 rounded-tl-lg" },
+    ...hackathonData.scoringComponents.map((component) => ({
+      columnHeader: component.friendlyName,
+      className: "w-fit",
+    })),
+    ...hackathonData.scoringSidepots.map((component) => ({
+      columnHeader: (
+        <div className="flex flex-col">
+          <p>Sidepot:</p>
+          {component.friendlyName}
+        </div>
+      ),
+      className: "w-fit bg-pastel-pink",
+    })),
+  ];
   const handleNextPage = () => {
     setCurrentPage((prevPage) =>
       Math.min(prevPage + 1, Math.ceil(tableData.length / entries_per_page)),
@@ -101,22 +114,26 @@ const JudgingTable = (props: JudgingTableProps) => {
   const colorStyles = COLOR_SCHEMES[colorScheme];
 
   return (
-    <div className={JUDGE_TABLE_SECTION_STYLES}>
-      <div>
-        <table className={JUDGE_TABLE_CONTENT_STYLES}>
+    <Card className="items-start gap-3">
+      <div className="w-full overflow-auto">
+        <table className="w-full border-separate border-spacing-x-0.5">
           <thead>
             <tr>
               {tableHeaders.map((header, index) => (
                 <th
                   key={index}
-                  className={`${JUDGE_TABLE_HEADER_CELL_STLYES} ${header.className} ${colorStyles.headerCellBg}`}
+                  className={twMerge(
+                    "p-4 text-xl font-medium capitalize text-white",
+                    header.className,
+                    colorStyles.headerCellBg,
+                  )}
                 >
                   {header.columnHeader}
                 </th>
               ))}
               <th
-                className={`w-1/5 rounded-tr-lg ${colorStyles.headerCellBg}`}
-              ></th>
+                className={` rounded-tr-lg p-12 ${colorStyles.headerCellBg}`}
+              />
             </tr>
           </thead>
           <tbody>
@@ -130,7 +147,6 @@ const JudgingTable = (props: JudgingTableProps) => {
                       teamId: team.id,
                     });
                     if (errors) throw Error(errors[0].message);
-                    console.log(data);
                     return data;
                   } catch (error) {
                     console.error(error);
@@ -187,44 +203,36 @@ const JudgingTable = (props: JudgingTableProps) => {
             })}
           </tbody>
         </table>
-        <div className="mt-6 flex justify-between">
-          <button className="flex items-center" onClick={handleSortClick}>
-            <Image
-              src={filter_icon}
-              height={20}
-              width={20}
-              alt="Filter icon"
-              className="mr-2"
-            />
-            <p>
-              Sort{" "}
-              {sortDirection === "asc"
-                ? "Alphabetically"
-                : "Reverse Alphabetically"}
-            </p>
+      </div>
+      <div className="flex w-full justify-between">
+        <button className="flex items-center gap-2" onClick={handleSortClick}>
+          <Image src={filter_icon} height={20} width={20} alt="Filter icon" />
+          <p>
+            Sort{" "}
+            {sortDirection === "asc"
+              ? "Alphabetically"
+              : "Reverse Alphabetically"}
+          </p>
+        </button>
+        <div>
+          <button
+            className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+          >
+            &lt;
           </button>
-          <div>
-            <button
-              className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            <button
-              className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
-              onClick={handleNextPage}
-              disabled={
-                currentPage === Math.ceil(sortedData.length / entries_per_page)
-              }
-            >
-              &gt;
-            </button>
-          </div>
+          <button
+            className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
+            onClick={handleNextPage}
+            disabled={
+              currentPage === Math.ceil(sortedData.length / entries_per_page)
+            }
+          >
+            &gt;
+          </button>
         </div>
       </div>
-    </div>
+    </Card>
   );
-};
-
-export default JudgingTable;
+}
