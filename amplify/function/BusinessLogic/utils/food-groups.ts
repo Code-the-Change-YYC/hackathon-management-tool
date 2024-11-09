@@ -4,7 +4,7 @@
  * get a integer value from uuid
  */
 export function uuidToInteger(uuid: string) {
-  const cleanedUuid = uuid.replace("/-/", "").toUpperCase();
+  const cleanedUuid = uuid.replace(/\D/g, "");
 
   const first4Chars = cleanedUuid.slice(0, 4);
 
@@ -12,8 +12,7 @@ export function uuidToInteger(uuid: string) {
   const result = parseInt(first4Chars, 16);
 
   if (isNaN(result)) {
-    console.error("The provided UUID is not valid.");
-    return -1;
+    return 1;
   }
 
   return result;
@@ -41,13 +40,10 @@ export function getTimeForFoodGroupPositionNumber(
     start.getTime() + groupDuration * (groupPositionNumber + 1),
   );
   const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
+    month: "short",
+    day: "numeric",
     hour: "numeric",
     minute: "numeric",
-    timeZone: process.env.TIME_ZONE,
-    hour12: true,
   };
 
   // Format the date with the specified options

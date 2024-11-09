@@ -27,7 +27,6 @@ export async function getUpcomingFoodEventDetails(userID: string): Promise<{
   const foodEvents = (await client.models.FoodEvent.list()).data;
   const currentTime = DateTime.now().setZone(process.env.TIME_ZONE).toJSDate(); // Current local time in the time zone
   const nextFoodEvent = getNextEvent(foodEvents, currentTime);
-
   if (nextFoodEvent) {
     const { data: user, errors: userErrors } = await client.models.User.get({
       id: userID,
@@ -49,14 +48,21 @@ export async function getUpcomingFoodEventDetails(userID: string): Promise<{
         nextFoodEvent.start,
         nextFoodEvent.end,
       );
-
+      const options: Intl.DateTimeFormatOptions = {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
       const eventDuration =
-        new Date(nextFoodEvent.start) + " to " + new Date(nextFoodEvent.end);
+        new Date(nextFoodEvent.start).toLocaleString("en-US", options) +
+        " to " +
+        new Date(nextFoodEvent.end).toLocaleDateString("en-US", options);
 
       return {
         queuePosition:
-          "You are in position number " +
-          (userGroupPositionNumber + 1) +
+          userGroupPositionNumber +
+          1 +
           " out of " +
           nextFoodEvent.totalGroupCount +
           " groups",
