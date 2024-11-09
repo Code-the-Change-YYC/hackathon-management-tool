@@ -19,11 +19,8 @@ export default async function JudgeShowcase() {
       </div>
       <div className="flex w-full flex-row flex-wrap">
         {judges.map((judge, index) => (
-          <div
-            className="flex w-1/2 flex-row py-10 sm:w-1/3 sm:justify-center"
-            key={index}
-          >
-            <div className="flex flex-row gap-2 sm:gap-3">
+          <div className="flex w-1/2 justify-center sm:w-1/3" key={index}>
+            <div className="flex w-4/5 flex-row gap-2 py-4">
               <div className="relative size-16 min-w-16 overflow-hidden rounded-full sm:size-24 sm:min-w-24">
                 <Image
                   src={
