@@ -3,15 +3,16 @@ import type { ReactNode } from "react";
 
 import { fetchContent } from "@/app/actions";
 
-const EVENT_DETAILS_SECTION_STYLES = "flex flex-col items-center bg-white";
+const EVENT_DETAILS_SECTION_STYLES =
+  "flex w-full flex-col items-center bg-white";
 const EVENT_DETAILS_CONTENT_STYLES =
-  "bg-pastel-pink border-4 border-dark-pink rounded-3xl my-4 lg:my-8 flex md:flex md:justify-center md:max-w-[1100px] md:shadow-[15px_15px_0px_0px_#FF4D6F]";
+  "bg-pastel-pink border-4 border-dark-pink rounded-3xl mt-4 mb-8 xl:mt-8 xl:mb-12 flex flex-col xl:flex-row  w-4/5 shadow-[15px_15px_0px_0px_#FF4D6F]";
 const EVENT_IMAGE_CONTAINER_STYLES =
-  "bg-blackish rounded-t-20 border-b-4 border-dark-pink w-72 h-64 md:rounded-tr-none md:rounded-l-3xl md:border-b-0 md:border-r-4 md:h-[370px] md:w-[40vw]";
+  "bg-blackish border-b-4 border-dark-pink size-full xl:size-1/2 rounded-t-2xl xl:rounded-tr-none xl:rounded-l-2xl xl:border-b-0 xl:border-r-4 ";
 const EVENT_IMAGE_STYLES =
-  "w-full h-full object-cover md:rounded-l-2xl md:rounded-tl-2xl md:rounded-t-none rounded-t-2xl";
+  "w-full h-full object-cover rounded-bl-none rounded-t-2xl xl:rounded-tr-none xl:rounded-l-2xl";
 const EVENT_DETAILS_CONTAINER_STYLES =
-  "flex items-center w-72 h-[370px] rounded-b-20 md:w-[50vw] md:rounded-bl-none md:rounded-r-2xl";
+  "flex items-center w-full xl:w-1/2 rounded-b-20 md:rounded-bl-none md:rounded-r-2xl";
 const EVENT_DETAIL_STYLES = "flex items-center ml-10";
 const EVENT_DETAIL_TITLE_STYLES =
   "text-lg text-blackish font-extrabold leading-tight";
