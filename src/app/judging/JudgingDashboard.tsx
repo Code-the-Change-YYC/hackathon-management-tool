@@ -12,14 +12,10 @@ export default async function JudgingDashboard() {
   };
 
   return (
-    <>
-      <div className={"flex h-screen justify-center text-blackish"}>
-        <div className={"w-full max-w-[1500px] p-6"}>
-          <Greetings accentColor="text-dark-pink" />
-          <h2 className={"py-4 text-xl font-semibold"}>Assigned Teams</h2>
-          <JudgingTable hackathonData={hackathonData} />
-        </div>
-      </div>
-    </>
+    <div className="flex w-full flex-1 flex-col items-center p-6 text-blackish">
+      <Greetings accentColor="text-dark-pink" />
+      <h2 className="flex w-full py-4 text-xl font-semibold">Assigned Teams</h2>
+      <JudgingTable hackathonData={hackathonData} />
+    </div>
   );
 }

@@ -2,19 +2,6 @@ import type { HackathonDetails } from "@/app/contentfulTypes";
 
 import HeroCallToAction from "./HeroCallToAction";
 
-const HERO_HEADER_STYLE = {
-  textShadow: `
-		-2px -2px 0 #7055FD, 
-		2px -2px 0 #7055FD, 
-		-2px 2px 0 #7055FD, 
-		2px 2px 0 #7055FD,
-		-2px -2px 0 #7055FD,
-		2px -2px 0 #7055FD,
-		-2px 2px 0 #7055FD,
-		2px 2px 0 #7055FD
-	`,
-};
-
 const HeroSectionTile = ({
   hackathonDetails,
 }: {
@@ -26,13 +13,10 @@ const HeroSectionTile = ({
 
   return (
     <div className={"flex flex-col px-4 pt-10 md:items-center md:px-0 "}>
-      <h1
-        className="flex-wrap text-5xl font-black text-pastel-green drop-shadow-lg md:text-center md:text-6xl"
-        style={HERO_HEADER_STYLE}
-      >
+      <h1 className="text-shadow-title flex-wrap text-5xl font-black text-pastel-green drop-shadow-lg md:text-center md:text-6xl">
         <span className="text-white">{eventName} </span> {" " + eventYear}
       </h1>
-      <strong className="flex w-full max-w-7xl flex-wrap justify-center py-4 text-xl text-awesomer-purple opacity-95 md:text-center md:text-xl">
+      <strong className="text-shadow-outline flex w-full max-w-7xl flex-wrap justify-center rounded-lg p-2 text-xl text-pastel-green opacity-95 drop-shadow-lg md:py-4 md:text-center md:text-xl md:text-awesomer-purple ">
         {eventBlurb}
       </strong>
       <HeroCallToAction />

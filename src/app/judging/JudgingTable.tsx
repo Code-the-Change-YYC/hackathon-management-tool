@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import Skeleton from "react-loading-skeleton";
 
 import type { Schema } from "@/amplify/data/resource";
 import LoadingRing from "@/components/LoadingRing";
@@ -48,36 +49,34 @@ export default function JudgingTable({
         return teams;
       },
     });
-  if (
-    roomIsFetching ||
-    teamsForRoomIsFetching ||
-    !roomData ||
-    !teamsForRoomData
-  ) {
-    return <div>Loading...</div>;
+  const isFetching = roomIsFetching || teamsForRoomIsFetching;
+  if (isFetching || !roomData || !teamsForRoomData) {
+    return (
+      <div className="flex flex-1">
+        <Skeleton className="h-full" containerClassName="flex-1" />
+      </div>
+    );
   }
 
-  const panelData = useMemo(() => {
-    return [
-      {
-        icon: "/svgs/judging/team_icon.svg",
-        alt: "Teams assigned icon",
-        stat: teamsForRoomData.length,
-        text: `Teams Assigned to ${roomData.name}`,
-      },
-      {
-        icon: "/svgs/judging/teams_left.svg",
-        alt: "Teams left icon",
-        stat: teamsForRoomData.filter(
-          async (team) =>
-            (await team?.scores())?.data.filter(
-              (score) => score.judgeId === currentUser.username,
-            ).length === 0,
-        ).length,
-        text: "Teams Left To Score",
-      },
-    ];
-  }, [roomData, teamsForRoomData]);
+  const panelData = [
+    {
+      icon: "/svgs/judging/team_icon.svg",
+      alt: "Teams assigned icon",
+      stat: teamsForRoomData.length,
+      text: `Teams Assigned to ${roomData.name}`,
+    },
+    {
+      icon: "/svgs/judging/teams_left.svg",
+      alt: "Teams left icon",
+      stat: teamsForRoomData.filter(
+        async (team) =>
+          (await team?.scores())?.data.filter(
+            (score) => score.judgeId === currentUser.username,
+          ).length === 0,
+      ).length,
+      text: "Teams Left To Score",
+    },
+  ];
   const handleCreateScoreClick = (teamId: string) => {
     setSelectedTeamId(teamId);
   };
@@ -89,57 +88,32 @@ export default function JudgingTable({
     setSelectedTeamId("");
   };
 
-  const isFetching = roomIsFetching || teamsForRoomIsFetching;
-
-  const tableHeaders = [
-    { columnHeader: "Team Name", className: "w-1/3 rounded-tl-lg" },
-    ...hackathonData.scoringComponents.map((component) => ({
-      columnHeader: component.friendlyName,
-      className: "w-fit",
-    })),
-    ...hackathonData.scoringSidepots.map((component) => ({
-      columnHeader: (
-        <div className="flex flex-col">
-          <p>Sidepot:</p>
-          {component.friendlyName}
-        </div>
-      ),
-      className: "w-fit bg-pastel-pink",
-    })),
-  ];
   return isFetching ? (
-    <div
-      className={
-        "flex h-screen w-full items-center justify-center bg-pastel-pink"
-      }
-    >
+    <div className="flex size-full flex-1 items-center justify-center bg-pastel-pink">
       <LoadingRing />
     </div>
   ) : (
-    <div className={"flex h-screen justify-center text-blackish"}>
-      <div className="mb-4 flex w-full max-w-[1500px] p-6">
-        <div className="mr-4 flex w-1/4 flex-col space-y-4">
+    <>
+      <div className="flex w-full flex-col justify-center gap-4 py-6 xl:flex-row">
+        <div className=" flex w-full flex-row gap-4 xl:w-1/4 xl:flex-col">
           {panelData.map((item, index) => (
-            <div key={index} className="h-1/2">
-              <StatsPanel
-                icon={item.icon}
-                alt={item.alt}
-                stat={item.stat}
-                subheader={item.text}
-              />
-            </div>
+            <StatsPanel
+              key={index}
+              icon={item.icon}
+              alt={item.alt}
+              stat={item.stat}
+              subheader={item.text}
+            />
           ))}
         </div>
-        <div className="w-3/4">
-          <ScoresTable
-            tableHeaders={tableHeaders}
-            tableData={teamsForRoomData as Schema["Team"]["type"][]}
-            onCreateScoreClick={handleCreateScoreClick}
-            onEditScoreClick={handleEditScoreClick}
-            colorScheme="pink"
-            entriesPerPage={150}
-          />
-        </div>
+        <ScoresTable
+          tableData={teamsForRoomData as Schema["Team"]["type"][]}
+          onCreateScoreClick={handleCreateScoreClick}
+          onEditScoreClick={handleEditScoreClick}
+          colorScheme="pink"
+          entriesPerPage={150}
+          hackathonData={hackathonData}
+        />
       </div>
       {selectedTeam !== "" && (
         <ModalPopup
@@ -148,6 +122,6 @@ export default function JudgingTable({
           teamId={selectedTeam}
         />
       )}
-    </div>
+    </>
   );
 }
