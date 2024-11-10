@@ -96,6 +96,7 @@ export function UserContextProvider({ children }: Props) {
             populated: true,
             completedProfile: response.data?.completedRegistration ?? false,
             email: response.data?.email ?? "",
+            teamId: response.data?.teamId ?? "",
             firstName: response.data?.firstName ?? "",
             lastName: response.data?.lastName ?? "",
             JUDGE_roomId: response.data?.JUDGE_roomId,

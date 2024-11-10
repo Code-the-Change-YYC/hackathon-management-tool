@@ -1,4 +1,9 @@
+"use client";
+
+import { generateClient } from "aws-amplify/api";
+
 import { type Schema } from "@/amplify/data/resource";
+import { useQuery } from "@tanstack/react-query";
 
 const INPUT_STYLES =
   "rounded-full border-4 placeholder-black border-white bg-[#FFFFFF] bg-white/30 ps-3 py-2 my-2 text-sm md:text-md backdrop-opacity-30";
@@ -17,7 +22,23 @@ export default function TeamForm({ data, teamMutation }: TeamFormProp) {
     teamMutation.mutate(data);
   };
 
+  const client = generateClient<Schema>();
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: teamData, isFetching } = useQuery({
+    initialData: null,
+    initialDataUpdatedAt: 0,
+    queryKey: ["TeamWithMembers"],
+    queryFn: async () => {
+      const { data: teamWithMembers } = await client.models.Team.get(
+        { id: data.id },
+        { selectionSet: ["id", "members.*"] },
+      );
+
+      return teamWithMembers;
+    },
+    enabled: !!data,
+  });
 
   return (
     <>
@@ -40,16 +61,24 @@ export default function TeamForm({ data, teamMutation }: TeamFormProp) {
             />
             <label>Team Members</label>
             <div className="flex flex-col">
-              {Array.isArray(data.members) &&
-                data.members.map((member: Schema["User"]["type"]) => (
-                  <input
-                    key={member.id}
-                    className={INPUT_STYLES}
-                    type="text"
-                    value={`${member.firstName} ${member.lastName}`}
-                    disabled
-                  />
-                ))}
+              {isFetching ? (
+                <h1 className={INPUT_STYLES}>Loading...</h1>
+              ) : (
+                <>
+                  {Array.isArray(teamData?.members) &&
+                    teamData?.members.map(
+                      (member: Partial<Schema["User"]["type"]>) => (
+                        <input
+                          key={member.id}
+                          className={INPUT_STYLES}
+                          type="text"
+                          value={`${member.firstName} ${member.lastName}`}
+                          disabled
+                        />
+                      ),
+                    )}
+                </>
+              )}
             </div>
           </form>
           <div className="mb-10 mt-3 flex justify-end md:mx-10">
