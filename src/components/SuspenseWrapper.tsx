@@ -13,7 +13,7 @@ export function SuspenseWrapper({
     <Suspense
       fallback={
         <div className={twMerge("size-full", className)}>
-          <Skeleton height={"100%"} />
+          <Skeleton containerClassName="w-full" height={"100%"} />
         </div>
       }
     >
