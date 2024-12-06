@@ -104,6 +104,18 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   if (isError) {
     return <div>Error, please try again later.</div>;
   }
+  if (data?.teamId && data?.completedRegistration) {
+    if (data?.role === UserType.Admin) {
+      router.push("/admin");
+      return null;
+    } else if (data?.role === UserType.Judge) {
+      router.push("/judging");
+      return null;
+    } else if (data?.role === UserType.Participant) {
+      router.push("/participant/profile");
+      return null;
+    }
+  }
   if (data?.teamId) {
     router.push(`/register/team/${data.teamId}`);
     return null;
