@@ -85,11 +85,11 @@ const CreateTeamPage = () => {
                     <li>
                       After forming a team, assign <b>ONE</b> member to{" "}
                       <b>&quot;Register New Team&quot;</b> using your Team Name.
-                      They will receive a unique <b>6-digit Team ID</b>{" "}
+                      They will receive a unique <b>4-digit Team ID</b>{" "}
                       following registration.
                     </li>
                     <li className={CREATE_TEAM_STEPS_STYLES}>
-                      Next, provide this <b>6-digit Team ID</b> to all team
+                      Next, provide this <b>4-digit Team ID</b> to all team
                       members.
                     </li>
                     <li className={CREATE_TEAM_STEPS_STYLES}>
