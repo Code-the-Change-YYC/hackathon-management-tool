@@ -111,7 +111,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     } else if (data?.role === UserType.Judge) {
       router.push("/judging");
       return null;
-    } else if (data?.role === UserType.Participant) {
+    } else {
       router.push("/participant/profile");
       return null;
     }
