@@ -15,9 +15,9 @@ const headerContainerStyles =
   "flex flex-row items-center justify-between text-awesomer-purple h-36 bg-white px-8";
 
 export default function Header() {
-  const user = useUser().currentUser;
+  const { currentUser: user, isFetching } = useUser();
 
-  const userId = useUser().currentUser.username as string;
+  const userId = user.username;
 
   const { data } = useQuery({
     initialData: {} as Schema["Team"]["type"],
@@ -52,6 +52,16 @@ export default function Header() {
     signOut();
     router.push("/");
   };
+
+  // Render a loading spinner while user data is being fetched
+  if (isFetching) {
+    return (
+      <div className={headerContainerStyles}>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className={headerContainerStyles}>
       <div className="flex w-48 font-semibold">
