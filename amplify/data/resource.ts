@@ -25,7 +25,12 @@ const schema = a
             allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
             allow.groups(["Admin"]).to(["read", "update", "create"]),
           ]),
-        email: a.string(),
+        email: a
+          .string()
+          .authorization((allow) => [
+            allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
+            allow.groups(["Admin"]).to(["read", "create"]),
+          ]),
         institution: a.string(),
         completedRegistration: a.boolean(),
         allergies: a.string(),

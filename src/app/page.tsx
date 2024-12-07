@@ -10,7 +10,7 @@ import { enableLandingPage } from "@/featureFlags";
 export const revalidate = 600;
 const Home = () => {
   return (
-    <main className="">
+    <main className="w-full">
       {enableLandingPage ? (
         <PagePlaceholder />
       ) : (

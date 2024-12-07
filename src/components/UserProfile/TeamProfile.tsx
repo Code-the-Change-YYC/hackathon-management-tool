@@ -16,25 +16,13 @@ const TEAM_INSTRUCTION_STYLES =
 const TeamProfile = () => {
   const queryClient = useQueryClient();
 
-  const userId = useUser().currentUser.username as string;
+  const userTeamId = useUser().currentUser.teamId as string;
 
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["Team"]["type"],
     initialDataUpdatedAt: 0,
-    queryKey: ["Team", userId],
+    queryKey: ["Team", userTeamId],
     queryFn: async () => {
-      const userResponse = await client.models.User.get({
-        id: userId,
-      });
-
-      if (userResponse.errors) throw new Error(userResponse.errors[0].message);
-
-      const userTeamId = userResponse.data?.teamId as string;
-
-      if (!userTeamId) {
-        return {} as Schema["Team"]["type"];
-      }
-
       const teamResponse = await client.models.Team.get({
         id: userTeamId,
       });
@@ -43,12 +31,13 @@ const TeamProfile = () => {
 
       return teamResponse.data;
     },
+    enabled: !!userTeamId,
   });
 
   const teamMutation = useMutation({
     mutationFn: async () => {
       try {
-        await client.models.User.update({ id: userId, teamId: null });
+        await client.models.User.update({ id: userTeamId, teamId: null });
       } catch (error) {
         console.error("Error updating ids", error);
         throw error;
@@ -56,14 +45,14 @@ const TeamProfile = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["Team", userId],
+        queryKey: ["Team", userTeamId],
       });
     },
   });
 
   return (
     <>
-      {isFetching ? (
+      {isFetching || !userTeamId ? (
         <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
           <LoadingRing />
         </div>
