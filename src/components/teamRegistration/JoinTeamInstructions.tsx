@@ -21,12 +21,12 @@ export default function JoinTeamInstructions() {
         <span className="font-bold"> ONE </span>
         member to <span className="font-bold"> “Register New Team” </span>
         using your Team Name. They will receive a unique
-        <span className="font-bold"> 6-digit Team ID </span>
+        <span className="font-bold"> 4-digit Team ID </span>
         following registration.
       </li>
       <li>
         Next, provide this
-        <span className="font-bold"> 6-digit Team ID </span>
+        <span className="font-bold"> 4-digit Team ID </span>
         to all team members.
       </li>
       <li>
