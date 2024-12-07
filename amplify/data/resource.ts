@@ -97,7 +97,7 @@ const schema = a
         teamRooms: a.hasMany("TeamRoom", "teamId"),
       })
       .authorization((allow) => [
-        allow.group("Admin").to(["read", "update", "create"]),
+        allow.group("Admin").to(["read", "update", "create", "delete"]),
         allow.authenticated().to(["read"]),
       ]),
     Score: a
