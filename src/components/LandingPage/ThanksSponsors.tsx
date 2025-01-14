@@ -69,8 +69,8 @@ export default async function ThankSponsors() {
               <div
                 className={IMAGE_CLASS}
                 style={{
-                  maxWidth: "200px",
-                  width: "100%",
+                  maxWidth: "300px",
+                  width: "95%",
                   height: "100%",
                   padding: "5px",
                   borderRadius: "20px",
@@ -101,8 +101,8 @@ export default async function ThankSponsors() {
                       alt="Sponsor Image"
                       layout="intrinsic"
                       objectFit="contain"
-                      width={140}
-                      height={140}
+                      width={150}
+                      height={150}
                     />
                   </div>
                 </a>
