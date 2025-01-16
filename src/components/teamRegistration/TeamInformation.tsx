@@ -30,8 +30,11 @@ export default function TeamInformation({
     );
   return (
     <div className="flex flex-col gap-8 py-8 text-neutral-700">
-      <h1 className=" text-center text-5xl font-semibold">
-        {teamName + "'s"} Team ID is: <br />
+      <h1 className=" flex flex-col items-center text-center text-4xl font-semibold md:text-5xl">
+        <p className="max-w-xs truncate sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-7xl">
+          {teamName + "'s"}
+        </p>
+        Team ID is: <br />
         <span className="tracking-widest">{teamID}</span>
       </h1>
       <div className="text-center text-xl font-medium">

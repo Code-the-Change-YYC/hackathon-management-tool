@@ -41,9 +41,9 @@ export default function JudgingTimeline({
             colorField: "color",
           }}
           day={{
-            startHour: 15, // will have to be edited when we know what times to capture
-            endHour: 18,
-            step: 15,
+            startHour: 12, // will have to be edited when we know what times to capture
+            endHour: 17,
+            step: 10,
           }}
           deletable={false}
           viewerExtraComponent={(fields, event) => {

@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 const judgingCriteriaStyles =
-  "relative flex -mt-5 justify-between bg-[#BAFBE4] py-20 px-10 md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
+  "relative flex -mt-5 justify-between bg-[#BAFBE4] py-20 px-[5%] md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
 
 const itemStyles =
-  "flex justify-start p-4 lg:px-10 lg:text-[1.0rem] items-start";
+  "flex justify-start p-4 lg:px-6 lg:text-[1.0rem] items-start";
 
 const checkMarkSvg = "/svgs/landingPage/check_mark_bkg.svg";
 
@@ -22,17 +22,17 @@ export const JUDGING_CRITERIA = [
   {
     category: "Judging Criteria - Technical Challenge",
     description:
-      "Does the product function as intended? Does the product execute on its idea in a way that’s effective?",
+      "Is the implementation complex? Does the product feature different parts? Does the product use interesting concepts or technologies?",
   },
   {
     category: "Judging Criteria - Presentation/Marketability",
     description:
-      "Is the implementation complex? Does the product feature different parts? Does the product use interesting concepts or technologies? (If you are unable to judge this criteria accurately, please leave it blank.)",
+      "Does the team seem organized in their presentation/demo? Does the presentation engage the judges and have real-world marketability?",
   },
   {
     category: "Judging Criteria - Design",
     description:
-      "Does the team seem organized in their presentation/demo? Does the presentation engage the judges and have real-world marketability? (If you are unable to judge this criteria accurately, please leave it blank.)",
+      "Is the product aesthetically pleasing? Is the product easy to use? Does the design of the product elevate its function and original idea?",
   },
 ];
 

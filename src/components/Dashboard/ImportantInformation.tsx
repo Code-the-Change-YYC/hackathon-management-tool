@@ -1,37 +1,43 @@
 import Image from "next/image";
 
+import { fetchContent } from "@/app/actions";
+import type { CeremonyDetails } from "@/app/contentfulTypes";
 import ImportantInfoIcon from "@/images/dashboard/ImportantInfoIcon.png";
-import { formatDate } from "@/utils/date-utils";
 
+// import { formatDate } from "@/utils/date-utils";
 import Card from "./Card";
 
-export default function ImportantInformation() {
-  const openingCeremony = {
-    location: "ICT",
-    time: new Date("November 23, 2024 09:00:00"),
-  };
-  const closingCeremony = {
-    location: "ICT",
-    time: new Date("November 24, 2024 18:00:00"),
-  };
+export default async function ImportantInformation() {
+  const ceremonyDetailsArray = await fetchContent("ceremonyDetails");
+  const ceremonyDetails = ceremonyDetailsArray[0]?.fields as CeremonyDetails;
+
+  // const openingCeremonyDate = new Date(ceremonyDetails.openingCeremonyDate);
+  // const closingCeremonyDate = new Date(ceremonyDetails.closingCeremonyDate);
+
   return (
-    <Card className="flex flex-col items-start  gap-4">
+    <Card className="flex h-full flex-col items-start justify-around gap-4">
       <div className="flex items-center gap-4">
-        <Image src={ImportantInfoIcon} alt={"Important Info Icon"} />
+        <Image
+          className="transition duration-300 hover:opacity-90"
+          src={ImportantInfoIcon}
+          alt={"Important Info Icon"}
+        />
         <div className="text-start font-medium">
           Important <br /> Information
         </div>
       </div>
-      <div className="grid w-full grid-flow-row gap-4 sm:grid-flow-col">
-        <div className="text-start text-2xl font-normal">
+      <div className="grid w-full gap-4 p-6">
+        <div className="mb-4 text-start text-2xl font-normal">
           <h1 className="pb-2 text-3xl font-bold">Opening Ceremony</h1>
-          <p>Location: {openingCeremony.location}</p>
-          <p>Time: {formatDate(openingCeremony.time)}</p>
+          <p>Location: {ceremonyDetails.openingCeremonyLocation}</p>
+          {/* <p>Time: {formatDate(openingCeremonyDate)}</p> */}
+          <p>Nov 9, 10:00 AM</p>
         </div>
         <div className="text-start text-2xl font-normal">
           <h1 className="pb-2 text-3xl font-bold">Closing Ceremony</h1>
-          <p>Location: {closingCeremony.location}</p>
-          <p>Time: {formatDate(closingCeremony.time)}</p>
+          <p>Location: {ceremonyDetails.closingCeremonyLocation}</p>
+          {/* <p>Time: {formatDate(closingCeremonyDate)}</p> */}
+          <p>Nov 10, 5:00 PM</p>
         </div>
       </div>
     </Card>

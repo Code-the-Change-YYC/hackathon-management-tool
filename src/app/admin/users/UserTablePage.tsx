@@ -43,6 +43,7 @@ const UserTablePage = () => {
           "email",
           "id",
         ],
+        limit: 1000,
       });
 
       if (response.errors) {

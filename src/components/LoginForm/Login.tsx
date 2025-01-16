@@ -12,6 +12,7 @@ import { type AuthContext } from "@aws-amplify/ui/dist/types";
 
 export default function Login() {
   const pathname = usePathname();
+
   const components: DefaultComponents = {
     SignIn: {
       Header: () => <FormFieldsHeader />,
@@ -42,7 +43,7 @@ export default function Login() {
   };
   return (
     <Authenticator
-      socialProviders={["google", "apple"]}
+      socialProviders={["google"]}
       initialState={pathname === "/login" ? "signIn" : "signUp"}
       signUpAttributes={[]}
       services={services}

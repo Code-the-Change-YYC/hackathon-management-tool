@@ -5,7 +5,9 @@ import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
 export default async function TotalParticipants() {
-  const users = await client.models.User.list();
+  const users = await client.models.User.list({
+    limit: 1000,
+  });
   // TODO: "user.role should be an enum, not a string."
   const participants = users.data.filter((user) => user.role === "Participant");
   const numParticipants = participants.length;
