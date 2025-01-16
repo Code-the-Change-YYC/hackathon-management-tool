@@ -1,8 +1,15 @@
+import type { Schema } from "@/amplify/data/resource";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 
-import type { Team } from "../tanstackTableSetup";
 import TeamMembers from "./TeamMembers";
 
+type Members = Pick<
+  Schema["User"]["type"],
+  "id" | "firstName" | "lastName" | "checkedIn"
+>;
+export type Team = Pick<Schema["Team"]["type"], "name" | "approved" | "id"> & {
+  members: Members[];
+};
 export default async function TeamsTable() {
   const { data: team } = await client.models.Team.list({
     selectionSet: [
@@ -19,9 +26,9 @@ export default async function TeamsTable() {
     return <div className="">No teams were found</div>;
   else {
     const teamData: Team[] = team.map((t) => ({
-      teamName: t.name,
-      approvedStatus: t.approved,
-      teamID: t.id,
+      name: t.name,
+      approved: t.approved,
+      id: t.id,
       members: t.members.map((m) => ({
         id: m.id,
         firstName: m.firstName,

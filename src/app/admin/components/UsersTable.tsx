@@ -3,33 +3,33 @@
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 
-import type { Schema } from "@/amplify/data/resource";
+import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
-import { teamColumns } from "@/app/admin/teams/TeamTableSetup";
 import tanstackTableHelper from "@/components/TanstackTableHelper";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import SearchTeam from "./SearchTeam";
-import TeamTableBody from "./TanstackTableBody";
-import TableFooter from "./TanstackTableFooter";
-import TeamsTableHead from "./TanstackTableHead";
-import type { Team } from "./TeamsTable";
+import SearchTeam from "../teams/components/SearchTeam";
+import TanstackTableBody from "../teams/components/TanstackTableBody";
+import TableFooter from "../teams/components/TanstackTableFooter";
+import TanstackTableHead from "../teams/components/TanstackTableHead";
+import { type User, usersColumns } from "./UsersTableSetup";
 
-export default function TeamMembers({ team }: { team: Team[] }) {
-  const [data, setData] = useState(team);
+export default function UsersTable({ users }: { users: User[] }) {
+  const [data, setData] = useState(users);
+  const [globalFilter, setGlobalFilter] = useState("");
   const queryClient = useQueryClient();
-  const deleteTeam = useMutation({
+  const deleteParticipant = useMutation({
     mutationFn: async ({
       rowIndex,
-      teamID,
+      participantID,
     }: {
       rowIndex: number;
-      teamID: Schema["Team"]["deleteType"];
+      participantID: Schema["User"]["deleteType"];
     }) => {
       const prev = data;
       setData((old) => old.filter((_, index) => index !== rowIndex));
       try {
-        const response = await client.models.Team.delete(teamID);
+        const response = await client.models.User.delete(participantID);
         if (response.errors) {
           throw new Error(response.errors[0].message);
         }
@@ -37,7 +37,7 @@ export default function TeamMembers({ team }: { team: Team[] }) {
         setData(prev);
         throw error;
       }
-      return teamID;
+      return participantID;
     },
     onError: (error) => {
       toast.error("Error updating teams: " + error.message);
@@ -47,10 +47,10 @@ export default function TeamMembers({ team }: { team: Team[] }) {
       toast.success(`Team ${teamID.id} deleted succesfully`);
     },
   });
-  const updateTeam = useMutation({
-    mutationFn: async (updatedData: Schema["Team"]["updateType"]) => {
+  const updateParticipant = useMutation({
+    mutationFn: async (updatedData: Schema["User"]["updateType"]) => {
       try {
-        const response = await client.models.Team.update(updatedData);
+        const response = await client.models.User.update(updatedData);
         if (response.errors) {
           throw new Error(response.errors[0].message);
         }
@@ -59,17 +59,16 @@ export default function TeamMembers({ team }: { team: Team[] }) {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Teams"] });
+      queryClient.invalidateQueries({ queryKey: ["Participant"] });
       toast.success("Table data updated succesfully");
     },
     onError: () => {
-      toast.error("Error updating teams");
+      toast.error("Error updating participant");
     },
   });
-  const [globalFilter, setGlobalFilter] = useState("");
   const table = tanstackTableHelper({
     data,
-    columnData: teamColumns,
+    columnData: usersColumns,
     meta: {
       updateData: (rowIndex, columnId, value) => {
         setData((old) =>
@@ -82,19 +81,22 @@ export default function TeamMembers({ team }: { team: Team[] }) {
           }),
         );
       },
-      deleteData: (team, rowIndex) => {
-        const teamID = {
-          id: team.id,
+      deleteData: (participant, rowIndex) => {
+        const participantID = {
+          id: participant.id,
         };
-        deleteTeam.mutate({ teamID, rowIndex });
+        deleteParticipant.mutate({ participantID, rowIndex });
       },
-      saveData: (team) => {
+      saveData: (participant) => {
         const updatedData = {
-          id: team.id,
-          name: team.name,
-          approved: team.approved,
+          id: participant.id,
+          name: participant.firstName,
+          lastName: participant.lastName,
+          role: participant.role,
+          teamId: participant.teamId,
+          email: participant.email,
         };
-        updateTeam.mutate(updatedData);
+        updateParticipant.mutate(updatedData);
       },
     },
     globalFilter,
@@ -111,10 +113,10 @@ export default function TeamMembers({ team }: { team: Team[] }) {
           )}
         />
         <table className="w-full border-separate border-spacing-x-0.5 p-2">
-          <TeamsTableHead
+          <TanstackTableHead
             table={useMemo(() => table.getHeaderGroups(), [table])}
           />
-          <TeamTableBody table={table} />
+          <TanstackTableBody table={table} />
           <tfoot>
             <tr>
               <th

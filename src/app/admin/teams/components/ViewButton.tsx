@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import type { Team } from "../tanstackTableSetup";
 import Modal from "./Modal";
+import type { Team } from "./TeamsTable";
 
 export default function ViewButton({ team }: { team: Team }) {
   const [showPopup, setShowPopup] = useState(false);
@@ -16,7 +16,7 @@ export default function ViewButton({ team }: { team: Team }) {
       {showPopup && (
         <Modal onClose={() => setShowPopup(!showPopup)}>
           <h1 className="text-3xl font-semibold">
-            {team.teamName}
+            {team.name}
             {"'s"} Team
           </h1>
           <table className="w-full border-separate border-spacing-2 text-left">

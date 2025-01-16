@@ -2,18 +2,20 @@ import { useState } from "react";
 
 import type { Row, TableMeta } from "@tanstack/react-table";
 
-import type { Team } from "../tanstackTableSetup";
 import Modal from "./Modal";
 
-export default function DeleteButton({
+export default function DeleteButton<T extends Record<string, any>>({
   row,
   meta,
 }: {
-  row: Row<Team>;
-  meta?: TableMeta<Team>;
+  row: Row<T>;
+  meta?: TableMeta<T>;
 }) {
   const [showPopup, setShowPopup] = useState(false);
-
+  const header =
+    row.original.teamName ??
+    `${row.original.firstName} ${row.original.lastName}`;
+  const id = `- #${row.original.teamID ?? row.original.id}`;
   return (
     <>
       <button className=" text-dark-pink" onClick={() => setShowPopup(true)}>
@@ -22,8 +24,8 @@ export default function DeleteButton({
       {showPopup && (
         <Modal onClose={() => setShowPopup(false)}>
           <h1 className="text-3xl font-semibold">
-            {row.original.teamName}
-            {"'s"} Team - #{row.original.teamID}
+            {header}
+            {id}
           </h1>
           <div className="flex flex-col gap-2 bg-light-grey p-2">
             <h1 className="text-xl font-bold">
@@ -46,7 +48,7 @@ export default function DeleteButton({
               <button
                 className="rounded-md border bg-dark-pink p-2 px-6 text-white transition-all hover:bg-pastel-pink"
                 onClick={() => {
-                  meta?.deleteTeam(row.original, row.index);
+                  meta?.deleteData(row.original, row.index);
                   setShowPopup(false);
                 }}
               >
