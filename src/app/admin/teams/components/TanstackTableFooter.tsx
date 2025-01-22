@@ -1,8 +1,6 @@
 import type { Table } from "@tanstack/react-table";
 
-import type { Team } from "../tanstackTableSetup";
-
-export default function TableFooter({ table }: { table: Table<Team> }) {
+export default function TanstackTableFooter<T>({ table }: { table: Table<T> }) {
   return (
     <div className="text-md flex items-center justify-between gap-2 px-4 text-awesomer-purple">
       <div className="text-black">

@@ -3,9 +3,7 @@ import { memo } from "react";
 import type { HeaderGroup } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
 
-import type { Team } from "../tanstackTableSetup";
-
-const TeamsTableHead = ({ table }: { table: HeaderGroup<Team>[] }) => {
+const TeamsTableHead = ({ table }: { table: HeaderGroup<any>[] }) => {
   return (
     <thead className=" bg-awesome-purple text-white">
       {table.map((headerGroup) => (

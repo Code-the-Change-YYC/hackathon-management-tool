@@ -5,7 +5,7 @@ import { memo, useEffect, useState } from "react";
 
 import search_icon from "@/svgs/admin/search_icon.svg";
 
-const SearchTeam = ({
+const TableSearch = ({
   tableDataLength,
   handleSearchChange,
 }: {
@@ -40,4 +40,4 @@ const SearchTeam = ({
   );
 };
 
-export default memo(SearchTeam);
+export default memo(TableSearch);

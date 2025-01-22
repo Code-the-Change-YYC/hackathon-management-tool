@@ -2,33 +2,40 @@
 
 import { useCallback, useMemo, useState } from "react";
 
-import type { Schema } from "@/amplify/data/resource";
+import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
-import { teamColumns } from "@/app/admin/teams/TeamTableSetup";
 import tanstackTableHelper from "@/components/TanstackTableHelper";
 
-import TableSearch from "./TableSearch";
-import TeamTableBody from "./TanstackTableBody";
-import TableFooter from "./TanstackTableFooter";
-import TeamsTableHead from "./TanstackTableHead";
-import type { Team } from "./TeamsTablePage";
+import TableSearch from "../teams/components/TableSearch";
+import TanstackTableBody from "../teams/components/TanstackTableBody";
+import TableFooter from "../teams/components/TanstackTableFooter";
+import TanstackTableHead from "../teams/components/TanstackTableHead";
+import type { User } from "../users/UserTablePage";
+import { usersColumns } from "./UsersTableSetup";
 
-export default function TeamsTable({ teams }: { teams: Team[] }) {
-  const [data, setData] = useState(teams);
+export default function UsersTable({ users }: { users: User[] }) {
+  const [data, setData] = useState(users);
   const [globalFilter, setGlobalFilter] = useState("");
-  const deleteTeam = async (id: Schema["Team"]["deleteType"]) =>
-    client.models.Team.delete(id);
-  const updateTeam = async (updatedData: Schema["Team"]["updateType"]) =>
-    client.models.Team.update(updatedData);
+  const deleteUser = async (id: Schema["User"]["deleteType"]) =>
+    client.models.User.delete(id);
+  const updateUser = async (updatedData: Schema["User"]["updateType"]) => {
+    return client.models.User.update({
+      id: updatedData.id,
+      firstName: updatedData.firstName,
+      lastName: updatedData.lastName,
+      role: updatedData.role,
+      teamId: updatedData.teamId,
+    });
+  };
   const table = tanstackTableHelper({
     data,
-    columns: teamColumns,
+    columns: usersColumns,
     globalFilter,
     setGlobalFilter,
+    deleteElement: deleteUser,
+    updateElement: updateUser,
     setData,
-    deleteElement: deleteTeam,
-    updateElement: updateTeam,
-    typeName: "Team",
+    typeName: "User",
   });
   return (
     <div className="flex flex-1 flex-col justify-between rounded-3xl bg-white p-2 text-xl outline  outline-awesomer-purple">
@@ -41,10 +48,10 @@ export default function TeamsTable({ teams }: { teams: Team[] }) {
           )}
         />
         <table className="w-full border-separate border-spacing-x-0.5 p-2">
-          <TeamsTableHead
+          <TanstackTableHead
             table={useMemo(() => table.getHeaderGroups(), [table])}
           />
-          <TeamTableBody table={table} />
+          <TanstackTableBody table={table} />
           <tfoot>
             <tr>
               <th

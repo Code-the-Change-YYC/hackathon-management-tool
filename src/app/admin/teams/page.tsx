@@ -1,6 +1,6 @@
 import { SuspenseWrapper } from "@/components/SuspenseWrapper";
 
-import TeamsTable from "./components/TeamsTable";
+import TeamsTable from "./components/TeamsTablePage";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
