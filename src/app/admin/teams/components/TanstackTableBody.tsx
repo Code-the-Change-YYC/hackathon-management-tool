@@ -3,7 +3,7 @@ import { flexRender } from "@tanstack/react-table";
 
 export default function TanstackTableBody<T>({ table }: { table: Table<T> }) {
   return (
-    <tbody>
+    <tbody className="text-sm md:text-lg xl:text-xl">
       {table.getRowModel().rows.map((row) => (
         <tr key={row.id} className="w-full odd:bg-light-grey">
           {row.getVisibleCells().map((cell) => (

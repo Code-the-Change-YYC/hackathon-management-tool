@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
 import DeleteButton from "./components/DeleteButton";
 import SaveEditButton from "./components/SaveEditButton";
-import type { Team } from "./components/TeamsTable";
+import type { Team } from "./components/TeamsTablePage";
 import ViewButton from "./components/ViewButton";
 
 const columnHelper = createColumnHelper<Team>();
@@ -22,21 +22,13 @@ export const teamColumns = [
         options: { meta },
       },
     }) => {
-      const initialValue = getValue() as string;
-      const [value, setValue] = useState(initialValue);
-      useEffect(() => {
-        setValue(initialValue);
-      }, [initialValue]);
-      if (!getIsSelected()) {
-        return getValue();
-      }
-      const onBlur = () => {
-        meta?.updateData(index, "name", value);
-      };
+      const [value, setValue] = useState(getValue());
+      if (!getIsSelected()) return getValue();
+      const onBlur = () => meta?.updateData(index, "name", value);
       return (
         <input
           className="w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple"
-          value={value as string}
+          value={value}
           onChange={(e) => setValue(e.target.value)}
           onBlur={onBlur}
         />
@@ -75,19 +67,12 @@ export const teamColumns = [
     }) => {
       const initialValue = getValue();
       const [value, setValue] = useState(initialValue);
-      useEffect(() => {
-        setValue(initialValue);
-      }, [initialValue]);
-      if (!getIsSelected()) {
-        return getValue() ? "Approved" : "Not Approved";
-      }
+      if (!getIsSelected()) return getValue() ? "Approved" : "Not Approved";
       const ApproveStatus = {
         Approved: true,
         "Not Approved": false,
       } as const;
-      const onBlur = () => {
-        meta?.updateData(index, "approved", value);
-      };
+      const onBlur = () => meta?.updateData(index, "approved", value);
       return (
         <select
           value={value ? "Approved" : "Not Approved"}
@@ -125,7 +110,16 @@ export const teamColumns = [
         <div className="grid auto-cols-auto grid-flow-col gap-2 ">
           <SaveEditButton row={row} meta={meta} />
           <ViewButton team={team} />
-          <DeleteButton row={row} meta={meta} />
+          <DeleteButton
+            row={row}
+            meta={meta}
+            headerText={
+              <>
+                <div>{row.original.name}</div>
+                <div className="text-lg">{row.original.id}</div>
+              </>
+            }
+          />
         </div>
       );
     },

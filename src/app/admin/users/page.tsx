@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export default function Users() {
   return (
-    <div className="flex flex-1 flex-col gap-4 overflow-auto bg-slate-200 p-4 text-3xl font-semibold">
+    <div className="flex flex-1 flex-col gap-4 overflow-auto bg-slate-200 p-4 text-3xl ">
       <CheckUserLoggedIn>
         <SuspenseWrapper>
           <UserTablePage />

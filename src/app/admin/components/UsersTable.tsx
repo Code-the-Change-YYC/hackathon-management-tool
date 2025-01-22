@@ -1,111 +1,46 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
 import tanstackTableHelper from "@/components/TanstackTableHelper";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import SearchTeam from "../teams/components/SearchTeam";
+import TableSearch from "../teams/components/TableSearch";
 import TanstackTableBody from "../teams/components/TanstackTableBody";
 import TableFooter from "../teams/components/TanstackTableFooter";
 import TanstackTableHead from "../teams/components/TanstackTableHead";
-import { type User, usersColumns } from "./UsersTableSetup";
+import type { User } from "../users/UserTablePage";
+import { usersColumns } from "./UsersTableSetup";
 
 export default function UsersTable({ users }: { users: User[] }) {
   const [data, setData] = useState(users);
   const [globalFilter, setGlobalFilter] = useState("");
-  const queryClient = useQueryClient();
-  const deleteParticipant = useMutation({
-    mutationFn: async ({
-      rowIndex,
-      participantID,
-    }: {
-      rowIndex: number;
-      participantID: Schema["User"]["deleteType"];
-    }) => {
-      const prev = data;
-      setData((old) => old.filter((_, index) => index !== rowIndex));
-      try {
-        const response = await client.models.User.delete(participantID);
-        if (response.errors) {
-          throw new Error(response.errors[0].message);
-        }
-      } catch (error) {
-        setData(prev);
-        throw error;
-      }
-      return participantID;
-    },
-    onError: (error) => {
-      toast.error("Error updating teams: " + error.message);
-    },
-    onSuccess: (teamID) => {
-      queryClient.invalidateQueries({ queryKey: ["Teams"] });
-      toast.success(`Team ${teamID.id} deleted succesfully`);
-    },
-  });
-  const updateParticipant = useMutation({
-    mutationFn: async (updatedData: Schema["User"]["updateType"]) => {
-      try {
-        const response = await client.models.User.update(updatedData);
-        if (response.errors) {
-          throw new Error(response.errors[0].message);
-        }
-      } catch (error) {
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Participant"] });
-      toast.success("Table data updated succesfully");
-    },
-    onError: () => {
-      toast.error("Error updating participant");
-    },
-  });
+  const deleteUser = async (id: Schema["User"]["deleteType"]) =>
+    client.models.User.delete(id);
+  const updateUser = async (updatedData: Schema["User"]["updateType"]) => {
+    return client.models.User.update({
+      id: updatedData.id,
+      firstName: updatedData.firstName,
+      lastName: updatedData.lastName,
+      role: updatedData.role,
+      teamId: updatedData.teamId,
+    });
+  };
   const table = tanstackTableHelper({
     data,
-    columnData: usersColumns,
-    meta: {
-      updateData: (rowIndex, columnId, value) => {
-        setData((old) =>
-          old.map((row, index) => {
-            if (index !== rowIndex) return row;
-            return {
-              ...old[rowIndex]!,
-              [columnId]: value,
-            };
-          }),
-        );
-      },
-      deleteData: (participant, rowIndex) => {
-        const participantID = {
-          id: participant.id,
-        };
-        deleteParticipant.mutate({ participantID, rowIndex });
-      },
-      saveData: (participant) => {
-        const updatedData = {
-          id: participant.id,
-          name: participant.firstName,
-          lastName: participant.lastName,
-          role: participant.role,
-          teamId: participant.teamId,
-          email: participant.email,
-        };
-        updateParticipant.mutate(updatedData);
-      },
-    },
+    columns: usersColumns,
     globalFilter,
     setGlobalFilter,
+    deleteElement: deleteUser,
+    updateElement: updateUser,
+    setData,
+    typeName: "User",
   });
   return (
     <div className="flex flex-1 flex-col justify-between rounded-3xl bg-white p-2 text-xl outline  outline-awesomer-purple">
       <div>
-        <SearchTeam
+        <TableSearch
           tableDataLength={table.getRowCount()}
           handleSearchChange={useCallback(
             (value: string) => setGlobalFilter(value),

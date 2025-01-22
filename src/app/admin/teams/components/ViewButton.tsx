@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import Modal from "./Modal";
-import type { Team } from "./TeamsTable";
+import type { Team } from "./TeamsTablePage";
 
 export default function ViewButton({ team }: { team: Team }) {
   const [showPopup, setShowPopup] = useState(false);

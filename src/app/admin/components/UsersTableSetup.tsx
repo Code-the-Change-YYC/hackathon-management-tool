@@ -2,16 +2,11 @@
 
 import { useState } from "react";
 
-import type { Schema } from "@/amplify/data/resource";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import DeleteButton from "../teams/components/DeleteButton";
 import SaveEditButton from "../teams/components/SaveEditButton";
-
-export type User = Pick<
-  Schema["User"]["type"],
-  "email" | "firstName" | "lastName" | "role" | "teamId" | "id"
->;
+import type { User } from "../users/UserTablePage";
 
 const Role = {
   Participant: "Participant",
@@ -21,13 +16,50 @@ const Role = {
 const columnHelper = createColumnHelper<User>();
 export const usersColumns = [
   columnHelper.accessor("id", {
-    cell: (info) => info.getValue(),
+    cell: (info) => {
+      return (
+        <div className="max-w-24 overflow-x-auto whitespace-nowrap lg:max-w-48 2xl:max-w-full">
+          {info.getValue()}
+        </div>
+      );
+    },
     header: "ID",
     sortingFn: "basic",
   }),
   columnHelper.accessor("email", {
+    cell: (info) => {
+      return (
+        <div className="max-w-24 overflow-x-auto whitespace-nowrap lg:max-w-48 2xl:max-w-full">
+          {info.getValue()}
+        </div>
+      );
+    },
     header: "Email",
     sortingFn: "basic",
+  }),
+  columnHelper.accessor("teamId", {
+    cell: ({
+      getValue,
+      row: { getIsSelected, index },
+      table: {
+        options: { meta },
+      },
+    }) => {
+      const [value, setValue] = useState(getValue()!);
+      if (!getIsSelected()) return getValue();
+      const onBlur = () => {
+        meta?.updateData(index, "teamId", value);
+      };
+      return (
+        <input
+          className="w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onBlur={onBlur}
+        />
+      );
+    },
+    header: "Team ID",
   }),
   columnHelper.accessor("firstName", {
     cell: ({
@@ -90,7 +122,6 @@ export const usersColumns = [
   columnHelper.accessor("role", {
     cell: ({
       getValue,
-      row,
       row: { getIsSelected, index },
       table: {
         options: { meta },
@@ -110,7 +141,7 @@ export const usersColumns = [
           className="w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple"
           onChange={(e) => {
             setValue(Role[e.target.value as keyof typeof Role]);
-            meta?.updateData(row.index, "role", value);
+            onBlur();
           }}
           onBlur={onBlur}
         >
@@ -137,7 +168,19 @@ export const usersColumns = [
       return (
         <div className="grid auto-cols-auto grid-flow-col gap-2 ">
           <SaveEditButton row={row} meta={meta} />
-          <DeleteButton row={row} meta={meta} />
+          <DeleteButton
+            row={row}
+            meta={meta}
+            headerText={
+              <>
+                <div>
+                  {`${row.original.firstName} ${row.original.lastName}`}
+                </div>
+                <div className="text-lg">{row.original.email}</div>
+                <div className="text-xs">{row.original.id}</div>
+              </>
+            }
+          />
         </div>
       );
     },
