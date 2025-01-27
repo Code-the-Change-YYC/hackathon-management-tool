@@ -21,7 +21,9 @@ export const metadata: Metadata = {
 function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex w-full flex-1 ">
-      <SideNavBar />
+      <div className="w-20">
+        <SideNavBar />
+      </div>
       <div className="flex w-full flex-1 flex-col ">
         <TopNavBar />
         {children}
