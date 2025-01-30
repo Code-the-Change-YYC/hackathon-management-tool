@@ -7,7 +7,7 @@ import withAuthGuard from "@/components/hoc/withAuthGuard";
 const UserProfile = dynamic(
   () => import("@/components/UserProfile/UserProfile"),
   {
-    ssr: false, 
+    ssr: false,
     loading: () => <p>Loading user profile...</p>,
   },
 );
