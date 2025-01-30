@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 import SideNavBar from "@/components/Dashboard/SideNavBar";
 import TopNavBar from "@/components/Dashboard/TopNavBar";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
 
 export const metadata: Metadata = {
   title: "Hack the Change - Admin",
@@ -19,7 +21,9 @@ export const metadata: Metadata = {
 function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex w-full flex-1 ">
-      <SideNavBar />
+      <div className="w-20">
+        <SideNavBar />
+      </div>
       <div className="flex w-full flex-1 flex-col ">
         <TopNavBar />
         {children}
@@ -28,4 +32,4 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default AdminLayout;
+export default withAuthGuard(AdminLayout, [UserType.Admin]);
