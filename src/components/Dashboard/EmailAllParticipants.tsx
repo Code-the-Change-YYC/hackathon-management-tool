@@ -1,9 +1,24 @@
+import { useEffect } from "react";
+
 type Props = { closeModal: () => void };
 
 export default function EmailAllParticipants({ closeModal }: Props) {
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      const modal = document.querySelector(".modal-container");
+      if (modal && !modal.contains(e.target as Node)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [closeModal]);
   return (
     <div className="flex size-full items-center justify-center">
-      <div className="max-w-2xl rounded-3xl bg-light-grey shadow-2xl">
+      <div className="modal-container max-w-2xl rounded-3xl bg-light-grey shadow-2xl">
         <div className="flex items-center justify-between rounded-t-3xl bg-awesomer-purple p-6">
           <h2 className="text-lg font-semibold text-white">
             Email All Participants

@@ -19,7 +19,7 @@ export default function TopNavBar() {
         <div className="flex flex-row items-center gap-4">
           <button
             onClick={toggleModal}
-            className="rounded-lg p-2 text-lg shadow-lg ring-2 ring-awesome-purple ease-linear hover:-translate-y-2 hover:bg-awesome-purple hover:ring-awesomer-purple"
+            className="rounded-lg p-2 text-lg shadow-lg ring-2 ring-awesome-purple transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:bg-awesome-purple hover:ring-awesomer-purple"
           >
             Announce To All Participants
           </button>
