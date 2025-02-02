@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 
 import SideNavBar from "@/components/Dashboard/SideNavBar";
 import TopNavBar from "@/components/Dashboard/TopNavBar";
-import { UserType } from "@/components/contexts/UserContext";
-import withAuthGuard from "@/components/hoc/withAuthGuard";
 
 export const metadata: Metadata = {
   title: "Hack the Change - Admin",
@@ -32,4 +30,4 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default withAuthGuard(AdminLayout, [UserType.Admin]);
+export default AdminLayout;
