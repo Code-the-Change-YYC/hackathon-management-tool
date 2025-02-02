@@ -130,19 +130,19 @@ export default function ResetPage() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="relative flex w-full flex-col justify-center gap-4 bg-white p-4 md:p-8"
+      className="relative flex w-full flex-col justify-center gap-4 bg-dashboard-grey p-4 md:p-8"
     >
       <div className="flex w-full flex-col justify-between gap-2 md:gap-12">
         <div className="flex w-full flex-row">
           <div className="mr-24 flex w-1/3 flex-col gap-2">
-            <Label>Score Components: </Label>
+            <Label>Scoring Components: </Label>
             {scoringComponents.map((field, index) => (
               <div key={field?.id} className="flex flex-row gap-2">
                 <Input
                   required
                   id="scoringComponents"
                   {...register(`scoringComponents.${index}.friendlyName`)}
-                  placeholder="Usability, Creativity, etc."
+                  placeholder="Idea, Effectiveness, Presentation, etc."
                 />
                 <Button
                   type="button"
@@ -150,7 +150,7 @@ export default function ResetPage() {
                   colorTheme="error"
                   onClick={() => removeScoringComponent(index)}
                 >
-                  X
+                  -
                 </Button>
               </div>
             ))}
@@ -164,7 +164,7 @@ export default function ResetPage() {
                 })
               }
             >
-              Add Score Component
+              Add Scoring Component
             </Button>
           </div>
           <div className="flex w-1/3 flex-col gap-2">
@@ -175,7 +175,7 @@ export default function ResetPage() {
                   required
                   id="scoringSidepots"
                   {...register(`scoringSidepots.${index}.friendlyName`)}
-                  placeholder="Usability, Creativity, etc."
+                  placeholder="Creativity, Best UI, Use of AI, etc."
                 />
                 <Button
                   variation="primary"
@@ -183,7 +183,7 @@ export default function ResetPage() {
                   type="button"
                   onClick={() => removeScoringSidepot(index)}
                 >
-                  X
+                  -
                 </Button>
               </div>
             ))}
@@ -229,7 +229,7 @@ export default function ResetPage() {
             <div className="flex flex-col gap-2">
               <Label>Resetting or Creating Hackathon</Label>
               <CheckboxField
-                label="Resetting Hackathon: "
+                label="Resetting Hackathon"
                 {...register("resetting")}
                 checked={resetting}
                 onChange={() => {
@@ -239,7 +239,7 @@ export default function ResetPage() {
                 }}
               />
               <CheckboxField
-                label="Creating Hackathon: "
+                label="Creating Hackathon"
                 {...register("resetting")}
                 checked={creating}
                 onChange={() => {
@@ -258,22 +258,22 @@ export default function ResetPage() {
             <div className="flex w-1/3 flex-col gap-2">
               <Label>Reset Fields</Label>
               <CheckboxField
-                label="Reset Users: "
+                label="Reset Users"
                 {...register("resetUsers")}
                 checked={watch("resetUsers")}
               />
               <CheckboxField
-                label="Reset Teams: "
+                label="Reset Teams"
                 {...register("resetTeams")}
                 checked={watch("resetTeams")}
               />
               <CheckboxField
-                label="Reset Rooms: "
+                label="Reset Rooms"
                 {...register("resetRooms")}
                 checked={watch("resetRooms")}
               />
               <CheckboxField
-                label="Reset Scores: "
+                label="Reset Scores"
                 {...register("resetScores")}
                 checked={watch("resetScores")}
               />
