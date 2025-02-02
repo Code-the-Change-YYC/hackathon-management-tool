@@ -1,9 +1,11 @@
-import { memo } from "react";
-
 import type { HeaderGroup } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
 
-const TeamsTableHead = ({ table }: { table: HeaderGroup<any>[] }) => {
+export default function TeamsTableHead({
+  table,
+}: {
+  table: HeaderGroup<any>[];
+}) {
   return (
     <thead className=" bg-awesome-purple text-white">
       {table.map((headerGroup) => (
@@ -46,5 +48,4 @@ const TeamsTableHead = ({ table }: { table: HeaderGroup<any>[] }) => {
       ))}
     </thead>
   );
-};
-export default memo(TeamsTableHead);
+}

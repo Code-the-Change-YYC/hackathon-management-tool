@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { TbInfoSquareRoundedFilled } from "react-icons/tb";
 
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -184,5 +185,12 @@ export const usersColumns = [
         </div>
       );
     },
+    header: () => (
+      <div className="flex items-center justify-center ">
+        <TbInfoSquareRoundedFilled
+          title={"shift+click headers to multi-sort"}
+        />
+      </div>
+    ),
   }),
 ];
