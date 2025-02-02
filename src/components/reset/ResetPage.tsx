@@ -133,7 +133,7 @@ export default function ResetPage() {
       className="relative flex w-full flex-col justify-center gap-4 bg-dashboard-grey p-4 md:p-8"
     >
       <div className="flex w-full flex-col justify-between gap-2 md:gap-12">
-        <div className="flex w-full flex-row">
+        <div className="m-4 flex w-full max-w-[1500px] flex-row justify-center rounded-md border border-awesomer-purple bg-light-grey p-5 text-lg text-black ">
           <div className="mr-24 flex w-1/3 flex-col gap-2">
             <Label>Scoring Components: </Label>
             {scoringComponents.map((field, index) => (
@@ -156,6 +156,7 @@ export default function ResetPage() {
             ))}
             <Button
               type="button"
+              variation="primary"
               onClick={() =>
                 appendScoringComponent({
                   friendlyName: "",
@@ -189,6 +190,7 @@ export default function ResetPage() {
             ))}
             <Button
               type="button"
+              variation="primary"
               onClick={() => {
                 appendScoringSidepot({
                   friendlyName: "",
@@ -203,14 +205,14 @@ export default function ResetPage() {
         </div>
         <div className="flex flex-row">
           {" "}
-          <div className="mr-24 flex min-w-96 flex-col gap-2">
+          <div className="m-4 mr-24 flex w-full min-w-96 max-w-[200px] flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
             <div className="flex flex-col gap-2">
               <Label htmlFor="startDate">Start Date:</Label>
               <Input
                 required
                 type="date"
                 id="startDate"
-                placeholder="Last Name"
+                placeholder="yyyy-mm-dd"
                 {...register("startDate")}
               />
             </div>
@@ -220,7 +222,7 @@ export default function ResetPage() {
                 required
                 type="date"
                 id="endDate"
-                placeholder="Last Name"
+                placeholder="yyyy-mm-dd"
                 {...register("endDate")}
               />
             </div>
@@ -280,7 +282,7 @@ export default function ResetPage() {
             </div>
           )}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="m-4 flex w-full max-w-[1500px] flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
           <Label htmlFor="safetyCheck">
             Enter &quot;i love code the change&quot; to confirm{" "}
           </Label>
