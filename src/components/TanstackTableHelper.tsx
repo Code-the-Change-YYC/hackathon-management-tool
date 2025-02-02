@@ -10,6 +10,7 @@ import type {
   FilterFn,
   PaginationState,
   RowData,
+  SortingState,
 } from "@tanstack/react-table";
 import {
   getCoreRowModel,
@@ -46,7 +47,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 export default function tanstackTableHelper<
   T extends M & MP & UP,
   M,
-  MP extends { readonly id: string },
+  MP extends object,
   DR,
   UP,
 >({
@@ -59,19 +60,19 @@ export default function tanstackTableHelper<
   typeName,
   updateElement,
 }: {
-  globalFilter: string;
-  setGlobalFilter: (value: string) => void;
+  globalFilter?: string;
+  setGlobalFilter?: (value: string) => void;
   data: T[];
   setData: Dispatch<SetStateAction<T[]>>;
   columns: ColumnDef<T, any>[];
-  deleteElement: (id: MP) => Promise<{
+  deleteElement?: (id: MP) => Promise<{
     data: DR;
     errors?: any[];
     extensions?: {
       [key: string]: any;
     };
   }>;
-  updateElement: (updatedElement: UP) => Promise<{
+  updateElement?: (updatedElement: UP) => Promise<{
     data: DR;
     errors?: any[];
     extensions?: {
@@ -84,70 +85,79 @@ export default function tanstackTableHelper<
     pageSize: 10,
     pageIndex: 0,
   });
-
+  const [sorting, setSorting] = useState<SortingState>([]);
   const queryClient = useQueryClient();
-  const deleteMutation = useMutation({
-    mutationKey: [typeName],
-    mutationFn: async ({ rowIndex, id }: { rowIndex: number; id: MP }) => {
-      const prev = data;
-      setData((old) => old.filter((_, index) => index !== rowIndex));
-      try {
-        const response = await deleteElement(id);
-        if (response.errors) {
-          throw new Error(response.errors[0].message);
+  let deleteMutation = null;
+  if (deleteElement) {
+    deleteMutation = useMutation({
+      mutationKey: [typeName],
+      mutationFn: async ({ rowIndex, id }: { rowIndex: number; id: MP }) => {
+        const prev = data;
+        setData((old) => old.filter((_, index) => index !== rowIndex));
+        try {
+          const response = await deleteElement(id);
+          if (response.errors) {
+            throw new Error(response.errors[0].message);
+          }
+        } catch (error) {
+          setData(prev);
+          throw error;
         }
-      } catch (error) {
-        setData(prev);
-        throw error;
-      }
-      return id;
-    },
-    onError: (error) => {
-      toast.error(`Error deleting ${typeName}: ${error.message}`);
-    },
-    onSuccess: (element) => {
-      queryClient.invalidateQueries({ queryKey: [typeName] });
-      toast.success(`${typeName} ${element.id!} deleted succesfully`);
-    },
-  });
-  const updateMutation = useMutation({
-    mutationKey: [typeName],
-    mutationFn: async (updatedData: UP) => {
-      try {
-        const response = await updateElement(updatedData);
-        if (response.errors) {
-          throw new Error(response.errors[0].message);
+        return id;
+      },
+      onError: (error) => {
+        toast.error(`Error deleting ${typeName}: ${error.message}`);
+      },
+      onSuccess: (element) => {
+        queryClient.invalidateQueries({ queryKey: [typeName] });
+        if (!("id" in element)) return;
+        toast.success(`${typeName} ${element.id!} deleted succesfully`);
+      },
+    });
+  }
+  let updateMutation = null;
+  if (updateElement) {
+    updateMutation = useMutation({
+      mutationKey: [typeName],
+      mutationFn: async (updatedData: UP) => {
+        try {
+          const response = await updateElement(updatedData);
+          if (response.errors) {
+            throw new Error(response.errors[0].message);
+          }
+        } catch (error) {
+          throw error;
         }
-      } catch (error) {
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [typeName] });
-      toast.success(`${typeName} data updated succesfully`);
-    },
-    onError: () => {
-      toast.error(`Error updating ${typeName}`);
-    },
-  });
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [typeName] });
+        toast.success(`${typeName} data updated succesfully`);
+      },
+      onError: () => {
+        toast.error(`Error updating ${typeName}`);
+      },
+    });
+  }
   const table = useReactTable({
     data,
     columns,
-    onGlobalFilterChange: setGlobalFilter,
+    // onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
+    // onPaginationChange: setPagination,
+    // onSortingChange: setSorting,
     filterFns: {
       fuzzy: fuzzyFilter,
     },
-    globalFilterFn: "fuzzy",
-    state: {
-      pagination,
-      globalFilter,
-    },
-    autoResetPageIndex: false,
+    // globalFilterFn: "fuzzy",
+    // state: {
+    //   pagination,
+    //   globalFilter,
+    //   sorting,
+    // },
+    // autoResetPageIndex: false,
     meta: {
       updateData: (rowIndex, columnId, value) => {
         setData((old) =>
@@ -161,9 +171,9 @@ export default function tanstackTableHelper<
         );
       },
       deleteData: (element, rowIndex) => {
-        deleteMutation.mutate({ id: element, rowIndex });
+        deleteMutation?.mutate({ id: element, rowIndex });
       },
-      saveData: (data) => updateMutation.mutate(data),
+      saveData: (data) => updateMutation?.mutate(data),
     },
   });
   return table;

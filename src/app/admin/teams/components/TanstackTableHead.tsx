@@ -3,7 +3,8 @@ import { memo } from "react";
 import type { HeaderGroup } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
 
-const TeamsTableHead = ({ table }: { table: HeaderGroup<any>[] }) => {
+const TanstackTableHead = ({ table }: { table: HeaderGroup<any>[] }) => {
+  console.log("rerender");
   return (
     <thead className=" bg-awesome-purple text-white">
       {table.map((headerGroup) => (
@@ -17,7 +18,10 @@ const TeamsTableHead = ({ table }: { table: HeaderGroup<any>[] }) => {
                       ? "flex cursor-pointer select-none gap-2"
                       : ""
                   }
-                  onClick={header.column.getToggleSortingHandler()}
+                  onClick={() => {
+                    header.column.getToggleSortingHandler();
+                    console.log(header.column.getIsSorted());
+                  }}
                   title={
                     header.column.getCanSort()
                       ? header.column.getNextSortingOrder() === "asc"
@@ -47,4 +51,4 @@ const TeamsTableHead = ({ table }: { table: HeaderGroup<any>[] }) => {
     </thead>
   );
 };
-export default memo(TeamsTableHead);
+export default memo(TanstackTableHead);

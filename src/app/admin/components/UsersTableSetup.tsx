@@ -2,17 +2,13 @@
 
 import { useState } from "react";
 
+import { UserType } from "@/components/contexts/UserContext";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import DeleteButton from "../teams/components/DeleteButton";
 import SaveEditButton from "../teams/components/SaveEditButton";
 import type { User } from "../users/UserTablePage";
 
-const Role = {
-  Participant: "Participant",
-  Judge: "Judge",
-  Admin: "Admin",
-} as const;
 const columnHelper = createColumnHelper<User>();
 export const usersColumns = [
   columnHelper.accessor("id", {
@@ -140,12 +136,12 @@ export const usersColumns = [
           value={value}
           className="w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple"
           onChange={(e) => {
-            setValue(Role[e.target.value as keyof typeof Role]);
+            setValue(UserType[e.target.value as keyof typeof UserType]);
             onBlur();
           }}
           onBlur={onBlur}
         >
-          {Object.keys(Role).map((key) => (
+          {Object.keys(UserType).map((key) => (
             <option key={key} value={key}>
               {key}
             </option>

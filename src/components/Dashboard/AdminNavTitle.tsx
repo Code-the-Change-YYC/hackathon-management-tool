@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 export default function AdminNavTitle() {
   const paths = usePathname().split("/");
   const path = paths[paths.length - 1];
-  console.log(path);
   const getTitle = (): string => {
     if (path === "admin") {
       return "Home";
