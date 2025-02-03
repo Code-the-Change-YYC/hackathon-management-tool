@@ -9,6 +9,7 @@ import type { Schema } from "@/amplify/data/resource";
 import { Button, CheckboxField, Input, Label } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
+import KevinIcon from "../../../public/svgs/admin/Kevin.svg";
 import LoadingRing from "../LoadingRing";
 
 const client = generateClient<Schema>();
@@ -205,9 +206,9 @@ export default function ResetPage() {
             </div>
           </div>
         </div>
-        <div className="-ml-4 flex flex-row">
+        <div className="-ml-4 flex w-full flex-row">
           {" "}
-          <div className="m-4 mr-10 flex h-[350px] w-full min-w-96 max-w-[250px] flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+          <div className="m-4 mr-10 flex h-[350px] w-full min-w-96 max-w-[200px] flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
             <div className="m-1.8 h-full w-full flex-col justify-center gap-8 bg-white p-10 align-middle">
               <div className="my-5 flex flex-col gap-2">
                 <Label htmlFor="startDate">Start Date:</Label>
@@ -231,8 +232,8 @@ export default function ResetPage() {
               </div>
             </div>
           </div>{" "}
-          <div className="my-4 flex h-[350px] w-full min-w-[600px] max-w-[1000px] gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
-            <div className="m-1.8 flex h-full w-full flex-row justify-center gap-20 bg-white py-10 pl-10 align-middle">
+          <div className="my-4 flex h-[350px] w-full gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+            <div className="m-1.8 flex h-full w-full flex-row justify-center gap-20 bg-white p-5 py-10 align-middle">
               <div className="flex min-w-20 flex-col pt-5">
                 <div className="flex flex-col gap-5">
                   <Label>Resetting or Creating Hackathon</Label>
@@ -290,42 +291,47 @@ export default function ResetPage() {
             </div>
           </div>
         </div>
-        <div className="mr-auto flex min-w-[700px] max-w-[1000px] flex-col items-center justify-center gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
-          <div className="m-1.8 w-full flex-col justify-center gap-8 bg-white p-10">
-            <div className="justify-items-center">
-              <Label htmlFor="safetyCheck">
-                Enter &quot;i love code the change&quot; to confirm{" "}
-              </Label>
+        <div className=" flex w-full flex-row">
+          <div className="mr-auto flex min-w-[700px] max-w-[1000px] flex-col items-center justify-center gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+            <div className="m-1.8 w-full flex-col justify-center gap-8 bg-white p-10">
+              <div className="justify-items-center">
+                <Label htmlFor="safetyCheck">
+                  Enter &quot;i love code the change&quot; to confirm{" "}
+                </Label>
 
-              <div className="mt-5 flex w-1/2 flex-row gap-2">
-                <Input
-                  required
-                  id="safetyCheck"
-                  placeholder="i love code the change"
-                  {...register("safetyCheck")}
-                  className="w-50"
-                />
-                <Button
-                  variation="primary"
-                  colorTheme={
-                    userMutation.isSuccess
-                      ? "success"
+                <div className="mt-5 flex w-3/4 flex-row gap-2">
+                  <Input
+                    required
+                    id="safetyCheck"
+                    placeholder="i love code the change"
+                    {...register("safetyCheck")}
+                    className="w-50"
+                  />
+                  <Button
+                    variation="primary"
+                    colorTheme={
+                      userMutation.isSuccess
+                        ? "success"
+                        : userMutation.isError
+                          ? "error"
+                          : undefined // Set the colorTheme to undefined if none of the conditions are met
+                    }
+                    loadingText="Loading..."
+                    type="submit"
+                    isLoading={userMutation.isPending}
+                  >
+                    {userMutation.isSuccess
+                      ? "Success"
                       : userMutation.isError
-                        ? "error"
-                        : undefined // Set the colorTheme to undefined if none of the conditions are met
-                  }
-                  loadingText="Loading..."
-                  type="submit"
-                  isLoading={userMutation.isPending}
-                >
-                  {userMutation.isSuccess
-                    ? "Success"
-                    : userMutation.isError
-                      ? "Error"
-                      : "Submit"}
-                </Button>
+                        ? "Error"
+                        : "Submit"}
+                  </Button>
+                </div>
               </div>
             </div>
+          </div>
+          <div className="flex w-full items-center justify-center">
+            <img src={KevinIcon.src} alt="Kevin Icon" className="w-1/2" />
           </div>
         </div>
       </div>
