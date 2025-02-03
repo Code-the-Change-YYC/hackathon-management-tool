@@ -143,9 +143,33 @@ export default function JudgingSchedule() {
     zoomLink: teamRoom.zoomLink,
   }));
 
+  // Update all team rooms with the same zoom link (can change this to different zoom links later on)
+  const { mutate: updateTeamRoomsWithZoomLink } = useMutation({
+    mutationFn: async (zoomLink: string) => {
+      const { data, errors } = await client.models.TeamRoom.list();
+      if (errors) {
+        throw errors;
+      }
+
+      const updatePromises = data.map((teamRoom) =>
+        client.models.TeamRoom.update({
+          id: teamRoom.id,
+          zoomLink,
+        }),
+      );
+
+      await Promise.all(updatePromises);
+
+      queryClient.invalidateQueries({ queryKey: ["TeamRoom"] });
+    },
+  });
+
   return (
     <>
-      <RoomAssigner judgingScheduleMutation={mutate} />
+      <RoomAssigner
+        judgingScheduleMutation={mutate}
+        updateTeamRoomsWithZoomLink={updateTeamRoomsWithZoomLink}
+      />
       <div className="flex justify-center">
         <div className="m-4 w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
           {judgeRooms && judgingEvents ? (
