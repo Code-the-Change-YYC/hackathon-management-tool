@@ -265,7 +265,7 @@ export default function ResetPage() {
               </div>
               {resetting && (
                 <div className="flex w-1/4 flex-col gap-5 py-5">
-                  <Label>Reset Fields</Label>
+                  <Label className="text-center">Reset Fields</Label>
                   <CheckboxField
                     label="Reset Users"
                     {...register("resetUsers")}
@@ -291,47 +291,50 @@ export default function ResetPage() {
             </div>
           </div>
         </div>
-        <div className=" flex w-full flex-row">
-          <div className="mr-auto flex min-w-[700px] max-w-[1000px] flex-col items-center justify-center gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
-            <div className="m-1.8 w-full flex-col justify-center gap-8 bg-white p-10">
-              <div className="justify-items-center">
-                <Label htmlFor="safetyCheck">
-                  Enter &quot;i love code the change&quot; to confirm{" "}
-                </Label>
+        <div className=" flex w-full items-center gap-4">
+          <div className=" flex min-w-0 flex-[2] flex-col items-center justify-center gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+            <div className="w-full bg-white p-6 md:p-10">
+              <Label htmlFor="safetyCheck" className="block text-center">
+                Enter &quot;i love code the change&quot; to confirm{" "}
+              </Label>
 
-                <div className="mt-5 flex w-3/4 flex-row gap-2">
-                  <Input
-                    required
-                    id="safetyCheck"
-                    placeholder="i love code the change"
-                    {...register("safetyCheck")}
-                    className="w-50"
-                  />
-                  <Button
-                    variation="primary"
-                    colorTheme={
-                      userMutation.isSuccess
-                        ? "success"
-                        : userMutation.isError
-                          ? "error"
-                          : undefined // Set the colorTheme to undefined if none of the conditions are met
-                    }
-                    loadingText="Loading..."
-                    type="submit"
-                    isLoading={userMutation.isPending}
-                  >
-                    {userMutation.isSuccess
-                      ? "Success"
+              <div className="mt-5 flex w-full flex-row gap-2">
+                <Input
+                  required
+                  id="safetyCheck"
+                  placeholder="i love code the change"
+                  {...register("safetyCheck")}
+                  className="w-2/3"
+                />
+                <Button
+                  variation="primary"
+                  colorTheme={
+                    userMutation.isSuccess
+                      ? "success"
                       : userMutation.isError
-                        ? "Error"
-                        : "Submit"}
-                  </Button>
-                </div>
+                        ? "error"
+                        : undefined // Set the colorTheme to undefined if none of the conditions are met
+                  }
+                  loadingText="Loading..."
+                  type="submit"
+                  isLoading={userMutation.isPending}
+                  className="w-1/3"
+                >
+                  {userMutation.isSuccess
+                    ? "Success"
+                    : userMutation.isError
+                      ? "Error"
+                      : "Submit"}
+                </Button>
               </div>
             </div>
           </div>
-          <div className="flex w-full items-center justify-center">
-            <img src={KevinIcon.src} alt="Kevin Icon" className="w-1/2" />
+          <div className="flex min-w-0 flex-[1] items-center justify-center">
+            <img
+              src={KevinIcon.src}
+              alt="Kevin Icon"
+              className="w-full max-w-[200px] md:max-w-[250px]"
+            />
           </div>
         </div>
       </div>
