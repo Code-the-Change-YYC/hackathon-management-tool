@@ -25,10 +25,10 @@ export function NavBar() {
 
   return (
     <nav className="border-b bg-white text-awesomer-purple">
-      <div className="mx-auto flex h-20 items-center justify-start space-x-32 pl-8">
+      <div className="mx-auto flex h-20 items-center justify-center space-x-48 pl-8">
         {navigation.map((item) => {
           return (
-            <Link key={item.name} href={item.href} className="text-xl">
+            <Link key={item.name} href={item.href} className="text-2xl">
               {item.name}
             </Link>
           );
