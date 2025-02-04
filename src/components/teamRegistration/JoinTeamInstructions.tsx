@@ -6,7 +6,19 @@ export default function JoinTeamInstructions() {
       <li>
         Join the
         <Link href="https://discord.com/" target="_blank">
-          <span className=" font-bold"> Code the Change YYC Discord </span>
+          <span className=" font-bold">
+            <a
+              className="hover:text-awesomer-purple"
+              target="_blank"
+              rel="noreferrer"
+              href={
+                "https://discord.com/channels/1098088070760382568/1098088071418880071"
+              }
+            >
+              {" "}
+              Code the Change YYC Discord{" "}
+            </a>
+          </span>
         </Link>
         and navigate to the
         <span className="font-bold"> #looking-for-a-team </span> channel.
