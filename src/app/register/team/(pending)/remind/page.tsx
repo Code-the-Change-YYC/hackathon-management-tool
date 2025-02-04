@@ -16,6 +16,7 @@ export default function page() {
       <div className="flex items-center justify-center">
         <a
           target="_blank"
+          rel="noreferrer"
           href={
             "https://discord.com/channels/1098088070760382568/1098088071418880071"
           }
