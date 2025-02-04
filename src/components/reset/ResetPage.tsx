@@ -233,7 +233,7 @@ export default function ResetPage() {
           </div>
           <div className="flex min-w-0 flex-1 flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
             <div className="flex flex-col items-center justify-center gap-6 bg-white p-5 md:p-10">
-              <div className="flex flex-wrap gap-10">
+              <div className="flex flex-wrap gap-20">
                 <div className="flex flex-col gap-5">
                   <Label>Resetting or Creating Hackathon</Label>
                   <CheckboxField
