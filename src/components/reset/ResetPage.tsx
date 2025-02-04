@@ -206,11 +206,10 @@ export default function ResetPage() {
             </div>
           </div>
         </div>
-        <div className="-ml-4 flex w-full flex-row">
-          {" "}
-          <div className="m-4 mr-10 flex h-[350px] w-full min-w-96 max-w-[200px] flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
-            <div className="m-1.8 h-full w-full flex-col justify-center gap-8 bg-white p-10 align-middle">
-              <div className="my-5 flex flex-col gap-2">
+        <div className="flex w-full gap-4">
+          <div className="flex w-[340px] flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+            <div className="flex h-full flex-col justify-center gap-14 bg-white p-5">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="startDate">Start Date:</Label>
                 <Input
                   required
@@ -220,7 +219,7 @@ export default function ResetPage() {
                   {...register("startDate")}
                 />
               </div>
-              <div className="my-5 flex flex-col gap-2 pt-5">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="endDate">End Date: </Label>
                 <Input
                   required
@@ -231,10 +230,10 @@ export default function ResetPage() {
                 />
               </div>
             </div>
-          </div>{" "}
-          <div className="my-4 flex h-[350px] w-full gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
-            <div className="m-1.8 flex h-full w-full flex-row justify-center gap-20 bg-white p-5 py-10 align-middle">
-              <div className="flex min-w-20 flex-col pt-5">
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+            <div className="flex flex-col items-center justify-center gap-6 bg-white p-5 md:p-10">
+              <div className="flex flex-wrap gap-10">
                 <div className="flex flex-col gap-5">
                   <Label>Resetting or Creating Hackathon</Label>
                   <CheckboxField
@@ -262,36 +261,36 @@ export default function ResetPage() {
                     }}
                   />
                 </div>
+                {resetting && (
+                  <div className="flex flex-col gap-5">
+                    <Label className="text-center">Reset Fields</Label>
+                    <CheckboxField
+                      label="Reset Users"
+                      {...register("resetUsers")}
+                      checked={watch("resetUsers")}
+                    />
+                    <CheckboxField
+                      label="Reset Teams"
+                      {...register("resetTeams")}
+                      checked={watch("resetTeams")}
+                    />
+                    <CheckboxField
+                      label="Reset Rooms"
+                      {...register("resetRooms")}
+                      checked={watch("resetRooms")}
+                    />
+                    <CheckboxField
+                      label="Reset Scores"
+                      {...register("resetScores")}
+                      checked={watch("resetScores")}
+                    />
+                  </div>
+                )}
               </div>
-              {resetting && (
-                <div className="flex w-1/4 flex-col gap-5 py-5">
-                  <Label className="text-center">Reset Fields</Label>
-                  <CheckboxField
-                    label="Reset Users"
-                    {...register("resetUsers")}
-                    checked={watch("resetUsers")}
-                  />
-                  <CheckboxField
-                    label="Reset Teams"
-                    {...register("resetTeams")}
-                    checked={watch("resetTeams")}
-                  />
-                  <CheckboxField
-                    label="Reset Rooms"
-                    {...register("resetRooms")}
-                    checked={watch("resetRooms")}
-                  />
-                  <CheckboxField
-                    label="Reset Scores"
-                    {...register("resetScores")}
-                    checked={watch("resetScores")}
-                  />
-                </div>
-              )}
             </div>
           </div>
         </div>
-        <div className=" flex w-full items-center gap-4">
+        <div className=" -my-4 flex w-full items-center">
           <div className=" flex min-w-0 flex-[2] flex-col items-center justify-center gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
             <div className="w-full bg-white p-6 md:p-10">
               <Label htmlFor="safetyCheck" className="block text-center">
