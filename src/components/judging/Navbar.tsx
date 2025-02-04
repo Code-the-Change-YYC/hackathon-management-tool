@@ -3,8 +3,12 @@
 import Link from "next/link";
 
 export function NavBar() {
-  // Will add the actual routes when the pages are created
+  // Will add the actual routes when the pages are
   const navigation = [
+    {
+      name: "Dashboard",
+      href: "/judging",
+    },
     {
       name: "Schedule",
       href: "/schedule",
