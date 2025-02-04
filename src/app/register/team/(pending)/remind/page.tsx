@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import PurpleButton from "@/components/PurpleButton";
 
 export default function page() {
