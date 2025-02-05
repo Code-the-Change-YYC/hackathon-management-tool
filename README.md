@@ -1,6 +1,8 @@
 - The prod branch has a CI/CD deployment available at: [https://hackthechangeyyc.ca/](https://hackthechangeyyc.ca/)
 - The main branch has a CI/CD deployment available at: [https://staging.hackthechangeyyc.ca/](https://staging.hackthechangeyyc.ca/)
 
+This project uses Yarn as its package manager. If you have been using NPM and not Yarn, you can install the CLI [here](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable) .
+
 ## Getting Started
 
 Ensure you run `npm i` in the root of the repo before continuing. Please respond 'y' to and prompts such as installing Husky, etc
@@ -50,6 +52,15 @@ https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-type
 
 **Understanding AWS Amplify:**
 https://docs.amplify.aws/react/start/
+
+**NextJS Documentation:**
+https://nextjs.org/
+
+**Moving From JavaScript to TypeScript:**
+https://www.typescriptlang.org/docs/handbook/migrating-from-javascript.html
+
+**Tailwind Documentation:**
+https://tailwindcss.com/docs/utility-first
 
 > Note that we are using AWS Amplify gen 2 v1.0
 

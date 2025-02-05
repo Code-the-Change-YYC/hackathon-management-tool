@@ -1,13 +1,14 @@
-import UserProfile from "@/components/UserProfile/UserProfile";
-import { UserType } from "@/components/contexts/UserContext";
-import withAuthGuard from "@/components/hoc/withAuthGuard";
+import dynamic from "next/dynamic";
 
-function Profile() {
+// Dynamically import UserProfile with preloading
+const UserProfile = dynamic(
+  () => import("@/components/UserProfile/UserProfile"),
+  {
+    ssr: false,
+    loading: () => <p>Loading user profile...</p>,
+  },
+);
+
+export default function Profile() {
   return <UserProfile />;
 }
-
-export default withAuthGuard(Profile, [
-  UserType.Participant,
-  UserType.Admin,
-  UserType.Judge,
-]);
