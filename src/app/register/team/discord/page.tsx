@@ -16,9 +16,7 @@ export default function page() {
         <a
           target="_blank"
           rel="noreferrer"
-          href={
-            "https://discord.com/channels/1098088070760382568/1098088071418880071"
-          }
+          href={process.env.NEXT_PUBLIC_DISCORD_LINK}
         >
           <PurpleButton>Hackathon Discord</PurpleButton>
         </a>
