@@ -21,9 +21,14 @@ export default function page() {
           <PurpleButton>Hackathon Discord</PurpleButton>
         </a>
       </div>
-      <Link className="flex justify-end" href={"/register/team/ready"}>
-        <PurpleButton>Next</PurpleButton>
-      </Link>
+      <div className="flex justify-between">
+        <Link className="flex justify-end" href={"/register/team"}>
+          <PurpleButton>Back</PurpleButton>
+        </Link>
+        <Link className="flex justify-end" href={"/register/team/ready"}>
+          <PurpleButton>Next</PurpleButton>
+        </Link>
+      </div>
     </div>
   );
 }
