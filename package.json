@@ -35,6 +35,7 @@
     "@yudiel/react-qr-scanner": "^2.0.4",
     "aws-amplify": "^6.0.18",
     "aws-lambda": "^1.0.7",
+    "browser-image-compression": "^2.0.2",
     "concurrently": "^8.2.2",
     "contentful": "^10.15.0",
     "hackathon-management-tool": "file:",

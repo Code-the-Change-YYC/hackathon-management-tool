@@ -1,4 +1,5 @@
 import type { AuthUser } from "aws-amplify/auth";
+import imageCompression from "browser-image-compression";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -40,6 +41,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         willEatMeals: input.willEatMeals,
         allergies: input.allergies,
         completedRegistration: true,
+        profilePicture: input.profilePicture,
       });
       toast.dismiss(toastObj);
       if (response.errors) {
@@ -72,6 +74,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   }
   const [formState, setFormState] = useState<Schema["User"]["type"]>({
     id: user?.userId,
+    profilePicture: "",
   } as Schema["User"]["type"]);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -125,6 +128,46 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       return null;
     }
   }
+
+  const compressImage = async (file: File) => {
+    const options = {
+      maxSizeMB: 0.1,
+      maxWidthOrHeight: 600,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(file, options);
+      const base64 = await fileToBase64(compressedFile);
+      return base64;
+    } catch (error) {
+      console.error("Error compressing image", error);
+    }
+  };
+
+  const fileToBase64 = (file: File) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+
+      try {
+        const base64ProfilePicture = (await compressImage(file)) as string;
+        console.log(base64ProfilePicture);
+        setFormState({
+          ...formState,
+          profilePicture: base64ProfilePicture,
+        });
+      } catch (error) {
+        console.error("Error converting file to base64:", error);
+      }
+    }
+  };
   return (
     <form
       onSubmit={submitForm}
@@ -132,6 +175,16 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     >
       <FormFieldsHeader />
       <div className="flex flex-row justify-between gap-2 md:gap-12 ">
+        <div className="flex w-1/2 flex-col gap-2">
+          <Label htmlFor="profilePicture">* Profile Picture:</Label>
+          <input
+            required
+            type="file"
+            id="profilePicture"
+            name="profilePicture"
+            onChange={handleFileChange}
+          />
+        </div>
         <div className="flex w-1/2 flex-col gap-2">
           <Label htmlFor="firstName">* First Name:</Label>
           <Input

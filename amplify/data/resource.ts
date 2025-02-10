@@ -16,6 +16,7 @@ const schema = a
     User: a
       .model({
         id: a.id().required(),
+        profilePicture: a.string(),
         firstName: a.string(),
         lastName: a.string(),
         role: a
