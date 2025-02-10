@@ -57,6 +57,7 @@ export function UserContextProvider({ children }: Props) {
       type: UserType.Guest,
       populated: false,
       JUDGE_roomId: "",
+      profilePicture: "",
     },
     queryKey: ["User"],
     queryFn: async () => {
