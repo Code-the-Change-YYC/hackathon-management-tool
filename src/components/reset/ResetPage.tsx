@@ -1,6 +1,7 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
+import Image from "next/image";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
@@ -9,7 +10,7 @@ import type { Schema } from "@/amplify/data/resource";
 import { Button, CheckboxField, Input, Label } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import KevinIcon from "../../../public/svgs/admin/Kevin.svg";
+// import KevinIcon from "../../../public/svgs/admin/Kevin.svg";
 import LoadingRing from "../LoadingRing";
 
 const client = generateClient<Schema>();
@@ -330,9 +331,10 @@ export default function ResetPage() {
           </div>
           <div className="flex min-w-0 flex-[1] items-center justify-center">
             <img
-              src={KevinIcon.src}
+              src="/svgs/admin/Kevin.svg"
               alt="Kevin Icon"
-              className="w-full max-w-[200px] md:max-w-[250px]"
+              width={200}
+              height={200}
             />
           </div>
         </div>
