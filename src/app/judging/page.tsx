@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { NavBar } from "@/components/judging/Navbar";
+
 import JudgingDashboard from "./JudgingDashboard";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
 export default function Judging() {
   return (
     <main className="flex w-full flex-1 flex-col gap-4 bg-dashboard-grey">
+      <NavBar />
       <JudgingDashboard />
     </main>
   );
