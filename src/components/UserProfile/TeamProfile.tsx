@@ -89,10 +89,10 @@ const TeamProfile = () => {
                   <li>
                     3. After forming a team , assign <strong>ONE</strong> member
                     to “Register New Team” using your Team Name. They will
-                    receive a unique 6-digit Team ID following registration.
+                    receive a unique 4-digit Team ID following registration.
                   </li>
                   <li>
-                    4. Next, provide this 6-digit <strong>Team ID</strong> to
+                    4. Next, provide this 4-digit <strong>Team ID</strong> to
                     all team members.
                   </li>
                   <li>
