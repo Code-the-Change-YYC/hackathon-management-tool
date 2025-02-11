@@ -11,15 +11,15 @@ export function NavBar() {
     },
     {
       name: "Schedule",
-      href: "/schedule",
+      href: "/judging/schedule",
     },
     {
       name: "Assigned Teams",
-      href: "/assigned-teams",
+      href: "/judging/assigned-teams",
     },
     {
       name: "Rubric",
-      href: "/rubric",
+      href: "/judging/rubric",
     },
   ];
 
