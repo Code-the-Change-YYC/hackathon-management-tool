@@ -1,25 +1,19 @@
-import Link from "next/link";
-
 export default function JoinTeamInstructions() {
   return (
     <ol className="flex list-inside list-decimal flex-col gap-4 px-6 text-lg font-medium">
       <li>
         Join the
-        <Link href="https://discord.com/" target="_blank">
-          <span className=" font-bold">
-            <a
-              className="hover:text-awesomer-purple"
-              target="_blank"
-              rel="noreferrer"
-              href={
-                "https://discord.com/channels/1098088070760382568/1098088071418880071"
-              }
-            >
-              {" "}
-              Code the Change YYC Discord{" "}
-            </a>
-          </span>
-        </Link>
+        <span className=" font-bold">
+          <a
+            className="hover:text-awesomer-purple"
+            target="_blank"
+            rel="noreferrer"
+            href={process.env.NEXT_PUBLIC_DISCORD_LINK}
+          >
+            {" "}
+            Code the Change YYC Discord{" "}
+          </a>
+        </span>
         and navigate to the
         <span className="font-bold"> #looking-for-a-team </span> channel.
       </li>
