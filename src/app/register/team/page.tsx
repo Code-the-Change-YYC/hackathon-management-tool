@@ -26,7 +26,7 @@ export default function page() {
           <Link href={"/register/team/remind"}>
             <PurpleButton>Remind me later</PurpleButton>
           </Link>
-          <Link href={"/register/team/ready"}>
+          <Link href={"/register/team/discord"}>
             <PurpleButton>Yes!</PurpleButton>
           </Link>
         </div>
