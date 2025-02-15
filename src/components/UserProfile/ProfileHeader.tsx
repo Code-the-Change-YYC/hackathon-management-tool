@@ -25,7 +25,11 @@ export default function ProfileHeader() {
     <div className={CONTAINER_STYLES}>
       <div className={PROFILE_CONTAINER}>
         <Image
-          src="/images/userProfile/profile.png" //temporary profile image
+          src={
+            user?.profilePicture
+              ? user.profilePicture
+              : "/images/userProfile/profile.png"
+          } //temporary profile image
           alt="Profile Image"
           width={120}
           height={120}

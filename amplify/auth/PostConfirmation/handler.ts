@@ -53,6 +53,7 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
   const cognitoGroupResponse = await cognitoClient.send(command);
 
   const DDBResponse = await dataClient.models.User.create({
+    profilePicture: "",
     firstName: "",
     lastName: "",
     role: "Participant",
