@@ -134,10 +134,10 @@ export default function ResetPage() {
       onSubmit={handleSubmit(onSubmit)}
       className="relative flex w-full flex-col justify-center gap-4 bg-dashboard-grey p-4 md:p-8"
     >
-      <div className="flex w-full flex-col justify-between gap-2 md:gap-4">
+      <div className="flex w-full flex-col justify-between gap-2 bg-dashboard-grey md:gap-4">
         <div className="mr-4 flex w-full flex-row justify-center rounded-md border border-awesomer-purple bg-light-grey p-5 text-lg text-black">
-          <div className="m-1.8 flex w-full justify-center gap-8 bg-white p-10">
-            <div className="mr-24 flex w-1/3 flex-col gap-2">
+          <div className="m-1.8 flex w-full flex-col justify-center gap-8 bg-white p-10 md:flex-row">
+            <div className=" flex w-full flex-col gap-2 md:mr-24 md:w-1/2">
               <Label>Scoring Components: </Label>
               {scoringComponents.map((field, index) => (
                 <div key={field?.id} className="flex flex-row gap-2">
@@ -171,7 +171,8 @@ export default function ResetPage() {
                 Add Scoring Component
               </Button>
             </div>
-            <div className="flex w-1/3 flex-col gap-2">
+
+            <div className="flex w-full flex-col gap-2 md:w-1/2">
               <Label htmlFor="scoringSidepots">Scoring Sidepots: </Label>
               {scoringSidepots.map((field, index) => (
                 <div key={field?.id} className="flex flex-row gap-2">
@@ -207,8 +208,9 @@ export default function ResetPage() {
             </div>
           </div>
         </div>
-        <div className="flex w-full gap-4">
-          <div className="flex w-[340px] flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+
+        <div className="mt-4 flex w-full flex-col gap-4 md:flex-row">
+          <div className="flex w-full flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black md:mr-4 md:w-1/3">
             <div className="flex h-full flex-col justify-center gap-14 bg-white p-5">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="startDate">Start Date:</Label>
@@ -220,6 +222,7 @@ export default function ResetPage() {
                   {...register("startDate")}
                 />
               </div>
+
               <div className="flex flex-col gap-2">
                 <Label htmlFor="endDate">End Date: </Label>
                 <Input
@@ -232,8 +235,8 @@ export default function ResetPage() {
               </div>
             </div>
           </div>
-          <div className="flex min-w-0 flex-1 flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
-            <div className="flex flex-col items-center justify-center gap-6 bg-white p-5 md:p-10">
+          <div className="flex w-full flex-1 flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black md:w-2/3">
+            <div className="flex h-full flex-col items-center justify-center gap-6 bg-white p-5 md:p-10">
               <div className="flex flex-wrap gap-20">
                 <div className="flex flex-col gap-5">
                   <Label>Resetting or Creating Hackathon</Label>
@@ -262,6 +265,7 @@ export default function ResetPage() {
                     }}
                   />
                 </div>
+
                 {resetting && (
                   <div className="flex flex-col gap-5">
                     <Label className="text-center">Reset Fields</Label>
@@ -291,8 +295,9 @@ export default function ResetPage() {
             </div>
           </div>
         </div>
-        <div className=" -my-4 flex w-full items-center">
-          <div className=" flex min-w-0 flex-[2] flex-col items-center justify-center gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+
+        <div className=" -my-4 mt-2 flex w-full items-center">
+          <div className=" mb-4 flex min-w-0 flex-[2] flex-col items-center justify-center gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
             <div className="w-full bg-white p-6 md:p-10">
               <Label htmlFor="safetyCheck" className="block text-center">
                 Enter &quot;i love code the change&quot; to confirm{" "}
@@ -330,11 +335,11 @@ export default function ResetPage() {
             </div>
           </div>
           <div className="flex min-w-0 flex-[1] items-center justify-center">
-            <img
+            <Image
               src="/svgs/admin/Kevin.svg"
               alt="Kevin Icon"
-              width={200}
-              height={200}
+              width={240}
+              height={240}
             />
           </div>
         </div>
