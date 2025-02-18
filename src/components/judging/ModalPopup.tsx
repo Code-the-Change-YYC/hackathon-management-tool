@@ -58,6 +58,7 @@ const ModalPopup = (props: ModalPopupProps) => {
       }
     },
   });
+  // console.log(currentUser.username);
 
   const createScore = useMutation({
     mutationKey: ["Score", currentUser.username, teamId],
@@ -96,7 +97,6 @@ const ModalPopup = (props: ModalPopupProps) => {
   const scoreObject = watch("score") as ScoreObject;
 
   const updateScoringComponent = (id: string, score: string) => {
-    console.log(id, score);
     setValue("score", { ...scoreObject, [id]: score });
   };
 
@@ -124,12 +124,9 @@ const ModalPopup = (props: ModalPopupProps) => {
                 className="flex flex-col gap-4"
               >
                 <p className="text-2xl">Main Components:</p>
-                <div className="flex">
+                <div className="flex items-center gap-4">
                   {hackathon.scoringComponents.map((component) => (
-                    <div
-                      className="flex flex-row items-center gap-4"
-                      key={component.id}
-                    >
+                    <div key={component.id}>
                       <SelectField
                         onChange={(e) =>
                           updateScoringComponent(component.id, e.target.value)
@@ -137,17 +134,15 @@ const ModalPopup = (props: ModalPopupProps) => {
                         value={scoreObject?.[component.id]}
                         label={component.friendlyName}
                         options={scoreOptions}
+                        className="flex flex-row justify-between"
                       />
                     </div>
                   ))}
                 </div>
                 <p className="text-2xl">Sidepots:</p>
-                <div className="flex">
+                <div className="flex items-center gap-4">
                   {hackathon.scoringSidepots.map((component) => (
-                    <div
-                      className="flex flex-row items-center gap-4"
-                      key={component.id}
-                    >
+                    <div key={component.id}>
                       <SelectField
                         onChange={(e) =>
                           updateScoringComponent(component.id, e.target.value)
