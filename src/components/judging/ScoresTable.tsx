@@ -158,6 +158,15 @@ export default function JudgingTable(props: JudgingTableProps) {
                 scoreData?.score ? JSON.parse(scoreData?.score as string) : {}
               ) as ScoreObject;
 
+              const scoringComponentIds = hackathonData.scoringComponents.map(
+                (component) => component.id,
+              );
+              const sidePotIds = hackathonData.scoringSidepots.map(
+                (component) => component.id,
+              );
+
+              const tableIds = [...scoringComponentIds, ...sidePotIds];
+
               return (
                 <tr
                   key={rowIndex}
@@ -167,9 +176,9 @@ export default function JudgingTable(props: JudgingTableProps) {
                 >
                   <td className={JUDGE_TABLE_CELL_STYLES}>{team.name}</td>
                   {scoreData &&
-                    Object.keys(scoreObject).map((cell, cellIndex) => (
-                      <td key={cellIndex} className={JUDGE_TABLE_CELL_STYLES}>
-                        {scoreObject[cell]}
+                    tableIds.map((columnId, columnIndex) => (
+                      <td key={columnIndex} className={JUDGE_TABLE_CELL_STYLES}>
+                        {scoreObject[columnId] ? scoreObject[columnId] : ""}
                       </td>
                     ))}
                   <td className={JUDGE_TABLE_CELL_STYLES}>
