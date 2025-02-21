@@ -105,7 +105,7 @@ export default function SideNavBar() {
 
   return (
     <details
-      className={`transition-width md:open:w-80" relative flex h-full w-20 cursor-pointer flex-col items-center gap-2 bg-awesomer-purple text-white duration-500 open:fixed open:top-0 open:w-60 md:w-[80px] z-10`}
+      className={`transition-width md:open:w-80" relative flex h-full w-20 cursor-pointer flex-col items-center gap-2 bg-awesomer-purple text-white duration-500 z-10 open:fixed open:top-0 open:w-60 md:w-[80px]`}
     >
       <summary className="sticky top-0 list-none pt-4">
         <Image
