@@ -1,4 +1,8 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useState } from "react";
+
+import { createZoomMeeting } from "@/app/zoom/actions";
 
 export default function RoomAssigner({
   judgingScheduleMutation,
@@ -14,28 +18,9 @@ export default function RoomAssigner({
 }) {
   const [inputValue, setInputValue] = useState<string>("");
   const [duration, setDuration] = useState<string>("");
-  const [zoomToken, setZoomToken] = useState<string | null>(null);
   const [meetingLink, setMeetingLink] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("zoom_token");
-
-    if (token) {
-      setZoomToken(token);
-      window.history.replaceState({}, document.title, window.location.pathname);
-
-      const storedMeetingParams = sessionStorage.getItem("meetingParams");
-      if (storedMeetingParams) {
-        const { startDateAndTime, presentationDuration } =
-          JSON.parse(storedMeetingParams);
-        createZoomMeeting(token, startDateAndTime, presentationDuration);
-        sessionStorage.removeItem("meetingParams");
-      }
-    }
-  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -51,72 +36,30 @@ export default function RoomAssigner({
     setMeetingLink(null);
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const formattedDate = new Date(
-      formData.get("schedule") as string,
-    ).toISOString();
+    try {
+      const formData = new FormData(e.currentTarget);
+      const formattedDate = new Date(
+        formData.get("schedule") as string,
+      ).toISOString();
 
-    judgingScheduleMutation({
-      judgingSessionsPerTeam: 1,
-      numOfJudgingRooms: Number(inputValue),
-      startDateAndTime: formattedDate,
-      presentationDuration: Number(duration),
-    });
-
-    sessionStorage.setItem(
-      "meetingParams",
-      JSON.stringify({
+      judgingScheduleMutation({
+        judgingSessionsPerTeam: 1,
+        numOfJudgingRooms: Number(inputValue),
         startDateAndTime: formattedDate,
         presentationDuration: Number(duration),
-      }),
-    );
-
-    if (!zoomToken) {
-      try {
-        const authResponse = await fetch("/api/auth");
-        const authData = await authResponse.json();
-
-        if (!authData.url) {
-          throw new Error("Zoom authorization URL not found.");
-        }
-
-        window.location.href = authData.url;
-        return;
-      } catch (err) {
-        setError("Zoom authentication failed.");
-        setLoading(false);
-        return;
-      }
-    }
-
-    await createZoomMeeting(zoomToken, formattedDate, Number(duration));
-    setLoading(false);
-  };
-
-  const createZoomMeeting = async (
-    token: string,
-    startDateAndTime: string,
-    presentationDuration: number,
-  ) => {
-    try {
-      const response = await fetch("/api/create-meeting", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          zoom_token: token,
-          startDateAndTime,
-          presentationDuration,
-        }),
       });
 
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      setMeetingLink(data.join_url);
-      updateTeamRoomsWithZoomLink(data.join_url);
+      const meetingData = await createZoomMeeting(
+        formattedDate,
+        Number(duration),
+      );
+
+      setMeetingLink(meetingData.join_url);
+      updateTeamRoomsWithZoomLink(meetingData.join_url);
     } catch (err) {
       setError("Failed to create Zoom meeting.");
+    } finally {
+      setLoading(false);
     }
   };
 
