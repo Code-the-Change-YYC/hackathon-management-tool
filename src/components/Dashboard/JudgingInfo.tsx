@@ -2,7 +2,6 @@
 
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import JudgeIcon from "@/images/dashboard/JudgeIcon.png";
@@ -15,7 +14,6 @@ const client = generateClient<Schema>();
 
 export default function JudgingInfo() {
   const userId = useUser().currentUser.username as string;
-  const [showZoomLink, setShowZoomLink] = useState(false);
 
   const { data: userData } = useQuery({
     initialDataUpdatedAt: 0,
@@ -65,22 +63,16 @@ export default function JudgingInfo() {
 
   const zoomLink = teamRoomData?.[0]?.zoomLink || null;
 
-  useEffect(() => {
-    if (timeSlot) {
-      const checkTime = () => {
-        const now = new Date();
-        const fiveMinutesBefore = new Date(timeSlot);
-        fiveMinutesBefore.setMinutes(timeSlot.getMinutes() - 5);
+  const showZoomLink = (() => {
+    if (!timeSlot) return false;
 
-        setShowZoomLink(now >= fiveMinutesBefore);
-      };
+    const current = new Date();
 
-      checkTime();
-      const interval = setInterval(checkTime, 60000);
+    const fiveMinutesBefore = new Date(timeSlot);
+    fiveMinutesBefore.setMinutes(timeSlot.getMinutes() - 5);
 
-      return () => clearInterval(interval);
-    }
-  }, [timeSlot]);
+    return current >= fiveMinutesBefore;
+  })();
 
   const roomId = teamRoomData?.[0]?.roomId;
   const { data: judgeRoomData, isFetching: isFetchingJudgeData } = useQuery({
@@ -139,7 +131,7 @@ export default function JudgingInfo() {
 
       <div className="flex flex-col gap-2 p-4 text-start">
         <div className="font-medium">Zoom Link: </div>
-        {showZoomLink && zoomLink ? (
+        {zoomLink && showZoomLink ? (
           <a
             href={zoomLink}
             target="_blank"
