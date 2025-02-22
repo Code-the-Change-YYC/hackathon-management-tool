@@ -131,18 +131,20 @@ export default function JudgingInfo() {
 
       <div className="flex flex-col gap-2 p-4 text-start">
         <div className="font-medium">Zoom Link: </div>
-        {zoomLink && showZoomLink ? (
-          <a
-            href={zoomLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 underline"
-          >
-            Join Zoom Meeting
-          </a>
-        ) : (
-          <div className="text-gray-500">Zoom link coming soon</div>
-        )}
+        <a
+          href={zoomLink && showZoomLink ? zoomLink : "#"}
+          target={zoomLink && showZoomLink ? "_blank" : "_self"}
+          rel="noopener noreferrer"
+          className={`${
+            zoomLink && showZoomLink
+              ? "text-blue-500 underline"
+              : "pointer-events-none cursor-default text-gray-500"
+          }`}
+        >
+          {zoomLink && showZoomLink
+            ? "Join Zoom Meeting"
+            : "Zoom link coming soon"}
+        </a>
       </div>
     </Card>
   );
