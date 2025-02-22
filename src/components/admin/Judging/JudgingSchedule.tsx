@@ -12,7 +12,7 @@ const client = generateClient<Schema>();
 
 export default function JudgingSchedule() {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const { mutateAsync: judgingScheduleMutation } = useMutation({
     mutationFn: async ({
       judgingSessionsPerTeam,
       numOfJudgingRooms,
@@ -167,7 +167,7 @@ export default function JudgingSchedule() {
   return (
     <>
       <RoomAssigner
-        judgingScheduleMutation={mutate}
+        judgingScheduleMutation={judgingScheduleMutation}
         updateTeamRoomsWithZoomLink={updateTeamRoomsWithZoomLink}
       />
       <div className="flex justify-center">

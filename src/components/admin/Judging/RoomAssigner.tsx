@@ -42,7 +42,7 @@ export default function RoomAssigner({
         formData.get("schedule") as string,
       ).toISOString();
 
-      judgingScheduleMutation({
+      await judgingScheduleMutation({
         judgingSessionsPerTeam: 1,
         numOfJudgingRooms: Number(inputValue),
         startDateAndTime: formattedDate,
