@@ -31,8 +31,8 @@ export default function TeamsTable({ teams }: { teams: Team[] }) {
     typeName: "Team",
   });
   return (
-    <div className="flex flex-1 flex-col justify-between rounded-3xl bg-white p-2 text-xl outline  outline-awesomer-purple">
-      <div>
+    <div className="flex flex-1 flex-col justify-between overflow-x-auto rounded-3xl bg-white p-2 text-xl outline  outline-awesomer-purple">
+      <div className="w-full">
         <TableSearch
           tableDataLength={table.getRowCount()}
           handleSearchChange={useCallback(
@@ -40,7 +40,7 @@ export default function TeamsTable({ teams }: { teams: Team[] }) {
             [],
           )}
         />
-        <table className="w-full border-separate border-spacing-x-0.5 p-2">
+        <table className="ml-1.5 w-full border-separate border-spacing-x-0.5 p-2 md:ml-0">
           <TeamsTableHead
             table={useMemo(() => table.getHeaderGroups(), [table])}
           />

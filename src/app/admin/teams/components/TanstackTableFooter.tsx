@@ -2,12 +2,12 @@ import type { Table } from "@tanstack/react-table";
 
 export default function TanstackTableFooter<T>({ table }: { table: Table<T> }) {
   return (
-    <div className="text-md flex items-center justify-between gap-2 px-4 text-awesomer-purple">
+    <div className="text-md flex items-center justify-between gap-2.5 px-4 text-awesomer-purple">
       <div className="text-black">
         Showing {table.getRowModel().rows.length.toLocaleString()} of{" "}
         {table.getRowCount().toLocaleString()} Rows
       </div>
-      <div className="flex gap-2 ">
+      <div className="flex items-center gap-1.5 whitespace-nowrap">
         <span className="flex items-center gap-1">
           <div>Page</div>
           <strong>
@@ -26,7 +26,7 @@ export default function TanstackTableFooter<T>({ table }: { table: Table<T> }) {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               table.setPageIndex(page);
             }}
-            className="w-16 rounded border p-1"
+            className="w-12 rounded border p-1"
           />
         </span>
         <select
@@ -51,21 +51,21 @@ export default function TanstackTableFooter<T>({ table }: { table: Table<T> }) {
           {"<<"}
         </button>
         <button
-          className="flex size-8 justify-center rounded border border-awesome-purple bg-slate-300 transition-all hover:border-awesomer-purple"
+          className="flex size-8 items-center justify-center rounded border border-awesome-purple bg-slate-300 transition-all hover:border-awesomer-purple"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
           {"<"}
         </button>
         <button
-          className="flex size-8 justify-center rounded border border-awesome-purple bg-slate-300 transition-all hover:border-awesomer-purple"
+          className="flex size-8 items-center justify-center rounded border border-awesome-purple bg-slate-300 transition-all hover:border-awesomer-purple"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
           {">"}
         </button>
         <button
-          className="rounded border p-1"
+          className="mr-3 rounded border p-1"
           onClick={() => table.lastPage()}
           disabled={!table.getCanNextPage()}
         >
