@@ -2,6 +2,7 @@
 
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
+import Link from "next/link";
 
 import { type Schema } from "@/amplify/data/resource";
 import JudgeIcon from "@/images/dashboard/JudgeIcon.png";
@@ -131,20 +132,20 @@ export default function JudgingInfo() {
 
       <div className="flex flex-col gap-2 p-4 text-start">
         <div className="font-medium">Zoom Link: </div>
-        <a
-          href={zoomLink && showZoomLink ? zoomLink : "#"}
-          target={zoomLink && showZoomLink ? "_blank" : "_self"}
-          rel="noopener noreferrer"
-          className={`${
-            zoomLink && showZoomLink
-              ? "text-blue-500 underline"
-              : "pointer-events-none cursor-default text-gray-500"
-          }`}
-        >
-          {zoomLink && showZoomLink
-            ? "Join Zoom Meeting"
-            : "Zoom link coming soon"}
-        </a>
+        {zoomLink && showZoomLink ? (
+          <Link
+            href={zoomLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 underline"
+          >
+            Join Zoom Meeting
+          </Link>
+        ) : (
+          <div className="pointer-events-none cursor-default text-gray-500">
+            Zoom link coming soon
+          </div>
+        )}
       </div>
     </Card>
   );
