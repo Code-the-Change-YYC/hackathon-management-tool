@@ -1,6 +1,6 @@
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
@@ -170,14 +170,26 @@ export default function JudgingTable(props: JudgingTableProps) {
                 scoreData?.score ? JSON.parse(scoreData?.score as string) : {}
               ) as ScoreObject;
 
-              const scoringComponentIds = hackathonData.scoringComponents.map(
-                (component) => component.id,
-              );
-              const sidePotIds = hackathonData.scoringSidepots.map(
-                (component) => component.id,
+              const scoringComponentIds = useMemo(
+                () =>
+                  hackathonData.scoringComponents.map(
+                    (component) => component.id,
+                  ),
+                [hackathonData.scoringComponents],
               );
 
-              const tableIds = [...scoringComponentIds, ...sidePotIds];
+              const sidePotIds = useMemo(
+                () =>
+                  hackathonData.scoringSidepots.map(
+                    (component) => component.id,
+                  ),
+                [hackathonData.scoringSidepots],
+              );
+
+              const tableIds = useMemo(
+                () => [...scoringComponentIds, ...sidePotIds],
+                [scoringComponentIds, sidePotIds],
+              );
 
               // editing logic
 
