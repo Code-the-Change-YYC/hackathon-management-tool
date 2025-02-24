@@ -79,9 +79,6 @@ export default function JudgingTable({
   const handleCreateScoreClick = (teamId: string) => {
     setSelectedTeamId(teamId);
   };
-  const handleEditScoreClick = (teamId: string) => {
-    setSelectedTeamId(teamId);
-  };
 
   const closeModal = () => {
     setSelectedTeamId("");
@@ -104,7 +101,6 @@ export default function JudgingTable({
         <ScoresTable
           tableData={teamsForRoomData as Schema["Team"]["type"][]}
           onCreateScoreClick={handleCreateScoreClick}
-          onEditScoreClick={handleEditScoreClick}
           colorScheme="pink"
           entriesPerPage={150}
           hackathonData={hackathonData}

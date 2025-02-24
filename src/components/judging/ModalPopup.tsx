@@ -40,7 +40,7 @@ const ModalPopup = (props: ModalPopupProps) => {
 
   const scoreOptions = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-  const { data: scoreData, isFetching: isFetchingScore } = useQuery({
+  const { isFetching: isFetchingScore } = useQuery({
     queryKey: ["Score", currentUser.username, teamId],
     queryFn: async () => {
       try {
@@ -63,24 +63,14 @@ const ModalPopup = (props: ModalPopupProps) => {
   const createScore = useMutation({
     mutationKey: ["Score", currentUser.username, teamId],
     mutationFn: async (input: Schema["Score"]["type"]) => {
-      if (scoreData) {
-        const { data, errors } = await client.models.Score.update({
-          judgeId: currentUser.username,
-          teamId: teamId,
-          score: JSON.stringify(input.score),
-        });
-        if (errors) throw Error(errors[0].message);
-        return data;
-      } else {
-        const { data, errors } = await client.models.Score.create({
-          judgeId: currentUser.username,
-          teamId: teamId,
-          hackathonId: hackathon.id,
-          score: JSON.stringify(input.score),
-        });
-        if (errors) throw Error(errors[0].message);
-        return data;
-      }
+      const { data, errors } = await client.models.Score.create({
+        judgeId: currentUser.username,
+        teamId: teamId,
+        hackathonId: hackathon.id,
+        score: JSON.stringify(input.score),
+      });
+      if (errors) throw Error(errors[0].message);
+      return data;
     },
     onSuccess: () => {
       onClose();
@@ -106,9 +96,7 @@ const ModalPopup = (props: ModalPopupProps) => {
         <div className={MODAL_POPUP_SECTION_STYLES}>
           <div className={MODAL_POPUP_TILE_STLYES}>
             <div className="flex justify-between">
-              <h1 className="text-2xl font-bold">
-                {scoreData ? `Editing ${teamId}` : `Scoring ${teamId}`}
-              </h1>
+              <h1 className="text-2xl font-bold">{`Scoring ${teamId}`}</h1>
               <button onClick={onClose}>
                 <Image
                   src={exit_icon}
