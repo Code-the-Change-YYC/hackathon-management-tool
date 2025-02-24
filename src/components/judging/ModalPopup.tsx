@@ -58,7 +58,6 @@ const ModalPopup = (props: ModalPopupProps) => {
       }
     },
   });
-  // console.log(currentUser.username);
 
   const createScore = useMutation({
     mutationKey: ["Score", currentUser.username, teamId],
