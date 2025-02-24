@@ -1,6 +1,7 @@
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
 import { type Schema } from "@/amplify/data/resource";
@@ -10,7 +11,6 @@ import Card from "../Dashboard/Card";
 import { useUser } from "../contexts/UserContext";
 import { type ScoreObject } from "./ModalPopup";
 
-const edit_icon = "/svgs/judging/edit_icon.svg";
 const filter_icon = "/svgs/judging/filter_arrows.svg";
 
 const JUDGE_TABLE_CELL_STYLES = "text-center text-lg py-4";
@@ -37,7 +37,6 @@ const client = generateClient<Schema>();
 interface JudgingTableProps {
   tableData: Schema["Team"]["type"][];
   onCreateScoreClick: (teamName: string) => void;
-  onEditScoreClick: (teamName: string) => void;
   colorScheme: "pink" | "purple";
   entriesPerPage: number;
   hackathonData: Pick<
@@ -52,7 +51,6 @@ export default function JudgingTable(props: JudgingTableProps) {
   const {
     tableData,
     onCreateScoreClick,
-    onEditScoreClick,
     colorScheme,
     entriesPerPage,
     hackathonData,
@@ -111,6 +109,23 @@ export default function JudgingTable(props: JudgingTableProps) {
     startIndex + entries_per_page,
   );
 
+  // editing scores
+
+  const [editScore, setEditScore] = useState<{
+    teamId: string;
+    columnId: string;
+  } | null>(null);
+  const { register, handleSubmit, setValue } = useForm();
+
+  const handleEditClick = (
+    teamId: string,
+    columnId: string,
+    currentValue: string,
+  ) => {
+    setEditScore({ teamId, columnId });
+    setValue(`score.${columnId}`, currentValue);
+  };
+
   const colorStyles = COLOR_SCHEMES[colorScheme];
 
   return (
@@ -131,14 +146,11 @@ export default function JudgingTable(props: JudgingTableProps) {
                   {header.columnHeader}
                 </th>
               ))}
-              <th
-                className={` rounded-tr-lg p-12 ${colorStyles.headerCellBg}`}
-              />
             </tr>
           </thead>
           <tbody>
             {paginatedData.map((team, rowIndex) => {
-              const { data: scoreData } = useQuery({
+              const { data: scoreData, refetch } = useQuery({
                 queryKey: ["Score", currentUser.username, team.id],
                 queryFn: async () => {
                   try {
@@ -167,6 +179,30 @@ export default function JudgingTable(props: JudgingTableProps) {
 
               const tableIds = [...scoringComponentIds, ...sidePotIds];
 
+              // editing logic
+
+              const handleSave = async (
+                data: any,
+                teamId: string,
+                columnId: string,
+              ) => {
+                try {
+                  await client.models.Score.update({
+                    judgeId: currentUser.username,
+                    teamId,
+                    score: JSON.stringify({
+                      ...scoreObject,
+                      [columnId]: data[`score`][columnId],
+                    }),
+                  });
+                  await refetch();
+
+                  setEditScore(null);
+                } catch (error) {
+                  console.error("Error updating score:", error);
+                }
+              };
+
               return (
                 <tr
                   key={rowIndex}
@@ -177,36 +213,75 @@ export default function JudgingTable(props: JudgingTableProps) {
                   <td className={JUDGE_TABLE_CELL_STYLES}>{team.name}</td>
                   {scoreData &&
                     tableIds.map((columnId, columnIndex) => (
-                      <td key={columnIndex} className={JUDGE_TABLE_CELL_STYLES}>
-                        {scoreObject[columnId] ? scoreObject[columnId] : ""}
+                      <td
+                        key={columnIndex}
+                        className={JUDGE_TABLE_CELL_STYLES}
+                        onClick={() =>
+                          handleEditClick(
+                            team.id,
+                            columnId,
+                            scoreObject[columnId],
+                          )
+                        }
+                      >
+                        {editScore?.teamId === team.id &&
+                        editScore?.columnId === columnId ? (
+                          <form
+                            onSubmit={handleSubmit((data) =>
+                              handleSave(data, team.id, columnId),
+                            )}
+                          >
+                            <select
+                              {...register(`score.${columnId}`)}
+                              defaultValue={scoreObject[columnId] || " "}
+                              className="w-16 rounded p-1"
+                              autoFocus
+                              onChange={async (e) => {
+                                const newValue = e.target.value;
+                                setValue(`score.${columnId}`, newValue);
+
+                                await handleSave(
+                                  { score: { [columnId]: newValue } },
+                                  team.id,
+                                  columnId,
+                                );
+                              }}
+                            >
+                              {[
+                                "0",
+                                "1",
+                                "2",
+                                "3",
+                                "4",
+                                "5",
+                                "6",
+                                "7",
+                                "8",
+                                "9",
+                                "10",
+                              ].map((num) => (
+                                <option key={num} value={num}>
+                                  {num}
+                                </option>
+                              ))}
+                            </select>
+                          </form>
+                        ) : (
+                          scoreObject[columnId]
+                        )}
                       </td>
                     ))}
-                  <td className={JUDGE_TABLE_CELL_STYLES}>
-                    {scoreData ? (
-                      <button
-                        className={`${SCORE_BUTTON_STYLES} ${colorStyles.scoreButtonStyles}`}
-                        onClick={() => onEditScoreClick(team.id)}
-                      >
-                        <div className="flex">
-                          <Image
-                            src={edit_icon}
-                            height={10}
-                            width={10}
-                            alt="Edit score icon"
-                            className="mr-2"
-                          />
-                          <p>Edit Score</p>
-                        </div>
-                      </button>
-                    ) : (
+
+                  {!scoreData && (
+                    <td className={JUDGE_TABLE_CELL_STYLES}>
                       <button
                         className={`${SCORE_BUTTON_STYLES} ${colorStyles.scoreButtonStyles}`}
                         onClick={() => onCreateScoreClick(team.id)}
                       >
                         + Create Score
                       </button>
-                    )}
-                  </td>
+                    </td>
+                  )}
                 </tr>
               );
             })}
