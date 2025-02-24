@@ -2,7 +2,7 @@ import type { Table } from "@tanstack/react-table";
 
 export default function TanstackTableFooter<T>({ table }: { table: Table<T> }) {
   return (
-    <div className="text-md flex items-center justify-between gap-2.5 px-4 text-awesomer-purple">
+    <div className="text-md flex items-center justify-between px-3 text-awesomer-purple group-[.teams]:gap-2.5 group-[.users]:gap-7 group-[.users]:whitespace-nowrap group-[.teams]:md:gap-4 group-[.users]:md:gap-11">
       <div className="text-black">
         Showing {table.getRowModel().rows.length.toLocaleString()} of{" "}
         {table.getRowCount().toLocaleString()} Rows
@@ -42,7 +42,7 @@ export default function TanstackTableFooter<T>({ table }: { table: Table<T> }) {
           ))}
         </select>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 md:gap-2">
         <button
           className="rounded border p-1"
           onClick={() => table.firstPage()}
@@ -65,7 +65,7 @@ export default function TanstackTableFooter<T>({ table }: { table: Table<T> }) {
           {">"}
         </button>
         <button
-          className="mr-3 rounded border p-1"
+          className="mr-3 rounded border p-1 md:mr-0"
           onClick={() => table.lastPage()}
           disabled={!table.getCanNextPage()}
         >
