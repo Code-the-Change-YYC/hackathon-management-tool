@@ -1,5 +1,5 @@
 import type { AuthUser } from "aws-amplify/auth";
-import imageCompression from "browser-image-compression";
+import { getUrl, uploadData } from "aws-amplify/storage";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -129,45 +129,40 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     }
   }
 
-  const compressImage = async (file: File) => {
-    const options = {
-      maxSizeMB: 0.1,
-      maxWidthOrHeight: 600,
-      useWebWorker: true,
-    };
-    try {
-      const compressedFile = await imageCompression(file, options);
-      const base64 = await fileToBase64(compressedFile);
-      return base64;
-    } catch (error) {
-      console.error("Error compressing image", error);
-    }
-  };
-
-  const fileToBase64 = (file: File) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
 
       try {
-        const base64ProfilePicture = (await compressImage(file)) as string;
-        console.log(base64ProfilePicture);
+        // Upload the file to Amplify Storage without compression
+        const uploadResult = uploadData({
+          key: `profile-pictures/${user.userId}.jpg`,
+          data: file,
+          options: {
+            contentType: file.type,
+            bucket: "profileImageStorage",
+          },
+        });
+
+        if (!uploadResult) {
+          throw new Error("Failed to upload image");
+        }
+
+        // Get the public URL for the uploaded image
+        const imageUrl = await getUrl({
+          key: `profile-pictures/${user.userId}.jpg`,
+        });
+
         setFormState({
           ...formState,
-          profilePicture: base64ProfilePicture,
+          profilePicture: imageUrl.url as unknown as string,
         });
       } catch (error) {
-        console.error("Error converting file to base64:", error);
+        console.error("Error processing image:", error);
       }
     }
   };
+
   return (
     <form
       onSubmit={submitForm}

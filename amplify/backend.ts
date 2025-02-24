@@ -3,9 +3,12 @@ import { auth } from "@/amplify/auth/resource";
 import { data } from "@/amplify/data/resource";
 import { defineBackend } from "@aws-amplify/backend";
 
+import { storage } from "./storage/resource";
+
 const backend = defineBackend({
   auth,
   data,
+  storage,
 });
 
 // Cognito Email Overrides
