@@ -19,7 +19,7 @@ const TableSearch = ({
         {" record"}
         {tableDataLength !== 1 && "s"} found)
       </h1>
-      <div className="relative ml-12 flex w-2/5 min-w-[180px] max-w-[500px]">
+      <div className="relative flex w-2/5 min-w-[180px] max-w-[500px] group-[.teams]:ml-12 group-[.users]:ml-44 md:group-[.users]:ml-56">
         <input
           type="text"
           placeholder="Search name"
