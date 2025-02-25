@@ -66,9 +66,9 @@ export default function Header() {
                 )}
               </>
             ) : user.type === UserType.Admin ? (
-              <Link href="/admin/teams">Admin Dashboard</Link>
+              <Link href="/admin">Admin Dashboard</Link>
             ) : user.type === UserType.Judge ? (
-              <Link href="/judging">Judge Dashboard</Link>
+              <Link href="/judging"></Link>
             ) : null}
           </>
         ) : (
@@ -83,7 +83,7 @@ export default function Header() {
             alt="Awesome Logo"
             width={70}
             height={70}
-            className="shadow-lg"
+            className="shadow-lg transition-transform hover:scale-125"
           />
         </Link>
       </div>

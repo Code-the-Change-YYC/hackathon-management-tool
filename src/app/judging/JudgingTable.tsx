@@ -4,7 +4,6 @@ import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
 import type { Schema } from "@/amplify/data/resource";
-import LoadingRing from "@/components/LoadingRing";
 import { useUser } from "@/components/contexts/UserContext";
 import ModalPopup from "@/components/judging/ModalPopup";
 import ScoresTable from "@/components/judging/ScoresTable";
@@ -88,11 +87,7 @@ export default function JudgingTable({
     setSelectedTeamId("");
   };
 
-  return isFetching ? (
-    <div className="flex size-full flex-1 items-center justify-center bg-pastel-pink">
-      <LoadingRing />
-    </div>
-  ) : (
+  return (
     <>
       <div className="flex w-full flex-col justify-center gap-4 py-6 xl:flex-row">
         <div className=" flex w-full flex-row gap-4 xl:w-1/4 xl:flex-col">

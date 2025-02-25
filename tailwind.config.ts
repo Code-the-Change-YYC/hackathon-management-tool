@@ -52,6 +52,9 @@ const config: Config = {
         "::-webkit-scrollbar-track": {
           backgroundColor: "#D2D2D2",
         },
+        "::-webkit-details-marker": {
+          display: "none",
+        },
       };
 
       addUtilities(newUtilities, ["responsive", "hover"]);
