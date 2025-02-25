@@ -1,4 +1,5 @@
 import type { AuthUser } from "aws-amplify/auth";
+import { getUrl, uploadData } from "aws-amplify/storage";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -40,6 +41,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         willEatMeals: input.willEatMeals,
         allergies: input.allergies,
         completedRegistration: true,
+        profilePicture: input.profilePicture,
       });
       toast.dismiss(toastObj);
       if (response.errors) {
@@ -72,6 +74,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   }
   const [formState, setFormState] = useState<Schema["User"]["type"]>({
     id: user?.userId,
+    profilePicture: "",
   } as Schema["User"]["type"]);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -125,6 +128,41 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       return null;
     }
   }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+
+      try {
+        // Upload the file to Amplify Storage without compression
+        const uploadResult = uploadData({
+          key: `profile-pictures/${user.userId}.jpg`,
+          data: file,
+          options: {
+            contentType: file.type,
+            bucket: "profileImageStorage",
+          },
+        });
+
+        if (!uploadResult) {
+          throw new Error("Failed to upload image");
+        }
+
+        // Get the public URL for the uploaded image
+        const imageUrl = await getUrl({
+          key: `profile-pictures/${user.userId}.jpg`,
+        });
+
+        setFormState({
+          ...formState,
+          profilePicture: imageUrl.url as unknown as string,
+        });
+      } catch (error) {
+        console.error("Error processing image:", error);
+      }
+    }
+  };
+
   return (
     <form
       onSubmit={submitForm}
@@ -132,6 +170,16 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     >
       <FormFieldsHeader />
       <div className="flex flex-row justify-between gap-2 md:gap-12 ">
+        <div className="flex w-1/2 flex-col gap-2">
+          <Label htmlFor="profilePicture">* Profile Picture:</Label>
+          <input
+            required
+            type="file"
+            id="profilePicture"
+            name="profilePicture"
+            onChange={handleFileChange}
+          />
+        </div>
         <div className="flex w-1/2 flex-col gap-2">
           <Label htmlFor="firstName">* First Name:</Label>
           <Input

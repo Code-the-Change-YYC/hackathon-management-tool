@@ -30,6 +30,7 @@ export interface IUser {
   teamId?: string;
   populated: boolean;
   JUDGE_roomId: string;
+  profilePicture: string;
 }
 
 interface IUserReturn {
@@ -56,6 +57,7 @@ export function UserContextProvider({ children }: Props) {
       type: UserType.Guest,
       populated: false,
       JUDGE_roomId: "",
+      profilePicture: "",
     },
     queryKey: ["User"],
     queryFn: async () => {
@@ -100,6 +102,7 @@ export function UserContextProvider({ children }: Props) {
             firstName: response.data?.firstName ?? "",
             lastName: response.data?.lastName ?? "",
             JUDGE_roomId: response.data?.JUDGE_roomId,
+            profilePicture: response.data?.profilePicture ?? "",
           } as IUser;
         } catch (error) {
           console.error(error);
