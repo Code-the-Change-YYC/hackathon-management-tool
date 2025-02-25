@@ -12,7 +12,7 @@ const client = generateClient<Schema>();
 
 export default function JudgingSchedule() {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const { mutateAsync: judgingScheduleMutation } = useMutation({
     mutationFn: async ({
       judgingSessionsPerTeam,
       numOfJudgingRooms,
@@ -136,27 +136,33 @@ export default function JudgingSchedule() {
           )
       : [];
 
-  const judgingEvents =
-    teamRoomData && teamData //make sure conteents of teamRoomData and teamData are mapped first
-      ? teamRoomData.map((teamRoom) => ({
-          event_id: teamRoom.id,
-          title:
-            teamData
-              ?.filter((team) => team.id === teamRoom.teamId)
-              .map((team) => team.name)
-              .join(", ") || "No Team Name",
-          room_id: teamRoom.roomId,
-          start: new Date(teamRoom.time),
-          end: new Date(new Date(teamRoom.time).getTime() + 15 * 60 * 1000),
-          zoomLink: teamRoom.zoomLink,
-        }))
-      : [];
+  // Update all team rooms with the same zoom link (can change this to different zoom links later on)
+  const { mutate: updateTeamRoomsWithZoomLink } = useMutation({
+    mutationFn: async (zoomLink: string) => {
+      const { data, errors } = await client.models.TeamRoom.list();
+      if (errors) {
+        throw errors;
+      }
 
-  return isLoading ? (
-    <div>Loading schedule...</div> //JudgeTimeline component is only mapped if all isLoading flags are false
-  ) : (
+      const updatePromises = data.map((teamRoom) =>
+        client.models.TeamRoom.update({
+          id: teamRoom.id,
+          zoomLink,
+        }),
+      );
+
+      await Promise.all(updatePromises);
+
+      queryClient.invalidateQueries({ queryKey: ["TeamRoom"] });
+    },
+  });
+
+  return (
     <>
-      <RoomAssigner judgingScheduleMutation={mutate} />
+      <RoomAssigner
+        judgingScheduleMutation={judgingScheduleMutation}
+        updateTeamRoomsWithZoomLink={updateTeamRoomsWithZoomLink}
+      />
       <div className="flex justify-center">
         <div className="m-4 w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
           {judgeRooms && judgingEvents ? (
