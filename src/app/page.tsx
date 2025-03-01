@@ -3,6 +3,7 @@ import HackathonInformationContainer from "@/components/LandingPage/HackathonInf
 import HeroSection from "@/components/LandingPage/HeroSection";
 import JudgeShowcase from "@/components/LandingPage/JudgeShowcase";
 import JudgingCriteria from "@/components/LandingPage/JudgingCriteria";
+import PastWinners from "@/components/LandingPage/PastWinners";
 import ThankSponsors from "@/components/LandingPage/ThanksSponsors";
 import PagePlaceholder from "@/components/PagePlaceholder";
 import { enableLandingPage } from "@/featureFlags";
@@ -20,6 +21,7 @@ const Home = () => {
           <HackathonInformationContainer />
           <JudgingCriteria />
           <JudgeShowcase />
+          <PastWinners />
           <ThankSponsors />
         </>
       )}
