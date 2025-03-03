@@ -157,14 +157,30 @@ export default function JudgingSchedule() {
     },
   });
 
+  const judgingEvents =
+    teamRoomData && teamData //make sure conteents of teamRoomData and teamData are mapped first
+      ? teamRoomData.map((teamRoom) => ({
+          event_id: teamRoom.id,
+          title:
+            teamData
+              ?.filter((team) => team.id === teamRoom.teamId)
+              .map((team) => team.name)
+              .join(", ") || "No Team Name",
+          room_id: teamRoom.roomId,
+          start: new Date(teamRoom.time),
+          end: new Date(new Date(teamRoom.time).getTime() + 15 * 60 * 1000),
+          zoomLink: teamRoom.zoomLink,
+        }))
+      : [];
+
   return (
     <>
       <RoomAssigner
         judgingScheduleMutation={judgingScheduleMutation}
         updateTeamRoomsWithZoomLink={updateTeamRoomsWithZoomLink}
       />
-      <div className="flex justify-center">
-        <div className="m-4 w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+      <div className="m-4 flex justify-center">
+        <div className="z-0 w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
           {judgeRooms && judgingEvents ? (
             <JudgingTimeline
               judgeRooms={judgeRooms}

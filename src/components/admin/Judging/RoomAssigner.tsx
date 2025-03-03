@@ -64,49 +64,50 @@ export default function RoomAssigner({
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="m-4 w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+    <div className="m-4 flex justify-center">
+      <div className="w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
         <div className="rounded-md bg-white p-10">
           <form
-            className="relative flex h-[100px] w-full flex-row justify-between rounded border-awesome-purple"
+            className="relative flex min-h-[100px] w-full flex-col items-center justify-between rounded border-awesome-purple md:flex-row"
             onSubmit={handleSubmit}
           >
-            <div className="flex w-1/4 flex-col gap-2">
-              <label htmlFor="numberOfRooms">Enter Number of Rooms:</label>
-              <input
-                className="flex items-center justify-between rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black"
-                type="number"
-                value={inputValue}
-                onChange={handleInputChange}
-                id="numberOfRooms"
-              />
+            <div className="flex w-full flex-col gap-4 md:flex-row">
+              <div className="flex w-full flex-col gap-2 md:w-1/4">
+                <label htmlFor="numberOfRooms">Enter Number of Room:</label>
+                <input
+                  className="flex items-center justify-between rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black"
+                  type="number"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  id="numberOfRooms"
+                />
+              </div>
+              <div className="flex w-full flex-col gap-2 md:w-1/4">
+                <label htmlFor="duration">Enter Judging Duration:</label>
+                <input
+                  id="duration"
+                  className="flex items-center justify-between rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black"
+                  type="number"
+                  value={duration}
+                  onChange={handleDurationChange}
+                />
+              </div>
+              <div className="flex w-full flex-col gap-2 md:w-1/4">
+                <label htmlFor="schedule">Select a date and time:</label>
+                <div className="flex flex-col rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black">
+                  <input type="datetime-local" id="schedule" name="schedule" />
+                </div>
+              </div>
+              <div className="min-w-30 md:mt-auto md:w-1/4">
+                <button
+                  type="submit"
+                  className="mt-4 max-h-40 w-full rounded-md bg-awesomer-purple p-1 text-white transition hover:bg-awesome-purple hover:shadow-lg md:mt-0 xl:py-5"
+                  disabled={loading}
+                >
+                  Assign Teams to Rooms
+                </button>
+              </div>
             </div>
-            <div className="flex w-1/4 flex-col gap-2">
-              <label htmlFor="duration">Enter Duration of Judging:</label>
-              <input
-                id="duration"
-                className="flex items-center justify-between rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black"
-                type="number"
-                value={duration}
-                onChange={handleDurationChange}
-              />
-            </div>
-            <div className="flex w-1/4 flex-col gap-2">
-              <label htmlFor="schedule">Select a date and time:</label>
-              <input
-                type="datetime-local"
-                id="schedule"
-                name="schedule"
-                className="flex flex-col rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-1/12 rounded-md bg-awesomer-purple p-1 text-white transition hover:bg-awesome-purple hover:shadow-lg"
-              disabled={loading}
-            >
-              Assign Teams to Rooms
-            </button>
           </form>
           {meetingLink && (
             <div className="mt-6">
