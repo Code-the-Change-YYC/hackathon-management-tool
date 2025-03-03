@@ -175,22 +175,28 @@ export default function JudgingSchedule() {
 
   return (
     <>
-      <RoomAssigner
-        judgingScheduleMutation={judgingScheduleMutation}
-        updateTeamRoomsWithZoomLink={updateTeamRoomsWithZoomLink}
-      />
-      <div className="m-4 flex justify-center">
-        <div className="z-0 w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
-          {judgeRooms && judgingEvents ? (
-            <JudgingTimeline
-              judgeRooms={judgeRooms}
-              judgingEvents={judgingEvents}
-            />
-          ) : (
-            <div className="size-full">Schedule not made yet</div>
-          )}
-        </div>
-      </div>
+      {isLoading ? (
+        <>
+          <RoomAssigner
+            judgingScheduleMutation={judgingScheduleMutation}
+            updateTeamRoomsWithZoomLink={updateTeamRoomsWithZoomLink}
+          />
+          <div className="m-4 flex justify-center">
+            <div className="z-0 w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+              {judgeRooms && judgingEvents ? (
+                <JudgingTimeline
+                  judgeRooms={judgeRooms}
+                  judgingEvents={judgingEvents}
+                />
+              ) : (
+                <div className="size-full">Schedule not made yet</div>
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <h1>Loading Schedule...</h1>
+      )}
     </>
   );
 }
