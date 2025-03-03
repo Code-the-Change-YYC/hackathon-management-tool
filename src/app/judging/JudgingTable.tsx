@@ -58,6 +58,18 @@ export default function JudgingTable({
     );
   }
 
+  async function getRoomsLeft(teamsForRoomData: any) {
+    const num = teamsForRoomData.filter(
+      async (team: any) =>
+        (await team?.scores())?.data.filter(
+          (score: any) => score.judgeId === currentUser.username,
+        ).length === 0,
+    ).length;
+    return num;
+  }
+
+  console.log(getRoomsLeft(teamsForRoomData));
+
   const panelData = [
     {
       icon: "/svgs/judging/team_icon.svg",

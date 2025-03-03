@@ -2,22 +2,18 @@ import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { twMerge } from "tailwind-merge";
 
 import { type Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
 
 import Card from "../Dashboard/Card";
+// import LoadingRing from "../LoadingRing";
 import { useUser } from "../contexts/UserContext";
 import { type ScoreObject } from "./ModalPopup";
 
 const filter_icon = "/svgs/judging/filter_arrows.svg";
-
-const JUDGE_TABLE_CELL_STYLES = "text-center text-lg py-4";
-const SCORE_BUTTON_STYLES =
-  "rounded-full border-2 px-2 py-1 text-sm font-medium";
-
-const PAGINATION_BUTTON_STYLES = "text-white rounded-full pb-1 px-6 mr-2";
 
 const COLOR_SCHEMES = {
   pink: {
@@ -210,8 +206,10 @@ export default function JudgingTable(props: JudgingTableProps) {
                   await refetch();
 
                   setEditScore(null);
+                  toast.success("Score updated successfully!");
                 } catch (error) {
                   console.error("Error updating score:", error);
+                  toast.error("Error updating Score. Try again.");
                 }
               };
 
@@ -222,12 +220,12 @@ export default function JudgingTable(props: JudgingTableProps) {
                     rowIndex % 2 === 0 ? "bg-[#f1f1f1]" : "bg-[#e1e1e1]"
                   }`}
                 >
-                  <td className={JUDGE_TABLE_CELL_STYLES}>{team.name}</td>
+                  <td className="py-4 text-center text-lg">{team.name}</td>
                   {scoreData &&
                     tableIds.map((columnId, columnIndex) => (
                       <td
                         key={columnIndex}
-                        className={JUDGE_TABLE_CELL_STYLES}
+                        className="group relative cursor-pointer py-4 text-center text-lg"
                         onClick={() =>
                           handleEditClick(
                             team.id,
@@ -246,7 +244,7 @@ export default function JudgingTable(props: JudgingTableProps) {
                             <select
                               {...register(`score.${columnId}`)}
                               defaultValue={scoreObject[columnId] || " "}
-                              className="w-16 rounded p-1"
+                              className="relative z-10 w-16 rounded p-1"
                               autoFocus
                               onChange={async (e) => {
                                 const newValue = e.target.value;
@@ -259,21 +257,9 @@ export default function JudgingTable(props: JudgingTableProps) {
                                 );
                               }}
                             >
-                              {[
-                                "0",
-                                "1",
-                                "2",
-                                "3",
-                                "4",
-                                "5",
-                                "6",
-                                "7",
-                                "8",
-                                "9",
-                                "10",
-                              ].map((num) => (
-                                <option key={num} value={num}>
-                                  {num}
+                              {Array.from({ length: 11 }, (_, index) => (
+                                <option key={index} value={index}>
+                                  {index}
                                 </option>
                               ))}
                             </select>
@@ -281,13 +267,18 @@ export default function JudgingTable(props: JudgingTableProps) {
                         ) : (
                           scoreObject[columnId]
                         )}
+                        <span
+                          className={`text-md ${colorStyles.headerCellBg} pointer-events-none absolute inset-0 flex items-center justify-center bg-opacity-50 font-semibold text-white opacity-0 group-hover:opacity-100`}
+                        >
+                          Edit
+                        </span>
                       </td>
                     ))}
 
                   {!scoreData && (
-                    <td className={JUDGE_TABLE_CELL_STYLES}>
+                    <td className="py-4 text-center text-lg">
                       <button
-                        className={`${SCORE_BUTTON_STYLES} ${colorStyles.scoreButtonStyles}`}
+                        className={`${"rounded-full border-2 px-2 py-1 text-sm font-medium"} ${colorStyles.scoreButtonStyles}`}
                         onClick={() => onCreateScoreClick(team.id)}
                       >
                         + Create Score
@@ -312,14 +303,14 @@ export default function JudgingTable(props: JudgingTableProps) {
         </button>
         <div>
           <button
-            className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
+            className={`${"mr-2 rounded-full px-6 pb-1 text-white"} ${colorStyles.paginationButtonStyles}`}
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
           >
             &lt;
           </button>
           <button
-            className={`${PAGINATION_BUTTON_STYLES} ${colorStyles.paginationButtonStyles}`}
+            className={`${"mr-2 rounded-full px-6 pb-1 text-white"} ${colorStyles.paginationButtonStyles}`}
             onClick={handleNextPage}
             disabled={
               currentPage === Math.ceil(sortedData.length / entries_per_page)
