@@ -93,7 +93,7 @@ export default function RoomAssigner({
                 />
               </div>
               <div className="flex w-full flex-col gap-2 md:w-1/4">
-                <label htmlFor="schedule">Select a date and time:</label>
+                <label htmlFor="schedule">Select a Date and Time:</label>
                 <div className="flex flex-col rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black">
                   <input type="datetime-local" id="schedule" name="schedule" />
                 </div>
