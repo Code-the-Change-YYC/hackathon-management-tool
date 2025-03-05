@@ -1,14 +1,13 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
+import Image from "next/image";
 import { toast } from "react-toastify";
 
 import { type Schema } from "@/amplify/data/resource";
 import JudgingTimeline from "@/components/admin/Judging/JudgingTimeline";
 import RoomAssigner from "@/components/admin/Judging/RoomAssigner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
-import LoadingRing from "../../LoadingRing";
 
 const client = generateClient<Schema>();
 
@@ -196,9 +195,15 @@ export default function JudgingSchedule() {
           </div>
         </div>
       ) : (
-        <div className="my-4 flex flex-col items-center justify-center md:h-1/2 lg:pb-8 xl:h-1/3">
-          <h1 className="mb-4 text-2xl font-semibold">Loading Schedule...</h1>
-          <LoadingRing />
+        <div className="flex flex-col items-center justify-center md:min-h-screen">
+          <h1 className="text-2xl font-semibold">Loading Schedule...</h1>
+          <Image
+            src="/svgs/runningKevin.svg"
+            alt="Kevin Running"
+            width={120}
+            height={120}
+            className="my-4"
+          />
         </div>
       )}
     </>
