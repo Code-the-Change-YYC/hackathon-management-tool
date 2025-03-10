@@ -26,6 +26,7 @@ export default function JudgingTable({
   const { data: roomData, isFetching: roomIsFetching } = useQuery({
     queryKey: ["RoomForJudge", currentUser.JUDGE_roomId],
     queryFn: async () => {
+      if (currentUser.JUDGE_roomId === "") return null;
       const { data, errors } = await client.models.Room.get({
         id: currentUser.JUDGE_roomId,
       });
@@ -57,6 +58,18 @@ export default function JudgingTable({
     );
   }
 
+  async function getRoomsLeft(teamsForRoomData: any) {
+    const num = teamsForRoomData.filter(
+      async (team: any) =>
+        (await team?.scores())?.data.filter(
+          (score: any) => score.judgeId === currentUser.username,
+        ).length === 0,
+    ).length;
+    return num;
+  }
+
+  console.log(getRoomsLeft(teamsForRoomData));
+
   const panelData = [
     {
       icon: "/svgs/judging/team_icon.svg",
@@ -77,9 +90,6 @@ export default function JudgingTable({
     },
   ];
   const handleCreateScoreClick = (teamId: string) => {
-    setSelectedTeamId(teamId);
-  };
-  const handleEditScoreClick = (teamId: string) => {
     setSelectedTeamId(teamId);
   };
 
@@ -104,7 +114,6 @@ export default function JudgingTable({
         <ScoresTable
           tableData={teamsForRoomData as Schema["Team"]["type"][]}
           onCreateScoreClick={handleCreateScoreClick}
-          onEditScoreClick={handleEditScoreClick}
           colorScheme="pink"
           entriesPerPage={150}
           hackathonData={hackathonData}
