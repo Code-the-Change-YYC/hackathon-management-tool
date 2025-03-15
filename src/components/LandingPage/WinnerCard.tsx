@@ -59,7 +59,10 @@ export default function WinnerCard({
           <h2 className="text-lg font-bold italic drop-shadow-xl xl:text-3xl">
             {pastWinner.projectName}
           </h2>
-          <p className=" truncate text-sm xl:text-lg">
+          <p
+            title={pastWinner.projectDescription}
+            className=" truncate text-sm xl:text-lg"
+          >
             {pastWinner.projectDescription}
           </p>
         </div>
