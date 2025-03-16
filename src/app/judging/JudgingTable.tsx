@@ -4,6 +4,7 @@ import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
 import type { Schema } from "@/amplify/data/resource";
+import LoadingRing from "@/components/LoadingRing";
 import { useUser } from "@/components/contexts/UserContext";
 import ModalPopup from "@/components/judging/ModalPopup";
 import ScoresTable from "@/components/judging/ScoresTable";
@@ -21,6 +22,7 @@ export default function JudgingTable({
   >;
 }) {
   const [selectedTeam, setSelectedTeamId] = useState("");
+  const [teamsLeft, setTeamsLeft] = useState(0);
 
   const { currentUser } = useUser();
   const { data: roomData, isFetching: roomIsFetching } = useQuery({
@@ -57,36 +59,50 @@ export default function JudgingTable({
       </div>
     );
   }
+  async function getFilteredTeamsCount() {
+    if (!teamsForRoomData) {
+      return;
+    }
+    const boolArray = await Promise.all(
+      teamsForRoomData?.map(async (team) => {
+        const scores = await team?.scores();
+        return (
+          scores?.data.filter((score) => score.judgeId === currentUser.username)
+            .length === 0
+        );
+      }),
+    );
 
-  async function getRoomsLeft(teamsForRoomData: any) {
-    const num = teamsForRoomData.filter(
-      async (team: any) =>
-        (await team?.scores())?.data.filter(
-          (score: any) => score.judgeId === currentUser.username,
-        ).length === 0,
-    ).length;
-    return num;
+    return teamsForRoomData?.filter((_, index) => boolArray[index]).length;
   }
 
-  console.log(getRoomsLeft(teamsForRoomData));
+  if (!teamsForRoomData) return;
+
+  async function updateTeamsLeft() {
+    const filteredCount = await getFilteredTeamsCount();
+    if (!filteredCount) {
+      return;
+    }
+    setTeamsLeft(filteredCount);
+  }
+
+  updateTeamsLeft();
 
   const panelData = [
     {
       icon: "/svgs/judging/team_icon.svg",
       alt: "Teams assigned icon",
       stat: teamsForRoomData.length,
-      text: `Teams Assigned to ${roomData.name}`,
+      text:
+        teamsForRoomData.length === 1
+          ? `Team Assigned to ${roomData.name}`
+          : `Teams Assigned to ${roomData.name}`,
     },
     {
       icon: "/svgs/judging/teams_left.svg",
       alt: "Teams left icon",
-      stat: teamsForRoomData.filter(
-        async (team) =>
-          (await team?.scores())?.data.filter(
-            (score) => score.judgeId === currentUser.username,
-          ).length === 0,
-      ).length,
-      text: "Teams Left To Score",
+      stat: teamsLeft,
+      text: teamsLeft === 1 ? "Team Left to Score" : "Teams Left to Score",
     },
   ];
   const handleCreateScoreClick = (teamId: string) => {
@@ -99,26 +115,33 @@ export default function JudgingTable({
 
   return (
     <>
-      <div className="flex w-full flex-col justify-center gap-4 py-6 xl:flex-row">
-        <div className=" flex w-full flex-row gap-4 xl:w-1/4 xl:flex-col">
-          {panelData.map((item, index) => (
-            <StatsPanel
-              key={index}
-              icon={item.icon}
-              alt={item.alt}
-              stat={item.stat}
-              subheader={item.text}
-            />
-          ))}
+      {teamsLeft === 0 ? (
+        <div className="flex h-screen w-full items-center justify-center">
+          <LoadingRing />
         </div>
-        <ScoresTable
-          tableData={teamsForRoomData as Schema["Team"]["type"][]}
-          onCreateScoreClick={handleCreateScoreClick}
-          colorScheme="pink"
-          entriesPerPage={150}
-          hackathonData={hackathonData}
-        />
-      </div>
+      ) : (
+        <div className="flex w-full flex-col justify-center gap-4 py-6 xl:flex-row">
+          <div className=" flex w-full flex-row gap-4 xl:w-1/4 xl:flex-col">
+            {panelData.map((item, index) => (
+              <StatsPanel
+                key={index}
+                icon={item.icon}
+                alt={item.alt}
+                stat={item.stat}
+                subheader={item.text}
+              />
+            ))}
+          </div>
+          <ScoresTable
+            tableData={teamsForRoomData as Schema["Team"]["type"][]}
+            onCreateScoreClick={handleCreateScoreClick}
+            colorScheme="pink"
+            entriesPerPage={150}
+            hackathonData={hackathonData}
+          />
+        </div>
+      )}
+
       {selectedTeam !== "" && (
         <ModalPopup
           hackathon={hackathonData}
