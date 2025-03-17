@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { NavBar } from "@/components/judging/Navbar";
+import NavBar from "@/components/judging/Navbar";
 
 import JudgingDashboard from "./JudgingDashboard";
 

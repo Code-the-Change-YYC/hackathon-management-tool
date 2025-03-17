@@ -1,4 +1,4 @@
-import { NavBar } from "@/components/judging/Navbar";
+import NavBar from "@/components/judging/Navbar";
 
 const RubricPage = () => {
   return (
