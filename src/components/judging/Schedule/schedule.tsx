@@ -112,7 +112,9 @@ export default function JudgingSchedule() {
         );
 
   return isLoading ? (
-    <div>Loading schedule...</div>
+    <div className=" mt-48 flex h-full items-center justify-center text-awesomer-purple">
+      Loading schedule...
+    </div>
   ) : (
     <div className="mt-8 flex flex-col items-center">
       {/* Filter Buttons */}
