@@ -115,7 +115,7 @@ export default function JudgingTable({
 
   return (
     <>
-      {teamsLeft === 0 ? (
+      {isFetching ? (
         <div className="flex h-screen w-full items-center justify-center">
           <LoadingRing />
         </div>
