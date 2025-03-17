@@ -1,6 +1,7 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
+import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import JudgingTimeline from "@/components/admin/Judging/JudgingTimeline";
@@ -99,18 +100,52 @@ export default function JudgingSchedule() {
         }))
       : [];
 
+  // State to manage the filter (all teams or assigned teams)
+  const [filter, setFilter] = useState<"all" | "assigned">("all");
+
+  // Filtered events based on the selected filter
+  const filteredEvents =
+    filter === "all"
+      ? judgingEvents
+      : judgingEvents.filter((event) =>
+          judgeData?.some((judge) => judge.JUDGE_roomId === event.room_id),
+        );
+
   return isLoading ? (
     <div>Loading schedule...</div>
   ) : (
-    <div className="flex justify-center">
-      <div className="m-4 w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
-        {judgingEvents.length > 0 ? (
+    <div className="mt-8 flex flex-col items-center">
+      {/* Filter Buttons */}
+      <div className="mb-6 flex space-x-4">
+        <button
+          onClick={() => setFilter("all")}
+          className={`rounded px-4 py-2 ${
+            filter === "all" ? "bg-awesomer-purple text-white" : "bg-gray-200"
+          }`}
+        >
+          All Teams
+        </button>
+        <button
+          onClick={() => setFilter("assigned")}
+          className={`rounded px-4 py-2 ${
+            filter === "assigned"
+              ? "bg-awesomer-purple text-white"
+              : "bg-gray-200"
+          }`}
+        >
+          Assigned Teams
+        </button>
+      </div>
+
+      {/* Schedule Display */}
+      <div className="w-full max-w-[1000px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+        {filteredEvents.length > 0 ? (
           <JudgingTimeline
             judgeRooms={judgeRooms}
-            judgingEvents={judgingEvents}
+            judgingEvents={filteredEvents}
           />
         ) : (
-          <div className="size-full">Schedule not made yet</div>
+          <div className="flex justify-center">Schedule not made yet</div>
         )}
       </div>
     </div>

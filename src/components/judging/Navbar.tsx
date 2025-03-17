@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export function NavBar() {
+export default function NavBar() {
   // Will add the actual routes when the pages are
   const navigation = [
     {
