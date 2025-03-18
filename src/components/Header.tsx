@@ -11,9 +11,6 @@ import { client } from "@/app/QueryProvider";
 import { UserType, useUser } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 
-const headerContainerStyles =
-  "flex flex-row items-center justify-between text-awesomer-purple h-36 bg-white px-8";
-
 export default function Header() {
   const user = useUser().currentUser;
 
@@ -53,7 +50,7 @@ export default function Header() {
     router.push("/");
   };
   return (
-    <div className={headerContainerStyles}>
+    <div className="flex h-36 w-screen flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
       <div className="flex w-48 font-semibold">
         {user.username ? (
           <>
