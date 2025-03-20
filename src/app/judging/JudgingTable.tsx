@@ -26,6 +26,7 @@ export default function JudgingTable({
   const { data: roomData, isFetching: roomIsFetching } = useQuery({
     queryKey: ["RoomForJudge", currentUser.JUDGE_roomId],
     queryFn: async () => {
+      if (!currentUser.JUDGE_roomId) throw Error("No room assigned to judge");
       const { data, errors } = await client.models.Room.get({
         id: currentUser.JUDGE_roomId,
       });

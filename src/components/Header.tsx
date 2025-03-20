@@ -89,7 +89,7 @@ export default function Header() {
       </div>
 
       <div className="flex w-48 justify-end">
-        {user.completedProfile && (
+        {user.completedRegistration && (
           <Link href="/participant/profile">
             <CgProfile size={60} />
           </Link>
