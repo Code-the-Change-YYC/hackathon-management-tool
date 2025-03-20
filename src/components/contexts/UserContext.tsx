@@ -43,7 +43,7 @@ const GUEST_USER: IUser = {
 };
 const client = generateClient<Schema>();
 
-export const UserContext = createContext<IUserReturn>({} as IUserReturn);
+const UserContext = createContext<IUserReturn>({} as IUserReturn);
 export function UserContextProvider({ children }: Props) {
   const queryClient = useQueryClient();
 
@@ -57,12 +57,11 @@ export function UserContextProvider({ children }: Props) {
     queryFn: async () => {
       try {
         const user = await fetchAuthSession();
+        const userRole = (
+          user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
+        ).filter((group) => Object.keys(UserType).includes(group))?.[0];
 
-        if (
-          (
-            user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
-          )?.[0] === undefined
-        ) {
+        if (!userRole) {
           // Logout User if not in group
           signOut();
           console.error("User not in group");
@@ -71,36 +70,29 @@ export function UserContextProvider({ children }: Props) {
           throw new Error("No user");
         }
 
-        try {
-          const response = await client.models.User.get({
-            id: user.userSub as string,
-          });
+        const response = await client.models.User.get({
+          id: user.userSub,
+        });
 
-          if (response.errors) throw new Error(response.errors[0].message);
+        if (response.errors) throw new Error(response.errors[0].message);
 
-          if (response.data === null) {
-            // Logout User record does not exist in DB
-            signOut();
-            console.error("User not in DB");
-          }
-          return {
-            ...response.data,
-            username: user.userSub as string,
-            type: (
-              user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
-            ).filter((group) => Object.keys(UserType).includes(group))?.[0],
-          } as IUser;
-        } catch (error) {
-          console.error(error);
+        if (!response.data) {
+          // Logout User record does not exist in DB
+          signOut();
+          console.error("User not in DB");
         }
+        return {
+          ...response.data,
+          username: user.userSub,
+          type: userRole,
+        } as IUser;
         // Set user information based on the authentication session...
       } catch (error) {
         if (String(error).includes("No user")) {
           console.info("Not Logged in");
           return GUEST_USER;
-        } else {
-          console.error(error);
         }
+        console.error(error);
       }
     },
   });
@@ -142,6 +134,6 @@ export function UserContextProvider({ children }: Props) {
   );
 }
 
-export function useUser(): IUserReturn {
+export function useUser() {
   return useContext(UserContext);
 }
