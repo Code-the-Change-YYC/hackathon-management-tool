@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Skeleton from "react-loading-skeleton";
 
 import type { Schema } from "@/amplify/data/resource";
 import LoadingRing from "@/components/LoadingRing";
@@ -51,15 +50,16 @@ export default function JudgingTable({
         return teams;
       },
     });
-  const isFetching = roomIsFetching || teamsForRoomIsFetching;
+  const isFetching = roomIsFetching && teamsForRoomIsFetching;
   if (isFetching || !roomData || !teamsForRoomData) {
     return (
-      <div className="flex flex-1">
-        <Skeleton className="h-full" containerClassName="flex-1" />
+      <div>
+        <LoadingRing />
       </div>
     );
   }
   async function getFilteredTeamsCount() {
+    // https://medium.com/@debbs119/array-filter-and-array-map-with-async-functions-9636e1ae8d6e --> why it need to map to a boolean array first
     if (!teamsForRoomData) {
       return;
     }
@@ -72,21 +72,12 @@ export default function JudgingTable({
         );
       }),
     );
-
-    return teamsForRoomData?.filter((_, index) => boolArray[index]).length;
+    setTeamsLeft(
+      teamsForRoomData?.filter((_, index) => boolArray[index]).length,
+    );
   }
 
-  if (!teamsForRoomData) return;
-
-  async function updateTeamsLeft() {
-    const filteredCount = await getFilteredTeamsCount();
-    if (!filteredCount) {
-      return;
-    }
-    setTeamsLeft(filteredCount);
-  }
-
-  updateTeamsLeft();
+  getFilteredTeamsCount();
 
   const panelData = [
     {
@@ -115,32 +106,26 @@ export default function JudgingTable({
 
   return (
     <>
-      {isFetching ? (
-        <div className="flex h-screen w-full items-center justify-center">
-          <LoadingRing />
+      <div className="flex w-full flex-col justify-center gap-4 py-6 xl:flex-row">
+        <div className=" flex w-full flex-row gap-4 xl:w-1/4 xl:flex-col">
+          {panelData.map((item, index) => (
+            <StatsPanel
+              key={index}
+              icon={item.icon}
+              alt={item.alt}
+              stat={item.stat}
+              subheader={item.text}
+            />
+          ))}
         </div>
-      ) : (
-        <div className="flex w-full flex-col justify-center gap-4 py-6 xl:flex-row">
-          <div className=" flex w-full flex-row gap-4 xl:w-1/4 xl:flex-col">
-            {panelData.map((item, index) => (
-              <StatsPanel
-                key={index}
-                icon={item.icon}
-                alt={item.alt}
-                stat={item.stat}
-                subheader={item.text}
-              />
-            ))}
-          </div>
-          <ScoresTable
-            tableData={teamsForRoomData as Schema["Team"]["type"][]}
-            onCreateScoreClick={handleCreateScoreClick}
-            colorScheme="pink"
-            entriesPerPage={150}
-            hackathonData={hackathonData}
-          />
-        </div>
-      )}
+        <ScoresTable
+          tableData={teamsForRoomData as Schema["Team"]["type"][]}
+          onCreateScoreClick={handleCreateScoreClick}
+          colorScheme="pink"
+          entriesPerPage={150}
+          hackathonData={hackathonData}
+        />
+      </div>
 
       {selectedTeam !== "" && (
         <ModalPopup

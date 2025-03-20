@@ -9,7 +9,6 @@ import { type Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
 
 import Card from "../Dashboard/Card";
-// import LoadingRing from "../LoadingRing";
 import { useUser } from "../contexts/UserContext";
 import { type ScoreObject } from "./ModalPopup";
 
