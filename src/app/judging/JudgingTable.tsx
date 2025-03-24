@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 import type { Schema } from "@/amplify/data/resource";
@@ -53,8 +54,17 @@ export default function JudgingTable({
   const isFetching = roomIsFetching && teamsForRoomIsFetching;
   if (isFetching || !roomData || !teamsForRoomData) {
     return (
-      <div>
-        <LoadingRing />
+      <div className="m-4 flex h-full flex-col justify-center">
+        <div className="-ml-4 flex justify-center">
+          <LoadingRing />
+        </div>
+
+        <Image
+          src="/svgs/admin/Kevin.svg"
+          alt="Kevin Icon"
+          width={240}
+          height={240}
+        />
       </div>
     );
   }
