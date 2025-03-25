@@ -2,8 +2,6 @@
 
 import { twMerge } from "tailwind-merge";
 
-import LoadingRing from "@/components/LoadingRing";
-
 import { UserType, useUser } from "../contexts/UserContext";
 import Card from "./Card";
 
@@ -37,7 +35,12 @@ export default function Greetings({
 
         <h1 className="text-3xl md:text-4xl lg:text-6xl">
           Hello,
-          {user.isFetching && <LoadingRing />}
+          {user.isFetching && (
+            <span className={`capitalize italic ${nameColor}`}>
+              {" "}
+              Loading...
+            </span>
+          )}
           <span className={`capitalize italic ${nameColor}`}>
             {" "}
             {firstName} {lastName}!
