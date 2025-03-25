@@ -1,10 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 
 import type { Schema } from "@/amplify/data/resource";
-import LoadingRing from "@/components/LoadingRing";
+import KevinLoadingRing from "@/components/KevinLoadingRing";
 import { useUser } from "@/components/contexts/UserContext";
 import ModalPopup from "@/components/judging/ModalPopup";
 import ScoresTable from "@/components/judging/ScoresTable";
@@ -53,23 +52,10 @@ export default function JudgingTable({
     });
   const isFetching = roomIsFetching && teamsForRoomIsFetching;
   if (isFetching || !roomData || !teamsForRoomData) {
-    return (
-      <div className="m-4 flex h-full flex-col justify-center">
-        <div className="-ml-4 flex justify-center">
-          <LoadingRing />
-        </div>
-
-        <Image
-          src="/svgs/admin/Kevin.svg"
-          alt="Kevin Icon"
-          width={240}
-          height={240}
-        />
-      </div>
-    );
+    return <KevinLoadingRing />;
   }
   async function getFilteredTeamsCount() {
-    // https://medium.com/@debbs119/array-filter-and-array-map-with-async-functions-9636e1ae8d6e --> why it need to map to a boolean array first
+    // https://medium.com/@debbs119/array-filter-and-array-map-with-async-functions-9636e1ae8d6e --> why it needs to map to a boolean array first
     if (!teamsForRoomData) {
       return;
     }
