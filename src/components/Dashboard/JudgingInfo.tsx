@@ -14,28 +14,14 @@ import Card from "./Card";
 const client = generateClient<Schema>();
 
 export default function JudgingInfo() {
-  const userId = useUser().currentUser.username as string;
-
-  const { data: userData } = useQuery({
-    initialDataUpdatedAt: 0,
-    queryKey: ["User", userId],
-    queryFn: async () => {
-      const { data, errors } = await client.models.User.get({ id: userId });
-      if (errors) {
-        throw new Error("Error fetching user data");
-      }
-      return data;
-    },
-    enabled: !!userId,
-  });
-
-  const teamId = userData?.teamId;
+  const { currentUser: userData } = useUser();
+  const teamId = userData.teamId;
+  const roomId = userData.JUDGE_roomId;
   const { data: teamData, isFetching: isFetchingTeamName } = useQuery({
     initialDataUpdatedAt: 0,
     queryKey: ["Team", teamId],
     queryFn: async () => {
-      if (!teamId) throw new Error("Team ID is undefined");
-      const { data, errors } = await client.models.Team.get({ id: teamId });
+      const { data, errors } = await userData.team();
       if (errors) throw new Error("Error fetching team data");
       return data;
     },
@@ -48,21 +34,16 @@ export default function JudgingInfo() {
     initialDataUpdatedAt: 0,
     queryKey: ["TeamRoom", teamId],
     queryFn: async () => {
-      if (!teamId) throw new Error("Team ID is undefined");
-      const { data, errors } = await client.models.TeamRoom.list({
-        filter: { teamId: { eq: teamId } },
-      });
+      if (!teamData) throw new Error("Team ID is undefined");
+      const { data, errors } = await teamData.teamRooms();
       if (errors) throw new Error("Error fetching team room data");
-      return data;
+      return data[0];
     },
     enabled: !!teamId,
   });
+  const timeSlot = teamRoomData?.time ? new Date(teamRoomData.time) : null;
 
-  const timeSlot = teamRoomData?.[0]?.time
-    ? new Date(teamRoomData[0].time)
-    : null;
-
-  const zoomLink = teamRoomData?.[0]?.zoomLink || null;
+  const zoomLink = teamRoomData?.zoomLink;
 
   const showZoomLink = (() => {
     if (!timeSlot) return false;
@@ -75,7 +56,6 @@ export default function JudgingInfo() {
     return current >= fiveMinutesBefore;
   })();
 
-  const roomId = teamRoomData?.[0]?.roomId;
   const { data: judgeRoomData, isFetching: isFetchingJudgeData } = useQuery({
     queryKey: ["Room", roomId],
     queryFn: async () => {
