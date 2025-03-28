@@ -21,6 +21,7 @@ const Home = () => {
           <HackathonInformationContainer />
           <JudgingCriteria />
           <JudgeShowcase />
+          <PastWinners />
           <ThankSponsors />
         </>
       )}
