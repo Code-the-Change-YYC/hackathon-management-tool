@@ -13,7 +13,7 @@ export default async function HeroSection() {
   const res = (await fetchContent("hackathonDetails"))[0];
   const hackathonDetails = res.fields;
   return (
-    <div className="md:py-15 relative flex flex-col items-center justify-center md:px-8 lg:px-32 ">
+    <div className="md:py-15 relative flex h-dvh flex-col items-center justify-center md:px-8 lg:px-32 ">
       <Image
         src={HERO_SECTION_BACKGROUND}
         alt="Landing page background"

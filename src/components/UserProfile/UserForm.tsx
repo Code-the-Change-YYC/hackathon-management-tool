@@ -7,17 +7,6 @@ import { useFormStatus } from "react-dom";
 import { type Schema } from "@/amplify/data/resource";
 import { type UserFormProp } from "@/components/UserProfile/UserProfile";
 
-const INPUT_STYLES: string =
-  "rounded-full  border-4 border-white bg-[#FFFFFF]  ps-3  py-2 my-2 text-sm md:text-md bg-white/30";
-const BUTTON_STYLES =
-  " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
-const DISABLE_BUTTON_STYLES =
-  " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white opacity-50";
-const TEXT_COLOR_GRAY = "text-gray-400"; // CSS class for gray text color
-const TEXT_COLOR_BLACK = "text-black"; // CSS class for black text color
-
-const FORM_STYLES = "md:mx-10 flex flex-col";
-
 export default function UserForm({
   data,
   userMutation,
@@ -48,12 +37,12 @@ export default function UserForm({
   };
 
   return (
-    <form className={FORM_STYLES} onSubmit={handleSaveClick}>
+    <form className={"flex flex-col md:mx-10"} onSubmit={handleSaveClick}>
       <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5">
         <div className="flex flex-col">
           <label>First Name</label>
           <input
-            className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+            className={`md:text-md  my-2 rounded-full border-4  border-white bg-white/30 py-2 ps-3 text-sm ${isEditing ? "text-black" : "text-gray-400"}`}
             type="text"
             placeholder={formState.firstName ?? "First Name"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -65,7 +54,7 @@ export default function UserForm({
         <div className="flex flex-col">
           <label>Last Name</label>
           <input
-            className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+            className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-[#FFFFFF] bg-white/30 py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
             type="text"
             placeholder={formState.lastName ?? "Last Name"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -77,7 +66,7 @@ export default function UserForm({
       </div>
       <label>Email</label>
       <input
-        className={`${INPUT_STYLES} ${TEXT_COLOR_GRAY}`}
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-[#FFFFFF] bg-white/30 py-2 ps-3 text-sm"} ${"text-gray-400"}`}
         type="text"
         placeholder={formState.email ?? ""}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -87,14 +76,14 @@ export default function UserForm({
       />
       <label>Password</label>
       <input
-        className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-[#FFFFFF] bg-white/30 py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
         type="password"
         placeholder="••••••••"
         disabled={!isEditing} // Disabled when not in edit mode
       />
       <label>Institution</label>
       <input
-        className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-[#FFFFFF] bg-white/30 py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
         type="text"
         placeholder={formState.institution ?? "e.g. University of Calgary"}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -104,7 +93,7 @@ export default function UserForm({
       />
       <label>Do you want provided meals at the hackathon?</label>
       <select
-        className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-[#FFFFFF] bg-white/30 py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
         value={formState.willEatMeals ? "Yes" : "No"}
         onChange={(e) =>
           setFormState((prevState) => ({
@@ -121,7 +110,7 @@ export default function UserForm({
         <>
           <label>Do you have any allergies?</label>
           <input
-            className={`${INPUT_STYLES} ${isEditing ? TEXT_COLOR_BLACK : TEXT_COLOR_GRAY}`}
+            className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-[#FFFFFF] bg-white/30 py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
             type="text"
             placeholder={formState.allergies ?? "e.g. Dairy, Nuts, etc."}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -137,7 +126,7 @@ export default function UserForm({
         on hackathon day
       </p>
       <input
-        className={`${INPUT_STYLES} ${TEXT_COLOR_GRAY}`}
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-[#FFFFFF] bg-white/30 py-2 ps-3 text-sm"} ${"text-gray-400"}`}
         type="text"
         value={formState.checkedIn ? "Yes" : "No"}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -148,23 +137,43 @@ export default function UserForm({
           <>
             <button
               type="button"
-              className={BUTTON_STYLES}
+              className={
+                "my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white md:px-12"
+              }
               onClick={handleCancelClick}
             >
               Cancel
             </button>
 
-            <button type="submit" className={BUTTON_STYLES} disabled={pending}>
+            <button
+              type="submit"
+              className={
+                " my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white md:px-12"
+              }
+              disabled={pending}
+            >
               {pending ? "Saving.." : "Save"}
             </button>
           </>
         ) : (
           <>
-            <button type="button" className={DISABLE_BUTTON_STYLES} disabled>
+            <button
+              type="button"
+              className={
+                "my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white opacity-50 md:px-12"
+              }
+              disabled
+            >
               Cancel
             </button>
 
-            <button type="submit" className={DISABLE_BUTTON_STYLES} disabled>
+            <button
+              type="submit"
+              className={
+                "my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white opacity-50 md:px-12"
+              }
+              disabled
+            >
               Save
             </button>
           </>

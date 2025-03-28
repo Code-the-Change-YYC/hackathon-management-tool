@@ -11,7 +11,7 @@ import { enableLandingPage } from "@/featureFlags";
 export const revalidate = 600;
 const Home = () => {
   return (
-    <main className="w-full">
+    <main className="w-screen">
       {enableLandingPage ? (
         <PagePlaceholder />
       ) : (
@@ -20,8 +20,6 @@ const Home = () => {
           <AboutEventTile />
           <HackathonInformationContainer />
           <JudgingCriteria />
-          <JudgeShowcase />
-          <PastWinners />
           <ThankSponsors />
         </>
       )}

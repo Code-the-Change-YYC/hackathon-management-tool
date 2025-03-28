@@ -7,8 +7,8 @@ const squigglySvg = "/svgs/judgingCriteria/squiggly_line.svg";
 export default async function JudgeShowcase() {
   const judges = await fetchContent("hackathonJudge");
   return (
-    <div className="flex h-full flex-col justify-center bg-white p-10">
-      <div className="flex w-fit flex-col items-center sm:w-1/4 sm:pr-5">
+    <div className="flex flex-col justify-center bg-white p-10">
+      <div className="flex flex-col items-center sm:w-1/4 sm:pr-5">
         <h1 className="text-2xl font-extrabold">Judges</h1>
         <Image
           src={squigglySvg}
