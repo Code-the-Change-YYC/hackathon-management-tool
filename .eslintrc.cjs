@@ -33,6 +33,7 @@ const config = {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/no-explicit-any": "off",
+        "tailwindcss/no-contradicting-classname": "off",
       },
     },
   ],
