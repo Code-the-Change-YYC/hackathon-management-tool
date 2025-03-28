@@ -93,7 +93,8 @@ export const ResetHackathon = /* GraphQL */ `mutation ResetHackathon(
   APITypes.ResetHackathonMutation
 >;
 
-export const ScheduleTeamsAndJudges = /* GraphQL */ `mutation ScheduleTeamsAndJudges(
+export const ScheduleTeamsAndJudges =
+  /* GraphQL */ `mutation ScheduleTeamsAndJudges(
   $judgingSessionsPerTeam: Int!
   $numOfJudgingRooms: Int!
   $presentationDuration: Int!
@@ -112,10 +113,11 @@ export const ScheduleTeamsAndJudges = /* GraphQL */ `mutation ScheduleTeamsAndJu
   }
 }
 ` as GeneratedMutation<
-  APITypes.ScheduleTeamsAndJudgesMutationVariables,
-  APITypes.ScheduleTeamsAndJudgesMutation
->;
-export const SetUserAsCheckedIn = /* GraphQL */ `mutation SetUserAsCheckedIn($userId: String!) {
+    APITypes.ScheduleTeamsAndJudgesMutationVariables,
+    APITypes.ScheduleTeamsAndJudgesMutation
+  >;
+export const SetUserAsCheckedIn =
+  /* GraphQL */ `mutation SetUserAsCheckedIn($userId: String!) {
   SetUserAsCheckedIn(userId: $userId) {
     JUDGE_givenScores {
       nextToken

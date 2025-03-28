@@ -1,5 +1,3 @@
-import { NavBar } from "@/components/judging/Navbar";
-
 const AssignedTeamsPage = () => {
   const assignedTeams = [
     { id: 1, name: "Team Alpha" },
@@ -9,7 +7,6 @@ const AssignedTeamsPage = () => {
 
   return (
     <div>
-      <NavBar />
       <h1> Put assinged teams here Assigned Teams</h1>
       <ul>
         {assignedTeams.map((team) => (
