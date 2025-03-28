@@ -17,11 +17,11 @@ export default async function JudgeShowcase() {
           height={20}
         ></Image>
       </div>
-      <div className="flex w-full flex-row flex-wrap">
+      <div className="grid w-full grid-cols-2 md:grid-cols-3">
         {judges.map((judge, index) => (
-          <div className="flex w-1/3 justify-center py-5 pl-7" key={index}>
-            <div className="flex flex-row items-center gap-4">
-              <div className="relative size-16 overflow-hidden rounded-full sm:size-24">
+          <div className="flex w-full justify-center py-5" key={index}>
+            <div className="flex flex-col items-center gap-4 sm:flex-row">
+              <div className="relative size-24 overflow-hidden rounded-full">
                 <Image
                   src={
                     judge.fields.judgeImg.fields.file?.url
@@ -34,10 +34,10 @@ export default async function JudgeShowcase() {
                 />
               </div>
               <div className="flex flex-col justify-center">
-                <p className="w-36 text-xs font-extrabold text-awesome-purple sm:text-base">
+                <p className="w-36 text-center text-xs font-extrabold text-awesome-purple sm:text-start sm:text-base">
                   {judge.fields.judgeName}
                 </p>
-                <p className="w-36 text-xs sm:text-base">
+                <p className="w-36 text-center text-xs sm:text-start sm:text-base">
                   {judge.fields.judgeCompany}
                 </p>
               </div>

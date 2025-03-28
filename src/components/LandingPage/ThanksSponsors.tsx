@@ -12,8 +12,8 @@ export default async function ThankSponsors() {
   );
 
   return (
-    <div className="relative flex flex-col items-center justify-center overflow-hidden pb-12 pt-10">
-      <div className="flex h-48 w-full justify-center">
+    <div className="relative flex flex-col items-center justify-center overflow-hidden pb-12 ">
+      <div className="flex w-full justify-center sm:h-48">
         <div className="relative z-10 overflow-hidden sm:flex sm:w-2/5">
           <Image
             src={leftSponsorSvg}

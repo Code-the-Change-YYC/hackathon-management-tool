@@ -20,7 +20,7 @@ const Home = () => {
           <AboutEventTile />
           <HackathonInformationContainer />
           <JudgingCriteria />
-
+          <JudgeShowcase />
           <ThankSponsors />
         </>
       )}
