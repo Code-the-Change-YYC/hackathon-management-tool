@@ -14,9 +14,9 @@ export default function TopNavBar() {
   };
   return (
     <>
-      <div className=" flex w-full flex-col justify-between gap-4 bg-white p-4 px-8 text-4xl font-semibold md:flex-row">
+      <div className="flex w-full flex-col justify-between gap-4 bg-white p-4 px-8 text-4xl font-semibold md:flex-row">
         <AdminNavTitle />
-        <div className="flex justify-center">
+        <div className="flex justify-start">
           <button
             onClick={toggleModal}
             className="rounded-lg p-2 text-lg shadow-lg ring-2 ring-awesome-purple transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:bg-awesome-purple hover:ring-awesomer-purple"
