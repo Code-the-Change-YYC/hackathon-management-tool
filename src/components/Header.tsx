@@ -50,7 +50,7 @@ export default function Header() {
     router.push("/");
   };
   return (
-    <div className="flex h-36 w-screen flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
+    <div className="flex h-36 w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
       <div className="flex w-48 font-semibold">
         {user.username ? (
           <>
