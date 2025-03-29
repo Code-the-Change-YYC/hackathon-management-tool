@@ -1,4 +1,7 @@
+import Link from "next/link";
 import { FaInstagram, FaLinkedin } from "react-icons/fa";
+
+import PastWinners from "./LandingPage/PastWinners";
 
 const PagePlaceholderStyles =
   "flex flex-col w-full h-screen items-center justify-center";
@@ -6,25 +9,26 @@ const PagePlaceholderStyles =
 const PagePlaceholder = () => {
   return (
     <div className={PagePlaceholderStyles}>
-      <h1 className="text-center text-3xl">
+      <PastWinners />
+      <h1 className="text-center text-3xl ">
         Under construction, stay tuned on social media for more!
       </h1>
       <div className="mt-[20px] flex">
-        <a
+        <Link
           href="https://www.instagram.com/codethechangeyyc"
           target="_blank"
           rel="noopener noreferrer"
           className="mr-4"
         >
           <FaInstagram size={35} />
-        </a>
-        <a
+        </Link>
+        <Link
           href="https://www.linkedin.com/company/code-the-change-yyc"
           target="_blank"
           rel="noopener noreferrer"
         >
           <FaLinkedin size={35} />
-        </a>
+        </Link>
       </div>
     </div>
   );

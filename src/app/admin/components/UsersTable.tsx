@@ -38,8 +38,8 @@ export default function UsersTable({ users }: { users: User[] }) {
     typeName: "User",
   });
   return (
-    <div className="flex flex-1 flex-col justify-between rounded-3xl bg-white p-2 text-xl outline  outline-awesomer-purple">
-      <div>
+    <div className="users group flex flex-1 flex-col justify-between overflow-x-auto rounded-3xl bg-white p-2 text-xl outline  outline-awesomer-purple">
+      <div className="w-full">
         <TableSearch
           tableDataLength={table.getRowCount()}
           handleSearchChange={useCallback(
