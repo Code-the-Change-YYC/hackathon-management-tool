@@ -7,9 +7,7 @@ export default function JudgingLayout({
 }) {
   return (
     <div className="flex size-full flex-col bg-dashboard-grey">
-      {/* Always render the NavBar at the top */}
-      <NavBar />
-      {/* Render the content of the specific page */}
+      <NavBar />      
       <main className="flex flex-1 flex-col gap-4">{children}</main>
     </div>
   );
