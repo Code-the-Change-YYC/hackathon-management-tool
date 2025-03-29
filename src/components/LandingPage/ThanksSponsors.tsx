@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { fetchContent } from "@/app/actions";
 
@@ -48,7 +49,7 @@ export default async function ThankSponsors() {
           >
             <div className="group flex flex-col items-center justify-center gap-3">
               <div className="relative duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform ">
-                <a
+                <Link
                   href={sponsor.fields.sponsorPage}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -65,7 +66,7 @@ export default async function ThankSponsors() {
                     width={150}
                     height={150}
                   />
-                </a>
+                </Link>
               </div>
               <p className="text-center opacity-0 transition-all duration-300 group-hover:opacity-100">
                 {sponsor.fields.sponsorName}

@@ -26,8 +26,6 @@ export default function ProfileLinks() {
     setActiveLink(window.location.pathname);
   }, []);
 
-  console.log(currentUser);
-
   return (
     <div className="align-center text-1xl md:text-md my-12 flex flex-row gap-8 text-center text-[#FF6B54] sm:gap-16 md:mx-10">
       {currentUser.id &&
