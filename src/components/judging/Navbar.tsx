@@ -51,6 +51,7 @@ export default function NavBar() {
       {/* Mobile menu overlay */}
       {isMenuOpen && (
         <div
+          // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
           className="fixed inset-0 z-40 bg-black bg-opacity-50"
           onClick={toggleMenu}
         />

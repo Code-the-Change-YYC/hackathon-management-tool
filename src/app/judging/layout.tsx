@@ -7,7 +7,7 @@ export default function JudgingLayout({
 }) {
   return (
     <div className="flex size-full flex-col bg-dashboard-grey">
-      <NavBar />      
+      <NavBar />
       <main className="flex flex-1 flex-col gap-4">{children}</main>
     </div>
   );
