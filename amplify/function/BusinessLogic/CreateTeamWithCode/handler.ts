@@ -3,6 +3,7 @@ import { generateClient } from "aws-amplify/data";
 import type { AppSyncIdentityCognito } from "aws-lambda";
 
 import type { Schema } from "../../../data/resource";
+import { tryCatch } from "../utils/try-catch";
 import { createTeam, updateUser } from "./graphql/mutations";
 import { getTeam } from "./graphql/queries";
 
@@ -38,101 +39,85 @@ const client = generateClient<Schema>({
   authMode: "iam",
 });
 
+const generateTeamId = () =>
+  Array.from(Array(4), () =>
+    Math.floor(Math.random() * 36)
+      .toString(36)
+      .toUpperCase(),
+  ).join("");
+const getTeamFromId = (teamId: string) =>
+  client.graphql({
+    query: getTeam,
+    variables: {
+      id: teamId,
+    },
+  });
 export const handler: Schema["CreateTeamWithCode"]["functionHandler"] = async (
   event,
 ) => {
-  let team = null;
-  let teamId: string | null = null;
-  try {
-    do {
-      teamId = Array.from(Array(4), () =>
-        Math.floor(Math.random() * 36)
-          .toString(36)
-          .toUpperCase(),
-      ).join("");
+  const {
+    arguments: { addCallerToTeam, teamName },
+  } = event;
 
-      team = (
-        await client.graphql({
-          query: getTeam,
-          variables: {
-            id: teamId,
-          },
-        })
-      ).data.getTeam;
-    } while (team != null);
-
-    const teamCreation = await client
-      .graphql({
-        query: createTeam,
-        variables: {
-          input: {
-            name: event.arguments.teamName,
-            id: teamId,
-          },
+  let teamId = generateTeamId();
+  let { error: teamIdTaken } = await tryCatch(getTeamFromId(teamId));
+  while (teamIdTaken) {
+    teamId = generateTeamId();
+    ({ error: teamIdTaken } = await tryCatch(getTeamFromId(teamId)));
+  } // possibility of infite loop at 36^4 teams
+  const { error: createTeamError } = await tryCatch(
+    client.graphql({
+      query: createTeam,
+      variables: {
+        input: {
+          name: teamName,
+          id: teamId,
         },
-      })
-      .catch(() => {
-        throw new Error(
-          JSON.stringify({
-            body: { value: `Error creating team` },
-            statusCode: 500,
-            headers: { "Content-Type": "application/json" },
-          }),
-        );
-      });
-
-    if (teamCreation) {
-      if (event.arguments.addCallerToTeam) {
-        return await client
-          .graphql({
-            query: updateUser,
-            variables: {
-              input: {
-                id: (event.identity as AppSyncIdentityCognito).sub,
-                teamId: teamId,
-              },
-            },
-          })
-          .then(() => {
-            return {
-              body: { value: teamId },
-              statusCode: 200,
-              headers: { "Content-Type": "application/json" },
-            };
-          })
-          .catch(() => {
-            throw new Error(
-              JSON.stringify({
-                body: { value: `Error updating user (team was created)` },
-                statusCode: 500,
-                headers: { "Content-Type": "application/json" },
-              }),
-            );
-          });
-      } else {
-        return {
-          body: { value: teamId },
-          statusCode: 200,
-          headers: { "Content-Type": "application/json" },
-        };
-      }
-    } else {
-      throw new Error(
-        JSON.stringify({
-          body: { value: `Error creating team` },
-          statusCode: 500,
-          headers: { "Content-Type": "application/json" },
-        }),
-      );
-    }
-  } catch (error) {
-    console.error(error);
+      },
+    }),
+  );
+  if (createTeamError) {
     throw new Error(
       JSON.stringify({
-        body: { value: `Unhandled Internal Server Error` },
+        body: { value: `Error creating team` },
         statusCode: 500,
         headers: { "Content-Type": "application/json" },
       }),
     );
   }
+  if (!addCallerToTeam) {
+    return {
+      body: { value: teamId },
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+    };
+  }
+  const { error: updateUserError, data: updateUserSuccess } = await tryCatch(
+    client.graphql({
+      query: updateUser,
+      variables: {
+        input: {
+          id: (event.identity as AppSyncIdentityCognito).sub,
+          teamId: teamId,
+        },
+      },
+    }),
+  );
+  if (updateUserSuccess) {
+    return {
+      body: { value: teamId },
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+    };
+  }
+
+  throw new Error(
+    JSON.stringify({
+      body: {
+        value: `Error updating user ( ${(event.identity as AppSyncIdentityCognito).sub}) (team was created) ${updateUserError}`,
+      },
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+    }),
+  );
 };

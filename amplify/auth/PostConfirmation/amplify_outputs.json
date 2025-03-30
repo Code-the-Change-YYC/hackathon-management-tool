@@ -113,13 +113,6 @@
               "isRequired": false,
               "attributes": []
             },
-            "checkedIn": {
-              "name": "checkedIn",
-              "isArray": false,
-              "type": "Boolean",
-              "isRequired": false,
-              "attributes": []
-            },
             "teamId": {
               "name": "teamId",
               "isArray": false,
@@ -1260,22 +1253,6 @@
               "name": "addCallerToTeam",
               "isArray": false,
               "type": "Boolean",
-              "isRequired": true
-            }
-          }
-        },
-        "SetUserAsCheckedIn": {
-          "name": "SetUserAsCheckedIn",
-          "isArray": false,
-          "type": {
-            "model": "User"
-          },
-          "isRequired": false,
-          "arguments": {
-            "userId": {
-              "name": "userId",
-              "isArray": false,
-              "type": "String",
               "isRequired": true
             }
           }

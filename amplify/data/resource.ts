@@ -35,13 +35,6 @@ const schema = a
         completedRegistration: a.boolean(),
         allergies: a.string(),
         willEatMeals: a.boolean(),
-        checkedIn: a
-          .boolean()
-          .default(false)
-          .authorization((allow) => [
-            allow.ownerDefinedIn("profileOwner").to(["read"]),
-            allow.groups(["Admin"]).to(["read", "update", "delete", "create"]),
-          ]),
         teamId: a
           .id()
           .authorization((allow) => [
@@ -95,6 +88,7 @@ const schema = a
         members: a.hasMany("User", "teamId"),
         scores: a.hasMany("Score", "teamId"),
         teamRooms: a.hasMany("TeamRoom", "teamId"),
+        devPostLink: a.string(),
       })
       .authorization((allow) => [
         allow.group("Admin").to(["read", "update", "create", "delete"]),
@@ -280,21 +274,6 @@ const schema = a
       .authorization((allow) => [allow.group("Admin")])
       .handler(a.handler.function(ResetHackathon))
       .returns(a.ref("StatusCodeFunctionResponse")),
-
-    // Custom resolvers
-    SetUserAsCheckedIn: a
-      .mutation()
-      .arguments({
-        userId: a.string().required(),
-      })
-      .returns(a.ref("User"))
-      .authorization((allow) => [allow.authenticated()])
-      .handler(
-        a.handler.custom({
-          dataSource: a.ref("User"),
-          entry: "./user/SetUserAsCheckedIn.js",
-        }),
-      ),
   })
 
   .authorization((allow) => [

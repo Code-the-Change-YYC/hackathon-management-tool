@@ -3,78 +3,28 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
 import LoadingRing from "@/components/LoadingRing";
 import UserForm from "@/components/UserProfile/UserForm";
 import { useUser } from "@/components/contexts/UserContext";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
-const BUTTON_STYLES =
-  " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
-
-export interface UserFormProp {
-  data: Schema["User"]["type"];
-  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
-  setEnableCancelSave: React.Dispatch<React.SetStateAction<boolean>>;
-  enableCancelSave: boolean;
-  isEditing: boolean;
-  userMutation: any;
-}
-
-const UserProfile = () => {
-  const { currentUser, isFetching: userContextIsFetching } = useUser();
-  const userId = currentUser.username as string;
-
-  const { data, isFetching } = useQuery({
-    initialData: {} as Schema["User"]["type"],
-    initialDataUpdatedAt: 0,
-    queryKey: ["User", userId],
-    queryFn: async () => {
-      const response = await client.models.User.get({
-        id: userId,
-      });
-
-      if (response.errors) throw new Error(response.errors[0].message);
-
-      return response.data;
-    },
-    enabled: !!userId,
-  });
+export default function UserProfile() {
+  const { currentUser: data, isFetching: userContextIsFetching } = useUser();
 
   const userMutation = useMutation({
-    //mutation takes parameters of input with User type
     mutationKey: ["User"],
-    mutationFn: async (input: Schema["User"]["type"]) => {
-      const {
-        createdAt,
-        updatedAt,
-        team,
-        teamId,
-        checkedIn,
-        profileOwner,
-        ...extractedFields
-      } = input;
-      // TODO this can be cleaned if we use React Hook Form to handle form state better
-      void createdAt,
-        void updatedAt,
-        void team,
-        void teamId,
-        void checkedIn,
-        void profileOwner;
-
+    mutationFn: async (input: typeof data) => {
       try {
-        await client.models.User.update(extractedFields);
+        await client.models.User.update(input);
       } catch (error) {
-        console.error("Error updating user", error);
-        throw error;
+        throw new Error("Failed to update user");
       }
     },
   });
 
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [enableCancelSave, setEnableCancelSave] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [enableCancelSave, setEnableCancelSave] = useState(false);
 
   const handleEditClick = () => {
     if (!isEditing) {
@@ -85,8 +35,7 @@ const UserProfile = () => {
 
   return (
     <div>
-      {" "}
-      {isFetching || userContextIsFetching ? (
+      {userContextIsFetching ? (
         <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
           <LoadingRing />
         </div>
@@ -116,31 +65,25 @@ const UserProfile = () => {
             />{" "}
           </div>
           <div className="px-10 md:px-16 md:py-10">
-            {/* <ProfileLinks /> */}
-            <div className="mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
+            <div className="text-apricot mb-3 flex justify-between uppercase md:mx-10">
               <h1 className="mt-3 text-lg font-bold md:text-2xl">My Details</h1>
-              <button className={BUTTON_STYLES} onClick={handleEditClick}>
+              <button
+                className=" bg-apricot my-2 rounded-full border-4 border-white  px-10 py-2 text-white md:px-12"
+                onClick={handleEditClick}
+              >
                 Edit
               </button>
             </div>
-            {data ? (
-              <UserForm
-                data={data}
-                setIsEditing={setIsEditing}
-                isEditing={isEditing}
-                enableCancelSave={enableCancelSave}
-                setEnableCancelSave={setEnableCancelSave}
-                userMutation={userMutation}
-              />
-            ) : (
-              <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
-                <h1 className="text-2xl">Loading...</h1>
-              </div>
-            )}
+            <UserForm
+              setIsEditing={setIsEditing}
+              isEditing={isEditing}
+              enableCancelSave={enableCancelSave}
+              setEnableCancelSave={setEnableCancelSave}
+              userMutation={userMutation}
+            />
           </div>
         </div>
       )}
     </div>
   );
-};
-export default UserProfile;
+}
