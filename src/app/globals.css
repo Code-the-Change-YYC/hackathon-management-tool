@@ -97,3 +97,18 @@ body {
     transform: rotate(360deg);
   }
 }
+
+details summary {
+  position: sticky;
+  top: 0;
+}
+details[open] summary {
+  position: relative;
+  top: 0;
+}
+
+details[open] {
+  position: relative;
+  left: 0;
+  z-index: 10;
+}

@@ -9,8 +9,8 @@ export default async function TeamRankings() {
   const { data: hackathons } = await client.models.Hackathon.list();
   const hackathonData = hackathons[0];
   const scoringMetrics = [
-    ...hackathonData.scoringComponents,
-    ...hackathonData.scoringSidepots,
+    // ...hackathonData.scoringComponents,
+    // ...hackathonData.scoringSidepots,
   ];
   return (
     <Card className="h-full">
