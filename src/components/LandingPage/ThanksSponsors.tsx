@@ -48,24 +48,26 @@ export default async function ThankSponsors() {
             key={index}
           >
             <div className="group flex flex-col items-center justify-center gap-3">
-              <div className="relative duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform ">
+              <div className="relative  ">
                 <Link
                   href={sponsor.fields.sponsorPage}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Image
-                    src={
-                      sponsor.fields.sponsorImg.fields.file?.url
-                        ?.toString()
-                        .replace("//", "https://") ?? ""
-                    }
-                    alt="Sponsor Image"
-                    layout="intrinsic"
-                    objectFit="contain"
-                    width={150}
-                    height={150}
-                  />
+                  <div className="flex size-[150px] items-center justify-center overflow-hidden rounded-full duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform">
+                    <Image
+                      src={
+                        sponsor.fields.sponsorImg.fields.file?.url
+                          ?.toString()
+                          .replace("//", "https://") ?? ""
+                      }
+                      alt="Sponsor Image"
+                      layout="intrinsic"
+                      className="scale-75"
+                      width={150}
+                      height={150}
+                    />
+                  </div>
                 </Link>
               </div>
               <p className="text-center opacity-0 transition-all duration-300 group-hover:opacity-100">
