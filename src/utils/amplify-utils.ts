@@ -30,3 +30,32 @@ export async function AuthGetCurrentUserServer() {
     console.error(error);
   }
 }
+
+export type ClientType<T> = {
+  [K in keyof T]: T[K] extends Function
+    ? never
+    : T[K] extends object
+      ? ClientType<T[K]>
+      : T[K];
+};
+
+/**
+ * Required to serialize data from server components to client components
+ *
+ * Recursively remove functions from an object
+ */
+export function clientMod<T extends Record<string, any> | any[]>(
+  obj: T,
+): ClientType<T> {
+  if (Array.isArray(obj)) {
+    return obj.map((item) => clientMod(item)) as ClientType<T>;
+  }
+  const result: Record<string, any> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value !== "function") {
+      result[key] =
+        value && typeof value === "object" ? clientMod(value) : value;
+    }
+  }
+  return result as ClientType<T>;
+}
