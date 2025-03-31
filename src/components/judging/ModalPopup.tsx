@@ -17,6 +17,7 @@ const MODAL_POPUP_TILE_STLYES = "w-4/5 max-w-[1200px] rounded-md bg-white p-6";
 interface ModalPopupProps {
   onClose: () => void;
   teamId: string;
+  teamName: string;
   hackathon: Pick<
     Schema["Hackathon"]["type"],
     "id" | "scoringComponents" | "scoringSidepots"
@@ -30,7 +31,7 @@ export type ScoreObject = {
 };
 
 const ModalPopup = (props: ModalPopupProps) => {
-  const { onClose, teamId, hackathon } = props;
+  const { onClose, teamId, hackathon, teamName } = props;
   const { currentUser } = useUser();
   const queryClient = useQueryClient();
 
@@ -95,7 +96,9 @@ const ModalPopup = (props: ModalPopupProps) => {
         <div className={MODAL_POPUP_SECTION_STYLES}>
           <div className={MODAL_POPUP_TILE_STLYES}>
             <div className="flex justify-between">
-              <h1 className="text-2xl font-bold">{`Scoring ${teamId}`}</h1>
+              <h1 className="pb-4 text-6xl font-bold text-dark-pink">
+                Scoring <span className="text-medium-pink">{teamName}</span>
+              </h1>
               <button onClick={onClose}>
                 <Image
                   src={exit_icon}
@@ -110,7 +113,7 @@ const ModalPopup = (props: ModalPopupProps) => {
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-4"
               >
-                <p className="text-2xl">Main Components:</p>
+                <p className="text-2xl font-bold">Main Components:</p>
                 <div className="flex items-center gap-4">
                   {hackathon.scoringComponents.map((component) => (
                     <div key={component.id}>
@@ -126,7 +129,8 @@ const ModalPopup = (props: ModalPopupProps) => {
                     </div>
                   ))}
                 </div>
-                <p className="text-2xl">Sidepots:</p>
+                <hr></hr>
+                <p className="text-2xl font-bold">Sidepots:</p>
                 <div className="flex items-center gap-4">
                   {hackathon.scoringSidepots.map((component) => (
                     <div key={component.id}>
@@ -141,7 +145,11 @@ const ModalPopup = (props: ModalPopupProps) => {
                     </div>
                   ))}
                 </div>
-                <Button type="submit" value="Submit">
+                <Button
+                  className="hover:bg-pastel-pink"
+                  type="submit"
+                  value="Submit"
+                >
                   Submit Score
                 </Button>
               </form>

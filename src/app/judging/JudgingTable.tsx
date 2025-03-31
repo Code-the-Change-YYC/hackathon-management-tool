@@ -21,15 +21,16 @@ export default function JudgingTable({
   >;
 }) {
   const [selectedTeam, setSelectedTeamId] = useState("");
+  const [teamName, setTeamName] = useState("");
   const [teamsLeft, setTeamsLeft] = useState(0);
 
   const { currentUser } = useUser();
   const { data: roomData, isFetching: roomIsFetching } = useQuery({
     queryKey: ["RoomForJudge", currentUser.JUDGE_roomId],
     queryFn: async () => {
-      if (currentUser.JUDGE_roomId === undefined) return null;
+      if (!currentUser.JUDGE_roomId) throw Error("No room assigned to judge");
       const { data, errors } = await client.models.Room.get({
-        id: currentUser.JUDGE_roomId as string,
+        id: currentUser.JUDGE_roomId,
       });
       if (errors) throw Error(errors[0].message);
 
@@ -93,12 +94,19 @@ export default function JudgingTable({
       text: teamsLeft === 1 ? "Team Left to Score" : "Teams Left to Score",
     },
   ];
+
   const handleCreateScoreClick = (teamId: string) => {
-    setSelectedTeamId(teamId);
+    const selectedTeam = teamsForRoomData.find((team) => team?.id === teamId);
+
+    if (selectedTeam) {
+      setSelectedTeamId(teamId);
+      setTeamName(selectedTeam.name);
+    }
   };
 
   const closeModal = () => {
     setSelectedTeamId("");
+    setTeamName("");
   };
 
   return (
@@ -129,6 +137,7 @@ export default function JudgingTable({
           hackathon={hackathonData}
           onClose={closeModal}
           teamId={selectedTeam}
+          teamName={teamName}
         />
       )}
     </>
