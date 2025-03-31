@@ -36,6 +36,7 @@ export default function JudgingTable({
 
       return data;
     },
+    enabled: !!currentUser.JUDGE_roomId,
   });
 
   const { data: teamsForRoomData, isFetching: teamsForRoomIsFetching } =

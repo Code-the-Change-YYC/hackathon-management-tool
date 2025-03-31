@@ -117,14 +117,14 @@ const ModalPopup = (props: ModalPopupProps) => {
                 <div className="flex items-center gap-4">
                   {hackathon.scoringComponents.map((component) => (
                     <div key={component.id}>
+                      {/* <label>{component.friendlyName}</label> */}
                       <SelectField
                         onChange={(e) =>
                           updateScoringComponent(component.id, e.target.value)
                         }
                         value={scoreObject?.[component.id]}
-                        label={component.friendlyName}
                         options={scoreOptions}
-                        className="flex flex-row justify-between"
+                        label={component.friendlyName}
                       />
                     </div>
                   ))}

@@ -125,7 +125,7 @@ export default function JudgingTable(props: JudgingTableProps) {
 
   return (
     <Card className="items-start gap-3">
-      <div className="w-full overflow-auto">
+      <div className="w-full overflow-auto rounded-xl">
         <table className="w-full border-separate border-spacing-x-0.5">
           <thead>
             <tr>
