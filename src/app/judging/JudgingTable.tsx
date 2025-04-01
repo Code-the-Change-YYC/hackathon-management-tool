@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import type { Schema } from "@/amplify/data/resource";
-import KevinLoadingRing from "@/components/KevinLoadingRing";
+import KevinKevinLoadingRing from "@/components/KevinKevinLoadingRing";
 import { useUser } from "@/components/contexts/UserContext";
 import ModalPopup from "@/components/judging/ModalPopup";
 import ScoresTable from "@/components/judging/ScoresTable";
@@ -55,7 +55,7 @@ export default function JudgingTable({
     });
   const isFetching = roomIsFetching && teamsForRoomIsFetching;
   if (isFetching || !roomData || !teamsForRoomData) {
-    return <KevinLoadingRing />;
+    return <KevinKevinLoadingRing />;
   }
   async function getFilteredTeamsCount() {
     // https://medium.com/@debbs119/array-filter-and-array-map-with-async-functions-9636e1ae8d6e --> why it needs to map to a boolean array first
