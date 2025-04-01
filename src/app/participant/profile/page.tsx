@@ -1,11 +1,17 @@
 import dynamic from "next/dynamic";
 
+import KevinLoadingRing from "@/components/KevinLoadingRing";
+
 // Dynamically import UserProfile with preloading
 const UserProfile = dynamic(
   () => import("@/components/UserProfile/UserProfile"),
   {
     ssr: false,
-    loading: () => <p>Loading user profile...</p>,
+    loading: () => (
+      <div className="flex w-full items-center justify-center">
+        <KevinLoadingRing />
+      </div>
+    ),
   },
 );
 
