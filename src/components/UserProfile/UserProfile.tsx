@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
-import LoadingRing from "@/components/LoadingRing";
+import KevinLoadingRing from "@/components/KevinLoadingRing";
 import UserForm from "@/components/UserProfile/UserForm";
 import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -84,8 +84,8 @@ const UserProfile = () => {
     <>
       {" "}
       {isFetching || userContextIsFetching ? (
-        <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
-          <LoadingRing />
+        <div className="flex w-full items-center justify-center">
+          <KevinLoadingRing />
         </div>
       ) : (
         <div className="flex w-full flex-col items-start bg-fuzzy-peach md:items-start">

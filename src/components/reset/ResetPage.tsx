@@ -10,7 +10,7 @@ import type { Schema } from "@/amplify/data/resource";
 import { Button, CheckboxField, Input, Label } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import LoadingRing from "../LoadingRing";
+import KevinLoadingRing from "../KevinLoadingRing";
 
 const client = generateClient<Schema>();
 export default function ResetPage() {
@@ -113,9 +113,12 @@ export default function ResetPage() {
     name: "scoringSidepots",
   });
 
-  if (hackathonData.isPending) return <LoadingRing />;
-
-  if (userMutation.isPending) return <LoadingRing />;
+  if (hackathonData.isPending || userMutation.isPending)
+    return (
+      <div className="mt-16 flex w-full items-center justify-center">
+        <KevinLoadingRing />
+      </div>
+    );
 
   if (userMutation.isError) return <div>Error, please try again later.</div>;
 

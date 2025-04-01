@@ -10,7 +10,7 @@ import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import LoadingRing from "../LoadingRing";
+import KevinLoadingRing from "../KevinLoadingRing";
 import { UserType, useUser } from "../contexts/UserContext";
 
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
@@ -91,8 +91,14 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       setFormState((prevState) => ({ ...prevState, [name]: value }));
     }
   };
+
+  console.log(isPending);
   if (isPending) {
-    return <LoadingRing />;
+    return (
+      <div className="mt-16 flex w-full items-center justify-center">
+        <KevinLoadingRing />
+      </div>
+    );
   }
   if (isError) {
     return <div>Error, please try again later.</div>;
