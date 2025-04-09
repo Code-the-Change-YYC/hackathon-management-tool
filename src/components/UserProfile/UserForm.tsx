@@ -1,14 +1,22 @@
 "use client";
 
-import type React from "react";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { type Schema } from "@/amplify/data/resource";
-import { type UserFormProp } from "@/components/UserProfile/UserProfile";
+import type { UseMutationResult } from "@tanstack/react-query";
 
+import type { IUser } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
+import FormInput from "./FormInput";
+
+export interface UserFormProp {
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setEnableCancelSave: React.Dispatch<React.SetStateAction<boolean>>;
+  enableCancelSave: boolean;
+  isEditing: boolean;
+  userMutation: UseMutationResult<void, Error, IUser, unknown>;
+}
 export default function UserForm({
-  data,
   userMutation,
   setIsEditing,
   isEditing,
@@ -16,7 +24,8 @@ export default function UserForm({
   setEnableCancelSave,
 }: UserFormProp) {
   const { pending } = useFormStatus();
-  const [formState, setFormState] = useState<Schema["User"]["type"]>(data);
+  const { currentUser } = useUser();
+  const [formState, setFormState] = useState(currentUser);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -40,60 +49,52 @@ export default function UserForm({
     <form className={"flex flex-col md:mx-10"} onSubmit={handleSaveClick}>
       <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5">
         <div className="flex flex-col">
-          <label>First Name</label>
-          <input
-            className={`md:text-md  my-2 rounded-full border-4 border-white bg-white py-2 ps-3 text-sm ${isEditing ? "text-black" : "text-gray-400"}`}
-            type="text"
+          <FormInput
+            label="First Name"
             placeholder={formState.firstName ?? "First Name"}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
+            onChange={onChange}
             value={formState.firstName ?? ""}
-            name="firstName"
-            disabled={!isEditing} // Disabled when not in edit mode
+            name={"firstName"}
+            disabled={!isEditing}
           />
         </div>
         <div className="flex flex-col">
-          <label>Last Name</label>
-          <input
-            className={`${"md:text-md  my-2 rounded-full border-4 border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
-            type="text"
-            placeholder={formState.lastName ?? "Last Name"}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
-            name="lastName"
+          <FormInput
+            label="Last Name"
+            placeholder={formState.firstName ?? "Last Name"}
+            onChange={onChange}
             value={formState.lastName ?? ""}
-            disabled={!isEditing} // Disabled when not in edit mode
+            name={"lastName"}
+            disabled={!isEditing}
           />
         </div>
       </div>
-      <label>Email</label>
-      <input
-        className={`${"md:text-md  my-2 rounded-full border-4  border-white bg-white py-2 ps-3 text-sm"} ${"text-gray-400"}`}
-        type="text"
+      <FormInput
+        label="Email"
         placeholder={formState.email ?? ""}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
+        onChange={onChange}
         value={formState.email ?? ""}
-        name="email"
-        disabled // Should not be able to edit email
+        name={"email"}
+        disabled
       />
-      <label>Password</label>
-      <input
-        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
+      <FormInput
+        label="Password"
         type="password"
         placeholder="••••••••"
-        disabled={!isEditing} // Disabled when not in edit mode
+        disabled={!isEditing}
+        name="password"
       />
-      <label>Institution</label>
-      <input
-        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
-        type="text"
+      <FormInput
+        label="Institution"
         placeholder={formState.institution ?? "e.g. University of Calgary"}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
+        onChange={onChange}
         value={formState.institution ?? ""}
         name="institution"
         disabled={!isEditing} // Disabled when not in edit mode
       />
       <label>Do you want provided meals at the hackathon?</label>
       <select
-        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
+        className={`md:text-md  my-2 rounded-full border-4  border-white   bg-white/30 py-2 ps-3 text-sm ${isEditing ? "text-black" : "text-gray-400"}`}
         value={formState.willEatMeals ? "Yes" : "No"}
         onChange={(e) =>
           setFormState((prevState) => ({
@@ -107,38 +108,21 @@ export default function UserForm({
         <option value="No">No</option>
       </select>
       {formState.willEatMeals && (
-        <>
-          <label>Do you have any allergies?</label>
-          <input
-            className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white  py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
-            type="text"
-            placeholder={formState.allergies ?? "e.g. Dairy, Nuts, etc."}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
-            value={formState.allergies ?? ""}
-            name="allergies"
-            disabled={!isEditing} // Disabled when not in edit mode
-          />
-        </>
+        <FormInput
+          name={"allergies"}
+          label="Do you have any allergies?"
+          placeholder={formState.allergies ?? "e.g. Dairy, Nuts, etc."}
+          onChange={onChange}
+          value={formState.allergies ?? ""}
+          disabled={!isEditing} // Disabled when not in edit mode
+        />
       )}
-      <p>
-        Check-in Status <br />
-        This status will change to &quot;Yes&quot; after you&apos;ve checked in
-        on hackathon day
-      </p>
-      <input
-        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white  py-2 ps-3 text-sm"} ${"text-gray-400"}`}
-        type="text"
-        value={formState.checkedIn ? "Yes" : "No"}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
-        readOnly
-      />
       <div className=" mb-10 mt-3 flex flex-col justify-between md:flex-row">
         {enableCancelSave ? (
           <>
             <button
-              type="button"
               className={
-                "my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white md:px-12"
+                " my-2 rounded-full border-4 border-white bg-apricot  px-10 py-2 text-white md:px-12"
               }
               onClick={handleCancelClick}
             >
@@ -148,7 +132,7 @@ export default function UserForm({
             <button
               type="submit"
               className={
-                " my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white md:px-12"
+                " my-2 rounded-full border-4 border-white bg-apricot  px-10 py-2 text-white md:px-12"
               }
               disabled={pending}
             >
@@ -157,25 +141,16 @@ export default function UserForm({
           </>
         ) : (
           <>
-            <button
-              type="button"
-              className={
-                "my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white opacity-50 md:px-12"
-              }
-              disabled
-            >
-              Cancel
-            </button>
-
-            <button
-              type="submit"
-              className={
-                "my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white opacity-50 md:px-12"
-              }
-              disabled
-            >
-              Save
-            </button>
+            {["Cancel", "Save"].map((text) => (
+              <button
+                key={text}
+                type="button"
+                disabled
+                className=" my-2 rounded-full border-4 border-white bg-apricot  px-10 py-2 text-white opacity-50 md:px-12"
+              >
+                {text}
+              </button>
+            ))}
           </>
         )}
       </div>

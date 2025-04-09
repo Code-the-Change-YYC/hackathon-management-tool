@@ -6,6 +6,7 @@ import { hackathonTimeRemaining } from "@/utils/date-utils";
 
 import CountdownTimer from "../LandingPage/CountdownTimer";
 import Card from "./Card";
+import DevPostLinkUpload from "./DevPostLinkUpload";
 
 export default function SubmissionDueClock({
   submissionTime,
@@ -52,6 +53,7 @@ export default function SubmissionDueClock({
           className="w-32 bg-emerald-500 md:w-52 lg:w-52"
         />
       </div>
+      <DevPostLinkUpload />
     </Card>
   );
 }
