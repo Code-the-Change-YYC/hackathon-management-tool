@@ -58,7 +58,6 @@ export default function TeamForm() {
     e.preventDefault();
     teamMutation.mutate();
   };
-
   if (!userTeam) return null;
   return (
     <>
@@ -74,6 +73,13 @@ export default function TeamForm() {
           disabled
           value={userTeam.name}
           label={"Team Name"}
+        />
+        <FormInput
+          name={"DevPost Link"}
+          value={userTeam.devPostLink ?? "Awaiting Submission..."}
+          disabled
+          placeholder="Awaiting Submission..."
+          label={"DevPost Link"}
         />
         <label>Team Members</label>
         <div className="flex flex-col">
