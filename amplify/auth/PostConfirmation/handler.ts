@@ -58,7 +58,6 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
     role: "Participant",
     id: event.request.userAttributes.sub,
     email: event.request.userAttributes.email,
-    checkedIn: false,
     willEatMeals: false,
     allergies: "",
     institution: "",
