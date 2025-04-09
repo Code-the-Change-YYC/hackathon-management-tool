@@ -47,14 +47,6 @@ export const teamColumns = [
     filterFn: "includesString",
     sortingFn: "alphanumeric",
   }),
-  columnHelper.accessor("members", {
-    cell: (info) =>
-      info.getValue().every((member) => member.checkedIn)
-        ? "Checked In"
-        : "Not Checked In",
-    header: "Check-in Status",
-    sortingFn: "basic",
-  }),
   columnHelper.accessor("approved", {
     cell: ({
       getValue,
