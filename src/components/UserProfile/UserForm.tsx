@@ -1,13 +1,11 @@
 "use client";
 
-import type React from "react";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import { type Schema } from "@/amplify/data/resource";
 import { type UserFormProp } from "@/components/UserProfile/UserProfile";
 
 export default function UserForm({
-  data,
   userMutation,
   setIsEditing,
   isEditing,
@@ -15,7 +13,8 @@ export default function UserForm({
   setEnableCancelSave,
 }: UserFormProp) {
   const { pending } = useFormStatus();
-  const [formState, setFormState] = useState<Schema["User"]["type"]>(data);
+  const { currentUser } = useUser();
+  const [formState, setFormState] = useState(currentUser);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -44,10 +43,10 @@ export default function UserForm({
             className={`md:text-md  my-2 rounded-full border-4 border-white bg-white py-2 ps-3 text-sm ${isEditing ? "text-black" : "text-ehhh-grey"}`}
             type="text"
             placeholder={formState.firstName ?? "First Name"}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
+            onChange={onChange}
             value={formState.firstName ?? ""}
-            name="firstName"
-            disabled={!isEditing} // Disabled when not in edit mode
+            name={"firstName"}
+            disabled={!isEditing}
           />
         </div>
         <div className="flex flex-col">
@@ -59,7 +58,8 @@ export default function UserForm({
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
             name="lastName"
             value={formState.lastName ?? ""}
-            disabled={!isEditing} // Disabled when not in edit mode
+            name={"lastName"}
+            disabled={!isEditing}
           />
         </div>
       </div>
@@ -68,24 +68,25 @@ export default function UserForm({
         className={`${"md:text-md  my-2 rounded-full border-4  border-white bg-white py-2 ps-3 text-sm"} ${"text-ehhh-grey"}`}
         type="text"
         placeholder={formState.email ?? ""}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
+        onChange={onChange}
         value={formState.email ?? ""}
-        name="email"
-        disabled // Should not be able to edit email
+        name={"email"}
+        disabled
       />
       <label>Password</label>
       <input
         className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
         type="password"
         placeholder="••••••••"
-        disabled={!isEditing} // Disabled when not in edit mode
+        disabled={!isEditing}
+        name="password"
       />
       <label>Institution</label>
       <input
         className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
         type="text"
         placeholder={formState.institution ?? "e.g. University of Calgary"}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
+        onChange={onChange}
         value={formState.institution ?? ""}
         name="institution"
         disabled={!isEditing} // Disabled when not in edit mode
@@ -135,7 +136,6 @@ export default function UserForm({
         {enableCancelSave ? (
           <>
             <button
-              type="button"
               className={
                 "my-2 rounded-full border-4 border-white bg-grapefruit  px-10 py-2 text-white md:px-12"
               }

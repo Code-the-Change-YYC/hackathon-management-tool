@@ -113,5 +113,4 @@ const TeamProfile = () => {
       )}
     </>
   );
-};
-export default TeamProfile;
+}
