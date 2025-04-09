@@ -20,7 +20,7 @@ export enum UserType {
   Guest = "Guest",
 }
 
-type IUser = Schema["User"]["type"] & {
+export type IUser = Schema["User"]["type"] & {
   type: UserType;
   username: string;
 };
