@@ -102,9 +102,17 @@ export default function JudgingInfo() {
           src={JudgeIcon}
           alt={"Judging Icon"}
         />
-        <div className="text-start font-medium">
-          {isFetchingTeamName ? "Loading..." : <div>{`${teamName}'s `}</div>}
-          <div className="">Judging Information</div>
+        <div className="flex flex-col gap-2">
+          <div className="text-start font-medium">
+            {isFetchingTeamName ? "Loading..." : <div>{`${teamName}'s `}</div>}
+            <div className="">Judging Information</div>
+          </div>
+          <Link
+            href="/judging/rubric"
+            className="text-left text-2xl text-gray-500 underline"
+          >
+            View Judging Rubric
+          </Link>
         </div>
       </div>
 
