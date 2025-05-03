@@ -1,29 +1,55 @@
+import Image from "next/image";
+
 const RubricPage = () => {
   return (
-    <div className="flex h-full w-dvw flex-col bg-dashboard-grey">
-      <h1 className="my-8 whitespace-nowrap text-center text-3xl font-extrabold text-dark-green md:my-12 md:text-4xl">
-        Judging Rubric
-      </h1>
+    <div className="flex h-full w-dvw flex-col bg-pastel-green">
+      <div className="flex h-40 items-center justify-center gap-2 md:h-60">
+        <Image
+          src="/svgs/judgingRubric/rubric_left.svg"
+          alt="Left Squiggly SVG"
+          width={100}
+          height={60}
+          className="mb-2 mr-1 w-1/4 pl-4 md:w-1/3 xl:h-4/5 xl:w-2/5"
+        />
+        <h1 className="whitespace-nowrap text-center text-xl font-extrabold text-dark-green md:text-4xl">
+          Judging Rubric
+        </h1>
+        <Image
+          src="/svgs/judgingRubric/rubric_right.svg"
+          alt="Right Squiggly SVG"
+          width={100}
+          height={60}
+          className="ml-1 w-1/4 pr-4 md:-mt-5 md:w-1/3 xl:h-4/5 xl:w-2/5"
+        />
+      </div>
 
-      <div className="mx-5 mb-5 max-w-[1500px] overflow-x-auto rounded-2xl border-2 border-dark-green bg-light-grey 2xl:mx-auto">
+      <div className="mx-5 mb-5 max-w-[1500px] overflow-x-auto rounded-2xl border-2 border-dark-green bg-[#E3FFF8] 2xl:mx-auto">
         <table className="m-3 min-w-[880px] max-w-[1480px] table-fixed overflow-x-auto">
           <thead>
-            <tr className="bg-[#72E4CE] text-white">
-              <th className="w-1/6 ">Category</th>
-              <th className="w-1/6 ">Minimal (1-2)</th>
-              <th className="w-1/6 ">Developing (3-4)</th>
-              <th className="w-1/6 ">Satisfactory (5-6)</th>
-              <th className="w-1/6">Effective (7-8)</th>
+            <tr className="bg-[#D2F4EA] text-dark-green">
+              <th className="w-1/6 border-r border-dark-green">Category</th>
+              <th className="w-1/6 border-r border-dark-green">
+                Minimal (1-2)
+              </th>
+              <th className="w-1/6 border-r border-dark-green">
+                Developing (3-4)
+              </th>
+              <th className="w-1/6 border-r border-dark-green">
+                Satisfactory (5-6)
+              </th>
+              <th className="w-1/6 border-r border-dark-green">
+                Effective (7-8)
+              </th>
               <th className="w-1/6">Excellent (9-10)</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr className="border-b border-[#C4C4C4] align-text-top text-xs text-dark-grey odd:bg-light-grey even:bg-[#E4E4E4]">
-              <td className="border-r border-[#C4C4C4] px-3 py-2 text-center align-middle text-lg lg:px-4 lg:text-xl">
+            <tr className="border-b border-dark-green align-text-top text-xs text-[#017D66] odd:bg-[#E3FFF8] even:bg-[#D2F4EA]">
+              <td className="border-r border-dark-green px-3 py-2 text-center align-middle text-lg lg:px-4 lg:text-xl">
                 Idea
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>The product is unrelated to the prompt.</li>
                   <li>
@@ -31,7 +57,7 @@ const RubricPage = () => {
                   </li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>
                     Product takes wide liberty with the prompt and is loosely
@@ -43,7 +69,7 @@ const RubricPage = () => {
                   </li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>
                     Product loosely addresses the prompt, and would not have a
@@ -55,7 +81,7 @@ const RubricPage = () => {
                   </li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>Product innovatively addresses the prompt.</li>
                   <li>
@@ -80,16 +106,16 @@ const RubricPage = () => {
               </td>
             </tr>
 
-            <tr className="border-b border-[#C4C4C4] align-text-top text-xs text-dark-grey odd:bg-light-grey even:bg-[#E4E4E4]">
-              <td className="border-r border-[#C4C4C4] px-3 py-2 text-center align-middle text-lg lg:px-4 lg:text-xl">
+            <tr className="border-b border-dark-green align-text-top text-xs text-[#017D66] odd:bg-[#E3FFF8] even:bg-[#D2F4EA]">
+              <td className="border-r border-dark-green px-3 py-2 text-center align-middle text-lg lg:px-4 lg:text-xl">
                 Effectiveness
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>The product is not functional and is unpresentable</li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>
                     Some features are completely broken or requires multiple
@@ -101,7 +127,7 @@ const RubricPage = () => {
                   </li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>The core features of the product are functional. </li>
                   <li>
@@ -114,7 +140,7 @@ const RubricPage = () => {
                   </li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>The core features of the product are functional. </li>
                   <li>
@@ -144,11 +170,11 @@ const RubricPage = () => {
               </td>
             </tr>
 
-            <tr className="border-b border-[#C4C4C4] align-text-top text-xs text-dark-grey">
-              <td className="border-r border-[#C4C4C4] px-3 py-2 text-center align-middle text-lg odd:bg-light-grey even:bg-[#E4E4E4] lg:px-4 lg:text-xl">
+            <tr className="border-b border-dark-green align-text-top text-xs text-[#017D66]">
+              <td className="border-r border-dark-green px-3 py-2 text-center align-middle text-lg odd:bg-[#E3FFF8] even:bg-[#D2F4EA] lg:px-4 lg:text-xl">
                 Technical Challenge
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>
                     Product is straightforward and requires little to no
@@ -156,7 +182,7 @@ const RubricPage = () => {
                   </li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>
                     Product implements some level of coding and requires a small
@@ -164,7 +190,7 @@ const RubricPage = () => {
                   </li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <td>
                   <p>The product does at least ONE of the following:</p>
                 </td>
@@ -181,7 +207,7 @@ const RubricPage = () => {
                   <li>Includes more than one functionality.</li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <td>
                   <p>The product does at least ONE of the following:</p>
                 </td>
@@ -216,11 +242,11 @@ const RubricPage = () => {
               </td>
             </tr>
 
-            <tr className="border-b border-[#C4C4C4] align-text-top text-xs text-dark-grey odd:bg-light-grey even:bg-[#E4E4E4]">
-              <td className="border-r border-[#C4C4C4] px-3 py-2 text-center align-middle text-lg lg:px-4 lg:text-xl">
+            <tr className="border-b border-dark-green align-text-top text-xs text-[#017D66] odd:bg-[#E3FFF8] even:bg-[#D2F4EA]">
+              <td className="border-r border-dark-green px-3 py-2 text-center align-middle text-lg lg:px-4 lg:text-xl">
                 Presentation/ Marketability
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>
                     The team appears to have not prepared for the presentation
@@ -230,7 +256,7 @@ const RubricPage = () => {
                   <li>Questions asked by judges cannot be answered</li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>
                     The team appears to have practiced for the presentation, but
@@ -243,7 +269,7 @@ const RubricPage = () => {
                   </li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>The team is coordinated in their presentation. </li>
                   <li>
@@ -257,7 +283,7 @@ const RubricPage = () => {
                   </li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>
                     The presentation is engaging and team members appear
@@ -294,16 +320,16 @@ const RubricPage = () => {
               </td>
             </tr>
 
-            <tr className="align-text-top text-xs text-dark-grey odd:bg-light-grey even:bg-[#E4E4E4]">
-              <td className="border-r border-[#C4C4C4] px-3 py-2 text-center align-middle text-lg lg:px-4 lg:text-xl">
+            <tr className="align-text-top text-xs text-[#017D66] odd:bg-[#E3FFF8] even:bg-[#D2F4EA]">
+              <td className="border-r border-dark-green px-3 py-2 text-center align-middle text-lg lg:px-4 lg:text-xl">
                 Design
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>The design of the product makes it unusable</li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>
                     The design of the project overall detracts from its
@@ -313,7 +339,7 @@ const RubricPage = () => {
                   <li>The product message and intention are unclear</li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>
                     The product’s design neither detracts nor enhances its
@@ -329,7 +355,7 @@ const RubricPage = () => {
                   </li>
                 </ul>
               </td>
-              <td className="border-r border-[#C4C4C4] px-3 py-2 lg:px-4">
+              <td className="border-r border-dark-green px-3 py-2 lg:px-4">
                 <ul className="mx-2 list-outside list-disc space-y-1 text-left">
                   <li>The product’s design is clean and uncluttered.</li>
                   <li>
