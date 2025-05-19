@@ -75,7 +75,7 @@ export default function JudgingInfoPage() {
                 Presentations should include a demo of your working project
               </li>
               <li>
-                Explain the problem you're solving and how your solution
+                Explain the problem you&apos;re solving and how your solution
                 addresses it
               </li>
               <li>
@@ -104,7 +104,7 @@ export default function JudgingInfoPage() {
                   the schedule.
                 </p>
                 <p className="text-sm">
-                  You'll receive notifications about your judging time slots and
+                  You&apos;ll receive notifications about your judging time
                   locations.
                 </p>
               </div>
@@ -149,7 +149,7 @@ export default function JudgingInfoPage() {
               </li>
               <li>
                 <span className="font-medium">Tell a story</span> - Frame your
-                project around the problem you're solving
+                project around the problem you&apos;re solving
               </li>
               <li>
                 <span className="font-medium">
@@ -193,8 +193,8 @@ export default function JudgingInfoPage() {
 
             <div className="mb-4 rounded-md bg-gray-50 p-4">
               <p className="text-center font-medium">
-                View your assigned judging times in the "Schedule" section of
-                the navigation
+                View your assigned judging times in the &quot;Schedule&quot;
+                section of the navigation
               </p>
             </div>
 
