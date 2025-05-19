@@ -13,7 +13,7 @@ export default function ParticipantNav() {
     },
     {
       name: "Food Ticket",
-      href: "/participant/food-ticket",
+      href: "/participant/profile/food-ticket",
     },
     {
       name: "Important Information",

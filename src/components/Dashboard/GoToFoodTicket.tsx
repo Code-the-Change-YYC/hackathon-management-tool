@@ -21,7 +21,10 @@ export default function GoToFoodTicket() {
         <div className=" text-xl font-medium">Go To My</div>
         <h2 className="italic"> Food Ticket</h2>
       </div>
-      <Link href={href} className="transition duration-300 hover:opacity-90">
+      <Link
+        href="/participant/profile/food-ticket"
+        className="transition duration-300 hover:opacity-90"
+      >
         <FaCircleArrowRight size={48} color="grey" />
       </Link>
     </Card>
