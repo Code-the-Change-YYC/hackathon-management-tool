@@ -21,8 +21,8 @@ export default async function PastWinners() {
           <span className="pl-1 italic text-awesomer-purple">Winners</span>
         </Underline>
       </h1>
-      <div className="flex w-full snap-x items-center justify-center overflow-x-auto lg:overflow-visible">
-        <ul className="flex max-h-screen w-full max-w-screen-2xl justify-around gap-2  sm:aspect-auto">
+      <div className="flex w-full snap-x items-center justify-center overflow-x-auto py-4 sm:p-0 lg:overflow-visible">
+        <ul className="flex max-h-screen w-full max-w-screen-2xl justify-around gap-2 sm:aspect-auto">
           {Object.entries(sortedPastWinners).map(([key, value], index) => (
             <WinnerCard
               pastWinnersArraySize={sortedPastWinners.length}

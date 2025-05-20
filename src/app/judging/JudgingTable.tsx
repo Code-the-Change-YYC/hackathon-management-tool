@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Skeleton from "react-loading-skeleton";
 
 import type { Schema } from "@/amplify/data/resource";
+import KevinLoadingRing from "@/components/KevinLoadingRing";
 import { useUser } from "@/components/contexts/UserContext";
 import ModalPopup from "@/components/judging/ModalPopup";
 import ScoresTable from "@/components/judging/ScoresTable";
@@ -21,6 +21,8 @@ export default function JudgingTable({
   >;
 }) {
   const [selectedTeam, setSelectedTeamId] = useState("");
+  const [teamName, setTeamName] = useState("");
+  const [teamsLeft, setTeamsLeft] = useState(0);
 
   const { currentUser } = useUser();
   const { data: roomData, isFetching: roomIsFetching } = useQuery({
@@ -34,7 +36,9 @@ export default function JudgingTable({
 
       return data;
     },
+    enabled: !!currentUser.JUDGE_roomId,
   });
+
   const { data: teamsForRoomData, isFetching: teamsForRoomIsFetching } =
     useQuery({
       queryKey: ["TeamsForRoom", roomData?.id],
@@ -49,43 +53,61 @@ export default function JudgingTable({
         return teams;
       },
     });
-  const isFetching = roomIsFetching || teamsForRoomIsFetching;
+  const isFetching = roomIsFetching && teamsForRoomIsFetching;
   if (isFetching || !roomData || !teamsForRoomData) {
-    return (
-      <div className="flex flex-1">
-        <Skeleton className="h-full" containerClassName="flex-1" />
-      </div>
+    return <KevinLoadingRing />;
+  }
+  async function getFilteredTeamsCount() {
+    // https://medium.com/@debbs119/array-filter-and-array-map-with-async-functions-9636e1ae8d6e --> why it needs to map to a boolean array first
+    if (!teamsForRoomData) {
+      return;
+    }
+    const boolArray = await Promise.all(
+      teamsForRoomData?.map(async (team) => {
+        const scores = await team?.scores();
+        return (
+          scores?.data.filter((score) => score.judgeId === currentUser.username)
+            .length === 0
+        );
+      }),
+    );
+    setTeamsLeft(
+      teamsForRoomData?.filter((_, index) => boolArray[index]).length,
     );
   }
+
+  getFilteredTeamsCount();
 
   const panelData = [
     {
       icon: "/svgs/judging/team_icon.svg",
       alt: "Teams assigned icon",
       stat: teamsForRoomData.length,
-      text: `Teams Assigned to ${roomData.name}`,
+      text:
+        teamsForRoomData.length === 1
+          ? `Team Assigned to ${roomData.name}`
+          : `Teams Assigned to ${roomData.name}`,
     },
     {
       icon: "/svgs/judging/teams_left.svg",
       alt: "Teams left icon",
-      stat: teamsForRoomData.filter(
-        async (team) =>
-          (await team?.scores())?.data.filter(
-            (score) => score.judgeId === currentUser.username,
-          ).length === 0,
-      ).length,
-      text: "Teams Left To Score",
+      stat: teamsLeft,
+      text: teamsLeft === 1 ? "Team Left to Score" : "Teams Left to Score",
     },
   ];
+
   const handleCreateScoreClick = (teamId: string) => {
-    setSelectedTeamId(teamId);
-  };
-  const handleEditScoreClick = (teamId: string) => {
-    setSelectedTeamId(teamId);
+    const selectedTeam = teamsForRoomData.find((team) => team?.id === teamId);
+
+    if (selectedTeam) {
+      setSelectedTeamId(teamId);
+      setTeamName(selectedTeam.name);
+    }
   };
 
   const closeModal = () => {
     setSelectedTeamId("");
+    setTeamName("");
   };
 
   return (
@@ -105,17 +127,18 @@ export default function JudgingTable({
         <ScoresTable
           tableData={teamsForRoomData as Schema["Team"]["type"][]}
           onCreateScoreClick={handleCreateScoreClick}
-          onEditScoreClick={handleEditScoreClick}
           colorScheme="pink"
           entriesPerPage={150}
           hackathonData={hackathonData}
         />
       </div>
+
       {selectedTeam !== "" && (
         <ModalPopup
           hackathon={hackathonData}
           onClose={closeModal}
           teamId={selectedTeam}
+          teamName={teamName}
         />
       )}
     </>

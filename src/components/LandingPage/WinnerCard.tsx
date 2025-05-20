@@ -51,7 +51,7 @@ export default function WinnerCard({
         className="absolute inset-0 flex flex-col justify-end rounded-3xl bg-gradient-to-b from-black/50 via-black/0 to-black pb-4 shadow-2xl   drop-shadow-2xl  "
       >
         <div
-          className={` ${ColorCycles[index % ColorCycles.length]}  w-fit rounded-r-3xl px-3 py-1 text-xs font-bold tracking-wider text-white shadow-lg xl:text-xl`}
+          className={`${ColorCycles[index % ColorCycles.length]}  w-fit rounded-r-3xl px-3 py-1 text-xs font-bold tracking-wider text-white shadow-lg xl:text-xl`}
         >
           {pastWinner.awardName}
         </div>

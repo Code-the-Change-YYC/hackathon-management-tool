@@ -3,7 +3,7 @@
 import { client } from "@/app/QueryProvider";
 import { useQuery } from "@tanstack/react-query";
 
-import LoadingRing from "../LoadingRing";
+import KevinLoadingRing from "../KevinLoadingRing";
 
 export default function TeamInformation({
   state = "Registered",
@@ -19,7 +19,12 @@ export default function TeamInformation({
     },
   });
   const teamName = data?.name ?? "Unknown";
-  if (isPending) return <LoadingRing />;
+  if (isPending)
+    return (
+      <div className="mt-4">
+        <KevinLoadingRing />
+      </div>
+    );
   if (state === "Joined")
     return (
       <div className=" flex flex-col gap-4 text-center text-5xl font-bold">
