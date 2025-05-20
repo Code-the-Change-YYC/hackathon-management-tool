@@ -18,11 +18,3 @@ backend.auth.resources.cfnResources.cfnUserPool.emailConfiguration = {
   sourceArn:
     "arn:aws:ses:ca-central-1:847668204885:identity/hackthechangeyyc.ca",
 };
-
-backend.addOutput({
-  storage: {
-    aws_region: "ca-central-1",
-    bucket_name:
-      "amplify-dvv7xnx31hgrk-hmt-amplifydataamplifycodege-o8ge4guj5s8m",
-  },
-});

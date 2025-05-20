@@ -1,6 +1,9 @@
 "use client";
 
+import { fetchAuthSession } from "aws-amplify/auth";
+import { getUrl, list } from "aws-amplify/storage";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import { useUser } from "@/components/contexts/UserContext";
 
@@ -18,18 +21,136 @@ const RIGHT_SQUIGGLE_STYLES =
 
 export default function ProfileHeader() {
   const user = useUser().currentUser;
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
 
   // console.log(user);
+
+  // useEffect(() => {
+  //   const getProfilePicture = async () => {
+  //     // Get user ID from appropriate property
+  //     const userId = user?.username;
+
+  //     if (!userId) {
+  //       console.log("No user ID found in user object", user);
+  //       return;
+  //     }
+
+  //     console.log("User Found", user);
+
+  //     try {
+  //       // Try multiple common image filenames since we can't list the directory
+  //       const possibleFilenames = [
+  //         "profile.jpg",
+  //         "profile.jpeg",
+  //         "profile.png",
+  //         "avatar.jpg",
+  //         "avatar.png",
+  //         "photo.jpg",
+  //         "photo.png",
+  //         "image.jpg",
+  //         "image.png",
+  //       ];
+
+  //       // Try each possible filename
+  //       for (const filename of possibleFilenames) {
+  //         try {
+  //           const profileImageKey = `private/${userId}/profilePicture/${filename}`;
+
+  //           // Attempt to get the URL directly
+  //           const { url } = await getUrl({
+  //             key: profileImageKey,
+  //             options: { accessLevel: "private" },
+  //           });
+
+  //           // If successful, set the URL and exit
+  //           setProfileImageUrl(url.href);
+  //           return;
+  //         } catch (fileError) {
+  //           // Continue to the next filename if this one doesn't work
+  //           continue;
+  //         }
+  //       }
+
+  //       // If we get here, none of the common filenames worked
+  //       // We can still try the list approach as a last resort
+  //       try {
+  //         const result = await list({
+  //           path: `private/${userId}/profilePicture/`,
+  //           options: { accessLevel: "private" },
+  //         });
+
+  //         if (result.items && result.items.length > 0) {
+  //           // Sort files by last modified date (newest first)
+  //           const sortedFiles = result.items.sort((a, b) => {
+  //             return (
+  //               (b.lastModified?.getTime() || 0) -
+  //               (a.lastModified?.getTime() || 0)
+  //             );
+  //           });
+
+  //           const latestFile = sortedFiles[0];
+
+  //           // Get the file URL
+  //           const { url } = await getUrl({
+  //             key: latestFile.path,
+  //             options: { accessLevel: "private" },
+  //           });
+
+  //           setProfileImageUrl(url.href);
+  //         }
+  //       } catch (listError) {
+  //         // ListBucket permission is likely missing - silently fall back to default
+  //         console.log("List operation failed, using default profile image");
+  //       }
+  //     } catch (error) {
+  //       // Just silently fall back to default image
+  //       console.log("Using default profile image due to access restrictions");
+  //     }
+  //   };
+
+  //   if (user) {
+  //     getProfilePicture();
+  //   }
+  // }, [user]);
+
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      try {
+        const session = await fetchAuthSession();
+        const identityId = session.identityId;
+
+        // Step 1: List all files in the user's folder
+        const { items } = await list({
+          path: `public/${identityId}/`,
+        });
+
+        if (items.length > 0) {
+          // Step 2: Get the key of the first file
+          const firstFileKey = items[0].path;
+
+          // Step 3: Get the public URL of that file
+          const { url } = await getUrl({
+            path: firstFileKey || "",
+          });
+
+          // Step 4: Set the URL as the profile picture
+          setProfileImageUrl(url.href);
+        } else {
+          console.warn("No profile picture found for this user.");
+        }
+      } catch (error) {
+        console.error("Error fetching profile picture:", error);
+      }
+    };
+
+    fetchProfilePicture();
+  }, []);
 
   return (
     <div className={CONTAINER_STYLES}>
       <div className={PROFILE_CONTAINER}>
         <Image
-          src={
-            user?.profilePicture
-              ? user.profilePicture
-              : "/images/userProfile/profile.png"
-          } //temporary profile image
+          src={profileImageUrl || "/images/userProfile/profile.png"} //temporary profile image
           alt="Profile Image"
           width={120}
           height={120}

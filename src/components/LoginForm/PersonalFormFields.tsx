@@ -94,6 +94,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       setFormState((prevState) => ({ ...prevState, [name]: value }));
     }
   };
+
   if (isPending) {
     return <LoadingRing />;
   }
@@ -140,10 +141,12 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
           <Label htmlFor="profilePicture">* Profile Picture:</Label>
           <FileUploader
             acceptedFileTypes={["image/*"]}
-            autoUpload={false}
-            path="profile-pictures/"
+            path={({ identityId }) => `public/${identityId}/`}
             maxFileCount={1}
             isResumable
+            onUploadSuccess={async ({ key }) => {
+              console.log("Upload successful! File key:", key);
+            }}
           />
         </div>
         <div className="flex w-1/2 flex-col gap-2">

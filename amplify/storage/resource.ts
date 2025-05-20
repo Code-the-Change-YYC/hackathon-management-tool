@@ -3,23 +3,22 @@ import { defineStorage } from "@aws-amplify/backend";
 export const storage = defineStorage({
   name: "profileImageStorage",
   access: (allow) => ({
-    "profile-pictures/{entity_id}/*": [
-      allow.guest.to(["read"]),
-      allow.entity("identity").to(["read", "write", "delete"]),
+    "public/*": [
+      allow.authenticated.to(["read", "write", "delete"]),
+      allow.groups(["Participant"]).to(["read", "write"]),
+      allow.groups(["Judge"]).to(["read", "write", "delete"]),
+      allow.groups(["Admin"]).to(["read", "write", "delete"]),
     ],
-    "picture-submissions/*": [
-      allow.authenticated.to(["read", "write"]),
-      allow.guest.to(["read", "write"]),
+    "private/${user}/profilePicture/*": [
+      // Allow users to manage their own profile pictures
+      allow.authenticated.to(["read", "write", "delete"]),
+      allow.groups(["Admin"]).to(["read", "write", "delete"]),
     ],
-    "private/{entity_id}/*": [
-      allow.entity("identity").to(["read", "write", "delete"]),
-    ],
-    "media/*": [allow.authenticated.to(["read", "write", "delete"])],
-    "media/profile-pictures/*": [allow.guest.to(["read"])],
-    "media/albums/*": [allow.authenticated.to(["read"])],
-    "other/*": [
-      allow.guest.to(["read"]),
-      allow.authenticated.to(["read", "write"]),
+    "media/*": [
+      allow.authenticated.to(["read", "write", "delete"]),
+      allow.groups(["Participant"]).to(["read", "write"]),
+      allow.groups(["Judge"]).to(["read", "write", "delete"]),
+      allow.groups(["Admin"]).to(["read", "write", "delete"]),
     ],
   }),
 });
