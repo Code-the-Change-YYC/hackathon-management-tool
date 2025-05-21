@@ -10,7 +10,7 @@ const HackathonFinished = () => {
             Hack the Change
           </p>
           <p className="text-shadow-title-hackathon-finished font-omnes text-8xl font-bold text-[#D4FAEF]">
-            2024
+            2025
           </p>
           <p className="mt-2.5 font-omnes text-5xl font-bold tracking-wide text-white">
             has finished!
