@@ -9,7 +9,7 @@ const Footer = () => {
     >
       <h2 className="font-bold">Keep Up With Us!</h2>
       <SocialMediaIcons />
-      <h4 className="mt-6 font-medium text-ehhh-grey">
+      <h4 className="mt-4 font-medium text-ehhh-grey">
         Copyright @ Code the Change YYC
       </h4>
     </div>
