@@ -7,10 +7,9 @@ import ParticipantTicketIcon from "@/images/dashboard/ParticipantTicketIcon.png"
 import Card from "./Card";
 
 export default function GoToFoodTicket() {
-  const href = "#";
   return (
     <Card className="flex h-full flex-row justify-start gap-8">
-      <Link href={href}>
+      <Link href="/participant/profile/food-ticket">
         <Image
           className="transition duration-300 hover:opacity-90"
           src={ParticipantTicketIcon}

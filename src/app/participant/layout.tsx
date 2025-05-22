@@ -1,7 +1,5 @@
 "use client";
 
-import UserBasedNav from "@/components/Dashboard/UserBasedNav";
-
 export default function RoleBasedLayout({
   children,
 }: {
@@ -13,8 +11,7 @@ export default function RoleBasedLayout({
 
   // This example uses the UserBasedNav component in the layout:
   return (
-    <div className="flex min-h-screen flex-col bg-dashboard-grey">
-      <UserBasedNav />
+    <div className="flex w-full flex-col bg-fuzzy-peach">
       <main className="">{children}</main>
     </div>
   );
