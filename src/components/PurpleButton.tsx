@@ -6,15 +6,18 @@ export default function PurpleButton({
   type,
   onClick,
   className,
+  tabIndex,
 }: {
   children: React.ReactNode;
   disabled?: boolean;
   type?: HTMLButtonElement["type"];
   onClick?: () => void;
   className?: string;
+  tabIndex?: number;
 }) {
   return (
     <button
+      tabIndex={tabIndex}
       type={type}
       disabled={disabled}
       onClick={onClick}

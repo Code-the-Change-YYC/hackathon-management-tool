@@ -6,8 +6,8 @@ import ParticipantTicketIcon from "@/images/dashboard/ParticipantTicketIcon.png"
 
 import Card from "./Card";
 
+const href = "/participant/profile/food-ticket";
 export default function GoToFoodTicket() {
-  const href = "#";
   return (
     <Card className="flex h-full flex-row justify-start gap-8">
       <Link href={href}>

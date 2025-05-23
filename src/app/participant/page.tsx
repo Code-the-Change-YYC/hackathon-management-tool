@@ -29,7 +29,6 @@ export default function page() {
         <div className="flex flex-col gap-4">
           <NextMealScheduled />
           <GoToFoodTicket />
-          {/* <DevPostSubmission /> */}
         </div>
         <div className="flex flex-col gap-4">
           <ImportantInformation />
