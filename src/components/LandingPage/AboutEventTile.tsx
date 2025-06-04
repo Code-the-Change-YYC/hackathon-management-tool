@@ -6,7 +6,7 @@ import { fetchContent } from "@/app/actions";
 const EVENT_DETAILS_SECTION_STYLES =
   "flex w-full flex-col items-center bg-white";
 const EVENT_DETAILS_CONTENT_STYLES =
-  "bg-pastel-pink border-4 border-dark-pink rounded-3xl mt-4 mb-8 xl:mt-8 xl:mb-12 flex flex-col xl:flex-row  w-4/5 shadow-[15px_15px_0px_0px_#FF4D6F]";
+  "bg-pastel-pink border-4 border-dark-pink rounded-3xl mt-4 mb-8 xl:mt-8 xl:mb-12 flex flex-col xl:flex-row  w-4/5 shadow-[15px_15px_0px_0px_dark-pink]";
 const EVENT_IMAGE_CONTAINER_STYLES =
   "bg-blackish border-b-4 border-dark-pink size-full xl:size-1/2 rounded-t-2xl xl:rounded-tr-none xl:rounded-l-2xl xl:border-b-0 xl:border-r-4 ";
 const EVENT_IMAGE_STYLES =

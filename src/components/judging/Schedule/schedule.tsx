@@ -122,7 +122,9 @@ export default function JudgingSchedule() {
         <button
           onClick={() => setFilter("all")}
           className={`rounded px-4 py-2 ${
-            filter === "all" ? "bg-awesomer-purple text-white" : "bg-gray-200"
+            filter === "all"
+              ? "bg-awesomer-purple text-white"
+              : "bg-dashboard-grey"
           }`}
         >
           All Teams
@@ -132,7 +134,7 @@ export default function JudgingSchedule() {
           className={`rounded px-4 py-2 ${
             filter === "assigned"
               ? "bg-awesomer-purple text-white"
-              : "bg-gray-200"
+              : "bg-dashboard-grey"
           }`}
         >
           Assigned Teams

@@ -42,7 +42,7 @@ export default function UserForm({
         <div className="flex flex-col">
           <label>First Name</label>
           <input
-            className={`md:text-md  my-2 rounded-full border-4 border-white bg-white py-2 ps-3 text-sm ${isEditing ? "text-black" : "text-gray-400"}`}
+            className={`md:text-md  my-2 rounded-full border-4 border-white bg-white py-2 ps-3 text-sm ${isEditing ? "text-black" : "text-cement-grey"}`}
             type="text"
             placeholder={formState.firstName ?? "First Name"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -54,7 +54,7 @@ export default function UserForm({
         <div className="flex flex-col">
           <label>Last Name</label>
           <input
-            className={`${"md:text-md  my-2 rounded-full border-4 border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
+            className={`${"md:text-md  my-2 rounded-full border-4 border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-cement-grey"}`}
             type="text"
             placeholder={formState.lastName ?? "Last Name"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -66,7 +66,7 @@ export default function UserForm({
       </div>
       <label>Email</label>
       <input
-        className={`${"md:text-md  my-2 rounded-full border-4  border-white bg-white py-2 ps-3 text-sm"} ${"text-gray-400"}`}
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white bg-white py-2 ps-3 text-sm"} ${"text-cement-grey"}`}
         type="text"
         placeholder={formState.email ?? ""}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -76,14 +76,14 @@ export default function UserForm({
       />
       <label>Password</label>
       <input
-        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-cement-grey"}`}
         type="password"
         placeholder="••••••••"
         disabled={!isEditing} // Disabled when not in edit mode
       />
       <label>Institution</label>
       <input
-        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-cement-grey"}`}
         type="text"
         placeholder={formState.institution ?? "e.g. University of Calgary"}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -93,7 +93,7 @@ export default function UserForm({
       />
       <label>Do you want provided meals at the hackathon?</label>
       <select
-        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-cement-grey"}`}
         value={formState.willEatMeals ? "Yes" : "No"}
         onChange={(e) =>
           setFormState((prevState) => ({
@@ -110,7 +110,7 @@ export default function UserForm({
         <>
           <label>Do you have any allergies?</label>
           <input
-            className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white  py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-gray-400"}`}
+            className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white  py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-cement-grey"}`}
             type="text"
             placeholder={formState.allergies ?? "e.g. Dairy, Nuts, etc."}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -126,7 +126,7 @@ export default function UserForm({
         on hackathon day
       </p>
       <input
-        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white  py-2 ps-3 text-sm"} ${"text-gray-400"}`}
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white  py-2 ps-3 text-sm"} ${"text-cement-grey"}`}
         type="text"
         value={formState.checkedIn ? "Yes" : "No"}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
@@ -138,7 +138,7 @@ export default function UserForm({
             <button
               type="button"
               className={
-                "my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white md:px-12"
+                "my-2 rounded-full border-4 border-white bg-grapefruit  px-10 py-2 text-white md:px-12"
               }
               onClick={handleCancelClick}
             >
@@ -148,7 +148,7 @@ export default function UserForm({
             <button
               type="submit"
               className={
-                " my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white md:px-12"
+                " my-2 rounded-full border-4 border-white bg-grapefruit  px-10 py-2 text-white md:px-12"
               }
               disabled={pending}
             >
@@ -160,7 +160,7 @@ export default function UserForm({
             <button
               type="button"
               className={
-                "my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white opacity-50 md:px-12"
+                "my-2 rounded-full border-4 border-white bg-grapefruit  px-10 py-2 text-white opacity-50 md:px-12"
               }
               disabled
             >
@@ -170,7 +170,7 @@ export default function UserForm({
             <button
               type="submit"
               className={
-                "my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white opacity-50 md:px-12"
+                "my-2 rounded-full border-4 border-white bg-grapefruit  px-10 py-2 text-white opacity-50 md:px-12"
               }
               disabled
             >
