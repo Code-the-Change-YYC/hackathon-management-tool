@@ -1,4 +1,5 @@
 import type { AuthUser } from "aws-amplify/auth";
+import { fetchAuthSession } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -9,12 +10,13 @@ import FormFieldButtons from "@/components/LoginForm/FormFieldButtons";
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
 import { FileUploader } from "@aws-amplify/ui-react-storage";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import LoadingRing from "../LoadingRing";
 import { UserType, useUser } from "../contexts/UserContext";
 
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { isPending, isError, data } = useQuery({
     queryKey: ["User", user?.userId],
@@ -140,12 +142,32 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         <div className="flex w-1/2 flex-col gap-2">
           <Label htmlFor="profilePicture">* Profile Picture:</Label>
           <FileUploader
-            acceptedFileTypes={["image/*"]}
-            path={({ identityId }) => `public/${identityId}/`}
+            acceptedFileTypes={["image/png"]}
+            path={`public/`}
             maxFileCount={1}
             isResumable
-            onUploadSuccess={async ({ key }) => {
-              console.log("Upload successful! File key:", key);
+            processFile={async ({ file }) => {
+              if (file.type !== "image/png") {
+                throw new Error("Only PNG files are allowed.");
+              }
+              const session = await fetchAuthSession();
+              const identityId = session.identityId;
+              const extension = file.type.split("/")[1] || "png";
+              const newKey = `${identityId}.${extension}`;
+              const renamedFile = new File(
+                [file],
+                `${identityId}.${extension}`,
+                {
+                  type: file.type,
+                },
+              );
+              return {
+                key: newKey,
+                file: renamedFile,
+              };
+            }}
+            onUploadSuccess={() => {
+              queryClient.invalidateQueries({ queryKey: ["profile-image"] });
             }}
           />
         </div>
