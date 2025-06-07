@@ -123,7 +123,9 @@ Copy the file `.env.local.example` and rename the file to `.env.local`
 
 ## Colour Scheme
 
-Colours are defined in [tailwind.config.ts](tailwind.config.ts), with a visual reference available in the "Colour Scheme" tab on the [HMT Figma](https://www.figma.com/design/eBswR1P8DUUO9F8PsspcWJ/Hackathon-Management-Tool-Designs-UPDATED?node-id=1046-1374&t=Q7omfcAHRzHS7aNh-1). Use the predefined colour names in place of hex codes. Prior to adding a new colour, try adjusting the opacity of the existing colours to see if it achieves the desired result. This helps keep the colour palette concise and consistent!
+Colours are defined in [tailwind.config.ts](tailwind.config.ts) and are to be used in place of hex codes. A visual reference is available in the "Colour Scheme" tab on the [HMT Figma](https://www.figma.com/design/eBswR1P8DUUO9F8PsspcWJ/Hackathon-Management-Tool-Designs-UPDATED?node-id=1046-1374&t=Q7omfcAHRzHS7aNh-1).
+
+Prior to adding a new colour, try adjusting the opacity of the existing colours first to see if it achieves the desired result. This helps keep the colour palette concise and consistent.
 
 ### CTC's _staple_ colours:
 
@@ -143,16 +145,12 @@ Colours are defined in [tailwind.config.ts](tailwind.config.ts), with a visual r
 - lilac-purple
 - regal-blue: Typically used for external links and buttons
 
-### Grey Tones
+### Grey Tones:
 
 - white
 - light-grey
 - dashboard-grey: Default dashboard background colour
 - medium-grey
 - ehhh-grey
-- cement-grey
-- stingray-grey
-- asphalt-grey
 - dark-grey
-- blackish
 - black

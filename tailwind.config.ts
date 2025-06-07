@@ -33,11 +33,7 @@ const config: Config = {
         "dashboard-grey": "#E5E5E5",
         "medium-grey": "#D9D9D9",
         "ehhh-grey": "#C5C5C5",
-        "cement-grey": "#9ca3af",
-        "stingray-grey": "#6b7280",
-        "asphalt-grey": "#374151",
         "dark-grey": "#333333",
-        blackish: "#222222",
       },
       borderRadius: {
         "20": "20px",

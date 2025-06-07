@@ -37,7 +37,7 @@ export default function NextMealScheduled() {
         <h1>
           Next Meal <br /> Scheduled at
         </h1>
-        <div className="text-3xl font-bold italic text-blackish">
+        <div className="text-3xl font-bold italic text-dark-grey">
           {isFetching ? "Loading..." : (data?.timeslot ?? "No meal scheduled")}
         </div>
         <h2>Location: {location}</h2>

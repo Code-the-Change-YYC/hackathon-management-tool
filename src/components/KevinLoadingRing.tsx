@@ -12,10 +12,10 @@ export default function KevinLoadingRing() {
           height={240}
         />
         <div className="ml-2 flex w-full items-center justify-center space-x-1">
-          <span className="font-semibold text-asphalt-grey">Loading</span>
-          <span className=" mt-3 size-1 animate-pulse rounded-full bg-asphalt-grey delay-200"></span>
-          <span className="delay-400 mt-3 size-1 animate-pulse rounded-full bg-asphalt-grey"></span>
-          <span className="delay-600 mt-3 size-1 animate-pulse rounded-full bg-asphalt-grey"></span>
+          <span className="font-semibold text-dark-grey">Loading</span>
+          <span className=" mt-3 size-1 animate-pulse rounded-full bg-dark-grey delay-200"></span>
+          <span className="delay-400 mt-3 size-1 animate-pulse rounded-full bg-dark-grey"></span>
+          <span className="delay-600 mt-3 size-1 animate-pulse rounded-full bg-dark-grey"></span>
         </div>
       </div>
     </>

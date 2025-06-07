@@ -109,7 +109,7 @@ export default function JudgingInfo() {
           </div>
           <Link
             href="/participant/rubric"
-            className="text-left text-xl text-stingray-grey underline md:text-2xl"
+            className="text-left text-xl text-dark-grey underline md:text-2xl"
           >
             View Judging Rubric
           </Link>
@@ -121,7 +121,7 @@ export default function JudgingInfo() {
         {isFetchingTeamRoom ? (
           "Loading..."
         ) : (
-          <div className="text-3xl italic text-blackish xl:text-5xl">
+          <div className="text-3xl italic text-dark-grey xl:text-5xl">
             {timeSlot ? timeSlot.toLocaleString() : "Room not assigned"}
           </div>
         )}
@@ -132,7 +132,7 @@ export default function JudgingInfo() {
         {isFetchingJudgeData ? (
           "Loading..."
         ) : (
-          <div className="text-3xl italic text-blackish xl:text-5xl">
+          <div className="text-3xl italic text-dark-grey xl:text-5xl">
             {judgeNames}
           </div>
         )}
@@ -150,7 +150,7 @@ export default function JudgingInfo() {
             Join Zoom Meeting
           </Link>
         ) : (
-          <div className="pointer-events-none cursor-default text-stingray-grey">
+          <div className="pointer-events-none cursor-default text-dark-grey">
             Zoom link coming soon
           </div>
         )}

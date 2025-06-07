@@ -141,7 +141,7 @@ export default function RankingTable({
     [sortKey, sortAscending, computedScores],
   );
   return (
-    <table className=" w-full text-left text-lg font-medium text-stingray-grey">
+    <table className=" w-full text-left text-lg font-medium text-dark-grey">
       <thead className=" rounded-xl bg-awesome-purple text-lg  font-medium text-white">
         <tr>
           <th className=" px-6 py-3">
