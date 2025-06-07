@@ -28,7 +28,9 @@ const NavLinkContainer = ({
   return (
     <Link
       href={dashboardLink.route}
-      className={"mb-2 flex justify-between rounded-md p-2 hover:bg-[#5E48D1]"}
+      className={
+        "mb-2 flex justify-between rounded-md p-2 hover:bg-dark-grey/20"
+      }
     >
       <div className="flex gap-2">
         <div className={"flex justify-center rounded-md bg-white p-2"}>

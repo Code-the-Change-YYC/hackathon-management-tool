@@ -70,7 +70,7 @@ export default function NavBar() {
             <Link
               key={item.name}
               href={item.href}
-              className="rounded px-2 py-3 text-xl text-awesomer-purple hover:bg-gray-100"
+              className="rounded px-2 py-3 text-xl text-awesomer-purple hover:bg-light-grey"
               onClick={() => setIsMenuOpen(false)}
             >
               {item.name}

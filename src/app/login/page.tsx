@@ -4,7 +4,7 @@ import KevinLoadingRing from "@/components/KevinLoadingRing";
 import RegistrationLayout from "@/components/layouts/RegistrationLayout";
 
 const Login = dynamic(() => import("@/components/LoginForm/Login"), {
-  ssr: false,
+  ssr: true,
   loading: () => (
     <div className="mt-16 flex w-full items-center justify-center">
       <KevinLoadingRing />

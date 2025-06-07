@@ -114,10 +114,10 @@ const UserProfile = () => {
           </div>
           <div className="w-full md:px-16 md:py-10">
             {/* <ProfileLinks /> */}
-            <div className="mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
+            <div className="mb-3 flex justify-between uppercase text-grapefruit md:mx-10">
               <h1 className="mt-3 text-lg font-bold md:text-2xl">My Details</h1>
               <button
-                className="my-2 rounded-full border-4 border-white bg-[#FF6B54]  px-10 py-2 text-white md:px-12"
+                className="my-2 rounded-full border-4 border-white bg-grapefruit  px-10 py-2 text-white md:px-12"
                 onClick={handleEditClick}
               >
                 Edit

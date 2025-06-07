@@ -8,10 +8,10 @@ import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const BUTTON_STYLES =
-  " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
+  " rounded-full border-4 border-white bg-grapefruit px-10  md:px-12 py-2 my-2 text-white";
 
 const TEAM_INSTRUCTION_STYLES =
-  "bg-pink bg-white/30 mx-10 my-10 rounded-3xl  border-4 border-white bg-[#FFFFFF] px-10 py-20 md:px-20 md:py-16";
+  "bg-pink bg-white/30 mx-10 my-10 rounded-3xl  border-4 border-white bg-white px-10 py-20 md:px-20 md:py-16";
 
 const TeamProfile = () => {
   const queryClient = useQueryClient();
@@ -58,7 +58,7 @@ const TeamProfile = () => {
         </div>
       ) : (
         <>
-          <div className="  mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
+          <div className="  mb-3 flex justify-between uppercase text-grapefruit md:mx-10">
             <h1 className="my-4 text-lg font-bold md:mt-3 md:text-2xl">
               Team Details
             </h1>

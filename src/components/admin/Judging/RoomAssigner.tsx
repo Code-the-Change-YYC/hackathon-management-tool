@@ -115,14 +115,14 @@ export default function RoomAssigner({
               <a
                 href={meetingLink}
                 target="_blank"
-                className="text-blue-500 underline"
+                className="text-regal-blue underline"
                 rel="noreferrer"
               >
                 {meetingLink}
               </a>
             </div>
           )}
-          {error && <p className="mt-4 text-red-500">{error}</p>}
+          {error && <p className="mt-4 text-strawberry-red">{error}</p>}
         </div>
       </div>
     </div>

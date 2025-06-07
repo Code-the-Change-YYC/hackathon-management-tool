@@ -6,7 +6,7 @@ import KevinLoadingRing from "@/components/KevinLoadingRing";
 const UserProfile = dynamic(
   () => import("@/components/UserProfile/UserProfile"),
   {
-    ssr: false,
+    ssr: true,
     loading: () => (
       <div className="flex w-full items-center justify-center">
         <KevinLoadingRing />

@@ -27,7 +27,7 @@ export default function ProfileLinks() {
   }, []);
 
   return (
-    <div className="align-center text-1xl md:text-md my-12 flex flex-row gap-8 text-center text-[#FF6B54] sm:gap-16 md:mx-10">
+    <div className="align-center text-1xl md:text-md my-12 flex flex-row gap-8 text-center text-grapefruit sm:gap-16 md:mx-10">
       {currentUser.id &&
         links.map((link, index) => (
           <Link

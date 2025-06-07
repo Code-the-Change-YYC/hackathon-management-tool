@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 const judgingCriteriaStyles =
-  "relative flex -mt-5 justify-between bg-[#BAFBE4] py-20 px-[5%] md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
+  "relative flex -mt-5 justify-between bg-pastel-green py-20 px-[5%] md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
 
 const itemStyles =
   "flex justify-start p-4 lg:px-6 lg:text-[1.0rem] items-start";

@@ -8,7 +8,7 @@ export default function WindowContainer({
   return (
     <div
       className={
-        "relative hidden min-w-[675px] flex-col items-center justify-center rounded-md border-t-[30px] border-white bg-[#00D3A9] py-10 opacity-95 md:flex  md:px-8 lg:w-11/12"
+        "relative hidden min-w-[675px] flex-col items-center justify-center rounded-md border-t-[30px] border-white bg-dark-green py-10 opacity-95 md:flex  md:px-8 lg:w-11/12"
       }
     >
       <Image

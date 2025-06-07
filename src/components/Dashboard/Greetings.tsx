@@ -20,7 +20,7 @@ export default function Greetings({
       ? "text-awesome-purple"
       : accentColor !== undefined
         ? accentColor
-        : "text-emerald-500";
+        : "text-dark-green";
   return (
     <Card>
       <div
