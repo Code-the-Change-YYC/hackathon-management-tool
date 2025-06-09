@@ -108,6 +108,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       router.push("/admin");
       return null;
     } else if (data?.role === UserType.Judge) {
+      // Probably something here with this condition cuz it includes team id?
       router.push("/judging");
       return null;
     } else {
