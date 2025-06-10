@@ -9,16 +9,5 @@ export const storage = defineStorage({
       allow.groups(["Judge"]).to(["read", "write", "delete"]),
       allow.groups(["Admin"]).to(["read", "write", "delete"]),
     ],
-    "private/${user}/profilePicture/*": [
-      // Allow users to manage their own profile pictures
-      allow.authenticated.to(["read", "write", "delete"]),
-      allow.groups(["Admin"]).to(["read", "write", "delete"]),
-    ],
-    "media/*": [
-      allow.authenticated.to(["read", "write", "delete"]),
-      allow.groups(["Participant"]).to(["read", "write"]),
-      allow.groups(["Judge"]).to(["read", "write", "delete"]),
-      allow.groups(["Admin"]).to(["read", "write", "delete"]),
-    ],
   }),
 });

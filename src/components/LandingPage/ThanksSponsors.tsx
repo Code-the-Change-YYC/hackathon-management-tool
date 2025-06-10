@@ -8,9 +8,6 @@ const leftSponsorSvgSmall = "/svgs/judgingCriteria/leftSponsorSvgSmall.svg";
 const rightSponsorSvgSmall = "/svgs/judgingCriteria/rightSponsorSvgSmall.svg";
 
 export default async function ThankSponsors() {
-  const IMAGE_CLASS =
-    "relative duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform ";
-
   const sponsors = await fetchContent("hackathonSponsor");
   const sortedSponsors = sponsors.sort(
     (a, b) => a.fields.sponsorOrder - b.fields.sponsorOrder,
@@ -66,32 +63,13 @@ export default async function ThankSponsors() {
         {sortedSponsors.map((sponsor, index) => (
           <div className="flex flex-row gap-2 sm:gap-3" key={index}>
             <div className="group flex flex-col items-center gap-3">
-              <div
-                className={IMAGE_CLASS}
-                style={{
-                  maxWidth: "300px",
-                  width: "95%",
-                  height: "100%",
-                  padding: "5px",
-                  borderRadius: "20px",
-                  overflow: "hidden",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
+              <div className="relative flex h-full w-[95%] max-w-[300px] items-center justify-center overflow-hidden rounded-20 p-[5px] duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform">
                 <a
                   href={sponsor.fields.sponsorPage}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: "inherit",
-                    }}
-                  >
+                  <div className="rounded-inherit size-full">
                     <Image
                       src={
                         sponsor.fields.sponsorImg.fields.file?.url
