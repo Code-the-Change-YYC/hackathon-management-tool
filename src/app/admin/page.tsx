@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 };
 export default function page() {
   return (
-    <div className="flex flex-1 flex-col gap-4 overflow-auto bg-slate-200 p-4 text-3xl font-semibold">
+    <div className="z-0 flex flex-1 flex-col gap-4 overflow-auto bg-dashboard-grey p-4 text-3xl font-semibold">
       <Greetings />
       <h1 className="text-2xl font-semibold">Hackathon Statistics</h1>
       <CheckUserLoggedIn>

@@ -20,7 +20,7 @@ export default function Greetings({
       ? "text-awesome-purple"
       : accentColor !== undefined
         ? accentColor
-        : "text-emerald-500";
+        : "text-dark-green";
   return (
     <Card>
       <div
@@ -32,8 +32,15 @@ export default function Greetings({
         <h2 className="text-lg font-normal md:text-xl lg:text-2xl">
           Hack the Change 2024
         </h2>
+
         <h1 className="text-3xl md:text-4xl lg:text-6xl">
           Hello,
+          {user.isFetching && (
+            <span className={`capitalize italic ${nameColor}`}>
+              {" "}
+              Loading...
+            </span>
+          )}
           <span className={`capitalize italic ${nameColor}`}>
             {" "}
             {firstName} {lastName}!

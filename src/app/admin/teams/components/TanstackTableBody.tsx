@@ -1,11 +1,9 @@
 import type { Table } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
 
-import type { Team } from "../tanstackTableSetup";
-
-export default function TeamTableBody({ table }: { table: Table<Team> }) {
+export default function TanstackTableBody<T>({ table }: { table: Table<T> }) {
   return (
-    <tbody>
+    <tbody className="text-sm md:text-lg xl:text-xl">
       {table.getRowModel().rows.map((row) => (
         <tr key={row.id} className="w-full odd:bg-light-grey">
           {row.getVisibleCells().map((cell) => (

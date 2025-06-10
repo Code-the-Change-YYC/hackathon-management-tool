@@ -1,13 +1,11 @@
 import type { Row, TableMeta } from "@tanstack/react-table";
 
-import type { Team } from "../tanstackTableSetup";
-
-export default function SaveEditButton({
+export default function SaveEditButton<T>({
   row,
   meta,
 }: {
-  row: Row<Team>;
-  meta?: TableMeta<Team>;
+  row: Row<T>;
+  meta?: TableMeta<T>;
 }) {
   return (
     <button

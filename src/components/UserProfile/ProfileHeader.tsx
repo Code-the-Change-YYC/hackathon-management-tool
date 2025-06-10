@@ -39,7 +39,7 @@ export default function ProfileHeader() {
   }
 
   return (
-    <div className={"flex h-60 items-center justify-center bg-[#FF6B54]"}>
+    <div className={"bg-grapefruit flex h-60 items-center justify-center"}>
       <div
         className={
           "absolute top-44 flex flex-row md:left-20 md:top-52 md:z-10 "

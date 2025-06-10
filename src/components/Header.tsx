@@ -11,9 +11,6 @@ import { client } from "@/app/QueryProvider";
 import { UserType, useUser } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 
-const headerContainerStyles =
-  "flex flex-row items-center justify-between text-awesomer-purple h-36 bg-white px-8";
-
 export default function Header() {
   const user = useUser().currentUser;
 
@@ -53,7 +50,7 @@ export default function Header() {
     router.push("/");
   };
   return (
-    <div className={headerContainerStyles}>
+    <div className="flex h-36 w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
       <div className="flex w-48 font-semibold">
         {user.username ? (
           <>
@@ -66,9 +63,9 @@ export default function Header() {
                 )}
               </>
             ) : user.type === UserType.Admin ? (
-              <Link href="/admin/teams">Admin Dashboard</Link>
+              <Link href="/admin">Admin Dashboard</Link>
             ) : user.type === UserType.Judge ? (
-              <Link href="/judging">Judge Dashboard</Link>
+              <Link href="/judging"></Link>
             ) : null}
           </>
         ) : (
@@ -83,13 +80,13 @@ export default function Header() {
             alt="Awesome Logo"
             width={70}
             height={70}
-            className="shadow-lg"
+            className="shadow-lg transition-transform hover:scale-125"
           />
         </Link>
       </div>
 
       <div className="flex w-48 justify-end">
-        {user.completedProfile && (
+        {user.completedRegistration && (
           <Link href="/participant/profile">
             <CgProfile size={60} />
           </Link>
