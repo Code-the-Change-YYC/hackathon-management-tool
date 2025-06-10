@@ -102,9 +102,17 @@ export default function JudgingInfo() {
           src={JudgeIcon}
           alt={"Judging Icon"}
         />
-        <div className="text-start font-medium">
-          {isFetchingTeamName ? "Loading..." : <div>{`${teamName}'s `}</div>}
-          <div className="">Judging Information</div>
+        <div className="flex flex-col gap-2">
+          <div className="text-start font-medium">
+            {isFetchingTeamName ? "Loading..." : <div>{`${teamName}'s `}</div>}
+            <div className="">Judging Information</div>
+          </div>
+          <Link
+            href="/participant/rubric"
+            className="text-left text-xl text-dark-grey underline md:text-2xl"
+          >
+            View Judging Rubric
+          </Link>
         </div>
       </div>
 
@@ -113,7 +121,7 @@ export default function JudgingInfo() {
         {isFetchingTeamRoom ? (
           "Loading..."
         ) : (
-          <div className="text-3xl italic text-neutral-800 xl:text-5xl">
+          <div className="text-3xl italic text-dark-grey xl:text-5xl">
             {timeSlot ? timeSlot.toLocaleString() : "Room not assigned"}
           </div>
         )}
@@ -124,7 +132,7 @@ export default function JudgingInfo() {
         {isFetchingJudgeData ? (
           "Loading..."
         ) : (
-          <div className="text-3xl italic text-neutral-800 xl:text-5xl">
+          <div className="text-3xl italic text-dark-grey xl:text-5xl">
             {judgeNames}
           </div>
         )}
@@ -137,12 +145,12 @@ export default function JudgingInfo() {
             href={zoomLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-500 underline"
+            className="text-regal-blue underline"
           >
             Join Zoom Meeting
           </Link>
         ) : (
-          <div className="pointer-events-none cursor-default text-gray-500">
+          <div className="pointer-events-none cursor-default text-dark-grey">
             Zoom link coming soon
           </div>
         )}

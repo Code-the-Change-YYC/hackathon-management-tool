@@ -51,14 +51,14 @@ export default function TanstackTableFooter<T>({ table }: { table: Table<T> }) {
           {"<<"}
         </button>
         <button
-          className="flex size-8 items-center justify-center rounded border border-awesome-purple bg-slate-300 transition-all hover:border-awesomer-purple"
+          className="flex size-8 items-center justify-center rounded border border-awesome-purple bg-medium-grey transition-all hover:border-awesomer-purple"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
           {"<"}
         </button>
         <button
-          className="flex size-8 items-center justify-center rounded border border-awesome-purple bg-slate-300 transition-all hover:border-awesomer-purple"
+          className="flex size-8 items-center justify-center rounded border border-awesome-purple bg-medium-grey transition-all hover:border-awesomer-purple"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
