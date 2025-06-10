@@ -75,7 +75,7 @@ const DataSeeder = () => {
               <li>
                 <button
                   onClick={toggleSelectAll}
-                  className="mb-2 rounded bg-blue-500 p-1 text-white"
+                  className="mb-2 rounded bg-regal-blue p-1 text-white"
                 >
                   {selectAll ? "Deselect All" : "Select All"}
                 </button>
@@ -89,8 +89,8 @@ const DataSeeder = () => {
             disabled={isSeeding || selectedSeeds.length === 0}
             className={`center my-auto block h-min rounded p-3 font-bold text-white shadow-lg ${
               isSeeding || selectedSeeds.length === 0
-                ? "cursor-not-allowed bg-green-400"
-                : "focus:shadow-outline bg-green-600 hover:bg-green-700 focus:outline-none"
+                ? "cursor-not-allowed bg-dark-green/45"
+                : "focus:shadow-outline bg-dark-green/65 hover:bg-dark-green focus:outline-none"
             }`}
           >
             {isSeeding ? "Seeding..." : "Seed Data"}
@@ -103,7 +103,7 @@ const DataSeeder = () => {
           <div
             key={index}
             className={`mb-2 p-2 ${
-              result.success ? "bg-green-200" : "bg-red-200"
+              result.success ? "bg-pastel-green" : "bg-pastel-pink"
             }`}
           >
             {result.message}

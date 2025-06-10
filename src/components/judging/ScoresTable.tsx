@@ -216,7 +216,7 @@ export default function JudgingTable(props: JudgingTableProps) {
                 <tr
                   key={rowIndex}
                   className={`${
-                    rowIndex % 2 === 0 ? "bg-[#f1f1f1]" : "bg-[#e1e1e1]"
+                    rowIndex % 2 === 0 ? "bg-light-grey" : "bg-dashboard-grey"
                   }`}
                 >
                   <td className="py-4 text-center text-lg">{team.name}</td>
