@@ -64,7 +64,8 @@ export default function Header() {
               </>
             ) : user.type === UserType.Admin ? (
               <Link href="/admin">Admin Dashboard</Link>
-            ) : user.type === UserType.Judge ? ( //Probably change the conditon here to make sure it redirects to the judging page only if the user is a judge regardless of TEAMID
+            ) : user.type === UserType.Judge ||
+              (UserType.Judge && user.teamId) ? (
               <Link href="/judging"></Link>
             ) : null}
           </>
