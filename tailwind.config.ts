@@ -33,6 +33,7 @@ const config: Config = {
         "lilac-purple": "#D6C9FF",
         "dashboard-grey": "#E5E5E5",
         "grey-purple": "#4B486D",
+        "mint-green": "#D4FAEF",
       },
       borderRadius: {
         "20": "20px",
