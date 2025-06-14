@@ -13,7 +13,7 @@ const REGISTER_HEADING_TEXT_STYLES =
   "text-4xl font-bold my-12 mt-6 md:mr-28 text-center md:w-[950px] mx-0 w-4/5";
 const CREATE_TEAM_BODY_CONTAINER_STYLES = "mx-auto flex w-5/6 max-w-[1000px]";
 const CREATE_TEAM_TILE_STYLES = "bg-white p-6 rounded-3xl flex justify-center";
-const CREATE_TEAM_TEXT_INFO_STYLES = "text-blackish";
+const CREATE_TEAM_TEXT_INFO_STYLES = "text-dark-grey";
 const CREATE_TEAM_STEPS_STYLES = "my-8";
 const READY_TO_REGISTER_CONTAINER_STYLES = "my-8 flex justify-center";
 const READY_TO_REGISTER_TEXT_STYLES = "text-center text-2xl font-semibold";

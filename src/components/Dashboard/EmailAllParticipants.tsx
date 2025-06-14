@@ -25,7 +25,7 @@ export default function EmailAllParticipants({ closeModal }: Props) {
           </h2>
           <button
             onClick={closeModal}
-            className="text-2xl text-white hover:text-gray-300"
+            className="text-2xl text-white hover:text-medium-grey"
           >
             &times;
           </button>
@@ -38,7 +38,7 @@ export default function EmailAllParticipants({ closeModal }: Props) {
                 type="text"
                 value="Code The Change"
                 readOnly
-                className="rounded-md bg-gray-100 p-2 text-gray-500"
+                className="rounded-md bg-light-grey p-2 text-dark-grey"
               />
             </div>
             <div>
@@ -47,7 +47,7 @@ export default function EmailAllParticipants({ closeModal }: Props) {
                 type="text"
                 value="All Participants"
                 readOnly
-                className="rounded-md bg-gray-100 p-2 text-gray-500"
+                className="rounded-md bg-light-grey p-2 text-dark-grey"
               />
             </div>
           </div>
