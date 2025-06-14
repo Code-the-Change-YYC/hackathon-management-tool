@@ -31,31 +31,33 @@ export default function TeamsTable({ teams }: { teams: Team[] }) {
     typeName: "Team",
   });
   return (
-    <div className="teams group flex flex-1 flex-col justify-between overflow-x-auto rounded-3xl bg-white p-2 text-xl outline  outline-awesomer-purple">
-      <div className="w-full">
-        <TableSearch
-          tableDataLength={table.getRowCount()}
-          handleSearchChange={useCallback(
-            (value: string) => setGlobalFilter(value),
-            [],
-          )}
-        />
-        <table className="ml-1.5 w-full border-separate border-spacing-x-0.5 p-2 md:ml-0">
-          <TeamsTableHead
-            table={useMemo(() => table.getHeaderGroups(), [table])}
+    <div className="teams group flex flex-1 flex-col justify-between overflow-hidden rounded-3xl bg-white p-2 text-xl outline  outline-awesomer-purple">
+      <div className="overflow-x-auto">
+        <div className="w-full">
+          <TableSearch
+            tableDataLength={table.getRowCount()}
+            handleSearchChange={useCallback(
+              (value: string) => setGlobalFilter(value),
+              [],
+            )}
           />
-          <TeamTableBody table={table} />
-          <tfoot>
-            <tr>
-              <th
-                colSpan={table.getAllColumns().length}
-                className="rounded-b-xl bg-awesome-purple p-4 text-white"
-              />
-            </tr>
-          </tfoot>
-        </table>
+          <table className="ml-1.5 w-full border-separate border-spacing-x-0.5 p-2 md:ml-0">
+            <TeamsTableHead
+              table={useMemo(() => table.getHeaderGroups(), [table])}
+            />
+            <TeamTableBody table={table} />
+            <tfoot>
+              <tr>
+                <th
+                  colSpan={table.getAllColumns().length}
+                  className="rounded-b-xl bg-awesome-purple p-4 text-white"
+                />
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <TableFooter table={table} />
       </div>
-      <TableFooter table={table} />
     </div>
   );
 }
