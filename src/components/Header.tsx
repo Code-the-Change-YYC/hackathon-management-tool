@@ -8,15 +8,17 @@ import { CgProfile } from "react-icons/cg";
 
 import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
-import { UserType, useUser } from "@/components/contexts/UserContext";
+import { useUser } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
+
+import UserBasedNav from "./Dashboard/UserBasedNav";
 
 export default function Header() {
   const user = useUser().currentUser;
 
   const userId = useUser().currentUser.username as string;
 
-  const { data } = useQuery({
+  useQuery({
     initialData: {} as Schema["Team"]["type"],
     initialDataUpdatedAt: 0,
     queryKey: ["Team", userId],
@@ -51,13 +53,14 @@ export default function Header() {
   };
   return (
     <div className="flex h-36 w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
-      <div className="flex w-48 font-semibold">
+      {/* Dont think we need this anymore because we have userbased nav */}
+      {/* <div className="flex w-48 font-semibold">
         {user.username ? (
           <>
             {user.type === UserType.Participant ? (
               <>
                 {data ? (
-                  <Link href="/participant">Dashboard</Link>
+                  <Link href="/participant"></Link>
                 ) : (
                   <Link href="/register/team">Join a Team</Link>
                 )}
@@ -70,6 +73,15 @@ export default function Header() {
           </>
         ) : (
           <a href="/login">Join Hackathon</a>
+        )}
+      </div> */}
+      <div className="flex w-48">
+        {user.id === "" ? (
+          <div></div>
+        ) : user && user.username ? (
+          <UserBasedNav />
+        ) : (
+          <Link href="/login">Join Hackathon</Link>
         )}
       </div>
 
