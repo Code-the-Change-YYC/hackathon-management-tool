@@ -76,7 +76,7 @@ export default function Header() {
         )}
       </div> */}
       <div className="flex w-48">
-        {typeof user === "undefined" ? (
+        {user.id === "" ? (
           <div></div>
         ) : user && user.username ? (
           <UserBasedNav />
