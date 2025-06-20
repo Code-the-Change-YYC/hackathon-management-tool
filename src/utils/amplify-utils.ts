@@ -59,7 +59,7 @@ export async function AuthGetCurrentUserDetails() {
     });
 
     if (!currentUser) {
-      throw new Error("No current user found.");
+      return null; // because in the route if the user cannot be found we check if !user
     }
 
     const userId = currentUser?.userId;

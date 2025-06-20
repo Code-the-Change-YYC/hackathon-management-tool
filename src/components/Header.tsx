@@ -50,7 +50,7 @@ export default function Header() {
             <CgProfile size={60} />
           </Link>
         )}
-        {userDetails?.role !== UserType.Guest && (
+        {userDetails.role && userDetails?.role !== UserType.Guest && (
           <button onClick={handleLogout} className="ml-4 font-semibold">
             Logout
           </button>

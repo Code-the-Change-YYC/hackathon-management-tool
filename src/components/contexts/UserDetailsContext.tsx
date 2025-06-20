@@ -1,19 +1,12 @@
 "use client";
 
-import {
-  type ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { type ReactNode, createContext, useContext, useMemo } from "react";
 
 import { type UserDetailsNoFunctions } from "@/utils/amplify-utils";
+import { useQuery } from "@tanstack/react-query";
 
 interface UserDetailsContextType {
   userDetails: UserDetailsNoFunctions;
-  setUserDetails: (u: UserDetailsNoFunctions) => void;
 }
 
 const UserDetailsContext = createContext<UserDetailsContextType>(
@@ -27,33 +20,28 @@ export function UserDetailsProvider({
   initialUserDetails: UserDetailsNoFunctions;
   children: ReactNode;
 }) {
-  const [userDetails, setUserDetailsState] =
-    useState<UserDetailsNoFunctions>(initialUserDetails);
-  const setUserDetails = useCallback((upd: UserDetailsNoFunctions) => {
-    setUserDetailsState((prev) => {
-      if (
-        prev.id === upd.id &&
-        prev.completedRegistration === upd.completedRegistration &&
-        prev.role === upd.role &&
-        prev.email === upd.email &&
-        prev.firstName === upd.firstName &&
-        prev.lastName === upd.lastName &&
-        prev.institution === upd.institution &&
-        prev.allergies === upd.allergies &&
-        prev.willEatMeals === upd.willEatMeals &&
-        prev.checkedIn === upd.checkedIn &&
-        prev.teamId === upd.teamId
-        // add accordingly
-      ) {
-        return prev;
-      }
-      return upd;
-    });
-  }, []);
+  const queryKey = ["User"];
+
+  async function fetchUserDetails(): Promise<UserDetailsNoFunctions> {
+    const resp = await fetch("/api/user");
+    if (!resp || !resp.ok) throw new Error("Failed to fetch user details");
+    return await resp.json();
+  }
+
+  const { data: userDetails } = useQuery<UserDetailsNoFunctions>({
+    queryKey,
+    queryFn: fetchUserDetails,
+    initialData: initialUserDetails,
+    // if initial data already exists you dont need to refetch:
+    refetchOnMount: initialUserDetails ? false : true,
+    // arbitreay stale time of 5 minutes
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: true,
+  });
 
   const value = useMemo(() => {
-    return { userDetails, setUserDetails };
-  }, [userDetails, setUserDetails]);
+    return { userDetails };
+  }, [userDetails]);
 
   return (
     <UserDetailsContext.Provider value={{ ...value }}>
