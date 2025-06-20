@@ -52,6 +52,14 @@ export type UserDetailsNoFunctions = SelectionSet<
 >;
 
 export async function AuthGetCurrentUserDetails() {
+  const cookieStore = cookies();
+  const all = cookieStore.getAll();
+  // amplifygen2 stores cookies named like .idToken, accessToken, etc.
+  // might have to change this to a better implemeantion
+  const idTokenCookie = all.find((c) => c.name.includes(".idToken"));
+  if (!idTokenCookie) {
+    return null;
+  }
   try {
     const currentUser = await runWithAmplifyServerContext({
       nextServerContext: { cookies },
