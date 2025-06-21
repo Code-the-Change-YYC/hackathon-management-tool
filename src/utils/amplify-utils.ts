@@ -44,7 +44,9 @@ const selectionSet = [
   "willEatMeals",
   "checkedIn",
   "teamId",
-] as const;
+  "profileOwner",
+  "JUDGE_roomId",
+] as const; // i cant typecast this to schema["User"]["type"] for some reason
 
 export type UserDetailsNoFunctions = SelectionSet<
   Schema["User"]["type"],

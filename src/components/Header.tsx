@@ -21,7 +21,7 @@ export default function Header() {
     router.push("/");
   };
   return (
-    <div className="flex h-36 w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
+    <div className="flex h-[10dvh] w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
       <div className="flex w-48">
         {userId === "" ? (
           <div></div>
