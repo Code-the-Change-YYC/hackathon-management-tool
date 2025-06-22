@@ -67,7 +67,8 @@ export default function Header() {
               </>
             ) : user.type === UserType.Admin ? (
               <Link href="/admin">Admin Dashboard</Link>
-            ) : user.type === UserType.Judge ? (
+            ) : user.type === UserType.Judge ||
+              (UserType.Judge && user.teamId) ? (
               <Link href="/judging"></Link>
             ) : null}
           </>
