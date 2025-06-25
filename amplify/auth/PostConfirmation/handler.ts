@@ -62,6 +62,7 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
     willEatMeals: false,
     allergies: "",
     institution: "",
+    program: "",
     profileOwner: `${event.request.userAttributes.sub}::${event.userName}`,
   })
     .then((user) => {
