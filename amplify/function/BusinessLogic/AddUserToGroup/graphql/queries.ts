@@ -129,6 +129,7 @@ export const getScore =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -233,6 +234,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -279,6 +281,7 @@ export const getUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -532,6 +535,7 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt

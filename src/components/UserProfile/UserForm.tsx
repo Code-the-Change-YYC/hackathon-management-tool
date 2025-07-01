@@ -91,6 +91,16 @@ export default function UserForm({
         name="institution"
         disabled={!isEditing} // Disabled when not in edit mode
       />
+      <label>Program</label>
+      <input
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
+        type="text"
+        placeholder={formState.program ?? "e.g. Engineering"}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
+        value={formState.program ?? ""}
+        name="program"
+        disabled={!isEditing} // Disabled when not in edit mode
+      />
       <label>Do you want provided meals at the hackathon?</label>
       <select
         className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
