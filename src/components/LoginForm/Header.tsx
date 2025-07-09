@@ -21,7 +21,7 @@ const Header = () => {
       </div>
       <div className=" text-4xl font-bold text-white lg:text-6xl">
         Register for Hack the Change
-        <span className="text-pastel-green"> 2024</span>
+        <span className="text-pastel-green"> 2025</span>
       </div>
     </div>
   );

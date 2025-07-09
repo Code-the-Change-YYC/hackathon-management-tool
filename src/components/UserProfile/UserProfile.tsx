@@ -50,6 +50,8 @@ const UserProfile = () => {
         teamId,
         checkedIn,
         profileOwner,
+        email,
+        role,
         ...extractedFields
       } = input;
       // TODO this can be cleaned if we use React Hook Form to handle form state better
@@ -59,6 +61,7 @@ const UserProfile = () => {
         void teamId,
         void checkedIn,
         void profileOwner;
+      void email, void role;
 
       try {
         await client.models.User.update(extractedFields);

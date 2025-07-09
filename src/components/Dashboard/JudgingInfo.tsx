@@ -109,7 +109,7 @@ export default function JudgingInfo() {
           </div>
           <Link
             href="/participant/rubric"
-            className="text-left text-xl text-dark-grey underline md:text-2xl"
+            className="text-left text-xl text-dark-grey/60 underline md:text-2xl"
           >
             View Judging Rubric
           </Link>
