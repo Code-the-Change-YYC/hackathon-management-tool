@@ -37,6 +37,7 @@
     "aws-lambda": "^1.0.7",
     "concurrently": "^8.2.2",
     "contentful": "^10.15.0",
+    "graphql": "^16.8.1",
     "hackathon-management-tool": "file:",
     "js-sha3": "^0.9.3",
     "luxon": "^3.4.4",
