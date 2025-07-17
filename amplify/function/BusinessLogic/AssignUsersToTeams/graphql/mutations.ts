@@ -92,6 +92,7 @@ export const ResetHackathon = /* GraphQL */ `mutation ResetHackathon(
   APITypes.ResetHackathonMutationVariables,
   APITypes.ResetHackathonMutation
 >;
+
 export const ScheduleTeamsAndJudges =
   /* GraphQL */ `mutation ScheduleTeamsAndJudges(
   $judgingSessionsPerTeam: Int!

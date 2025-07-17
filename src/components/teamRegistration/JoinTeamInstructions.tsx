@@ -1,13 +1,19 @@
-import Link from "next/link";
-
 export default function JoinTeamInstructions() {
   return (
     <ol className="flex list-inside list-decimal flex-col gap-4 px-6 text-lg font-medium">
       <li>
         Join the
-        <Link href="https://discord.com/" target="_blank">
-          <span className=" font-bold"> Code the Change YYC Discord </span>
-        </Link>
+        <span className=" font-bold">
+          <a
+            className="hover:text-awesomer-purple"
+            target="_blank"
+            rel="noreferrer"
+            href={process.env.NEXT_PUBLIC_DISCORD_LINK}
+          >
+            {" "}
+            Code the Change YYC Discord{" "}
+          </a>
+        </span>
         and navigate to the
         <span className="font-bold"> #looking-for-a-team </span> channel.
       </li>
@@ -21,12 +27,12 @@ export default function JoinTeamInstructions() {
         <span className="font-bold"> ONE </span>
         member to <span className="font-bold"> “Register New Team” </span>
         using your Team Name. They will receive a unique
-        <span className="font-bold"> 6-digit Team ID </span>
+        <span className="font-bold"> 4-digit Team ID </span>
         following registration.
       </li>
       <li>
         Next, provide this
-        <span className="font-bold"> 6-digit Team ID </span>
+        <span className="font-bold"> 4-digit Team ID </span>
         to all team members.
       </li>
       <li>

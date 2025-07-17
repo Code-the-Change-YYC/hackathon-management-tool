@@ -8,6 +8,9 @@ import TotalParticipants from "@/components/Dashboard/TotalParticipants";
 import TotalTeams from "@/components/Dashboard/TotalTeams";
 import { SuspenseWrapper } from "@/components/SuspenseWrapper";
 
+export const dynamic = "force-dynamic";
+
+export const revalidate = 0;
 export const metadata: Metadata = {
   title: "Hack the Change - Admin",
   description: "Hack the Change Admin Portal",
@@ -22,7 +25,7 @@ export const metadata: Metadata = {
 };
 export default function page() {
   return (
-    <div className="flex flex-1 flex-col gap-4 overflow-auto bg-slate-200 p-4 text-3xl font-semibold">
+    <div className="z-0 flex flex-1 flex-col gap-4 overflow-auto bg-dashboard-grey p-4 text-3xl font-semibold">
       <Greetings />
       <h1 className="text-2xl font-semibold">Hackathon Statistics</h1>
       <CheckUserLoggedIn>
@@ -40,7 +43,9 @@ export default function page() {
               <NumFoodTickets />
             </SuspenseWrapper>
           </div>
-          <TeamRankings />
+          <SuspenseWrapper>
+            <TeamRankings />
+          </SuspenseWrapper>
         </div>
       </CheckUserLoggedIn>
     </div>

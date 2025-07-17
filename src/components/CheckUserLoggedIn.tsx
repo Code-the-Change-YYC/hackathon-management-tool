@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
+import { AuthGetAuthSession } from "@/utils/amplify-utils";
 
 export default async function CheckUserLoggedIn({
   children,
@@ -8,11 +8,11 @@ export default async function CheckUserLoggedIn({
   children: ReactNode;
 }) {
   try {
-    const user = await AuthGetCurrentUserServer();
+    const user = await AuthGetAuthSession();
     if (!user?.tokens) {
       throw new Error("User is not logged in.");
     }
-    console.log(user);
+    // console.log(user);
     return <>{children}</>;
   } catch (error) {
     console.error(error);

@@ -1,15 +1,14 @@
 import Image from "next/image";
 
 import { fetchContent } from "@/app/actions";
-import type { Judge } from "@/app/contentfulTypes";
 
 const squigglySvg = "/svgs/judgingCriteria/squiggly_line.svg";
 
 export default async function JudgeShowcase() {
-  const judges = (await fetchContent("hackathonJudge")) as Judge[];
+  const judges = await fetchContent("hackathonJudge");
   return (
-    <div className="flex h-full flex-col justify-center bg-white p-10">
-      <div className="flex w-fit flex-col items-center sm:w-1/4 sm:pr-5">
+    <div className="flex flex-col justify-center bg-white p-10">
+      <div className="flex flex-col items-center sm:w-1/4 sm:pr-5">
         <h1 className="text-2xl font-extrabold">Judges</h1>
         <Image
           src={squigglySvg}
@@ -18,14 +17,11 @@ export default async function JudgeShowcase() {
           height={20}
         ></Image>
       </div>
-      <div className="flex w-full flex-row flex-wrap">
+      <div className="grid w-full grid-cols-2 md:grid-cols-3">
         {judges.map((judge, index) => (
-          <div
-            className="flex w-1/2 flex-row py-10 sm:w-1/3 sm:justify-center"
-            key={index}
-          >
-            <div className="flex flex-row gap-2 sm:gap-3">
-              <div className="relative size-16 min-w-16 overflow-hidden rounded-full sm:size-24 sm:min-w-24">
+          <div className="flex w-full justify-center py-5" key={index}>
+            <div className="flex flex-col items-center gap-4 sm:flex-row">
+              <div className="relative size-24 overflow-hidden rounded-full">
                 <Image
                   src={
                     judge.fields.judgeImg.fields.file?.url
@@ -38,10 +34,10 @@ export default async function JudgeShowcase() {
                 />
               </div>
               <div className="flex flex-col justify-center">
-                <p className="text-xs font-extrabold text-awesome-purple sm:text-base">
+                <p className="w-36 text-center text-xs font-extrabold text-awesome-purple sm:text-start sm:text-base">
                   {judge.fields.judgeName}
                 </p>
-                <p className="text-xs sm:text-base">
+                <p className="w-36 text-center text-xs sm:text-start sm:text-base">
                   {judge.fields.judgeCompany}
                 </p>
               </div>

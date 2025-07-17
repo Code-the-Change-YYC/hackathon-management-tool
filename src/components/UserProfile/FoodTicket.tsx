@@ -8,7 +8,7 @@ import { QRCode } from "react-qrcode-logo";
 import { type Schema } from "@/amplify/data/resource";
 import { createMessageAndCode } from "@/amplify/function/BusinessLogic/utils/crytography";
 import { getUpcomingFoodEventDetails } from "@/app/get-food-ticket/actions";
-import LoadingRing from "@/components/LoadingRing";
+import KevinLoadingRing from "@/components/KevinLoadingRing";
 import { UserType, useUser } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 
@@ -25,7 +25,7 @@ export default function UserFoodTicket() {
       <div className="flex h-screen w-full justify-center bg-fuzzy-peach">
         <div className="mt-10 w-3/4">
           <div className="rounded-3xl border-4 border-white bg-white/30 p-20">
-            <h1 className="text-center text-3xl font-bold text-[#FF6B54]">
+            <h1 className="text-center text-3xl font-bold text-grapefruit">
               Sorry! No Food Tickets Available for{" "}
               {isAdmin ? "Admins" : "Judges"}
             </h1>
@@ -114,7 +114,7 @@ export default function UserFoodTicket() {
     <>
       {isFetching ? (
         <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
-          <LoadingRing />
+          <KevinLoadingRing />
         </div>
       ) : (
         <div className="flex size-full flex-col items-center bg-fuzzy-peach">
@@ -141,7 +141,7 @@ export default function UserFoodTicket() {
               className="md:absolute md:right-10 md:top-[60rem]"
             />{" "}
           </div>
-          <div className="mb-3 flex w-fit flex-col items-center justify-between uppercase text-[#FF6B54] md:mx-10 md:px-16 md:py-10">
+          <div className="mb-3 flex w-fit flex-col items-center justify-between uppercase text-grapefruit md:mx-10 md:px-16 md:py-10">
             <div className="flex flex-row justify-between">
               <h1 className="mt-3 text-lg font-bold md:text-2xl">
                 My Food Ticket

@@ -33,7 +33,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body
-        className={`${Omnes.className} flex size-full min-h-screen flex-col bg-white dark:text-black`}
+        className={`${Omnes.className} flex size-full min-h-screen w-dvw flex-col overflow-x-clip bg-white dark:text-black`}
       >
         <ToastProvider>
           <Provider>

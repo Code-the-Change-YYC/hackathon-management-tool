@@ -5,7 +5,9 @@ import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
 export default async function TotalParticipants() {
-  const users = await client.models.User.list();
+  const users = await client.models.User.list({
+    limit: 1000,
+  });
   // TODO: "user.role should be an enum, not a string."
   const participants = users.data.filter((user) => user.role === "Participant");
   const numParticipants = participants.length;
@@ -24,7 +26,7 @@ export default async function TotalParticipants() {
       <Link href={href} className="z-10 text-xl font-medium">
         Total Participants
       </Link>
-      <div className="text-8xl italic text-zinc-800">{numParticipants}</div>
+      <div className="text-8xl italic text-dark-grey">{numParticipants}</div>
     </Card>
   );
 }

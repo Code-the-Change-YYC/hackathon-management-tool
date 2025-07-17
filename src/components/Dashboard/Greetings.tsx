@@ -1,25 +1,49 @@
 "use client";
 
+import { twMerge } from "tailwind-merge";
+
 import { UserType, useUser } from "../contexts/UserContext";
 import Card from "./Card";
 
-export default function Greetings() {
+export default function Greetings({
+  className,
+  accentColor,
+}: {
+  className?: string;
+  accentColor?: string;
+}) {
   const user = useUser();
-  const name = user.currentUser.firstName;
+  const firstName = user.currentUser.firstName;
+  const lastName = user.currentUser.lastName;
   const nameColor =
     user?.currentUser.type === UserType.Admin
       ? "text-awesome-purple"
-      : "text-emerald-500";
+      : accentColor !== undefined
+        ? accentColor
+        : "text-dark-green";
   return (
     <Card>
-      <div className=" flex w-full flex-col justify-start p-2 text-start md:p-4 ">
+      <div
+        className={twMerge(
+          " flex w-full flex-col justify-start p-2 text-start md:p-4 ",
+          className,
+        )}
+      >
         <h2 className="text-lg font-normal md:text-xl lg:text-2xl">
           Hack the Change 2024
         </h2>
+
         <h1 className="text-3xl md:text-4xl lg:text-6xl">
           Hello,
+          {user.isFetching && (
+            <span className={`capitalize italic ${nameColor}`}>
+              {" "}
+              Loading...
+            </span>
+          )}
           <span className={`capitalize italic ${nameColor}`}>
-            {` ${name}`}!
+            {" "}
+            {firstName} {lastName}!
           </span>
         </h1>
       </div>

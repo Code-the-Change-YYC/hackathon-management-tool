@@ -1,15 +1,13 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import type { Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
 
 import FilterIcon from "../atoms/FilterIcon";
-
-const client = generateClient<Schema>();
 
 type ITeamScores = {
   [teamId: string]: {
@@ -39,10 +37,10 @@ function TableRow({
   index?: number;
   total?: number;
 }) {
-  const bgColor = index % 2 === 1 ? "bg-white" : "bg-gray-200";
+  const bgColor = index % 2 === 1 ? "bg-white" : "bg-dashboard-grey";
   return (
     <tr className={twMerge("border-b", bgColor)}>
-      <td className="truncate whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+      <td className="truncate whitespace-nowrap px-6 py-4 font-medium text-dark-grey">
         {teamName}
       </td>
       {Object.keys(components).map((componentId) => {
@@ -62,83 +60,58 @@ function TableRow({
   );
 }
 
-export default function RankingTable() {
-  // Load Data
-  const { data: scoreData, isFetching: isScoreFetching } = useQuery({
+export default function RankingTable({
+  scoringMetrics,
+}: {
+  scoringMetrics: Schema["Hackathon"]["type"]["scoringComponents"];
+}) {
+  const client = generateClient<Schema>();
+  const { data: formattedScores } = useQuery({
     queryKey: ["Scores"],
     initialData: [],
     queryFn: async () => {
       const { data, errors } = await client.models.Score.list();
       if (errors) throw Error(errors[0].message);
-
-      return data;
+      let formattedData = data.map(async (score) => {
+        return {
+          teamId: score.teamId,
+          teamName: (await score.team()).data?.name ?? "",
+          score: JSON.parse(score.score as string) as IScoreRaw["score"],
+        };
+      });
+      const scores = await Promise.all(formattedData);
+      return scores;
     },
   });
 
-  const { data: hackathonData, isFetching: isHackathonFetching } = useQuery({
-    queryKey: ["Hackathon"],
-    initialData: {} as Schema["Hackathon"]["type"],
-    queryFn: async () => {
-      const { data, errors } = await client.models.Hackathon.list();
-      if (errors) throw Error(errors[0].message);
+  const computedScores: ITeamScores = useMemo(() => {
+    const tempScore: ITeamScores = {};
+    formattedScores.reduce((acc, score) => {
+      if (!acc[score.teamId]) {
+        acc[score.teamId] = {
+          total: 0,
+          name: score.teamName,
+          components: {},
+        };
+      }
 
-      return data[0];
-    },
-  });
+      const teamScore = scoringMetrics.reduce((total, metric) => {
+        const scoreComponentId = metric.id;
+        acc[score.teamId].components[scoreComponentId] = acc[score.teamId]
+          .components[scoreComponentId]
+          ? Number(acc[score.teamId].components[scoreComponentId]) +
+            Number(score.score[scoreComponentId])
+          : score.score[scoreComponentId];
 
-  // Do some local data reformatting
-  const [formattedScores, setFormattedScores] = useState<IScoreRaw[]>([]);
+        return total + Number(score.score[scoreComponentId]);
+      }, 0);
 
-  useEffect(() => {
-    if (scoreData) {
-      const decorateScoreData = async () => {
-        const formattedData = await Promise.all(
-          scoreData.map(async (score) => {
-            return {
-              teamId: score.teamId,
-              teamName: (await score.team()).data?.name ?? "",
-              score: JSON.parse(
-                score.score as unknown as string,
-              ) as IScoreRaw["score"],
-            };
-          }),
-        );
-        setFormattedScores(formattedData);
-      };
-      decorateScoreData();
-    }
-  }, [scoreData]);
+      acc[score.teamId].total += teamScore;
 
-  let computedScores: ITeamScores = {};
-  console.log("Formatted Scores", formattedScores);
-
-  computedScores = formattedScores.reduce((acc, score) => {
-    if (!acc[score.teamId]) {
-      acc[score.teamId] = {
-        total: 0,
-        name: score.teamName,
-        components: {},
-      };
-    }
-
-    const teamScore = [
-      ...hackathonData.scoringComponents,
-      ...hackathonData.scoringSidepots,
-    ].reduce((total, component) => {
-      const scoreComponentId = component?.id ?? "";
-      acc[score.teamId].components[scoreComponentId] = acc[score.teamId]
-        .components[scoreComponentId]
-        ? Number(acc[score.teamId].components[scoreComponentId]) +
-          Number(score.score[scoreComponentId])
-        : score.score[scoreComponentId];
-
-      return total + Number(score.score[scoreComponentId]);
-    }, 0);
-
-    acc[score.teamId].total += teamScore;
-
-    return acc;
-  }, computedScores);
+      return acc;
+    }, tempScore);
+    return tempScore;
+  }, [formattedScores, scoringMetrics]);
 
   const [sortKey, setSortKey] = useState<string>("total");
   const [sortAscending, setSortAscending] = useState(true);
@@ -165,46 +138,24 @@ export default function RankingTable() {
   }
   const sortedTeamIds = useMemo(
     () => sortByKey(sortKey, sortAscending),
-    [sortKey, sortAscending],
+    [sortKey, sortAscending, computedScores],
   );
-  console.log("Sorted Team Ids", computedScores);
   return (
-    !isScoreFetching &&
-    !isHackathonFetching && (
-      <div className="flex size-full justify-start overflow-auto rounded-xl">
-        <table className=" w-full text-left text-lg font-medium text-gray-500">
-          <thead className=" rounded-xl bg-awesome-purple text-lg  font-medium text-white">
-            <tr>
-              <th className=" px-6 py-3">
-                <div className="flex items-center capitalize">Team</div>
-              </th>
-              {[
-                ...hackathonData.scoringComponents,
-                ...hackathonData.scoringSidepots,
-              ].map((component) => {
-                return (
-                  <th key={component.id} className=" px-6 py-3">
-                    <div className="flex items-center capitalize">
-                      {component.friendlyName}
-                      {component.isSidepot ? " (Sidepot)" : null}
-                      <button
-                        onClick={() => {
-                          setSortKey(component.id);
-                          setSortAscending(!sortAscending);
-                        }}
-                      >
-                        <FilterIcon />
-                      </button>
-                    </div>
-                  </th>
-                );
-              })}
-              <th className=" px-6 py-3">
+    <table className=" w-full text-left text-lg font-medium text-dark-grey">
+      <thead className=" rounded-xl bg-awesome-purple text-lg  font-medium text-white">
+        <tr>
+          <th className=" px-6 py-3">
+            <div className="flex items-center capitalize">Team</div>
+          </th>
+          {scoringMetrics.map((metric) => {
+            return (
+              <th key={metric.id} className=" px-6 py-3">
                 <div className="flex items-center capitalize">
-                  Total
+                  {metric.friendlyName}
+                  {metric.isSidepot ? " (Sidepot)" : null}
                   <button
                     onClick={() => {
-                      setSortKey("total");
+                      setSortKey(metric.id);
                       setSortAscending(!sortAscending);
                     }}
                   >
@@ -212,23 +163,36 @@ export default function RankingTable() {
                   </button>
                 </div>
               </th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedTeamIds.map((teamId, index) => {
-              return (
-                <TableRow
-                  teamName={computedScores[teamId].name}
-                  components={computedScores[teamId].components}
-                  total={computedScores[teamId].total}
-                  key={index}
-                  index={index}
-                />
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    )
+            );
+          })}
+          <th className=" px-6 py-3">
+            <div className="flex items-center capitalize">
+              Total
+              <button
+                onClick={() => {
+                  setSortKey("total");
+                  setSortAscending(!sortAscending);
+                }}
+              >
+                <FilterIcon />
+              </button>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {sortedTeamIds.map((teamId, index) => {
+          return (
+            <TableRow
+              teamName={computedScores[teamId].name}
+              components={computedScores[teamId].components}
+              total={computedScores[teamId].total}
+              key={index}
+              index={index}
+            />
+          );
+        })}
+      </tbody>
+    </table>
   );
 }

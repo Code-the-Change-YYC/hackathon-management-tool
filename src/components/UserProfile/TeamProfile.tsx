@@ -2,39 +2,27 @@
 
 import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
-import LoadingRing from "@/components/LoadingRing";
+import KevinLoadingRing from "@/components/KevinLoadingRing";
 import TeamForm from "@/components/UserProfile/TeamForm";
 import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const BUTTON_STYLES =
-  " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
+  " rounded-full border-4 border-white bg-grapefruit px-10  md:px-12 py-2 my-2 text-white";
 
 const TEAM_INSTRUCTION_STYLES =
-  "bg-pink bg-white/30 mx-10 my-10 rounded-3xl  border-4 border-white bg-[#FFFFFF] px-10 py-20 md:px-20 md:py-16";
+  "bg-pink bg-white/30 mx-10 my-10 rounded-3xl  border-4 border-white bg-white px-10 py-20 md:px-20 md:py-16";
 
 const TeamProfile = () => {
   const queryClient = useQueryClient();
 
-  const userId = useUser().currentUser.username as string;
+  const userTeamId = useUser().currentUser.teamId as string;
 
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["Team"]["type"],
     initialDataUpdatedAt: 0,
-    queryKey: ["Team", userId],
+    queryKey: ["Team", userTeamId],
     queryFn: async () => {
-      const userResponse = await client.models.User.get({
-        id: userId,
-      });
-
-      if (userResponse.errors) throw new Error(userResponse.errors[0].message);
-
-      const userTeamId = userResponse.data?.teamId as string;
-
-      if (!userTeamId) {
-        return {} as Schema["Team"]["type"];
-      }
-
       const teamResponse = await client.models.Team.get({
         id: userTeamId,
       });
@@ -43,12 +31,13 @@ const TeamProfile = () => {
 
       return teamResponse.data;
     },
+    enabled: !!userTeamId,
   });
 
   const teamMutation = useMutation({
     mutationFn: async () => {
       try {
-        await client.models.User.update({ id: userId, teamId: null });
+        await client.models.User.update({ id: userTeamId, teamId: null });
       } catch (error) {
         console.error("Error updating ids", error);
         throw error;
@@ -56,20 +45,20 @@ const TeamProfile = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["Team", userId],
+        queryKey: ["Team", userTeamId],
       });
     },
   });
 
   return (
     <>
-      {isFetching ? (
+      {isFetching || !userTeamId ? (
         <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
-          <LoadingRing />
+          <KevinLoadingRing />
         </div>
       ) : (
         <>
-          <div className="  mb-3 flex justify-between uppercase text-[#FF6B54] md:mx-10">
+          <div className="  mb-3 flex justify-between uppercase text-grapefruit md:mx-10">
             <h1 className="my-4 text-lg font-bold md:mt-3 md:text-2xl">
               Team Details
             </h1>
@@ -100,10 +89,10 @@ const TeamProfile = () => {
                   <li>
                     3. After forming a team , assign <strong>ONE</strong> member
                     to “Register New Team” using your Team Name. They will
-                    receive a unique 6-digit Team ID following registration.
+                    receive a unique 4-digit Team ID following registration.
                   </li>
                   <li>
-                    4. Next, provide this 6-digit <strong>Team ID</strong> to
+                    4. Next, provide this 4-digit <strong>Team ID</strong> to
                     all team members.
                   </li>
                   <li>

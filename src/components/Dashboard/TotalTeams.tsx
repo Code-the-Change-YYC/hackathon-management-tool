@@ -5,7 +5,9 @@ import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
 export default async function TotalTeams() {
-  const teams = await client.models.Team.list();
+  const teams = await client.models.Team.list({
+    limit: 1000,
+  });
   const numTeams = teams.data.length;
   const href = "/admin/teams";
   return (
@@ -22,7 +24,7 @@ export default async function TotalTeams() {
       <Link href={href} className=" z-10 text-xl font-medium">
         Total Teams
       </Link>
-      <div className=" text-8xl italic text-zinc-800">{numTeams}</div>
+      <div className=" text-8xl italic text-dark-grey">{numTeams}</div>
     </Card>
   );
 }

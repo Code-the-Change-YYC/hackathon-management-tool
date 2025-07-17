@@ -32,6 +32,44 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+@media (max-width: 768px) {
+  .text-shadow-outline {
+    text-shadow:
+      -2px -2px 0 #7055fd,
+      2px -2px 0 #7055fd,
+      -2px 2px 0 #7055fd,
+      2px 2px 0 #7055fd,
+      -2px -2px 0 #7055fd,
+      2px -2px 0 #7055fd,
+      -2px 2px 0 #7055fd,
+      2px 2px 0 #7055fd;
+  }
+}
+
+.text-shadow-title {
+  text-shadow:
+    -2px -2px 0 #7055fd,
+    2px -2px 0 #7055fd,
+    -2px 2px 0 #7055fd,
+    2px 2px 0 #7055fd,
+    -2px -2px 0 #7055fd,
+    2px -2px 0 #7055fd,
+    -2px 2px 0 #7055fd,
+    2px 2px 0 #7055fd;
+}
+
+.text-shadow-title-hackathon-finished {
+  text-shadow:
+    -3px -3px 0 #533DE0,
+    3px -3px 0 #533DE0,
+    -3px 3px 0 #533DE0,
+    3px 3px 0 #533DE0,
+    -3px -3px 0 #533DE0,
+    3px -3px 0 #533DE0,
+    -3px 3px 0 #533DE0,
+    3px 3px 0 #533DE0;
+}
+
 .lds-ring,
 .lds-ring div {
   box-sizing: border-box;

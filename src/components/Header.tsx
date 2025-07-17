@@ -6,40 +6,27 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
 
-import { UserType, useUser } from "@/components/contexts/UserContext";
+import { UserType } from "@/components/contexts/UserContext";
+import { useUserDetails } from "@/components/contexts/UserDetailsContext";
 
-const headerContainerStyles =
-  "flex flex-row items-center justify-between text-awesomer-purple h-36 bg-white px-8";
+import UserBasedNav from "./Dashboard/UserBasedNav";
 
 export default function Header() {
-  const user = useUser().currentUser;
+  const { userDetails } = useUserDetails();
 
+  const userId = userDetails?.id || "";
   const router = useRouter();
-
   const handleLogout = () => {
     signOut();
     router.push("/");
   };
-
   return (
-    <div className={headerContainerStyles}>
-      <div className="flex w-48 font-semibold">
-        {user.username ? (
-          <>
-            {user.type === UserType.Participant ? (
-              <>
-                {user.teamId ? (
-                  <Link href="/participant/dashboard">Dashboard</Link>
-                ) : (
-                  <Link href="/register/team">Join a Team</Link>
-                )}
-              </>
-            ) : user.type === UserType.Admin ? (
-              <Link href="/admin/teams">Admin Dashboard</Link>
-            ) : user.type === UserType.Judge ? (
-              <Link href="/judging">Judge Dashboard</Link>
-            ) : null}
-          </>
+    <div className="flex h-[10dvh] w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
+      <div className="flex w-48">
+        {userId === "" ? (
+          <div></div>
+        ) : userDetails ? (
+          <UserBasedNav />
         ) : (
           <Link href="/login">Join Hackathon</Link>
         )}
@@ -52,18 +39,18 @@ export default function Header() {
             alt="Awesome Logo"
             width={70}
             height={70}
-            className="shadow-lg"
+            className="shadow-lg transition-transform hover:scale-125"
           />
         </Link>
       </div>
 
       <div className="flex w-48 justify-end">
-        {user.completedProfile && (
+        {userDetails?.completedRegistration && (
           <Link href="/participant/profile">
             <CgProfile size={60} />
           </Link>
         )}
-        {user.username && (
+        {userDetails.role && userDetails?.role !== UserType.Guest && (
           <button onClick={handleLogout} className="ml-4 font-semibold">
             Logout
           </button>

@@ -1,7 +1,6 @@
 import type { AuthUser } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import type { Id } from "react-toastify";
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 import type { Schema } from "@/amplify/data/resource";
@@ -11,8 +10,8 @@ import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-import LoadingRing from "../LoadingRing";
-import { UserType } from "../contexts/UserContext";
+import KevinLoadingRing from "../KevinLoadingRing";
+import { UserType, useUser } from "../contexts/UserContext";
 
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();
@@ -28,11 +27,11 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       return response.data;
     },
   });
-  const toastRef = useRef<Id>("");
+  const { revalidateUser } = useUser();
   const userMutation = useMutation({
     mutationKey: ["User", user?.userId],
     mutationFn: async (input: Schema["User"]["type"]) => {
-      toastRef.current = toast.loading("Updating user information...");
+      const toastObj = toast.loading("Updating user information...");
       const response = await client.models.User.update({
         id: user.userId,
         firstName: input.firstName,
@@ -42,28 +41,22 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         allergies: input.allergies,
         completedRegistration: true,
       });
-      if (response.errors) throw Error(response.errors[0].message);
+      toast.dismiss(toastObj);
+      if (response.errors) {
+        throw Error(response.errors[0].message);
+      }
 
       return response.data;
     },
     onSuccess: () => {
-      toast.update(toastRef.current, {
-        render: "User information updated successfully",
-        type: "success",
-        isLoading: false,
-        autoClose: 3000,
-      });
+      toast.success("User information updated successfully");
+      revalidateUser();
       router.push("/register/team");
     },
     onError: (error) => {
-      toast.update(toastRef.current, {
-        render: "Failed to update user information",
-        type: "error",
-        isLoading: false,
-        autoClose: 3000,
-      });
-
-      console.error("Error updating user", error);
+      toast.error(
+        `Failed to update user information ${(error as Error).message}. `,
+      );
     },
   });
   const institutions = [
@@ -98,11 +91,29 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       setFormState((prevState) => ({ ...prevState, [name]: value }));
     }
   };
+
+  console.log(isPending);
   if (isPending) {
-    return <LoadingRing />;
+    return (
+      <div className="mt-16 flex w-full items-center justify-center">
+        <KevinLoadingRing />
+      </div>
+    );
   }
   if (isError) {
     return <div>Error, please try again later.</div>;
+  }
+  if (data?.teamId && data?.completedRegistration) {
+    if (data?.role === UserType.Admin) {
+      router.push("/admin");
+      return null;
+    } else if (data?.role === UserType.Judge) {
+      router.push("/judging");
+      return null;
+    } else {
+      router.push("/participant/profile");
+      return null;
+    }
   }
   if (data?.teamId) {
     router.push(`/register/team/${data.teamId}`);

@@ -3,7 +3,7 @@
 import { client } from "@/app/QueryProvider";
 import { useQuery } from "@tanstack/react-query";
 
-import LoadingRing from "../LoadingRing";
+import KevinLoadingRing from "../KevinLoadingRing";
 
 export default function TeamInformation({
   state = "Registered",
@@ -19,7 +19,12 @@ export default function TeamInformation({
     },
   });
   const teamName = data?.name ?? "Unknown";
-  if (isPending) return <LoadingRing />;
+  if (isPending)
+    return (
+      <div className="mt-4">
+        <KevinLoadingRing />
+      </div>
+    );
   if (state === "Joined")
     return (
       <div className=" flex flex-col gap-4 text-center text-5xl font-bold">
@@ -29,9 +34,12 @@ export default function TeamInformation({
       </div>
     );
   return (
-    <div className="flex flex-col gap-8 py-8 text-neutral-700">
-      <h1 className=" text-center text-5xl font-semibold">
-        {teamName + "'s"} Team ID is: <br />
+    <div className="flex flex-col gap-8 py-8 text-dark-grey">
+      <h1 className=" flex flex-col items-center text-center text-4xl font-semibold md:text-5xl">
+        <p className="max-w-xs truncate sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-7xl">
+          {teamName + "'s"}
+        </p>
+        Team ID is: <br />
         <span className="tracking-widest">{teamID}</span>
       </h1>
       <div className="text-center text-xl font-medium">

@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import { useUser } from "@/components/contexts/UserContext";
 
-const CONTAINER_STYLES = "flex h-60 items-center justify-center bg-[#FF6B54]";
+const CONTAINER_STYLES = "flex h-60 items-center justify-center bg-grapefruit";
 const PROFILE_CONTAINER =
   "absolute top-44 flex flex-row md:left-20 md:top-52 md:z-10 ";
 const PROFILE_IMG =
@@ -18,6 +18,8 @@ const RIGHT_SQUIGGLE_STYLES =
 
 export default function ProfileHeader() {
   const user = useUser().currentUser;
+
+  // console.log(user);
 
   return (
     <div className={CONTAINER_STYLES}>
@@ -39,10 +41,16 @@ export default function ProfileHeader() {
           className={LEFT_SQUIGGLE_STYLES}
         />
         <h1 className="flex text-center text-xl font-extrabold text-white md:text-4xl">
-          Hello,&nbsp;
-          <span className="italic">
-            {user?.firstName} {user.lastName}
-          </span>
+          {user.username ? (
+            <>
+              <span>Hello,&nbsp;</span>
+              <span className="italic">
+                {user?.firstName} {user.lastName}
+              </span>
+            </>
+          ) : (
+            "Loading..."
+          )}
         </h1>
         <Image
           src="/images/userProfile/Squiggly_Right.svg"

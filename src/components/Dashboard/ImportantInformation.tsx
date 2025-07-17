@@ -1,25 +1,36 @@
 import Image from "next/image";
 
+import { fetchContent } from "@/app/actions";
+import type { CeremonyDetails } from "@/app/contentfulTypes";
 import ImportantInfoIcon from "@/images/dashboard/ImportantInfoIcon.png";
-import { formatDate } from "@/utils/date-utils";
 
+// import { formatDate } from "@/utils/date-utils";
 import Card from "./Card";
 
-export default function ImportantInformation() {
-  const openingCeremony = {
-    location: "ICT",
-    time: new Date("November 23, 2024 09:00:00"),
-  };
-  const closingCeremony = {
-    location: "ICT",
-    time: new Date("November 24, 2024 18:00:00"),
+export default async function ImportantInformation() {
+  const ceremonyDetailsArray = await fetchContent("ceremonyDetails");
+  const ceremonyDetails = ceremonyDetailsArray[0]?.fields as CeremonyDetails;
+
+  // const openingCeremonyDate = new Date(ceremonyDetails.openingCeremonyDate);
+  // const closingCeremonyDate = new Date(ceremonyDetails.closingCeremonyDate);
+
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-US", {
+      dateStyle: "long",
+      timeStyle: "short",
+    });
   };
 
   return (
     <Card className="flex flex-col items-start gap-4">
       {/* Header Section */}
       <div className="flex items-center gap-4">
-        <Image src={ImportantInfoIcon} alt={"Important Info Icon"} />
+        <Image
+          className="transition duration-300 hover:opacity-90"
+          src={ImportantInfoIcon}
+          alt={"Important Info Icon"}
+        />
         <div className="text-start font-medium">
           Important <br /> Information
         </div>
@@ -31,13 +42,13 @@ export default function ImportantInformation() {
         <div className="flex w-full flex-col gap-8 sm:flex-row">
           <div className="text-start text-2xl font-normal">
             <h1 className="pb-2 text-3xl font-bold">Opening Ceremony</h1>
-            <p>Location: {openingCeremony.location}</p>
-            <p>Time: {formatDate(openingCeremony.time)}</p>
+            <p>Location: {ceremonyDetails.openingCeremonyLocation}</p>
+            <p>Time: {formatDateTime(ceremonyDetails.openingCeremonyDate)}</p>
           </div>
           <div className="text-start text-2xl font-normal">
             <h1 className="pb-2 text-3xl font-bold">Closing Ceremony</h1>
-            <p>Location: {closingCeremony.location}</p>
-            <p>Time: {formatDate(closingCeremony.time)}</p>
+            <p>Location: {ceremonyDetails.closingCeremonyLocation}</p>
+            <p>Time: {formatDateTime(ceremonyDetails.closingCeremonyDate)}</p>
           </div>
         </div>
 
@@ -48,7 +59,7 @@ export default function ImportantInformation() {
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
-            className="h-full w-full"
+            className="size-full"
           ></iframe>
         </div>
       </div>
