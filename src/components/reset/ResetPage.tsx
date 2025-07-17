@@ -47,6 +47,73 @@ export default function ResetPage() {
     },
   });
 
+  const startHackathonMutation = useMutation({
+    mutationFn: async ({
+      startDate,
+      endDate,
+    }: {
+      startDate: string;
+      endDate: string;
+    }) => {
+      try {
+        const toastObj = toast.loading("Scheduling hackathon start...");
+        const { data: statusCode, errors } =
+          await client.mutations.StartHackathon({
+            startDate,
+            endDate,
+          });
+        if (errors) {
+          toast.dismiss(toastObj);
+          toast.error("Error scheduling hackathon start");
+          console.log(errors);
+          throw errors;
+        }
+        void statusCode;
+        toast.dismiss(toastObj);
+        toast.success("Hackathon start scheduled successfully");
+        return;
+      } catch (error) {
+        console.error("Error scheduling hackathon start", error);
+        throw error;
+      }
+    },
+  });
+
+  const stopHackathonMutation = useMutation({
+    mutationFn: async ({ stopDate }: { stopDate?: string }) => {
+      try {
+        const toastObj = toast.loading(
+          stopDate ? "Scheduling hackathon stop..." : "Stopping hackathon...",
+        );
+        const { data: statusCode, errors } =
+          await client.mutations.StopHackathon({
+            stopDate,
+          });
+        if (errors) {
+          toast.dismiss(toastObj);
+          toast.error(
+            stopDate
+              ? "Error scheduling hackathon stop"
+              : "Error stopping hackathon",
+          );
+          console.log(errors);
+          throw errors;
+        }
+        void statusCode;
+        toast.dismiss(toastObj);
+        toast.success(
+          stopDate
+            ? "Hackathon stop scheduled successfully"
+            : "Hackathon stopped successfully",
+        );
+        return;
+      } catch (error) {
+        console.error("Error with hackathon stop operation", error);
+        throw error;
+      }
+    },
+  });
+
   const hackathonData = useQuery({
     initialDataUpdatedAt: 0,
     queryKey: ["Hackathon"],
@@ -72,28 +139,57 @@ export default function ResetPage() {
     userMutation.mutate(data);
   };
 
+  const handleStartHackathon = () => {
+    const { startDate, endDate } = getValues();
+    if (!startDate || !endDate) {
+      toast.error("Start and end dates are required");
+      return;
+    }
+    startHackathonMutation.mutate({ startDate, endDate });
+  };
+
+  const handleStopHackathon = (immediate = false) => {
+    if (immediate) {
+      stopHackathonMutation.mutate({});
+    } else {
+      const { endDate } = getValues();
+      if (!endDate) {
+        toast.error("End date is required for scheduling stop");
+        return;
+      }
+      stopHackathonMutation.mutate({ stopDate: endDate });
+    }
+  };
+
   const generateId = () => uuidv4();
 
-  const { register, control, handleSubmit, watch, setValue, resetField } =
-    useForm({
-      defaultValues: {
-        scoringComponents: [
-          { friendlyName: "", isSidepot: false, id: generateId() },
-        ],
-        scoringSidepots: [
-          { friendlyName: "", isSidepot: true, id: generateId() },
-        ],
-        resetUsers: false,
-        resetTeams: false,
-        resetRooms: false,
-        resetScores: false,
-        startDate: "",
-        endDate: "",
-        safetyCheck: "",
-        resetting: true,
-        creating: false,
-      },
-    });
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    resetField,
+    getValues,
+  } = useForm({
+    defaultValues: {
+      scoringComponents: [
+        { friendlyName: "", isSidepot: false, id: generateId() },
+      ],
+      scoringSidepots: [
+        { friendlyName: "", isSidepot: true, id: generateId() },
+      ],
+      resetUsers: false,
+      resetTeams: false,
+      resetRooms: false,
+      resetScores: false,
+      startDate: "",
+      endDate: "",
+      safetyCheck: "",
+      resetting: true,
+      creating: false,
+    },
+  });
 
   const {
     fields: scoringComponents,
@@ -113,14 +209,24 @@ export default function ResetPage() {
     name: "scoringSidepots",
   });
 
-  if (hackathonData.isPending || userMutation.isPending)
+  if (
+    hackathonData.isPending ||
+    userMutation.isPending ||
+    startHackathonMutation.isPending ||
+    stopHackathonMutation.isPending
+  )
     return (
       <div className="mt-16 flex w-full items-center justify-center">
         <KevinLoadingRing />
       </div>
     );
 
-  if (userMutation.isError) return <div>Error, please try again later.</div>;
+  if (
+    userMutation.isError ||
+    startHackathonMutation.isError ||
+    stopHackathonMutation.isError
+  )
+    return <div>Error, please try again later.</div>;
 
   const [resetting, creating] = watch(["resetting", "creating"]);
 
@@ -236,6 +342,31 @@ export default function ResetPage() {
                   placeholder="yyyy-mm-dd"
                   {...register("endDate")}
                 />
+              </div>
+
+              <div className="mt-4 flex flex-col gap-4">
+                <Button
+                  type="button"
+                  variation="primary"
+                  onClick={() => handleStartHackathon()}
+                >
+                  Schedule Hackathon Start
+                </Button>
+                <Button
+                  type="button"
+                  variation="primary"
+                  onClick={() => handleStopHackathon(false)}
+                >
+                  Schedule Hackathon End
+                </Button>
+                <Button
+                  type="button"
+                  variation="primary"
+                  colorTheme="error"
+                  onClick={() => handleStopHackathon(true)}
+                >
+                  Stop Hackathon Now
+                </Button>
               </div>
             </div>
           </div>
