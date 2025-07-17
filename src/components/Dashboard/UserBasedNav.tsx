@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -42,7 +43,7 @@ function GenericNav({ navItems }: { navItems: NavItem[] }) {
     <>
       <button
         onClick={toggleMenu}
-        className="group fixed left-20 top-12 z-30 rounded p-2 transition-colors duration-200 hover:bg-awesome-purple"
+        className="group left-10 top-3 z-30 rounded p-2 transition-colors duration-200 hover:bg-awesome-purple"
         aria-label="Toggle menu"
         style={{ display: isMenuOpen ? "block" : "block" }}
       >
@@ -64,13 +65,15 @@ function GenericNav({ navItems }: { navItems: NavItem[] }) {
       >
         <button
           onClick={toggleMenu}
-          className="group fixed left-20 top-12 z-50 rounded-full p-2 text-awesomer-purple transition-colors hover:bg-awesome-purple "
+          className="group fixed left-16 top-10 z-50 rounded-full p-2 text-awesomer-purple transition-colors hover:bg-awesome-purple "
           aria-label="Close menu"
         >
-          <div className="relative size-8">
-            <span className="absolute left-0 top-1/2 h-0.5 w-8 -translate-y-1/2 rotate-45 bg-current transition-colors duration-200 group-hover:bg-white"></span>
-            <span className="absolute left-0 top-1/2 h-0.5 w-8 -translate-y-1/2 -rotate-45 bg-current transition-colors duration-200 group-hover:bg-white"></span>
-          </div>
+          <Image
+            src="/svgs/runningKevin.svg"
+            alt="Close Menu"
+            width={75}
+            height={75}
+          />
         </button>
 
         <div className="mt-28 w-full border-t border-gray-100" />
