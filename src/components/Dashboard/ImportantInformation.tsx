@@ -14,8 +14,17 @@ export default async function ImportantInformation() {
   // const openingCeremonyDate = new Date(ceremonyDetails.openingCeremonyDate);
   // const closingCeremonyDate = new Date(ceremonyDetails.closingCeremonyDate);
 
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-US", {
+      dateStyle: "long",
+      timeStyle: "short",
+    });
+  };
+
   return (
-    <Card className="flex h-full flex-col items-start justify-around gap-4">
+    <Card className="flex flex-col items-start gap-4">
+      {/* Header Section */}
       <div className="flex items-center gap-4">
         <Image
           className="transition duration-300 hover:opacity-90"
@@ -26,18 +35,32 @@ export default async function ImportantInformation() {
           Important <br /> Information
         </div>
       </div>
-      <div className="grid w-full gap-4 p-6">
-        <div className="mb-4 text-start text-2xl font-normal">
-          <h1 className="pb-2 text-3xl font-bold">Opening Ceremony</h1>
-          <p>Location: {ceremonyDetails.openingCeremonyLocation}</p>
-          {/* <p>Time: {formatDate(openingCeremonyDate)}</p> */}
-          <p>Nov 9, 10:00 AM</p>
+
+      {/* Content Section */}
+      <div className="flex w-full flex-col gap-4">
+        {/* Ceremony Details */}
+        <div className="flex w-full flex-col gap-8 sm:flex-row">
+          <div className="text-start text-2xl font-normal">
+            <h1 className="pb-2 text-3xl font-bold">Opening Ceremony</h1>
+            <p>Location: {ceremonyDetails.openingCeremonyLocation}</p>
+            <p>Time: {formatDateTime(ceremonyDetails.openingCeremonyDate)}</p>
+          </div>
+          <div className="text-start text-2xl font-normal">
+            <h1 className="pb-2 text-3xl font-bold">Closing Ceremony</h1>
+            <p>Location: {ceremonyDetails.closingCeremonyLocation}</p>
+            <p>Time: {formatDateTime(ceremonyDetails.closingCeremonyDate)}</p>
+          </div>
         </div>
-        <div className="text-start text-2xl font-normal">
-          <h1 className="pb-2 text-3xl font-bold">Closing Ceremony</h1>
-          <p>Location: {ceremonyDetails.closingCeremonyLocation}</p>
-          {/* <p>Time: {formatDate(closingCeremonyDate)}</p> */}
-          <p>Nov 10, 5:00 PM</p>
+
+        {/* Map Section */}
+        <div className="map-container mx-auto w-full max-w-3xl p-4">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5013.071625159322!2d-114.13297702336814!3d51.08011837171925!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x53716f0eeb318a4f%3A0xa0dc1a9954a92366!2sICT%20Building!5e0!3m2!1sen!2sca!4v1736727221478!5m2!1sen!2sca"
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            className="size-full"
+          ></iframe>
         </div>
       </div>
     </Card>
