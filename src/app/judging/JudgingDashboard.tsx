@@ -1,6 +1,5 @@
-import Greetings from "@/components/Dashboard/Greetings";
 import client from "@/components/_Amplify/AmplifyBackendClient";
-
+import Greetings from "@/components/Dashboard/Greetings";
 import JudgingTable from "./JudgingTable";
 
 export default async function JudgingDashboard() {

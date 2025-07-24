@@ -1,6 +1,5 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
-
 import type { Schema } from "../../../data/resource";
 import { createTeamRoom, updateUser } from "./graphql/mutations";
 import {

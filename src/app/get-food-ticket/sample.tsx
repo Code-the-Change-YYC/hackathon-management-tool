@@ -5,10 +5,8 @@
 import { generateClient } from "aws-amplify/api";
 import { getCurrentUser } from "aws-amplify/auth";
 import { useEffect, useState } from "react";
-
 import { type Schema } from "@/amplify/data/resource";
 import { createMessageAndCode } from "@/amplify/function/BusinessLogic/utils/crytography";
-
 import { getUpcomingFoodEventDetails } from "./actions";
 
 export default function FoodPage() {

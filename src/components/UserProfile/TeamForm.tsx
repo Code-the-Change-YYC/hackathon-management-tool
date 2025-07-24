@@ -1,7 +1,6 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-
 import { type Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
 

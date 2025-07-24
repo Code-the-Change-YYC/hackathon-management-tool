@@ -3,10 +3,8 @@
 import { generateClient } from "aws-amplify/api";
 import { useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
-
 import type { Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
-
 import FilterIcon from "../atoms/FilterIcon";
 
 type ITeamScores = {

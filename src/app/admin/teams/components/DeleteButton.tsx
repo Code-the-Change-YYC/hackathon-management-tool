@@ -1,8 +1,6 @@
 import type { ReactNode } from "react";
 import { useState } from "react";
-
 import type { Row, TableMeta } from "@tanstack/react-table";
-
 import Modal from "./Modal";
 
 export default function DeleteButton<T extends Record<string, any>>({

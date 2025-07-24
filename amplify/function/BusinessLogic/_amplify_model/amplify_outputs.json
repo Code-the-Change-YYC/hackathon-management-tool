@@ -5,15 +5,9 @@
     "user_pool_client_id": "30fkpco4lipfhcj3lvfumajs6i",
     "identity_pool_id": "ca-central-1:ad21f501-7694-43b8-ba7c-b48f0fbfe913",
     "mfa_methods": [],
-    "standard_required_attributes": [
-      "email"
-    ],
-    "username_attributes": [
-      "email"
-    ],
-    "user_verification_types": [
-      "email"
-    ],
+    "standard_required_attributes": ["email"],
+    "username_attributes": ["email"],
+    "user_verification_types": ["email"],
     "mfa_configuration": "NONE",
     "password_policy": {
       "min_length": 8,
@@ -23,9 +17,7 @@
       "require_uppercase": true
     },
     "oauth": {
-      "identity_providers": [
-        "GOOGLE"
-      ],
+      "identity_providers": ["GOOGLE"],
       "redirect_sign_in_uri": [
         "http://localhost:3000/login",
         "https://hackthechangeyyc.ca/login",
@@ -53,11 +45,7 @@
     "aws_region": "ca-central-1",
     "api_key": "da2-gcytlmzg4vg3padvqtlm7noyce",
     "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
-    "authorization_types": [
-      "API_KEY",
-      "AWS_LAMBDA",
-      "AWS_IAM"
-    ],
+    "authorization_types": ["API_KEY", "AWS_LAMBDA", "AWS_IAM"],
     "model_introspection": {
       "version": 1,
       "models": {
@@ -151,9 +139,7 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "teamId"
-                ]
+                "targetNames": ["teamId"]
               }
             },
             "attendedEvents": {
@@ -167,9 +153,7 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "userId"
-                ]
+                "associatedWith": ["userId"]
               }
             },
             "profileOwner": {
@@ -190,9 +174,7 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "judgeId"
-                ]
+                "associatedWith": ["judgeId"]
               }
             },
             "JUDGE_roomId": {
@@ -212,9 +194,7 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "JUDGE_roomId"
-                ]
+                "targetNames": ["JUDGE_roomId"]
               }
             },
             "createdAt": {
@@ -244,9 +224,7 @@
             {
               "type": "key",
               "properties": {
-                "fields": [
-                  "id"
-                ]
+                "fields": ["id"]
               }
             },
             {
@@ -257,33 +235,19 @@
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "read",
-                      "update",
-                      "create",
-                      "delete"
-                    ],
-                    "groups": [
-                      "Admin"
-                    ]
+                    "operations": ["read", "update", "create", "delete"],
+                    "groups": ["Admin"]
                   },
                   {
                     "provider": "userPools",
                     "ownerField": "profileOwner",
                     "allow": "owner",
-                    "operations": [
-                      "read",
-                      "update",
-                      "create"
-                    ],
+                    "operations": ["read", "update", "create"],
                     "identityClaim": "cognito:username"
                   },
                   {
                     "allow": "private",
-                    "operations": [
-                      "read",
-                      "create"
-                    ]
+                    "operations": ["read", "create"]
                   }
                 ]
               }
@@ -329,9 +293,7 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "userId"
-                ]
+                "targetNames": ["userId"]
               }
             },
             "foodEvent": {
@@ -344,9 +306,7 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "foodEventId"
-                ]
+                "targetNames": ["foodEventId"]
               }
             },
             "createdAt": {
@@ -376,9 +336,7 @@
             {
               "type": "key",
               "properties": {
-                "fields": [
-                  "id"
-                ]
+                "fields": ["id"]
               }
             },
             {
@@ -389,12 +347,8 @@
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "read"
-                    ],
-                    "groups": [
-                      "Admin"
-                    ]
+                    "operations": ["read"],
+                    "groups": ["Admin"]
                   }
                 ]
               }
@@ -462,9 +416,7 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "foodEventId"
-                ]
+                "associatedWith": ["foodEventId"]
               }
             },
             "createdAt": {
@@ -494,9 +446,7 @@
             {
               "type": "key",
               "properties": {
-                "fields": [
-                  "id"
-                ]
+                "fields": ["id"]
               }
             },
             {
@@ -507,19 +457,12 @@
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "create",
-                      "delete"
-                    ],
-                    "groups": [
-                      "Admin"
-                    ]
+                    "operations": ["create", "delete"],
+                    "groups": ["Admin"]
                   },
                   {
                     "allow": "private",
-                    "operations": [
-                      "read"
-                    ]
+                    "operations": ["read"]
                   }
                 ]
               }
@@ -566,9 +509,7 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "teamId"
-                ]
+                "associatedWith": ["teamId"]
               }
             },
             "scores": {
@@ -582,9 +523,7 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "teamId"
-                ]
+                "associatedWith": ["teamId"]
               }
             },
             "teamRooms": {
@@ -598,9 +537,7 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "teamId"
-                ]
+                "associatedWith": ["teamId"]
               }
             },
             "createdAt": {
@@ -630,9 +567,7 @@
             {
               "type": "key",
               "properties": {
-                "fields": [
-                  "id"
-                ]
+                "fields": ["id"]
               }
             },
             {
@@ -643,20 +578,12 @@
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "read",
-                      "update",
-                      "create"
-                    ],
-                    "groups": [
-                      "Admin"
-                    ]
+                    "operations": ["read", "update", "create"],
+                    "groups": ["Admin"]
                   },
                   {
                     "allow": "private",
-                    "operations": [
-                      "read"
-                    ]
+                    "operations": ["read"]
                   }
                 ]
               }
@@ -702,9 +629,7 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "hackathonId"
-                ]
+                "targetNames": ["hackathonId"]
               }
             },
             "judgeId": {
@@ -724,9 +649,7 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "judgeId"
-                ]
+                "targetNames": ["judgeId"]
               }
             },
             "teamId": {
@@ -746,9 +669,7 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "teamId"
-                ]
+                "targetNames": ["teamId"]
               }
             },
             "createdAt": {
@@ -778,10 +699,7 @@
             {
               "type": "key",
               "properties": {
-                "fields": [
-                  "teamId",
-                  "judgeId"
-                ]
+                "fields": ["teamId", "judgeId"]
               }
             },
             {
@@ -792,28 +710,15 @@
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "create",
-                      "read",
-                      "update",
-                      "delete"
-                    ],
-                    "groups": [
-                      "Admin"
-                    ]
+                    "operations": ["create", "read", "update", "delete"],
+                    "groups": ["Admin"]
                   },
                   {
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "create",
-                      "read",
-                      "update"
-                    ],
-                    "groups": [
-                      "Judge"
-                    ]
+                    "operations": ["create", "read", "update"],
+                    "groups": ["Judge"]
                   }
                 ]
               }
@@ -822,9 +727,7 @@
           "primaryKeyInfo": {
             "isCustomPrimaryKey": true,
             "primaryKeyFieldName": "teamId",
-            "sortKeyFieldNames": [
-              "judgeId"
-            ]
+            "sortKeyFieldNames": ["judgeId"]
           }
         },
         "Room": {
@@ -855,9 +758,7 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "roomId"
-                ]
+                "associatedWith": ["roomId"]
               }
             },
             "judges": {
@@ -871,9 +772,7 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "JUDGE_roomId"
-                ]
+                "associatedWith": ["JUDGE_roomId"]
               }
             },
             "createdAt": {
@@ -903,9 +802,7 @@
             {
               "type": "key",
               "properties": {
-                "fields": [
-                  "id"
-                ]
+                "fields": ["id"]
               }
             },
             {
@@ -916,20 +813,12 @@
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "read",
-                      "create",
-                      "update"
-                    ],
-                    "groups": [
-                      "Admin"
-                    ]
+                    "operations": ["read", "create", "update"],
+                    "groups": ["Admin"]
                   },
                   {
                     "allow": "private",
-                    "operations": [
-                      "read"
-                    ]
+                    "operations": ["read"]
                   }
                 ]
               }
@@ -989,9 +878,7 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "teamId"
-                ]
+                "targetNames": ["teamId"]
               }
             },
             "room": {
@@ -1004,9 +891,7 @@
               "attributes": [],
               "association": {
                 "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "roomId"
-                ]
+                "targetNames": ["roomId"]
               }
             },
             "createdAt": {
@@ -1036,9 +921,7 @@
             {
               "type": "key",
               "properties": {
-                "fields": [
-                  "id"
-                ]
+                "fields": ["id"]
               }
             },
             {
@@ -1047,22 +930,14 @@
                 "rules": [
                   {
                     "allow": "private",
-                    "operations": [
-                      "read"
-                    ]
+                    "operations": ["read"]
                   },
                   {
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "read",
-                      "create",
-                      "update"
-                    ],
-                    "groups": [
-                      "Admin"
-                    ]
+                    "operations": ["read", "create", "update"],
+                    "groups": ["Admin"]
                   }
                 ]
               }
@@ -1129,9 +1004,7 @@
               "isArrayNullable": true,
               "association": {
                 "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "hackathonId"
-                ]
+                "associatedWith": ["hackathonId"]
               }
             },
             "createdAt": {
@@ -1161,9 +1034,7 @@
             {
               "type": "key",
               "properties": {
-                "fields": [
-                  "id"
-                ]
+                "fields": ["id"]
               }
             },
             {
@@ -1174,21 +1045,12 @@
                     "groupClaim": "cognito:groups",
                     "provider": "userPools",
                     "allow": "groups",
-                    "operations": [
-                      "read",
-                      "update",
-                      "create",
-                      "delete"
-                    ],
-                    "groups": [
-                      "Admin"
-                    ]
+                    "operations": ["read", "update", "create", "delete"],
+                    "groups": ["Admin"]
                   },
                   {
                     "allow": "private",
-                    "operations": [
-                      "read"
-                    ]
+                    "operations": ["read"]
                   }
                 ]
               }

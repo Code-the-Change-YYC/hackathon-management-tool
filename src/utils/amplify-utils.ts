@@ -1,11 +1,9 @@
 import { type SelectionSet } from "aws-amplify/api";
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth/server";
 import { cookies } from "next/headers";
-
 import { type Schema } from "@/amplify/data/resource";
 import { createServerRunner } from "@aws-amplify/adapter-nextjs";
 import { generateServerClientUsingCookies } from "@aws-amplify/adapter-nextjs/api";
-
 // eslint-disable-next-line no-restricted-imports
 import config from "../../amplify_outputs.json";
 

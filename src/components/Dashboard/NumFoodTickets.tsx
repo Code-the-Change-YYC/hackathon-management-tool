@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import TicketIcon from "@/images/dashboard/TicketIcon.png";
-
 import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 

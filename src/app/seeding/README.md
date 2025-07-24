@@ -40,7 +40,6 @@ Example from `/models/Hackathon.ts`:
 ```typescript
 // FoodEvent.ts
 import client from "@/components/_Amplify/AmplifyBackendClient";
-
 import { withDatabaseOperations } from "./dbUtils";
 
 export async function seedFoodEvents() {
