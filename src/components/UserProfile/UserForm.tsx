@@ -14,7 +14,7 @@ type UserFormData = {
   lastName: string;
   email: string;
   institution: string;
-  willEatMeals: boolean;
+  willEatMeals: string;
   allergies: string;
 };
 
@@ -24,7 +24,7 @@ const getFormValues = (userDetails: any): UserFormData => ({
   lastName: userDetails?.lastName || "",
   email: userDetails?.email || "",
   institution: userDetails?.institution || "",
-  willEatMeals: userDetails?.willEatMeals ?? false,
+  willEatMeals: userDetails?.willEatMeals ? "true" : "false",
   allergies: userDetails?.allergies || "",
 });
 
@@ -85,7 +85,8 @@ export default function UserForm({
 
     userMutation.mutate(formattedData);
     console.log(formattedData); // Log the form state
-    console.log(willEatMeals);
+    console.log(willEatMeals); // REMOVE
+    console.log(typeof willEatMeals);
   };
 
   return (
@@ -162,7 +163,7 @@ export default function UserForm({
         <option value="true">Yes</option>
         <option value="false">No</option>
       </select>
-      {willEatMeals && (
+      {(willEatMeals === "true" || willEatMeals === true) && (
         <>
           <label>Do you have any allergies?</label>
           <input
