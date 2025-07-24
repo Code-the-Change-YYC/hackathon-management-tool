@@ -1,0 +1,36 @@
+name: Release & Deploy
+
+on:
+    pull_request:
+        types: [labeled, closed]
+
+jobs: 
+    bump-version:
+        if: github.event.action == 'labeled' && contains(github.event.pull_request.labels.*.name, 'release')
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Bump version
+              uses: phips28/gh-action-bump-version@v10.1.1
+              with:
+                tag-prefix: 'v'
+                minor-wording: 'minor'
+                major-wording: 'major'
+                patch-wording: 'patch'
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+
+    merge-to-prod:
+        if: github.event.pull_request.merged == true && github.base_ref == 'main'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Merge main into prod
+              run: |
+                git fetch origin prod
+                git checkout prod
+                git merge origin/main --no-ff -m "Merge QA to PROD"
+                git push origin prod
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
