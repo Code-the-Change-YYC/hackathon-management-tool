@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
 import { useUser } from "@/components/contexts/UserContext";
 
 interface NavItem {
@@ -42,7 +41,7 @@ function GenericNav({ navItems }: { navItems: NavItem[] }) {
     <>
       <button
         onClick={toggleMenu}
-        className="group fixed left-20 top-12 z-30 rounded p-2 transition-colors duration-200 hover:bg-awesome-purple"
+        className="group left-20 top-12 z-30 rounded p-2 transition-colors duration-200 hover:bg-awesome-purple"
         aria-label="Toggle menu"
         style={{ display: isMenuOpen ? "block" : "block" }}
       >
