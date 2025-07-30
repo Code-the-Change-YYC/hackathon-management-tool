@@ -1,0 +1,54 @@
+name: Bump Version on QA Merge
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+
+jobs:
+  bump-version:
+    if: >
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Determine release type from labels
+        id: release_type
+        run: |
+          echo '${{ toJSON(github.event.pull_request.labels) }}' > labels.json
+          RELEASE_TYPE=""
+
+          for label in $(jq -r '.[].name' labels.json); do
+            if [[ "$label" == "major" || "$label" == "minor" || "$label" == "patch" ]]; then
+              RELEASE_TYPE=$label
+              break
+            fi
+          done
+
+          if [ -z "$RELEASE_TYPE" ]; then
+            echo "::warning::No valid release label (major/minor/patch) found. Skipping version bump."
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+          echo "skip=false" >> $GITHUB_OUTPUT
+
+      - name: Bump version
+        if: steps.release_type.outputs.skip != 'true'
+        uses: phips28/gh-action-bump-version@v10.1.1
+        with:
+          tag-prefix: "v"
+          version-type: ${{ steps.release_type.outputs.type }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
