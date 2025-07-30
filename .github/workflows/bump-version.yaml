@@ -69,3 +69,35 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate changelog
+        if: steps.release_type.outputs.skip != 'true'
+        id: changelog
+        run: |
+          NEW_TAG=$(git describe --tags --abbrev=0)
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^)
+
+          echo "prev=$PREV_TAG" >> $GITHUB_OUTPUT
+          echo "tag=$NEW_TAG" >> $GITHUB_OUTPUT
+
+          echo "Generating changelog from $PREV_TAG to $NEW_TAG..."
+
+          LOG=$(git log $PREV_TAG..HEAD --pretty=format:"- %s by %an")
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$LOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release with Custom Changelog
+        if: steps.release_type.outputs.skip != 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          name: Release ${{ steps.changelog.outputs.tag }}
+          body: |
+            ## 🚀 Release ${{ steps.changelog.outputs.tag }}
+
+            Changes since [${{ steps.changelog.outputs.prev }}](https://github.com/${{ github.repository }}/compare/${{ steps.changelog.outputs.prev }}...${{ steps.changelog.outputs.tag }}):
+
+            ${{ steps.changelog.outputs.changelog }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
