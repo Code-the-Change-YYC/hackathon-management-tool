@@ -1,4 +1,4 @@
-name: Bump Version on QA Merge
+name: Bump Version on Main Merge
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Determine release type from labels
+      - name: Determine release type
         id: release_type
         run: |
           echo '${{ toJSON(github.event.pull_request.labels) }}' > labels.json
@@ -53,26 +53,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get latest tag
-        if: steps.release_type.outputs.skip != 'true'
-        id: get_tag
-        run: |
-          TAG=$(git describe --tags --abbrev=0)
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-
-      - name: Generate GitHub Release
-        if: steps.release_type.outputs.skip != 'true'
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ steps.get_tag.outputs.tag }}
-          name: Release ${{ steps.get_tag.outputs.tag }}
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate changelog
+      - name: Retreive Previous Data
         if: steps.release_type.outputs.skip != 'true'
         id: changelog
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           NEW_TAG=$(git describe --tags --abbrev=0)
           PREV_TAG=$(git describe --tags --abbrev=0 HEAD^)
@@ -80,14 +65,33 @@ jobs:
           echo "prev=$PREV_TAG" >> $GITHUB_OUTPUT
           echo "tag=$NEW_TAG" >> $GITHUB_OUTPUT
 
-          echo "Generating changelog from $PREV_TAG to $NEW_TAG..."
+          echo "Generating PR changelog from $PREV_TAG to $NEW_TAG..."
 
-          LOG=$(git log $PREV_TAG..HEAD --pretty=format:"- %s by %an")
+          COMMITS=$(git log $PREV_TAG..$NEW_TAG --pretty=format:"%H")
+
+          PR_NUMBERS=$(git log $PREV_TAG..$NEW_TAG --pretty=format:"%s" | grep -oE "#[0-9]+" | tr -d "#" | sort -u)
+
+          PR_LIST=""
+          for pr in $PR_NUMBERS; do
+            PR_JSON=$(gh pr view $pr --json title,number,url,author --jq '"- [#\(.number)](\(.url)) \(.title) (@\(.author.login))"')
+            PR_LIST="$PR_LIST$PR_JSON\n"
+          done
+
+          COMMIT_LIST=$(git log $PREV_TAG..$NEW_TAG --pretty=format:"- %s (%an)")
+
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          echo "$LOG" >> $GITHUB_OUTPUT
+          echo "### Merged Pull Requests:" >> $GITHUB_OUTPUT
+          if [ -n "$PR_LIST" ]; then
+            echo -e "$PR_LIST" >> $GITHUB_OUTPUT
+          else
+            echo "_No PRs found for this release._" >> $GITHUB_OUTPUT
+          fi
+          echo "" >> $GITHUB_OUTPUT
+          echo "### Commits:" >> $GITHUB_OUTPUT
+          echo "$COMMIT_LIST" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Create GitHub Release with Custom Changelog
+      - name: Generate Github Release
         if: steps.release_type.outputs.skip != 'true'
         uses: softprops/action-gh-release@v1
         with:
