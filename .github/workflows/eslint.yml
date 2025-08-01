@@ -46,9 +46,7 @@ jobs:
 
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.install-command }}
-
+      
       - name: Run ESLint
         run: |
-          ${{ steps.detect-package-manager.outputs.runner }} eslint . \
-            --config .eslintrc.cjs \
-            --ext .js,.jsx,.ts,.tsx
+          ${{ steps.detect-package-manager.outputs.runner }} eslint . --ext .ts,.tsx
