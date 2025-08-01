@@ -72,7 +72,7 @@ const UserProfile = () => {
   });
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const [enableCancelSave, setEnableCancelSave] = useState<boolean>(false);
 
   const handleEditClick = () => {

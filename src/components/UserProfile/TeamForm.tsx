@@ -23,7 +23,6 @@ export default function TeamForm({ data, teamMutation }: TeamFormProp) {
 
   const client = generateClient<Schema>();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: teamData, isFetching } = useQuery({
     initialData: null,
     initialDataUpdatedAt: 0,
