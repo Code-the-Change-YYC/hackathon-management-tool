@@ -1,7 +1,6 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import type { PostConfirmationTriggerHandler } from "aws-lambda";
-
 import { data } from "@/amplify/auth/PostConfirmation/amplify_outputs.json";
 import { type Schema } from "@/amplify/data/resource";
 import {

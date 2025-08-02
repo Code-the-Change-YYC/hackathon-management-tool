@@ -3,7 +3,6 @@
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import { toast } from "react-toastify";
-
 import { type Schema } from "@/amplify/data/resource";
 import JudgingTimeline from "@/components/admin/Judging/JudgingTimeline";
 import RoomAssigner from "@/components/admin/Judging/RoomAssigner";

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import client from "../_Amplify/AmplifyBackendClient";
 import RankingTable from "../admin/RankingTable";
 import Card from "./Card";

@@ -3,9 +3,7 @@
 import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession, signOut } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
-import { useContext } from "react";
-import { type ReactNode, createContext, useEffect } from "react";
-
+import { createContext, useContext, useEffect, type ReactNode } from "react";
 import { type Schema } from "@/amplify/data/resource";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 

@@ -1,11 +1,9 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-
 import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
 import tanstackTableHelper from "@/components/TanstackTableHelper";
-
 import TableSearch from "../teams/components/TableSearch";
 import TanstackTableBody from "../teams/components/TanstackTableBody";
 import TableFooter from "../teams/components/TanstackTableFooter";

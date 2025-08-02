@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
 import AdminNavTitle from "@/components/Dashboard/AdminNavTitle";
-
 import EmailAllParticipants from "./EmailAllParticipants";
 
 export default function TopNavBar() {

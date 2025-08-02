@@ -1,7 +1,6 @@
 // middleware.ts
 import { fetchAuthSession } from "aws-amplify/auth/server";
-import { type NextRequest, NextResponse } from "next/server";
-
+import { NextResponse, type NextRequest } from "next/server";
 import { runWithAmplifyServerContext } from "@/utils/amplify-utils";
 
 const protectedPaths = ["/admin", "/judging", "/participant"];

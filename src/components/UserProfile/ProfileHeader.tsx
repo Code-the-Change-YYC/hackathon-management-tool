@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-
 import { useUser } from "@/components/contexts/UserContext";
 
 const CONTAINER_STYLES = "flex h-60 items-center justify-center bg-grapefruit";

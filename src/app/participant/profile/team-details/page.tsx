@@ -1,6 +1,6 @@
-import TeamProfile from "@/components/UserProfile/TeamProfile";
 import { UserType } from "@/components/contexts/UserContext";
 import withAuthGuard from "@/components/hoc/withAuthGuard";
+import TeamProfile from "@/components/UserProfile/TeamProfile";
 
 function TeamDetails() {
   return <TeamProfile />;

@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 import { fetchContent } from "@/app/actions";
 
 const squigglySvg = "/svgs/judgingCriteria/squiggly_line.svg";

@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
-
+import { UserDetailsProvider } from "@/components/contexts/UserDetailsContext";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import PagePlaceholder from "@/components/PagePlaceholder";
-import { UserDetailsProvider } from "@/components/contexts/UserDetailsContext";
 import { enableLandingPage } from "@/featureFlags";
 import {
   AuthGetCurrentUserDetails,

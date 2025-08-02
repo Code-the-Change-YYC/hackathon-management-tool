@@ -5,10 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
-
 import { UserType } from "@/components/contexts/UserContext";
 import { useUserDetails } from "@/components/contexts/UserDetailsContext";
-
 import UserBasedNav from "./Dashboard/UserBasedNav";
 
 export default function Header() {
@@ -21,7 +19,7 @@ export default function Header() {
     router.push("/");
   };
   return (
-    <div className="flex h-[10dvh] w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
+    <div className="flex h-[15dvh] w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
       <div className="flex w-48">
         {userId === "" ? (
           <div></div>
