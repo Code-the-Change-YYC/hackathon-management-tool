@@ -1,5 +1,4 @@
 import { usePathname } from "next/navigation";
-
 import { Underline } from "@/utils/text-utils";
 
 export default function FormFieldsHeader() {

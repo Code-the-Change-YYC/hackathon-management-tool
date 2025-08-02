@@ -1,12 +1,12 @@
 "use client";
 
-import { type ReactNode, createContext, useContext, useMemo } from "react";
-
+import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { type UserDetailsNoFunctions } from "@/utils/amplify-utils";
 import { useQuery } from "@tanstack/react-query";
 
 interface UserDetailsContextType {
   userDetails: UserDetailsNoFunctions;
+  isLoading: boolean;
 }
 
 const UserDetailsContext = createContext<UserDetailsContextType>(
@@ -28,7 +28,7 @@ export function UserDetailsProvider({
     return await resp.json();
   }
 
-  const { data: userDetails } = useQuery<UserDetailsNoFunctions>({
+  const { data: userDetails, isLoading } = useQuery<UserDetailsNoFunctions>({
     queryKey,
     queryFn: fetchUserDetails,
     initialData: initialUserDetails,
@@ -40,8 +40,8 @@ export function UserDetailsProvider({
   });
 
   const value = useMemo(() => {
-    return { userDetails };
-  }, [userDetails]);
+    return { userDetails, isLoading };
+  }, [userDetails, isLoading]);
 
   return (
     <UserDetailsContext.Provider value={{ ...value }}>

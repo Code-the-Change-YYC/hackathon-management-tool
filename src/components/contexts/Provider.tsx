@@ -2,7 +2,6 @@
 
 import React from "react";
 import { toast } from "react-toastify";
-
 import { Authenticator } from "@aws-amplify/ui-react";
 import {
   MutationCache,

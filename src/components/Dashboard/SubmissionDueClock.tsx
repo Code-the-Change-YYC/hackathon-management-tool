@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-
 import { hackathonTimeRemaining } from "@/utils/date-utils";
-
 import CountdownTimer from "../LandingPage/CountdownTimer";
 import Card from "./Card";
 

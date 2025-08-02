@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { TbInfoSquareRoundedFilled } from "react-icons/tb";
-
 import { createColumnHelper } from "@tanstack/react-table";
-
 import DeleteButton from "./components/DeleteButton";
 import SaveEditButton from "./components/SaveEditButton";
 import type { Team } from "./components/TeamsTablePage";

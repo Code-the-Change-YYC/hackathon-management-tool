@@ -2,16 +2,14 @@ import type { AuthUser } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-
 import type { Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
 import FormFieldButtons from "@/components/LoginForm/FormFieldButtons";
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-
-import KevinLoadingRing from "../KevinLoadingRing";
 import { UserType, useUser } from "../contexts/UserContext";
+import KevinLoadingRing from "../KevinLoadingRing";
 
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();

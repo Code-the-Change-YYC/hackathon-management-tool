@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { getSeedingData, seedData } from "./actions";
 
 type SeedResult = {

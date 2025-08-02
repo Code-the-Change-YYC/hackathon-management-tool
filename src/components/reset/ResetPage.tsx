@@ -2,14 +2,12 @@
 
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
-import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-
 import type { Schema } from "@/amplify/data/resource";
 import { Button, CheckboxField, Input, Label } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-
 import KevinLoadingRing from "../KevinLoadingRing";
 
 const client = generateClient<Schema>();

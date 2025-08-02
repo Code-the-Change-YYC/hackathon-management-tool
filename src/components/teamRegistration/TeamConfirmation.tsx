@@ -1,8 +1,6 @@
 import Link from "next/link";
-
 import { fetchContent } from "@/app/actions";
 import { Underline } from "@/utils/text-utils";
-
 import PurpleButton from "../PurpleButton";
 import CalendarSection from "./CalendarSection";
 import CountdownWindow from "./CountdownWindow";
