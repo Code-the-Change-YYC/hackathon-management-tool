@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 import SocialMediaIcons from "@/components/atoms/SocialMediaIcons";
 
 const HackathonFinished = () => {

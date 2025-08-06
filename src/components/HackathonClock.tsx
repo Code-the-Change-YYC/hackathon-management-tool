@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
-
 import { calculateDateDifference } from "@/utils/date-utils";
 
 const CountdownTimer = dynamic(() => import("./LandingPage/CountdownTimer"), {

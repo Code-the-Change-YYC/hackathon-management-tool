@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { createPortal } from "react-dom";
-
 import exit_icon from "@/svgs/admin/exit_icon.svg";
 
 export default function Modal({

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-
 import GoToFoodTicket from "@/components/Dashboard/GoToFoodTicket";
 import Greetings from "@/components/Dashboard/Greetings";
 import ImportantInformation from "@/components/Dashboard/ImportantInformation";

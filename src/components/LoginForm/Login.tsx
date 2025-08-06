@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import PersonalFormFields from "@/components/LoginForm/PersonalFormFields";
 import type { AuthenticatorProps } from "@aws-amplify/ui-react";

@@ -1,7 +1,6 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 import type { AppSyncIdentityCognito } from "aws-lambda";
-
 import type { Schema } from "../../../data/resource";
 import { createTeam, updateUser } from "./graphql/mutations";
 import { getTeam } from "./graphql/queries";

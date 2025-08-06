@@ -3,10 +3,8 @@
 import { DateTime } from "luxon";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
-
 import { type Schema } from "@/amplify/data/resource";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { createFoodEvent } from "./userFoodEventActions";
 
 const HEADER_STYLES = "text-2xl my-8";

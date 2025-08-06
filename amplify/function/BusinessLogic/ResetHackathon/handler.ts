@@ -1,12 +1,10 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 import { v4 as uuidv4 } from "uuid";
-
 import {
   AdminDeleteUserCommand,
   CognitoIdentityProviderClient,
 } from "@aws-sdk/client-cognito-identity-provider";
-
 import type { Schema } from "../../../data/resource";
 import type { ScoreComponentTypeInput } from "./graphql/API";
 import {

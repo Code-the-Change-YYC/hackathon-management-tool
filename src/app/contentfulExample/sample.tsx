@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 import { fetchContent } from "../actions";
 
 export const dynamic = "force-dynamic";

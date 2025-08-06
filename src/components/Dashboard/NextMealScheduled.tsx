@@ -2,11 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
 import { getUpcomingFoodEventDetails } from "@/app/get-food-ticket/actions";
 import CalendarIcon from "@/images/dashboard/Calendar.png";
 import { useQuery } from "@tanstack/react-query";
-
 import { useUser } from "../contexts/UserContext";
 import Card from "./Card";
 

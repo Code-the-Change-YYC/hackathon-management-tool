@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
-
 import type { PastHackathonWinner } from "@/app/contentfulTypes";
 import imgPlaceholder from "@/images/imgplaceholder.png";
 
