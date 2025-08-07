@@ -49,8 +49,6 @@ const UserProfile = () => {
         teamId,
         checkedIn,
         profileOwner,
-        email,
-        role,
         ...extractedFields
       } = input;
       // TODO this can be cleaned if we use React Hook Form to handle form state better

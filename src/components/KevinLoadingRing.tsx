@@ -6,7 +6,7 @@ export default function KevinLoadingRing() {
       <div className="m-4 flex h-full flex-col justify-center text-center text-2xl">
         <Image
           className="animate-bounce"
-          src="/svgs/runningKevin.svg"
+          src="/svgs/admin/Kevin.svg"
           alt="Kevin Icon"
           width={240}
           height={240}

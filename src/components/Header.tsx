@@ -10,9 +10,38 @@ import { useUserDetails } from "@/components/contexts/UserDetailsContext";
 import UserBasedNav from "./Dashboard/UserBasedNav";
 
 export default function Header() {
-  const { userDetails } = useUserDetails();
+  const user = useUser().currentUser;
 
-  const userId = userDetails?.id || "";
+  const userId = useUser().currentUser.username as string;
+
+  const { data } = useQuery({
+    initialData: {} as Schema["Team"]["type"],
+    initialDataUpdatedAt: 0,
+    queryKey: ["Team", userId],
+    queryFn: async () => {
+      const userResponse = await client.models.User.get({
+        id: userId,
+      });
+
+      if (userResponse.errors) throw new Error(userResponse.errors[0].message);
+
+      const userTeamId = userResponse.data?.teamId as string;
+
+      if (userTeamId) {
+        const teamResponse = await client.models.Team.get({
+          id: userTeamId,
+        });
+
+        if (teamResponse.errors)
+          throw new Error(teamResponse.errors[0].message);
+
+        return teamResponse.data;
+      } else {
+        return {} as Schema["Team"]["type"];
+      }
+    },
+    enabled: !!userId,
+  });
   const router = useRouter();
   const handleLogout = () => {
     signOut();
@@ -43,12 +72,12 @@ export default function Header() {
       </div>
 
       <div className="flex w-48 justify-end">
-        {userDetails?.completedRegistration && (
+        {user.completedRegistration && (
           <Link href="/participant/profile">
             <CgProfile size={60} />
           </Link>
         )}
-        {userDetails.role && userDetails?.role !== UserType.Guest && (
+        {user.username && (
           <button onClick={handleLogout} className="ml-4 font-semibold">
             Logout
           </button>

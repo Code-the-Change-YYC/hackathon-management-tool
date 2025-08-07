@@ -24,7 +24,7 @@ export default function RegistrationLayout({
   return (
     <div
       className={twMerge(
-        "flex h-[90dvh] w-full flex-col items-center justify-center overflow-hidden py-6",
+        "flex w-full flex-1 flex-col items-center justify-center overflow-hidden pt-6",
         bgColor,
       )}
     >
@@ -39,7 +39,7 @@ export default function RegistrationLayout({
             alt={""}
           />
           <Image
-            className="pointer-events-none absolute -left-28 bottom-2 select-none"
+            className="pointer-events-none absolute -left-28 bottom-0 select-none"
             src={"/svgs/login/Star_Icon.svg"}
             height={51}
             width={59}

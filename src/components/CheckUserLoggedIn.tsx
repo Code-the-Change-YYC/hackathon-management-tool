@@ -7,7 +7,7 @@ export default async function CheckUserLoggedIn({
   children: ReactNode;
 }) {
   try {
-    const user = await AuthGetAuthSession();
+    const user = await AuthGetCurrentUserServer();
     if (!user?.tokens) {
       throw new Error("User is not logged in.");
     }

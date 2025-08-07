@@ -31,8 +31,6 @@ const config: Config = {
         "awesomer-purple": "#7055FD",
         "light-grey": "#F2F2F2",
         "dashboard-grey": "#E5E5E5",
-        "grey-purple": "#4B486D",
-        "mint-green": "#D4FAEF",
         "medium-grey": "#D9D9D9",
         "ehhh-grey": "#C5C5C5",
         "dark-grey": "#333333",

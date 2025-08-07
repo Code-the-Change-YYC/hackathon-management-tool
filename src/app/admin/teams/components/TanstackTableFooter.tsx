@@ -2,7 +2,7 @@ import type { Table } from "@tanstack/react-table";
 
 export default function TanstackTableFooter<T>({ table }: { table: Table<T> }) {
   return (
-    <div className="text-md mb-2 flex items-center justify-between px-3 text-awesomer-purple group-[.teams]:gap-2.5 group-[.users]:gap-7 group-[.users]:whitespace-nowrap group-[.teams]:md:gap-4 group-[.users]:md:gap-11">
+    <div className="text-md flex items-center justify-between px-3 text-awesomer-purple group-[.teams]:gap-2.5 group-[.users]:gap-7 group-[.users]:whitespace-nowrap group-[.teams]:md:gap-4 group-[.users]:md:gap-11">
       <div className="text-black">
         Showing {table.getRowModel().rows.length.toLocaleString()} of{" "}
         {table.getRowCount().toLocaleString()} Rows

@@ -1,4 +1,5 @@
 import type { AuthUser } from "aws-amplify/auth";
+import { fetchAuthSession } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -7,11 +8,15 @@ import { client } from "@/app/QueryProvider";
 import FormFieldButtons from "@/components/LoginForm/FormFieldButtons";
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { FileUploader } from "@aws-amplify/ui-react-storage";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import KevinLoadingRing from "../KevinLoadingRing";
 import { UserType, useUser } from "../contexts/UserContext";
 import KevinLoadingRing from "../KevinLoadingRing";
 
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { isPending, isError, data } = useQuery({
     queryKey: ["User", user?.userId],
@@ -38,6 +43,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         willEatMeals: input.willEatMeals,
         allergies: input.allergies,
         completedRegistration: true,
+        profilePicture: input.profilePicture,
       });
       toast.dismiss(toastObj);
       if (response.errors) {
@@ -70,6 +76,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
   }
   const [formState, setFormState] = useState<Schema["User"]["type"]>({
     id: user?.userId,
+    profilePicture: "",
   } as Schema["User"]["type"]);
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -90,7 +97,6 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     }
   };
 
-  console.log(isPending);
   if (isPending) {
     return (
       <div className="mt-16 flex w-full items-center justify-center">
@@ -129,6 +135,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       return null;
     }
   }
+
   return (
     <form
       onSubmit={submitForm}
@@ -136,6 +143,38 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     >
       <FormFieldsHeader />
       <div className="flex flex-row justify-between gap-2 md:gap-12 ">
+        <div className="flex w-1/2 flex-col gap-2">
+          <Label htmlFor="profilePicture">* Profile Picture:</Label>
+          <FileUploader
+            acceptedFileTypes={["image/png"]}
+            path={`public/`}
+            maxFileCount={1}
+            isResumable
+            processFile={async ({ file }) => {
+              if (file.type !== "image/png") {
+                throw new Error("Only PNG files are allowed.");
+              }
+              const session = await fetchAuthSession();
+              const identityId = session.identityId;
+              const extension = file.type.split("/")[1] || "png";
+              const newKey = `${identityId}.${extension}`;
+              const renamedFile = new File(
+                [file],
+                `${identityId}.${extension}`,
+                {
+                  type: file.type,
+                },
+              );
+              return {
+                key: newKey,
+                file: renamedFile,
+              };
+            }}
+            onUploadSuccess={() => {
+              queryClient.invalidateQueries({ queryKey: ["profile-image"] });
+            }}
+          />
+        </div>
         <div className="flex w-1/2 flex-col gap-2">
           <Label htmlFor="firstName">* First Name:</Label>
           <Input

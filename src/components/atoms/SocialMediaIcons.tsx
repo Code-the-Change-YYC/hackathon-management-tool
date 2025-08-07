@@ -45,13 +45,10 @@ const SocialMediaIcons = () => {
   ];
 
   return (
-    <div className={`flex items-start space-x-6 pt-3 text-white `}>
+    <div className={`flex items-start space-x-6 pt-5 text-white`}>
       {links.map(({ link, icon: Icon }) => (
         <Link href={link} key={link} target="_blank">
-          <Icon
-            size={ICON_SIZE}
-            className="cursor-pointer transition-all duration-300 hover:scale-110"
-          />
+          <Icon size={ICON_SIZE} className="cursor-pointer" />
         </Link>
       ))}
     </div>

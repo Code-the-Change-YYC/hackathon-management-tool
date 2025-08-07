@@ -42,18 +42,15 @@ export default async function ThankSponsors() {
       </div>
       <div className="grid w-full grid-cols-2 gap-6 px-8 pt-10  md:grid-cols-4">
         {sortedSponsors.map((sponsor, index) => (
-          <div
-            className="flex flex-row items-center justify-center gap-2 sm:gap-3"
-            key={index}
-          >
-            <div className="group flex flex-col items-center justify-center gap-3">
-              <div className="relative  ">
+          <div className="flex flex-row gap-2 sm:gap-3" key={index}>
+            <div className="group flex flex-col items-center gap-3">
+              <div className="relative flex h-full w-[95%] max-w-[300px] items-center justify-center overflow-hidden rounded-20 p-[5px] duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform">
                 <Link
                   href={sponsor.fields.sponsorPage}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <div className="flex size-[150px] items-center justify-center overflow-hidden rounded-full duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform">
+                  <div className="rounded-inherit size-full">
                     <Image
                       src={
                         sponsor.fields.sponsorImg.fields.file?.url

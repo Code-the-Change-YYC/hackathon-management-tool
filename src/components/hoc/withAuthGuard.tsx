@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import type React from "react";
 import { UserType } from "@/components/contexts/UserContext";
-import { AuthGetAuthSession } from "@/utils/amplify-utils";
+import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 
 const withAuthGuard = (
   WrappedComponent: React.ComponentType<any>,
@@ -17,7 +17,7 @@ const withAuthGuard = (
       }
     };
 
-    return AuthGetAuthSession()
+    return AuthGetCurrentUserServer()
       .then((user) => {
         if (user?.tokens) {
           return userTypeHasPagePermission(

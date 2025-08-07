@@ -36,7 +36,7 @@ const CreateTeamPage = () => {
           />
           <h1 className={REGISTER_HEADING_TEXT_STYLES}>
             Register for Hack the Change{" "}
-            <span className="text-pastel-green">2025</span>
+            <span className="text-pastel-green">2024</span>
           </h1>
           <Image
             className="absolute right-12 top-3 hidden md:flex"

@@ -25,7 +25,7 @@ const HackathonFinished = () => {
           <p className="text-shadow-title-hackathon-finished font-omnes text-8xl font-bold text-white">
             Hack the Change
           </p>
-          <p className="text-shadow-title-hackathon-finished font-omnes text-8xl font-bold text-mint-green">
+          <p className="text-shadow-title-hackathon-finished text-mint-green font-omnes text-8xl font-bold">
             2025
           </p>
           <p className="mt-2.5 font-omnes text-5xl font-bold tracking-wide text-white">
@@ -35,7 +35,7 @@ const HackathonFinished = () => {
             <SocialMediaIcons />
           </div>
           <div>
-            <p className="rounded-full bg-white px-6 py-3 text-2xl italic text-grey-purple shadow-md">
+            <p className="text-grey-purple rounded-full bg-white px-6 py-3 text-2xl italic shadow-md">
               Thank-you to all participants, judges and sponsors!
             </p>
           </div>

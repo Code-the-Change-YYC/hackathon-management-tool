@@ -9,7 +9,7 @@ import PagePlaceholder from "@/components/PagePlaceholder";
 import { enableLandingPage } from "@/featureFlags";
 
 export const revalidate = 600;
-const Home = async () => {
+const Home = () => {
   return (
     <main className="w-screen">
       {enableLandingPage ? (
