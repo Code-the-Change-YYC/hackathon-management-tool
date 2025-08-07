@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { hackathonTimeRemaining } from "@/utils/date-utils";
 import CountdownTimer from "../LandingPage/CountdownTimer";
 import Card from "./Card";
+import DevPostLinkUpload from "./DevPostLinkUpload";
 
 export default function SubmissionDueClock({
   submissionTime,
@@ -50,6 +51,7 @@ export default function SubmissionDueClock({
           className="w-32 bg-dark-green md:w-52 lg:w-52"
         />
       </div>
+      <DevPostLinkUpload />
     </Card>
   );
 }

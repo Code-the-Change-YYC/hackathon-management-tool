@@ -265,7 +265,7 @@ export default function JudgingTable(props: JudgingTableProps) {
                           scoreObject[columnId]
                         )}
                         <span
-                          className={`text-md ${colorStyles.headerCellBg} pointer-events-none absolute inset-0 flex items-center justify-center bg-opacity-50 font-semibold text-white opacity-0 group-hover:opacity-100`}
+                          className={`text-md ${colorStyles.headerCellBg} bg-opacity/50 pointer-events-none absolute inset-0 flex items-center justify-center font-semibold text-white opacity-0 group-hover:opacity-100`}
                         >
                           Edit
                         </span>
