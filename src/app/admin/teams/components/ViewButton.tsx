@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import Modal from "./Modal";
 import type { Team } from "./TeamsTablePage";
 

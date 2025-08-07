@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-
 import KevinLoadingRing from "@/components/KevinLoadingRing";
 
 // Dynamically import UserProfile with preloading

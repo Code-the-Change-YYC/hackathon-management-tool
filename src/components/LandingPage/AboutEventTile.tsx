@@ -1,6 +1,5 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-
 import { fetchContent } from "@/app/actions";
 
 const EVENT_DETAILS_SECTION_STYLES =

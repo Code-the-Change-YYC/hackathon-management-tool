@@ -1,13 +1,11 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
-
 import {
   AdminAddUserToGroupCommand,
   AdminListGroupsForUserCommand,
   AdminRemoveUserFromGroupCommand,
   CognitoIdentityProviderClient,
 } from "@aws-sdk/client-cognito-identity-provider";
-
 import type { Schema } from "../../../data/resource";
 import { updateUser } from "./graphql/mutations";
 

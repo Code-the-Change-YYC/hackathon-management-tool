@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
-
 import "@/app/globals.css";
 import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
 import Provider from "@/components/contexts/Provider";

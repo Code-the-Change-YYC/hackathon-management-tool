@@ -1,7 +1,6 @@
 import Link from "next/link";
-
-import PurpleButton from "@/components/PurpleButton";
 import RegistrationLayout from "@/components/layouts/RegistrationLayout";
+import PurpleButton from "@/components/PurpleButton";
 import JoinTeamInstructions from "@/components/teamRegistration/JoinTeamInstructions";
 import { Underline } from "@/utils/text-utils";
 

@@ -1,7 +1,6 @@
 import { fetchContent } from "@/app/actions";
 import type { PastHackathonWinner } from "@/app/contentfulTypes";
 import { Underline } from "@/utils/text-utils";
-
 import WinnerCard from "./WinnerCard";
 
 export default async function PastWinners() {

@@ -1,7 +1,5 @@
 import Image from "next/image";
-
 import { fetchContent } from "@/app/actions";
-
 import HackathonClock from "../HackathonClock";
 import HeroSectionTile from "./HeroSectionTile";
 import WindowContainer from "./WindowContainer";
@@ -13,7 +11,7 @@ export default async function HeroSection() {
   const res = (await fetchContent("hackathonDetails"))[0];
   const hackathonDetails = res.fields;
   return (
-    <div className="relative flex h-[90dvh] flex-col items-center justify-center md:px-8 md:py-16 lg:px-32">
+    <div className="relative flex h-[85dvh] flex-col items-center justify-center md:px-8 md:py-16 lg:px-32">
       <Image
         src={HERO_SECTION_BACKGROUND}
         alt="Landing page background"

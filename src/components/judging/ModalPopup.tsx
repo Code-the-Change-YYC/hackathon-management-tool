@@ -1,11 +1,9 @@
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
-import { type SubmitHandler, useForm } from "react-hook-form";
-
+import { useForm, type SubmitHandler } from "react-hook-form";
 import type { Schema } from "@/amplify/data/resource";
 import { Button, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
 import { useUser } from "../contexts/UserContext";
 
 const exit_icon = "/svgs/judging/exit_icon.svg";

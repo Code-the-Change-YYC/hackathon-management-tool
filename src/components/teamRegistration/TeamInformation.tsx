@@ -2,7 +2,6 @@
 
 import { client } from "@/app/QueryProvider";
 import { useQuery } from "@tanstack/react-query";
-
 import KevinLoadingRing from "../KevinLoadingRing";
 
 export default function TeamInformation({

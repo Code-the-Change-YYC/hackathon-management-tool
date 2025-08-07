@@ -1,6 +1,5 @@
 import { Amplify } from "aws-amplify";
 import type { AppSyncResolverHandler } from "aws-lambda";
-
 import { createAuthenticationCode } from "@/amplify/function/BusinessLogic/utils/crytography";
 
 Amplify.configure(

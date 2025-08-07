@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { FaInstagram, FaLinkedin } from "react-icons/fa";
-
 import PastWinners from "./LandingPage/PastWinners";
 
 const PagePlaceholderStyles =
