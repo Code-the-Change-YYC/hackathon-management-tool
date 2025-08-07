@@ -24,91 +24,71 @@ export default function TeamForm({ data, teamMutation }: TeamFormProp) {
   const client = generateClient<Schema>();
 
   const { data: teamData, isFetching } = useQuery({
+    initialData: null,
+    initialDataUpdatedAt: 0,
     queryKey: ["TeamWithMembers"],
     queryFn: async () => {
-      const teamWithMembers = await userTeam?.members();
-      if (!teamWithMembers) throw new Error("No team members found");
+      const { data: teamWithMembers } = await client.models.Team.get(
+        { id: data.id },
+        { selectionSet: ["id", "members.*"] },
+      );
 
-      return teamWithMembers.data;
+      return teamWithMembers;
     },
-    enabled: !!userTeam,
+    enabled: !!data,
   });
-  const teamMutation = useMutation({
-    mutationFn: async () => {
-      if (!userTeamId) throw new Error("No team ID found");
-      const { data, errors } = await client.models.User.update({
-        id: currentUser.id,
-        teamId: null,
-      });
-      console.log(data);
-      if (errors) throw new Error("TeamID Not found" + errors[0].message);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["Team", userTeamId],
-      });
-      toast.success("You have left the team");
-      revalidateUser();
-      refetchTeam();
-    },
-  });
-  const handleLeaveTeamClick = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    teamMutation.mutate();
-  };
-  if (!userTeam) return null;
+
   return (
     <>
-      <form className="flex flex-col md:mx-10" onSubmit={handleLeaveTeamClick}>
-        <FormInput
-          name={userTeam.id}
-          disabled
-          value={userTeam.id}
-          label={"Team ID"}
-        />
-        <FormInput
-          name={userTeam.name}
-          disabled
-          value={userTeam.name}
-          label={"Team Name"}
-        />
-        <FormInput
-          name={"DevPost Link"}
-          value={userTeam.devPostLink ?? "Awaiting Submission..."}
-          disabled
-          placeholder="Awaiting Submission..."
-          label={"DevPost Link"}
-        />
-        <label>Team Members</label>
-        <div className="flex flex-col">
-          {isFetching ? (
-            <h1 className="md:text-md my-2 rounded-full border-4 border-white  bg-white/30 py-2 ps-3 text-sm backdrop-opacity-30 placeholder:text-black">
-              Loading...
-            </h1>
-          ) : (
-            <>
-              {Array.isArray(teamData) &&
-                teamData.map((member) => (
-                  <FormInput
-                    key={member.id}
-                    disabled
-                    value={`${member.firstName} ${member.lastName}`}
-                    name={member.id}
-                  />
-                ))}
-            </>
-          )}
-        </div>
-        <div className="mt-8 flex justify-end">
-          <button
-            className="w-full rounded-full border-4 border-white bg-apricot  px-10 py-2 text-white disabled:opacity-50 md:w-auto md:px-12"
-            type="submit"
-            disabled={teamMutation.isPending || teamMutation.isSuccess}
-          >
-            {teamMutation.isPending ? "Leaving Team..." : "Leave Team"}
-          </button>
-        </div>
-      </form>
+      {data && (
+        <>
+          <form className={FORM_STYLES}>
+            <label>Team ID</label>
+            <input
+              className={INPUT_STYLES}
+              type="text"
+              placeholder={data.id ?? "Team ID"}
+              disabled
+            />
+            <label>Team Name</label>
+            <input
+              className={INPUT_STYLES}
+              type="text"
+              placeholder={data.name ?? "Team Name"}
+              disabled
+            />
+            <label>Team Members</label>
+            <div className="flex flex-col">
+              {isFetching ? (
+                <h1 className={INPUT_STYLES}>Loading...</h1>
+              ) : (
+                <>
+                  {Array.isArray(teamData?.members) &&
+                    teamData?.members.map(
+                      (member: Partial<Schema["User"]["type"]>) => (
+                        <input
+                          key={member.id}
+                          className={INPUT_STYLES}
+                          type="text"
+                          value={`${member.firstName} ${member.lastName}`}
+                          disabled
+                        />
+                      ),
+                    )}
+                </>
+              )}
+            </div>
+          </form>
+          <div className="mb-10 mt-3 flex justify-end md:mx-10">
+            <button
+              className={`${BUTTON_STYLES} w-full md:w-auto`}
+              onClick={handleLeaveTeamClick}
+            >
+              Leave Team
+            </button>
+          </div>
+        </>
+      )}
     </>
   );
 }

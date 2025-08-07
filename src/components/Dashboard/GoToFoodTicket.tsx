@@ -4,7 +4,6 @@ import { FaCircleArrowRight } from "react-icons/fa6";
 import ParticipantTicketIcon from "@/images/dashboard/ParticipantTicketIcon.png";
 import Card from "./Card";
 
-const href = "/participant/profile/food-ticket";
 export default function GoToFoodTicket() {
   return (
     <Card className="flex h-full flex-row justify-start gap-8">

@@ -2,23 +2,23 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
+import type { IUser } from "@/components/contexts/UserContext";
 import { useUser } from "@/components/contexts/UserContext";
 import KevinLoadingRing from "@/components/KevinLoadingRing";
 import UserForm from "@/components/UserProfile/UserForm";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 export default function UserProfile() {
-  const { currentUser: data, isFetching: userContextIsFetching } = useUser();
+  const { isFetching: userContextIsFetching } = useUser();
 
   const userMutation = useMutation({
     mutationKey: ["User"],
-    mutationFn: async (input: typeof data) => {
+    mutationFn: async (input: IUser) => {
       try {
         await client.models.User.update(input);
       } catch (error) {
-        throw new Error("Failed to update user");
+        throw new Error("Failed to update user " + error);
       }
     },
   });
@@ -65,10 +65,10 @@ export default function UserProfile() {
         />{" "}
       </div>
       <div className="w-full md:px-16 md:py-10">
-        <div className="mb-3 flex justify-between uppercase text-apricot md:mx-10">
+        <div className="text-apricot mb-3 flex justify-between uppercase md:mx-10">
           <h1 className="mt-3 text-lg font-bold md:text-2xl">My Details</h1>
           <button
-            className=" my-2 rounded-full border-4 border-white bg-apricot  px-10 py-2 text-white md:px-12"
+            className=" bg-apricot my-2 rounded-full border-4 border-white  px-10 py-2 text-white md:px-12"
             onClick={handleEditClick}
           >
             Edit

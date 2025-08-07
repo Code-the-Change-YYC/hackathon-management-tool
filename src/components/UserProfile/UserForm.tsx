@@ -2,9 +2,15 @@
 
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
-import { type Schema } from "@/amplify/data/resource";
-import { type UserFormProp } from "@/components/UserProfile/UserProfile";
+import { useUser } from "../contexts/UserContext";
 
+interface UserFormProp {
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  setEnableCancelSave: React.Dispatch<React.SetStateAction<boolean>>;
+  enableCancelSave: boolean;
+  isEditing: boolean;
+  userMutation: any;
+}
 export default function UserForm({
   userMutation,
   setIsEditing,
@@ -58,7 +64,6 @@ export default function UserForm({
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
             name="lastName"
             value={formState.lastName ?? ""}
-            name={"lastName"}
             disabled={!isEditing}
           />
         </div>
@@ -128,7 +133,7 @@ export default function UserForm({
       <input
         className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white  py-2 ps-3 text-sm"} ${"text-ehhh-grey"}`}
         type="text"
-        value={formState.checkedIn ? "Yes" : "No"}
+        value={formState.completedRegistration ? "Yes" : "No"}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
         readOnly
       />

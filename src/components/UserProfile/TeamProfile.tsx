@@ -9,15 +9,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-grapefruit px-10  md:px-12 py-2 my-2 text-white";
-
 const TEAM_INSTRUCTION_STYLES =
   "bg-pink bg-white/30 mx-10 my-10 rounded-3xl  border-4 border-white bg-white px-10 py-20 md:px-20 md:py-16";
-
 const TeamProfile = () => {
   const queryClient = useQueryClient();
-
   const userTeamId = useUser().currentUser.teamId as string;
-
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["Team"]["type"],
     initialDataUpdatedAt: 0,
@@ -26,14 +22,11 @@ const TeamProfile = () => {
       const teamResponse = await client.models.Team.get({
         id: userTeamId,
       });
-
       if (teamResponse.errors) throw new Error(teamResponse.errors[0].message);
-
       return teamResponse.data;
     },
     enabled: !!userTeamId,
   });
-
   const teamMutation = useMutation({
     mutationFn: async () => {
       try {
@@ -49,7 +42,6 @@ const TeamProfile = () => {
       });
     },
   });
-
   return (
     <>
       {isFetching || !userTeamId ? (
@@ -113,4 +105,5 @@ const TeamProfile = () => {
       )}
     </>
   );
-}
+};
+export default TeamProfile;

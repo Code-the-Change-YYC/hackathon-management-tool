@@ -3,11 +3,8 @@
 import { useState } from "react";
 import { FaCircleArrowRight } from "react-icons/fa6";
 import { toast } from "react-toastify";
-
 import { client } from "@/app/QueryProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
-
-import FormInput from "../UserProfile/FormInput";
 import { useUser } from "../contexts/UserContext";
 
 export default function DevPostLinkUpload() {
@@ -53,13 +50,14 @@ export default function DevPostLinkUpload() {
   };
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-2 py-2">
-      <FormInput
-        name={"devPostLink"}
+      <input
+        className={`md:text-md  my-2 w-full  rounded-full border-2 border-gray-300 bg-gray-100 py-2 ps-3 text-sm text-black `}
         placeholder={userTeam?.devPostLink ?? "Awaiting Submission..."}
-        className="w-full border-2 border-gray-300 bg-gray-100 text-gray-500"
-        value={devPostLink}
         onChange={(e) => setDevPostLink(e.target.value)}
+        value={devPostLink}
+        name={devPostLink}
       />
+
       <button type="submit" className="border-1 rounded-full border-red-500 ">
         <FaCircleArrowRight color="grey" />
       </button>
