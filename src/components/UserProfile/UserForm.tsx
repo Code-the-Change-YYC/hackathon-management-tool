@@ -3,10 +3,9 @@
 import { useEffect, useMemo } from "react";
 import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
-
 import { type Schema } from "@/amplify/data/resource";
-import { type UserFormProp } from "@/components/UserProfile/UserProfile";
 import { useUserDetails } from "@/components/contexts/UserDetailsContext";
+import { type UserFormProp } from "@/components/UserProfile/UserProfile";
 
 type UserFormData = {
   id: string;
