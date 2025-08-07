@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 
@@ -14,7 +14,7 @@ type UserFormData = {
   lastName: string;
   email: string;
   institution: string;
-  willEatMeals: string;
+  willEatMeals: boolean;
   allergies: string;
 };
 
@@ -24,7 +24,7 @@ const getFormValues = (userDetails: any): UserFormData => ({
   lastName: userDetails?.lastName || "",
   email: userDetails?.email || "",
   institution: userDetails?.institution || "",
-  willEatMeals: userDetails?.willEatMeals ? "true" : "false",
+  willEatMeals: Boolean(userDetails?.willEatMeals),
   allergies: userDetails?.allergies || "",
 });
 
@@ -37,6 +37,7 @@ export default function UserForm({
 }: UserFormProp) {
   const { pending } = useFormStatus();
   const { userDetails } = useUserDetails();
+  const value = useMemo(() => getFormValues(userDetails), [userDetails]);
   const {
     register,
     handleSubmit,
@@ -44,21 +45,21 @@ export default function UserForm({
     watch,
     formState: { errors, dirtyFields },
   } = useForm<UserFormData>({
-    defaultValues: getFormValues(userDetails),
+    defaultValues: value,
   });
 
   const willEatMeals = watch("willEatMeals");
 
   useEffect(() => {
     if (userDetails) {
-      reset(getFormValues(userDetails));
+      reset(value);
     }
-  }, [userDetails, reset]);
+  }, [value, reset]);
 
   const handleCancelClick = () => {
     setIsEditing(false);
     setEnableCancelSave(false);
-    reset(getFormValues(userDetails));
+    reset(value);
   };
 
   const handleSaveClick = (data: UserFormData) => {
@@ -84,9 +85,6 @@ export default function UserForm({
     } as Schema["User"]["type"];
 
     userMutation.mutate(formattedData);
-    console.log(formattedData); // Log the form state
-    console.log(willEatMeals); // REMOVE
-    console.log(typeof willEatMeals);
   };
 
   return (
@@ -133,7 +131,7 @@ export default function UserForm({
       <label>Email</label>
       <input
         className={`${"md:text-md  my-2 rounded-full border-4  border-white bg-white py-2 ps-3 text-sm"} ${"text-ehhh-grey"}`}
-        type="text"
+        type="email"
         value={userDetails?.email || ""}
         disabled // Should not be able to edit email
       />
@@ -156,14 +154,17 @@ export default function UserForm({
       <select
         className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
         {...register("willEatMeals", {
-          setValueAs: (value) => value === "true",
+          setValueAs: (value) => {
+            if (typeof value === "boolean") return value;
+            return value === "true";
+          },
         })}
         disabled={!isEditing} // Disabled when not in edit mode
       >
         <option value="true">Yes</option>
         <option value="false">No</option>
       </select>
-      {(willEatMeals === "true" || willEatMeals === true) && (
+      {willEatMeals && (
         <>
           <label>Do you have any allergies?</label>
           <input
