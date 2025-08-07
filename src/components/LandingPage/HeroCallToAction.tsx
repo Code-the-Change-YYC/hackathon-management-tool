@@ -1,31 +1,25 @@
 "use client";
 
 import Link from "next/link";
-
-import { useAuthenticator } from "@aws-amplify/ui-react";
+import { useUserDetails } from "@/components/contexts/UserDetailsContext";
 
 const LINK_STYLES =
   " cursor-pointer opacity-95 pb-4 flex justify-start font-bold md:justify-center";
 export default function HeroCallToAction() {
-  const { authStatus } = useAuthenticator();
+  const { userDetails } = useUserDetails();
+
+  const userId = userDetails?.id || "";
+
   return (
     <>
       <div className={LINK_STYLES}>
-        <a
-          href={
-            authStatus === "authenticated"
-              ? "/participant/profile"
-              : "/register"
-          }
-        >
+        <a href={userId !== "" ? "/participant/profile" : "/register"}>
           <div className=" rounded-2xl border-4 border-white bg-awesomer-purple px-6 py-2 text-sm text-white  hover:opacity-70 md:mb-0 md:px-6">
-            {authStatus === "authenticated"
-              ? "Go to Profile"
-              : "Join Hackathon"}
+            {userId ? "Go to Profile" : "Join Hackathon"}
           </div>
         </a>
       </div>
-      {authStatus !== "authenticated" && (
+      {userId === "" && (
         <div className={" flex gap-1 pb-4 font-bold opacity-95 "}>
           {"Already registered? "}
           <Link href="/login" className="text-awesomer-purple hover:opacity-70">

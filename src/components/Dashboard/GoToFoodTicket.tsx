@@ -1,9 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaCircleArrowRight } from "react-icons/fa6";
-
 import ParticipantTicketIcon from "@/images/dashboard/ParticipantTicketIcon.png";
-
 import Card from "./Card";
 
 export default function GoToFoodTicket() {

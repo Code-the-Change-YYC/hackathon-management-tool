@@ -3,7 +3,6 @@ import { fetchAuthSession } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-
 import type { Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
 import FormFieldButtons from "@/components/LoginForm/FormFieldButtons";
@@ -14,6 +13,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import KevinLoadingRing from "../KevinLoadingRing";
 import { UserType, useUser } from "../contexts/UserContext";
+import KevinLoadingRing from "../KevinLoadingRing";
 
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const queryClient = useQueryClient();

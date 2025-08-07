@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { memo } from "react";
-
 import search_icon from "@/svgs/admin/search_icon.svg";
 
 const TableSearch = ({

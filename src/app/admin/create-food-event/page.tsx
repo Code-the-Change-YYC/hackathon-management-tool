@@ -2,12 +2,10 @@
 
 import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
-
 import { type Schema } from "@/amplify/data/resource";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-
-import DeletePopUp from "./DeletePopUp";
 import CreateFoodEventForm from "./createFoodEventForm";
+import DeletePopUp from "./DeletePopUp";
 import OutputFoodEvent from "./outputFoodEvent";
 import { deleteFoodEvent } from "./userFoodEventActions";
 

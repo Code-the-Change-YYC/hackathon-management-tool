@@ -4,7 +4,6 @@ import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
 import { type Schema } from "@/amplify/data/resource";
 import { useUser } from "@/components/contexts/UserContext";
 
@@ -91,7 +90,7 @@ const CheckInPage = () => {
             You&apos;re Checked In!
           </h1>
           <p className={CHECKIN_STATUS_TEXT_STYLES}>
-            Thanks for checking in to Hack the Change 2024! Click the button
+            Thanks for checking in to Hack the Change 2025! Click the button
             below to return to your profile.
           </p>
           <Link

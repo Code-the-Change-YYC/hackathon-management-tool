@@ -3,7 +3,6 @@
 import { fetchAuthSession } from "aws-amplify/auth";
 import { getUrl } from "aws-amplify/storage";
 import Image from "next/image";
-
 import { useUser } from "@/components/contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 
@@ -39,7 +38,7 @@ export default function ProfileHeader() {
   }
 
   return (
-    <div className={"bg-grapefruit flex h-60 items-center justify-center"}>
+    <div className={"flex h-60 items-center justify-center bg-grapefruit"}>
       <div
         className={
           "absolute top-44 flex flex-row md:left-20 md:top-52 md:z-10 "

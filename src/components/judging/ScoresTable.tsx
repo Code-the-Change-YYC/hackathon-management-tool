@@ -4,12 +4,10 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { twMerge } from "tailwind-merge";
-
 import { type Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
-
-import Card from "../Dashboard/Card";
 import { useUser } from "../contexts/UserContext";
+import Card from "../Dashboard/Card";
 import { type ScoreObject } from "./ModalPopup";
 
 const filter_icon = "/svgs/judging/filter_arrows.svg";

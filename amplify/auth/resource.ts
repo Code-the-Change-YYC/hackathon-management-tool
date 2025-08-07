@@ -1,5 +1,4 @@
 import { defineAuth, secret } from "@aws-amplify/backend";
-
 import { AddUserToGroup } from "../function/BusinessLogic/AddUserToGroup/resource";
 import { ResetHackathon } from "../function/BusinessLogic/ResetHackathon/resource";
 import { PostConfirmation } from "./PostConfirmation/resource";

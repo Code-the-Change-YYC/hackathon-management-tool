@@ -5,11 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
-
-import { type Schema } from "@/amplify/data/resource";
-import { client } from "@/app/QueryProvider";
-import { UserType, useUser } from "@/components/contexts/UserContext";
-import { useQuery } from "@tanstack/react-query";
+import { UserType } from "@/components/contexts/UserContext";
+import { useUserDetails } from "@/components/contexts/UserDetailsContext";
+import UserBasedNav from "./Dashboard/UserBasedNav";
 
 export default function Header() {
   const user = useUser().currentUser;
@@ -50,26 +48,14 @@ export default function Header() {
     router.push("/");
   };
   return (
-    <div className="flex h-36 w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
-      <div className="flex w-48 font-semibold">
-        {user.username ? (
-          <>
-            {user.type === UserType.Participant ? (
-              <>
-                {data ? (
-                  <Link href="/participant">Dashboard</Link>
-                ) : (
-                  <Link href="/register/team">Join a Team</Link>
-                )}
-              </>
-            ) : user.type === UserType.Admin ? (
-              <Link href="/admin">Admin Dashboard</Link>
-            ) : user.type === UserType.Judge ? (
-              <Link href="/judging"></Link>
-            ) : null}
-          </>
+    <div className="flex h-[15dvh] w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
+      <div className="flex w-48">
+        {userId === "" ? (
+          <div></div>
+        ) : userDetails ? (
+          <UserBasedNav />
         ) : (
-          <a href="/login">Join Hackathon</a>
+          <Link href="/login">Join Hackathon</Link>
         )}
       </div>
 

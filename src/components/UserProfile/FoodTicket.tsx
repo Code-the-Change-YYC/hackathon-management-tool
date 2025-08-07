@@ -4,12 +4,11 @@ import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { QRCode } from "react-qrcode-logo";
-
 import { type Schema } from "@/amplify/data/resource";
 import { createMessageAndCode } from "@/amplify/function/BusinessLogic/utils/crytography";
 import { getUpcomingFoodEventDetails } from "@/app/get-food-ticket/actions";
-import KevinLoadingRing from "@/components/KevinLoadingRing";
 import { UserType, useUser } from "@/components/contexts/UserContext";
+import KevinLoadingRing from "@/components/KevinLoadingRing";
 import { useQuery } from "@tanstack/react-query";
 
 export default function UserFoodTicket() {

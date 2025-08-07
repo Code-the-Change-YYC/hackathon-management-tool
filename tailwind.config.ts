@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config, PluginAPI } from "tailwindcss/types/config";
 
 const config: Config = {
   content: [
@@ -42,7 +42,7 @@ const config: Config = {
   },
 
   plugins: [
-    function ({ addUtilities }) {
+    function ({ addUtilities }: PluginAPI) {
       const newUtilities = {
         "::-webkit-scrollbar": {
           width: "2px",
@@ -59,7 +59,7 @@ const config: Config = {
         },
       };
 
-      addUtilities(newUtilities, ["responsive", "hover"]);
+      addUtilities(newUtilities);
     },
   ],
 };

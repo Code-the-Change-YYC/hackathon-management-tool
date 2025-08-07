@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import type React from "react";
-
 import { UserType } from "@/components/contexts/UserContext";
 import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
 

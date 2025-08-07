@@ -6,8 +6,7 @@ import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMess
 import { ResetHackathon } from "@/amplify/function/BusinessLogic/ResetHackathon/resource";
 import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-
+import { a, defineData, type ClientSchema } from "@aws-amplify/backend";
 import { PostConfirmation } from "../auth/PostConfirmation/resource";
 import { ScheduleTeamsAndJudges } from "../function/BusinessLogic/ScheduleTeamsAndJudges/resource";
 

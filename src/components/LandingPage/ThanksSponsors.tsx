@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import { fetchContent } from "@/app/actions";
 
 const leftSponsorSvg = "/svgs/judgingCriteria/leftSponsorSvg.svg";

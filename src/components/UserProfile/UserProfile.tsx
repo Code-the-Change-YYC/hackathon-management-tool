@@ -2,12 +2,11 @@
 
 import Image from "next/image";
 import { useState } from "react";
-
 import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
+import { useUser } from "@/components/contexts/UserContext";
 import KevinLoadingRing from "@/components/KevinLoadingRing";
 import UserForm from "@/components/UserProfile/UserForm";
-import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export interface UserFormProp {
@@ -53,12 +52,13 @@ const UserProfile = () => {
         ...extractedFields
       } = input;
       // TODO this can be cleaned if we use React Hook Form to handle form state better
-      void createdAt,
+      (void createdAt,
         void updatedAt,
         void team,
         void teamId,
         void checkedIn,
-        void profileOwner;
+        void profileOwner);
+      (void email, void role);
 
       try {
         await client.models.User.update(extractedFields);
@@ -70,7 +70,7 @@ const UserProfile = () => {
   });
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const [enableCancelSave, setEnableCancelSave] = useState<boolean>(false);
 
   const handleEditClick = () => {

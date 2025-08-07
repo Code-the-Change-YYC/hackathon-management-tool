@@ -58,6 +58,18 @@ body {
     2px 2px 0 #7055fd;
 }
 
+.text-shadow-title-hackathon-finished {
+  text-shadow:
+    -3px -3px 0 #533de0,
+    3px -3px 0 #533de0,
+    -3px 3px 0 #533de0,
+    3px 3px 0 #533de0,
+    -3px -3px 0 #533de0,
+    3px -3px 0 #533de0,
+    -3px 3px 0 #533de0,
+    3px 3px 0 #533de0;
+}
+
 .lds-ring,
 .lds-ring div {
   box-sizing: border-box;

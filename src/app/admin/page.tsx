@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-
 import CheckUserLoggedIn from "@/components/CheckUserLoggedIn";
 import Greetings from "@/components/Dashboard/Greetings";
 import NumFoodTickets from "@/components/Dashboard/NumFoodTickets";

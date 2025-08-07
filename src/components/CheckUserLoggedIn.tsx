@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-
-import { AuthGetCurrentUserServer } from "@/utils/amplify-utils";
+import { AuthGetAuthSession } from "@/utils/amplify-utils";
 
 export default async function CheckUserLoggedIn({
   children,

@@ -3,11 +3,9 @@
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import Link from "next/link";
-
 import { type Schema } from "@/amplify/data/resource";
 import JudgeIcon from "@/images/dashboard/JudgeIcon.png";
 import { useQuery } from "@tanstack/react-query";
-
 import { useUser } from "../contexts/UserContext";
 import Card from "./Card";
 
