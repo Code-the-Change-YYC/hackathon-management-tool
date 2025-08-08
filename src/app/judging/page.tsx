@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-
 import JudgingDashboard from "./JudgingDashboard";
 
 export const dynamic = "force-dynamic";

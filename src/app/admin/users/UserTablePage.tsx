@@ -1,6 +1,5 @@
 import type { Schema } from "@/amplify/data/resource";
 import client from "@/components/_Amplify/AmplifyBackendClient";
-
 import UsersTable from "../components/UsersTable";
 
 const selectionSet = [

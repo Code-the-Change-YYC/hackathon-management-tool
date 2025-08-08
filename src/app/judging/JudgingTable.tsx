@@ -1,15 +1,13 @@
 "use client";
 
 import { useState } from "react";
-
 import type { Schema } from "@/amplify/data/resource";
-import KevinLoadingRing from "@/components/KevinLoadingRing";
 import { useUser } from "@/components/contexts/UserContext";
 import ModalPopup from "@/components/judging/ModalPopup";
 import ScoresTable from "@/components/judging/ScoresTable";
 import StatsPanel from "@/components/judging/StatsPanel";
+import KevinLoadingRing from "@/components/KevinLoadingRing";
 import { useQuery } from "@tanstack/react-query";
-
 import { client } from "../QueryProvider";
 
 export default function JudgingTable({

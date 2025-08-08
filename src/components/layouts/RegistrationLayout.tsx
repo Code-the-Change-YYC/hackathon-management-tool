@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
-
 import Header from "@/components/LoginForm/Header";
 
 export default function RegistrationLayout({

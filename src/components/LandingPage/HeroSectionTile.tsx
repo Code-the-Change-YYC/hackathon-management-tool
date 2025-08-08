@@ -1,5 +1,4 @@
 import type { HackathonDetails } from "@/app/contentfulTypes";
-
 import HeroCallToAction from "./HeroCallToAction";
 
 const HeroSectionTile = ({

@@ -3,7 +3,6 @@
 import type React from "react";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
-
 import { type Schema } from "@/amplify/data/resource";
 import { type UserFormProp } from "@/components/UserProfile/UserProfile";
 

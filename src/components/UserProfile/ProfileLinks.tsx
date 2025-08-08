@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
 import { UserType, useUser } from "../contexts/UserContext";
 
 export default function ProfileLinks() {

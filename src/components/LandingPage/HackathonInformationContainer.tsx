@@ -1,6 +1,5 @@
 import Image, { type StaticImageData } from "next/image";
 import { twMerge } from "tailwind-merge";
-
 import ABOUT_THE_CHALLENGE_IMAGE from "@/images/landingpage/AboutTheChallenge.png";
 import PRIZES_IMAGE from "@/images/landingpage/prizes.png";
 import REQUIREMENTS_IMAGE from "@/images/landingpage/requirements.png";

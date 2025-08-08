@@ -2,7 +2,6 @@
 
 import { DateTime } from "luxon";
 import validator from "validator";
-
 import type { Schema } from "@/amplify/data/resource";
 import { getMessageAndCode } from "@/amplify/function/BusinessLogic/utils/crytography";
 import {

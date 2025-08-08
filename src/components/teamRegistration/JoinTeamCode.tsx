@@ -2,14 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { toast } from "react-toastify";
-
 import { client } from "@/app/QueryProvider";
 import { useMutation } from "@tanstack/react-query";
-
-import PurpleButton from "../PurpleButton";
 import { useUser } from "../contexts/UserContext";
+import PurpleButton from "../PurpleButton";
 
 export default function JoinTeamCode() {
   const [teamIDInput, setTeamIDInput] = useState(Array(4).fill(""));

@@ -1,5 +1,4 @@
 import { fetchContent } from "@/app/actions";
-
 import SubmissionDueClock from "./SubmissionDueClock";
 
 export default async function SubmissionDue() {

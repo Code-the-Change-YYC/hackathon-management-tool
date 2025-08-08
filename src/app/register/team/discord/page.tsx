@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import PurpleButton from "@/components/PurpleButton";
 import { Underline } from "@/utils/text-utils";
 
