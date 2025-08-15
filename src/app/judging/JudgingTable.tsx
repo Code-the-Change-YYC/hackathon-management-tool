@@ -51,7 +51,6 @@ export default function JudgingTable({
         return teams;
       },
     });
-
   const isFetching = roomIsFetching && teamsForRoomIsFetching;
   if (isFetching || !roomData || !teamsForRoomData) {
     return <KevinLoadingRing />;
