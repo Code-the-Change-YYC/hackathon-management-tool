@@ -23,6 +23,9 @@ export function UserDetailsProvider({
   const queryKey = ["User"];
 
   async function fetchUserDetails(): Promise<UserDetailsNoFunctions> {
+    // migh tneed to remove this is a scuffed fix
+    const currentUser = await getCurrentUser();
+    if (!currentUser?.userId) return null;
     const resp = await fetch("/api/user");
     if (!resp || !resp.ok) throw new Error("Failed to fetch user details");
     return await resp.json();
