@@ -13,7 +13,7 @@ const REGISTER_HEADING_TEXT_STYLES =
   "text-4xl font-bold my-12 mt-6 md:mr-28 text-center md:w-[950px] mx-0 w-4/5";
 const CREATE_TEAM_BODY_CONTAINER_STYLES = "mx-auto flex w-5/6 max-w-[1000px]";
 const CREATE_TEAM_TILE_STYLES = "bg-white p-6 rounded-3xl flex justify-center";
-const CREATE_TEAM_TEXT_INFO_STYLES = "text-blackish";
+const CREATE_TEAM_TEXT_INFO_STYLES = "text-dark-grey";
 const CREATE_TEAM_STEPS_STYLES = "my-8";
 const READY_TO_REGISTER_CONTAINER_STYLES = "my-8 flex justify-center";
 const READY_TO_REGISTER_TEXT_STYLES = "text-center text-2xl font-semibold";
@@ -36,7 +36,7 @@ const CreateTeamPage = () => {
           />
           <h1 className={REGISTER_HEADING_TEXT_STYLES}>
             Register for Hack the Change{" "}
-            <span className="text-pastel-green">2024</span>
+            <span className="text-pastel-green">2025</span>
           </h1>
           <Image
             className="absolute right-12 top-3 hidden md:flex"
@@ -85,11 +85,11 @@ const CreateTeamPage = () => {
                     <li>
                       After forming a team, assign <b>ONE</b> member to{" "}
                       <b>&quot;Register New Team&quot;</b> using your Team Name.
-                      They will receive a unique <b>6-digit Team ID</b>{" "}
+                      They will receive a unique <b>4-digit Team ID</b>{" "}
                       following registration.
                     </li>
                     <li className={CREATE_TEAM_STEPS_STYLES}>
-                      Next, provide this <b>6-digit Team ID</b> to all team
+                      Next, provide this <b>4-digit Team ID</b> to all team
                       members.
                     </li>
                     <li className={CREATE_TEAM_STEPS_STYLES}>

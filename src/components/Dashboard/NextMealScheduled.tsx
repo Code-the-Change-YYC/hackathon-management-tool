@@ -2,11 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
 import { getUpcomingFoodEventDetails } from "@/app/get-food-ticket/actions";
 import CalendarIcon from "@/images/dashboard/Calendar.png";
 import { useQuery } from "@tanstack/react-query";
-
 import { useUser } from "../contexts/UserContext";
 import Card from "./Card";
 
@@ -37,7 +35,7 @@ export default function NextMealScheduled() {
         <h1>
           Next Meal <br /> Scheduled at
         </h1>
-        <div className="text-3xl font-bold italic text-zinc-800">
+        <div className="text-3xl font-bold italic text-dark-grey">
           {isFetching ? "Loading..." : (data?.timeslot ?? "No meal scheduled")}
         </div>
         <h2>Location: {location}</h2>

@@ -1,14 +1,13 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
-
 import { type Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
 
 const INPUT_STYLES =
-  "rounded-full border-4 placeholder-black border-white bg-[#FFFFFF] bg-white/30 ps-3 py-2 my-2 text-sm md:text-md backdrop-opacity-30";
+  "rounded-full border-4 placeholder-black border-white bg-white bg-white/30 ps-3 py-2 my-2 text-sm md:text-md backdrop-opacity-30";
 const BUTTON_STYLES =
-  " rounded-full border-4 border-white bg-[#FF6B54] px-10  md:px-12 py-2 my-2 text-white";
+  " rounded-full border-4 border-white bg-grapefruit px-10  md:px-12 py-2 my-2 text-white";
 
 const FORM_STYLES = "md:mx-10 flex flex-col";
 
@@ -24,7 +23,6 @@ export default function TeamForm({ data, teamMutation }: TeamFormProp) {
 
   const client = generateClient<Schema>();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: teamData, isFetching } = useQuery({
     initialData: null,
     initialDataUpdatedAt: 0,

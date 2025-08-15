@@ -1,8 +1,8 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
+import Image from "next/image";
 import { toast } from "react-toastify";
-
 import { type Schema } from "@/amplify/data/resource";
 import JudgingTimeline from "@/components/admin/Judging/JudgingTimeline";
 import RoomAssigner from "@/components/admin/Judging/RoomAssigner";
@@ -12,7 +12,7 @@ const client = generateClient<Schema>();
 
 export default function JudgingSchedule() {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const { mutateAsync: judgingScheduleMutation } = useMutation({
     mutationFn: async ({
       judgingSessionsPerTeam,
       numOfJudgingRooms,
@@ -61,7 +61,7 @@ export default function JudgingSchedule() {
     },
   });
 
-  const { data: roomData } = useQuery({
+  const { data: roomData, isLoading: isLoadingRooms } = useQuery({
     queryKey: ["Room"],
     queryFn: async () => {
       const { data, errors } = await client.models.Room.list();
@@ -72,7 +72,7 @@ export default function JudgingSchedule() {
     },
   });
 
-  const { data: teamRoomData } = useQuery({
+  const { data: teamRoomData, isLoading: isLoadingTeamRooms } = useQuery({
     queryKey: ["TeamRoom"],
     queryFn: async () => {
       const { data, errors } = await client.models.TeamRoom.list();
@@ -83,7 +83,7 @@ export default function JudgingSchedule() {
     },
   });
 
-  const { data: judgeData } = useQuery({
+  const { data: judgeData, isLoading: isLoadingJudges } = useQuery({
     queryKey: ["User-Judge"],
     queryFn: async () => {
       const { data, errors } = await client.models.User.list({
@@ -101,7 +101,7 @@ export default function JudgingSchedule() {
     },
   });
 
-  const { data: teamData } = useQuery({
+  const { data: teamData, isLoading: isLoadingTeams } = useQuery({
     queryKey: ["Teams"],
 
     queryFn: async () => {
@@ -115,49 +115,96 @@ export default function JudgingSchedule() {
     },
   });
 
-  const judgeRooms = roomData
-    ?.map((room) => ({
-      roomName: room.name,
-      room_id: room.id,
-      judgeNames:
-        judgeData
-          ?.filter((judge) => judge.JUDGE_roomId === room.id)
-          .map((judge) => judge.firstName)
-          .join(" & ") || "",
-      color: "#D6C9FF",
-    }))
-    .sort((a, b) =>
-      a.roomName > b.roomName ? 1 : b.roomName > a.roomName ? -1 : 0,
-    );
+  const isLoading =
+    isLoadingRooms || isLoadingJudges || isLoadingTeamRooms || isLoadingTeams;
 
-  const judgingEvents = teamRoomData?.map((teamRoom) => ({
-    event_id: teamRoom.id,
-    title:
-      teamData
-        ?.filter((team) => team.id === teamRoom.teamId)
-        .map((team) => team.name)
-        .join(", ") || "No Team Name",
-    room_id: teamRoom.roomId, // for some reason wont render if camelcase lol
-    start: new Date(teamRoom.time),
-    end: new Date(new Date(teamRoom.time).getTime() + 15 * 60 * 1000),
-    zoomLink: teamRoom.zoomLink,
-  }));
+  const judgeRooms =
+    roomData && judgeData //make sure contents of roomData and judgeData are rendered first
+      ? roomData
+          .map((room) => ({
+            roomName: room.name,
+            room_id: room.id,
+            judgeNames:
+              judgeData
+                ?.filter((judge) => judge.JUDGE_roomId === room.id)
+                .map((judge) => judge.firstName)
+                .join(" & ") || "No Names",
+            color: "#D6C9FF",
+          }))
+          .sort((a, b) =>
+            a.roomName > b.roomName ? 1 : b.roomName > a.roomName ? -1 : 0,
+          )
+      : [];
+
+  // Update all team rooms with the same zoom link (can change this to different zoom links later on)
+  const { mutate: updateTeamRoomsWithZoomLink } = useMutation({
+    mutationFn: async (zoomLink: string) => {
+      const { data, errors } = await client.models.TeamRoom.list();
+      if (errors) {
+        throw errors;
+      }
+
+      const updatePromises = data.map((teamRoom) =>
+        client.models.TeamRoom.update({
+          id: teamRoom.id,
+          zoomLink,
+        }),
+      );
+
+      await Promise.all(updatePromises);
+
+      queryClient.invalidateQueries({ queryKey: ["TeamRoom"] });
+    },
+  });
+
+  const judgingEvents =
+    teamRoomData && teamData //make sure conteents of teamRoomData and teamData are mapped first
+      ? teamRoomData.map((teamRoom) => ({
+          event_id: teamRoom.id,
+          title:
+            teamData
+              ?.filter((team) => team.id === teamRoom.teamId)
+              .map((team) => team.name)
+              .join(", ") || "No Team Name",
+          room_id: teamRoom.roomId,
+          start: new Date(teamRoom.time),
+          end: new Date(new Date(teamRoom.time).getTime() + 15 * 60 * 1000),
+          zoomLink: teamRoom.zoomLink,
+        }))
+      : [];
 
   return (
     <>
-      <RoomAssigner judgingScheduleMutation={mutate} />
-      <div className="flex justify-center">
-        <div className="m-4 w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
-          {judgeRooms && judgingEvents ? (
-            <JudgingTimeline
-              judgeRooms={judgeRooms}
-              judgingEvents={judgingEvents}
-            />
-          ) : (
-            <div className="size-full">Schedule not made yet</div>
-          )}
+      <RoomAssigner
+        judgingScheduleMutation={judgingScheduleMutation}
+        updateTeamRoomsWithZoomLink={updateTeamRoomsWithZoomLink}
+      />
+
+      {!isLoading ? (
+        <div className="m-4 flex justify-center">
+          <div className="z-0 w-full max-w-[1500px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
+            {judgeRooms && judgingEvents ? (
+              <JudgingTimeline
+                judgeRooms={judgeRooms}
+                judgingEvents={judgingEvents}
+              />
+            ) : (
+              <div className="size-full">Schedule not made yet</div>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center md:min-h-screen">
+          <h1 className="text-2xl font-semibold">Loading Schedule...</h1>
+          <Image
+            src="/svgs/runningKevin.svg"
+            alt="Kevin Running"
+            width={120}
+            height={120}
+            className="my-4"
+          />
+        </div>
+      )}
     </>
   );
 }

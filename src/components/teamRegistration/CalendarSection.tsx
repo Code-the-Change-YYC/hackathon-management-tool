@@ -1,7 +1,6 @@
 "use client";
 
 import { downloadEvent } from "@/utils/generateICS";
-
 import PurpleButton from "../PurpleButton";
 
 export default function CalendarSection() {

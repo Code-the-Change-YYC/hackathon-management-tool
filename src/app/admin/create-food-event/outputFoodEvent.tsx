@@ -1,7 +1,7 @@
 import { type Schema } from "@/amplify/data/resource";
 
 const DELETE_STYLES =
-  "bg-awesomer-purple px-5 py-2 mt-6 mb-3 text-white rounded-md hover:bg-[#A689FF]";
+  "bg-awesomer-purple px-5 py-2 mt-6 mb-3 text-white rounded-md hover:bg-awesome-purple";
 
 type OutputFoodEventProps = {
   foodData: Array<Partial<Schema["FoodEvent"]["type"]>>;
@@ -23,7 +23,7 @@ const OutputFoodEvent = ({
           foodData.map((event) => (
             <div
               key={event.id}
-              className="w-auto rounded-lg border border-slate-100 bg-white p-6 shadow-md"
+              className="w-auto rounded-lg border border-light-grey bg-white p-6 shadow-md"
             >
               <h3 className="py-3 text-lg font-semibold">{event.name}</h3>
               <p className="text-sm">

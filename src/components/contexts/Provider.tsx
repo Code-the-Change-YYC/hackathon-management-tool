@@ -2,7 +2,6 @@
 
 import React from "react";
 import { toast } from "react-toastify";
-
 import { Authenticator } from "@aws-amplify/ui-react";
 import {
   MutationCache,
@@ -27,9 +26,9 @@ export default function Provider({
           },
         },
         queryCache: new QueryCache({
-          onError: (error, query) => {
+          onError: (error) => {
             console.error("Query Boundary Caught:", error);
-            toast.error(`Error loading: ${query.queryKey[0]}`);
+            // toast.error(`Error loading: ${query.queryKey[0]}`);
           },
           // onSuccess(data, query) {
           //   toast.success(`${query.queryKey[0]} loaded`);

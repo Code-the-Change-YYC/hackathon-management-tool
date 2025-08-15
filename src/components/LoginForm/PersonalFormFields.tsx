@@ -2,16 +2,14 @@ import type { AuthUser } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-
 import type { Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
 import FormFieldButtons from "@/components/LoginForm/FormFieldButtons";
 import FormFieldsHeader from "@/components/LoginForm/FormFieldsHeader";
 import { Flex, Input, Label, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-
-import LoadingRing from "../LoadingRing";
 import { UserType, useUser } from "../contexts/UserContext";
+import KevinLoadingRing from "../KevinLoadingRing";
 
 export default function PersonalFormFields({ user }: { user: AuthUser }) {
   const router = useRouter();
@@ -91,11 +89,29 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
       setFormState((prevState) => ({ ...prevState, [name]: value }));
     }
   };
+
+  console.log(isPending);
   if (isPending) {
-    return <LoadingRing />;
+    return (
+      <div className="mt-16 flex w-full items-center justify-center">
+        <KevinLoadingRing />
+      </div>
+    );
   }
   if (isError) {
     return <div>Error, please try again later.</div>;
+  }
+  if (data?.teamId && data?.completedRegistration) {
+    if (data?.role === UserType.Admin) {
+      router.push("/admin");
+      return null;
+    } else if (data?.role === UserType.Judge) {
+      router.push("/judging");
+      return null;
+    } else {
+      router.push("/participant/profile");
+      return null;
+    }
   }
   if (data?.teamId) {
     router.push(`/register/team/${data.teamId}`);

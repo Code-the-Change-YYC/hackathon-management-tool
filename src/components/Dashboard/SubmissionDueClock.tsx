@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-
 import { hackathonTimeRemaining } from "@/utils/date-utils";
-
 import CountdownTimer from "../LandingPage/CountdownTimer";
 import Card from "./Card";
 
@@ -44,12 +42,12 @@ export default function SubmissionDueClock({
         <CountdownTimer
           name={"Hours"}
           value={hours}
-          className="w-32 bg-emerald-500 md:w-52  lg:w-52"
+          className="w-32 bg-dark-green md:w-52  lg:w-52"
         />
         <CountdownTimer
           name={"Minutes"}
           value={minutes}
-          className="w-32 bg-emerald-500 md:w-52 lg:w-52"
+          className="w-32 bg-dark-green md:w-52 lg:w-52"
         />
       </div>
     </Card>

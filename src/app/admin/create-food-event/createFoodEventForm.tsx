@@ -3,19 +3,17 @@
 import { DateTime } from "luxon";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
-
 import { type Schema } from "@/amplify/data/resource";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { createFoodEvent } from "./userFoodEventActions";
 
 const HEADER_STYLES = "text-2xl my-8";
 const INPUT_STYLES =
-  "rounded-lg border w-full p-3 my-2 border-2 border-[#A689FF] focus:bg-[#ede9fe] ";
+  "rounded-lg border w-full p-3 my-2 border-2 border-awesome-purple focus:bg-lilac-purple/50";
 const SUBMIT_STYLES =
-  "bg-awesomer-purple px-5 py-3 text-white rounded-md hover:bg-[#A689FF]";
+  "bg-awesomer-purple px-5 py-3 text-white rounded-md hover:bg-awesome-purple";
 const CLEAR_STYLES =
-  "bg-white px-5 py-3 text-black rounded-md border border-[#94a3b8] hover:bg-[#eae5fa] hover:text-[#7055fd]";
+  "bg-white px-5 py-3 text-black rounded-md border border-regal-blue/50 hover:bg-lilac-purple/50 hover:text-awesomer-purple";
 
 const CreateFoodTicketForm = () => {
   const queryClient = useQueryClient();
@@ -84,7 +82,7 @@ const CreateFoodTicketForm = () => {
             placeholder="Breakfast, Lunch, or Dinner"
           />
           {errors.name && (
-            <div className="text-red-500">{errors.name.message}</div>
+            <div className="text-strawberry-red">{errors.name.message}</div>
           )}
           <label>Description of Food Event</label>
           <textarea
@@ -95,7 +93,9 @@ const CreateFoodTicketForm = () => {
             placeholder="Description"
           />
           {errors.description && (
-            <div className="text-red-500">{errors.description.message}</div>
+            <div className="text-strawberry-red">
+              {errors.description.message}
+            </div>
           )}
           <label>Start date & time</label>
           <input
@@ -106,7 +106,7 @@ const CreateFoodTicketForm = () => {
             className={INPUT_STYLES}
           />
           {errors.start && (
-            <div className="text-red-500">{errors.start.message}</div>
+            <div className="text-strawberry-red">{errors.start.message}</div>
           )}
           <label>End date & time</label>
           <input
@@ -117,7 +117,7 @@ const CreateFoodTicketForm = () => {
             className={INPUT_STYLES}
           />
           {errors.end && (
-            <div className="text-red-500">{errors.end.message}</div>
+            <div className="text-strawberry-red">{errors.end.message}</div>
           )}
           <label>Number of Groups for Scheduled Meal Pick Up</label>
           <input
@@ -129,7 +129,9 @@ const CreateFoodTicketForm = () => {
             placeholder="Number of Groups"
           />
           {errors.totalGroupCount && (
-            <div className="text-red-500">{errors.totalGroupCount.message}</div>
+            <div className="text-strawberry-red">
+              {errors.totalGroupCount.message}
+            </div>
           )}
           <div className="my-4 flex items-center justify-between text-white">
             <button

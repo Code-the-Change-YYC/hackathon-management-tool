@@ -2,14 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { toast } from "react-toastify";
-
 import { client } from "@/app/QueryProvider";
 import { useMutation } from "@tanstack/react-query";
-
-import PurpleButton from "../PurpleButton";
 import { useUser } from "../contexts/UserContext";
+import PurpleButton from "../PurpleButton";
 
 export default function JoinTeamCode() {
   const [teamIDInput, setTeamIDInput] = useState(Array(4).fill(""));
@@ -85,8 +83,8 @@ export default function JoinTeamCode() {
   return (
     <>
       <form className="flex flex-col gap-4" onSubmit={handleJoinTeam}>
-        <div className="flex flex-col gap-4 rounded-3xl bg-rose-200/50 px-24 py-8  outline outline-rose-500/50">
-          <div className=" pb-12 text-center text-3xl font-semibold leading-10 text-rose-500/80">
+        <div className="flex flex-col gap-4 rounded-3xl bg-pastel-pink/60 px-24 py-8  outline outline-dark-pink/50">
+          <div className=" pb-12 text-center text-3xl font-semibold leading-10 text-dark-pink/90">
             Enter 4-digit Team ID
           </div>
           <div className="flex justify-center gap-2.5 pb-12 sm:gap-8">
@@ -98,7 +96,7 @@ export default function JoinTeamCode() {
                 }}
                 type="text"
                 maxLength={1}
-                className="size-16 rounded-xl bg-white text-center text-3xl font-semibold outline outline-rose-500"
+                className="size-16 rounded-xl bg-white text-center text-3xl font-semibold outline outline-dark-pink"
                 value={teamIDInput[index].toUpperCase()}
                 onChange={(e) => handleTeamIDInput(e, index)}
               />

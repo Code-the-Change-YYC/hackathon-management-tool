@@ -2,7 +2,6 @@
 
 import type { BaseEntry } from "contentful";
 import { createClient } from "contentful";
-
 import type { ContentTypeMap } from "./contentfulTypes";
 
 const contentfulClient = createClient({

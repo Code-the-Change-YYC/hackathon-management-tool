@@ -5,74 +5,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
-
-import { type Schema } from "@/amplify/data/resource";
-import { client } from "@/app/QueryProvider";
-import { UserType, useUser } from "@/components/contexts/UserContext";
-import { useQuery } from "@tanstack/react-query";
-
-const headerContainerStyles =
-  "flex flex-row items-center justify-between text-awesomer-purple h-36 bg-white px-8";
+import { UserType } from "@/components/contexts/UserContext";
+import { useUserDetails } from "@/components/contexts/UserDetailsContext";
+import UserBasedNav from "./Dashboard/UserBasedNav";
 
 export default function Header() {
-  const user = useUser().currentUser;
+  const { userDetails } = useUserDetails();
 
-  const userId = useUser().currentUser.username as string;
-
-  const { data } = useQuery({
-    initialData: {} as Schema["Team"]["type"],
-    initialDataUpdatedAt: 0,
-    queryKey: ["Team", userId],
-    queryFn: async () => {
-      const userResponse = await client.models.User.get({
-        id: userId,
-      });
-
-      if (userResponse.errors) throw new Error(userResponse.errors[0].message);
-
-      const userTeamId = userResponse.data?.teamId as string;
-
-      if (userTeamId) {
-        const teamResponse = await client.models.Team.get({
-          id: userTeamId,
-        });
-
-        if (teamResponse.errors)
-          throw new Error(teamResponse.errors[0].message);
-
-        return teamResponse.data;
-      } else {
-        return {} as Schema["Team"]["type"];
-      }
-    },
-    enabled: !!userId,
-  });
+  const userId = userDetails?.id || "";
   const router = useRouter();
   const handleLogout = () => {
     signOut();
     router.push("/");
   };
   return (
-    <div className={headerContainerStyles}>
-      <div className="flex w-48 font-semibold">
-        {user.username ? (
-          <>
-            {user.type === UserType.Participant ? (
-              <>
-                {data ? (
-                  <Link href="/participant">Dashboard</Link>
-                ) : (
-                  <Link href="/register/team">Join a Team</Link>
-                )}
-              </>
-            ) : user.type === UserType.Admin ? (
-              <Link href="/admin/teams">Admin Dashboard</Link>
-            ) : user.type === UserType.Judge ? (
-              <Link href="/judging">Judge Dashboard</Link>
-            ) : null}
-          </>
+    <div className="flex h-[15dvh] w-dvw flex-row items-center justify-between bg-white px-8 text-awesomer-purple">
+      <div className="flex w-48">
+        {userId === "" ? (
+          <div></div>
+        ) : userDetails ? (
+          <UserBasedNav />
         ) : (
-          <a href="/login">Join Hackathon</a>
+          <Link href="/login">Join Hackathon</Link>
         )}
       </div>
 
@@ -83,18 +37,18 @@ export default function Header() {
             alt="Awesome Logo"
             width={70}
             height={70}
-            className="shadow-lg"
+            className="shadow-lg transition-transform hover:scale-125"
           />
         </Link>
       </div>
 
       <div className="flex w-48 justify-end">
-        {user.completedProfile && (
+        {userDetails?.completedRegistration && (
           <Link href="/participant/profile">
             <CgProfile size={60} />
           </Link>
         )}
-        {user.username && (
+        {userDetails.role && userDetails?.role !== UserType.Guest && (
           <button onClick={handleLogout} className="ml-4 font-semibold">
             Logout
           </button>

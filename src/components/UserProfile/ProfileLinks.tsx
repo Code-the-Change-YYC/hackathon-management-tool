@@ -1,11 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
 import { UserType, useUser } from "../contexts/UserContext";
-
-const LINK_STYLES =
-  "md:mx-10 align-center text-center text-1xl md:text-md my-12 flex flex-row gap-8 sm:gap-16 text-[#FF6B54]";
-const ACTIVE_LINK_STYLES = "underline";
 
 export default function ProfileLinks() {
   const { currentUser } = useUser();
@@ -31,17 +26,18 @@ export default function ProfileLinks() {
   }, []);
 
   return (
-    <div className={LINK_STYLES}>
-      {links.map((link, index) => (
-        <Link
-          key={index}
-          href={link.href}
-          className={`${activeLink === link.href && ACTIVE_LINK_STYLES}`}
-          onClick={() => setActiveLink(link.href)}
-        >
-          {link.text}
-        </Link>
-      ))}
+    <div className="align-center text-1xl md:text-md my-12 flex flex-row justify-center gap-8 text-center text-grapefruit sm:gap-16 md:mx-10">
+      {currentUser.id &&
+        links.map((link, index) => (
+          <Link
+            key={index}
+            href={link.href}
+            className={`${activeLink === link.href && "underline"}`}
+            onClick={() => setActiveLink(link.href)}
+          >
+            {link.text}
+          </Link>
+        ))}
     </div>
   );
 }

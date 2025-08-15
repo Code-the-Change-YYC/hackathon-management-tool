@@ -2,7 +2,6 @@
 
 // THIS PAGE IS A SAMPLE, PLEASE REPLACE IT AND IMPROVE IT FROM HERE
 import { useState } from "react";
-
 import { verifyFoodTicket } from "../actions";
 
 export default function TicketVerification() {
@@ -43,7 +42,7 @@ export default function TicketVerification() {
           className="border p-2"
           placeholder="Enter Food Event ID"
         />
-        <button type="submit" className="bg-blue-500 p-2 text-white">
+        <button type="submit" className="bg-regal-blue p-2 text-white">
           Submit
         </button>
       </form>

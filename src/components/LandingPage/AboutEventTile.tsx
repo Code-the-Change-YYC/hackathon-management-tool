@@ -1,22 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-
 import { fetchContent } from "@/app/actions";
-
-const EVENT_DETAILS_SECTION_STYLES =
-  "flex w-full flex-col items-center bg-white";
-const EVENT_DETAILS_CONTENT_STYLES =
-  "bg-pastel-pink border-4 border-dark-pink rounded-3xl mt-4 mb-8 xl:mt-8 xl:mb-12 flex flex-col xl:flex-row  w-4/5 shadow-[15px_15px_0px_0px_#FF4D6F]";
-const EVENT_IMAGE_CONTAINER_STYLES =
-  "bg-blackish border-b-4 border-dark-pink size-full xl:size-1/2 rounded-t-2xl xl:rounded-tr-none xl:rounded-l-2xl xl:border-b-0 xl:border-r-4 ";
-const EVENT_IMAGE_STYLES =
-  "w-full h-full object-cover rounded-bl-none rounded-t-2xl xl:rounded-tr-none xl:rounded-l-2xl";
-const EVENT_DETAILS_CONTAINER_STYLES =
-  "flex items-center w-full xl:w-1/2 rounded-b-20 md:rounded-bl-none md:rounded-r-2xl";
-const EVENT_DETAIL_STYLES = "flex items-center ml-10";
-const EVENT_DETAIL_TITLE_STYLES =
-  "text-lg text-blackish font-extrabold leading-tight";
-const ICON_CONTAINER_STYLES = "bg-white rounded-xl p-1 m-4";
 
 const icons = {
   date: "/svgs/aboutEventTile/date_icon.svg",
@@ -31,15 +15,20 @@ interface EventDetailProps {
   children: ReactNode;
 }
 
-const EventDetail = (props: EventDetailProps) => {
-  const { iconSrc, iconName, children } = props;
-
+const EventDetail = ({ iconSrc, iconName, children }: EventDetailProps) => {
   return (
-    <div className={EVENT_DETAIL_STYLES}>
-      <div className={ICON_CONTAINER_STYLES}>
-        <Image src={iconSrc} alt={`${iconName} icon`} width={35} height={35} />
+    <div className="ml-10 flex items-center">
+      <div className="m-4 rounded-xl bg-white p-1">
+        <Image
+          src={iconSrc || "/placeholder.svg"}
+          alt={`${iconName} icon`}
+          width={35}
+          height={35}
+        />
       </div>
-      <h2 className={EVENT_DETAIL_TITLE_STYLES}>{children}</h2>
+      <h2 className="text-lg font-extrabold leading-tight text-dark-grey">
+        {children}
+      </h2>
     </div>
   );
 };
@@ -55,22 +44,22 @@ export default async function AboutEventTile() {
   });
 
   return (
-    <div className={EVENT_DETAILS_SECTION_STYLES}>
-      <div className={EVENT_DETAILS_CONTENT_STYLES}>
-        <div className={EVENT_IMAGE_CONTAINER_STYLES}>
+    <div className="flex w-full flex-col items-center bg-white">
+      <div className="z-100 mb-8 mt-4 flex w-4/5 flex-row rounded-3xl border-4 border-dark-pink bg-pastel-pink shadow-[15px_15px_0px_0px_dark-pink] xl:mb-12 xl:mt-8">
+        <div className="relative flex aspect-[16/9] w-full max-w-xl items-center justify-center overflow-hidden rounded-l-2xl bg-dark-grey">
           <Image
-            className={EVENT_IMAGE_STYLES}
             src={
               eventDetails.locationImage.fields.file?.url
                 ?.toString()
                 .replace("//", "https://") ?? ""
             }
             alt={eventDetails.locationName}
-            width={500}
-            height={500}
+            fill
+            sizes="(max-width: 768px) 100vw, 345px"
+            priority
           />
         </div>
-        <div className={EVENT_DETAILS_CONTAINER_STYLES}>
+        <div className="flex w-full items-center rounded-b-20 md:rounded-r-2xl md:rounded-bl-none xl:w-1/2">
           <div>
             <EventDetail iconSrc={icons.date} iconName="date">
               {formattedDate}

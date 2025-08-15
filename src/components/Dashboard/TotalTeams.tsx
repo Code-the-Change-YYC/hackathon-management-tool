@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import client from "../_Amplify/AmplifyBackendClient";
 import Card from "./Card";
 
@@ -24,7 +23,7 @@ export default async function TotalTeams() {
       <Link href={href} className=" z-10 text-xl font-medium">
         Total Teams
       </Link>
-      <div className=" text-8xl italic text-zinc-800">{numTeams}</div>
+      <div className=" text-8xl italic text-dark-grey">{numTeams}</div>
     </Card>
   );
 }

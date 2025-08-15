@@ -3,21 +3,20 @@
 import { generateClient } from "aws-amplify/api";
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
-
 import type { Schema } from "@/amplify/data/resource";
 import { verifyFoodTicket } from "@/app/admin/scan-food-tickets/actions";
 import { useQuery } from "@tanstack/react-query";
 import { Scanner } from "@yudiel/react-qr-scanner";
 
 const QR_SCANNER_SECTION_STYLES =
-  "overflow-x-hidden bg-medium-grey text-blackish";
+  "overflow-x-hidden bg-medium-grey text-dark-grey";
 const QR_SCANNER_CONTENT_STYLES =
   "container mx-auto flex items-center justify-center p-4";
 const QR_SCANNER_CONTAINER_STYLES =
   "w-full max-w-[500px] rounded-lg bg-white p-6 drop-shadow-md md:w-auto";
 
 const SELECT_FOOD_EVENT_STYLES =
-  "mb-4 w-full rounded-md border border-blackish p-2 focus:border-2 focus:border-awesomer-purple focus:outline-none";
+  "mb-4 w-full rounded-md border border-dark-grey p-2 focus:border-2 focus:border-awesomer-purple focus:outline-none";
 const QR_READER_CONTAINER_STYLES =
   "border-awesome-purple bg-awesome-purple rounded-md border-2";
 const MANUAL_SCAN_BUTTON_STYLES =

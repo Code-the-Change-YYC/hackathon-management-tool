@@ -1,6 +1,5 @@
-import Greetings from "@/components/Dashboard/Greetings";
 import client from "@/components/_Amplify/AmplifyBackendClient";
-
+import Greetings from "@/components/Dashboard/Greetings";
 import JudgingTable from "./JudgingTable";
 
 export default async function JudgingDashboard() {
@@ -12,7 +11,7 @@ export default async function JudgingDashboard() {
   };
 
   return (
-    <div className="flex w-full flex-1 flex-col items-center p-6 text-blackish">
+    <div className="flex w-full flex-1 flex-col items-center p-6 text-dark-grey">
       <Greetings accentColor="text-dark-pink" />
       <h2 className="flex w-full py-4 text-xl font-semibold">Assigned Teams</h2>
       <JudgingTable hackathonData={hackathonData} />

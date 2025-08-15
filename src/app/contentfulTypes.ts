@@ -44,6 +44,7 @@ export interface ContentTypeMap {
   timeline: BaseEntry;
   upcomingEvents: BaseEntry;
   ceremonyDetails: CeremonyDetails;
+  pastHackathonWinner: PastHackathonWinner;
   // add more types as needed...
 }
 
@@ -52,4 +53,15 @@ export interface CeremonyDetails extends BaseEntry {
   openingCeremonyDate: string;
   closingCeremonyLocation: string;
   closingCeremonyDate: string;
+}
+
+export interface PastHackathonWinner extends BaseEntry {
+  projectName: string;
+  projectDescription?: string;
+  projectImage?: Asset;
+  hackathonName?: string;
+  teamName?: string;
+  teamRanking?: number;
+  awardName?: string;
+  link?: string;
 }

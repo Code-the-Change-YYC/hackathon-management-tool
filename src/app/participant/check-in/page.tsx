@@ -4,7 +4,6 @@ import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
 import { type Schema } from "@/amplify/data/resource";
 import { useUser } from "@/components/contexts/UserContext";
 
@@ -12,7 +11,7 @@ const check_mark_icon = "/svgs/checkin/check_mark.svg";
 const cross_icon = "/svgs/checkin/circle_cross.svg";
 
 const CHECKIN_STATUS_TILE_STLYES =
-  "my-20 flex w-4/5 max-w-[1000px] flex-col items-center rounded-xl border-2 border-dark-pink bg-white p-10 shadow-[15px_15px_0px_0px_#FF4D6F]";
+  "my-20 flex w-4/5 max-w-[1000px] flex-col items-center rounded-xl border-2 border-dark-pink bg-white p-10 shadow-[15px_15px_0px_0px_dark-pink]";
 const CHECKIN_STATUS_HEADER_STYLES = "mb-2 text-2xl font-bold text-dark-pink";
 const CHECKIN_STATUS_TEXT_STYLES =
   "mb-6 max-w-[450px] text-center text-lg text-black";
@@ -91,7 +90,7 @@ const CheckInPage = () => {
             You&apos;re Checked In!
           </h1>
           <p className={CHECKIN_STATUS_TEXT_STYLES}>
-            Thanks for checking in to Hack the Change 2024! Click the button
+            Thanks for checking in to Hack the Change 2025! Click the button
             below to return to your profile.
           </p>
           <Link

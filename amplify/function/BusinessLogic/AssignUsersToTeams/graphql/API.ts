@@ -1,5 +1,3 @@
-/* tslint:disable */
-/* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
 export type GenericFunctionResponse = {
@@ -379,10 +377,10 @@ export type AddUserToGroupResponse = {
 };
 
 export type ScheduleTeamsAndJudgesResponse = {
-  __typename: "ScheduleTeamsAndJudgesResponse",
-  body?: string | null,
-  headers?: string | null,
-  statusCode?: number | null,
+  __typename: "ScheduleTeamsAndJudgesResponse";
+  body?: string | null;
+  headers?: string | null;
+  statusCode?: number | null;
 };
 
 export type ModelFoodEventConditionInput = {
@@ -1373,19 +1371,19 @@ export type ResetHackathonMutation = {
 };
 
 export type ScheduleTeamsAndJudgesMutationVariables = {
-  judgingSessionsPerTeam: number,
-  numOfJudgingRooms: number,
-  presentationDuration: number,
-  startDateAndTime: string,
+  judgingSessionsPerTeam: number;
+  numOfJudgingRooms: number;
+  presentationDuration: number;
+  startDateAndTime: string;
 };
 
 export type ScheduleTeamsAndJudgesMutation = {
-  ScheduleTeamsAndJudges?:  {
-    __typename: "ScheduleTeamsAndJudgesResponse",
-    body?: string | null,
-    headers?: string | null,
-    statusCode?: number | null,
-  } | null,
+  ScheduleTeamsAndJudges?: {
+    __typename: "ScheduleTeamsAndJudgesResponse";
+    body?: string | null;
+    headers?: string | null;
+    statusCode?: number | null;
+  } | null;
 };
 
 export type SetUserAsCheckedInMutationVariables = {

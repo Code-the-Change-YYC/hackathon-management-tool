@@ -1,10 +1,9 @@
 "use client";
 
 import Image from "next/image";
-
 import { useUser } from "@/components/contexts/UserContext";
 
-const CONTAINER_STYLES = "flex h-60 items-center justify-center bg-[#FF6B54]";
+const CONTAINER_STYLES = "flex h-60 items-center justify-center bg-grapefruit";
 const PROFILE_CONTAINER =
   "absolute top-44 flex flex-row md:left-20 md:top-52 md:z-10 ";
 const PROFILE_IMG =
@@ -18,8 +17,6 @@ const RIGHT_SQUIGGLE_STYLES =
 
 export default function ProfileHeader() {
   const user = useUser().currentUser;
-
-  // console.log(user);
 
   return (
     <div className={CONTAINER_STYLES}>

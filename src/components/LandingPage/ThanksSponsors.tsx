@@ -1,33 +1,20 @@
 import Image from "next/image";
-
+import Link from "next/link";
 import { fetchContent } from "@/app/actions";
 
 const leftSponsorSvg = "/svgs/judgingCriteria/leftSponsorSvg.svg";
 const rightSponsorSvg = "/svgs/judgingCriteria/rightSponsorSvg.svg";
-const leftSponsorSvgSmall = "/svgs/judgingCriteria/leftSponsorSvgSmall.svg";
-const rightSponsorSvgSmall = "/svgs/judgingCriteria/rightSponsorSvgSmall.svg";
 
 export default async function ThankSponsors() {
-  const IMAGE_CLASS =
-    "relative size-12 min-w-12 overflow-hidden rounded-full duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform sm:size-28 sm:min-w-28";
-
   const sponsors = await fetchContent("hackathonSponsor");
   const sortedSponsors = sponsors.sort(
     (a, b) => a.fields.sponsorOrder - b.fields.sponsorOrder,
   );
 
   return (
-    <div className="relative flex flex-col items-center justify-center overflow-hidden pb-12 pt-10">
-      <div className="flex h-48 w-full justify-center">
-        <div className="absolute -left-12 top-24 z-20  size-44 sm:hidden">
-          <Image
-            src={leftSponsorSvgSmall}
-            alt="squiggly lines"
-            fill={true}
-            style={{ objectFit: "contain" }}
-          />
-        </div>
-        <div className="relative z-10 hidden w-2/5 overflow-hidden sm:flex">
+    <div className="relative flex flex-col items-center justify-center overflow-hidden pb-12 ">
+      <div className="flex w-full justify-center sm:h-48">
+        <div className="relative z-10 overflow-hidden sm:flex sm:w-2/5">
           <Image
             src={leftSponsorSvg}
             alt="squiggly lines"
@@ -44,15 +31,7 @@ export default async function ThankSponsors() {
             {`Without their support, this event wouldn't have been possible`}
           </p>
         </div>
-        <div className="absolute -right-12 z-20 size-44 sm:hidden">
-          <Image
-            src={rightSponsorSvgSmall}
-            alt="squiggly lines"
-            fill={true}
-            style={{ objectFit: "contain" }}
-          />
-        </div>
-        <div className="relative z-20 hidden w-2/5 overflow-hidden sm:flex">
+        <div className="relative z-20 overflow-hidden sm:flex sm:w-2/5">
           <Image
             src={rightSponsorSvg}
             alt="squiggly lines"
@@ -61,30 +40,36 @@ export default async function ThankSponsors() {
           />
         </div>
       </div>
-
-      <div className="flex w-full flex-row justify-around px-8 pt-10">
+      <div className="grid w-full grid-cols-2 gap-6 px-8 pt-10  md:grid-cols-4">
         {sortedSponsors.map((sponsor, index) => (
-          <div className="flex flex-row  gap-2 sm:gap-3" key={index}>
-            <div className="group flex flex-col items-center gap-3">
-              <div className={IMAGE_CLASS}>
-                <a
+          <div
+            className="flex flex-row items-center justify-center gap-2 sm:gap-3"
+            key={index}
+          >
+            <div className="group flex flex-col items-center justify-center gap-3">
+              <div className="relative  ">
+                <Link
                   href={sponsor.fields.sponsorPage}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Image
-                    src={
-                      sponsor.fields.sponsorImg.fields.file?.url
-                        ?.toString()
-                        .replace("//", "https://") ?? ""
-                    }
-                    alt="Sponsor Image"
-                    style={{ objectFit: "contain" }}
-                    fill
-                  />
-                </a>
+                  <div className="flex size-[150px] items-center justify-center overflow-hidden rounded-full duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:transition-transform">
+                    <Image
+                      src={
+                        sponsor.fields.sponsorImg.fields.file?.url
+                          ?.toString()
+                          .replace("//", "https://") ?? ""
+                      }
+                      alt="Sponsor Image"
+                      layout="intrinsic"
+                      className="scale-75"
+                      width={150}
+                      height={150}
+                    />
+                  </div>
+                </Link>
               </div>
-              <p className="inset-0 text-center opacity-0 transition-all duration-300 group-hover:opacity-100">
+              <p className="text-center opacity-0 transition-all duration-300 group-hover:opacity-100">
                 {sponsor.fields.sponsorName}
               </p>
             </div>

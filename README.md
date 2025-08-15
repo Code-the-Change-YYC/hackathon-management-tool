@@ -1,6 +1,8 @@
 - The prod branch has a CI/CD deployment available at: [https://hackthechangeyyc.ca/](https://hackthechangeyyc.ca/)
 - The main branch has a CI/CD deployment available at: [https://staging.hackthechangeyyc.ca/](https://staging.hackthechangeyyc.ca/)
 
+This project uses Yarn as its package manager. If you have been using NPM and not Yarn, you can install the CLI [here](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable) .
+
 ## Getting Started
 
 Ensure you run `npm i` in the root of the repo before continuing. Please respond 'y' to and prompts such as installing Husky, etc
@@ -50,6 +52,15 @@ https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-type
 
 **Understanding AWS Amplify:**
 https://docs.amplify.aws/react/start/
+
+**NextJS Documentation:**
+https://nextjs.org/
+
+**Moving From JavaScript to TypeScript:**
+https://www.typescriptlang.org/docs/handbook/migrating-from-javascript.html
+
+**Tailwind Documentation:**
+https://tailwindcss.com/docs/utility-first
 
 > Note that we are using AWS Amplify gen 2 v1.0
 
@@ -109,3 +120,37 @@ Copy the file `.env.local.example` and rename the file to `.env.local`
 - User with Judge role and JUDGERoomId where the _Room_ id matches the _JUDGERoomId_
 - Team must exist where _id_ matches the _teamroom team id_
 - Hackathon must be created as well through admin page or appsync
+
+## Colour Scheme
+
+Colours are defined in [tailwind.config.ts](tailwind.config.ts) and are to be used in place of hex codes. A visual reference is available in the "Colour Scheme" tab on the [HMT Figma](https://www.figma.com/design/eBswR1P8DUUO9F8PsspcWJ/Hackathon-Management-Tool-Designs-UPDATED?node-id=1046-1374&t=Q7omfcAHRzHS7aNh-1).
+
+Prior to adding a new colour, try adjusting the opacity of the existing colours first to see if it achieves the desired result. This helps keep the colour palette concise and consistent.
+
+### CTC's _staple_ colours:
+
+- pastel-pink
+- dark-pink
+- fuzzy-peach
+- grapefruit
+- pastel-green
+- dark-green
+- awesome-purple
+- awesomer-purple
+
+### Other colours:
+
+- medium-pink
+- strawberry-red: Used for error texts
+- lilac-purple
+- regal-blue: Typically used for external links and buttons
+
+### Grey Tones:
+
+- white
+- light-grey
+- dashboard-grey: Default dashboard background colour
+- medium-grey
+- ehhh-grey
+- dark-grey
+- black

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-
 import SideNavBar from "@/components/Dashboard/SideNavBar";
 import TopNavBar from "@/components/Dashboard/TopNavBar";
 
@@ -18,11 +17,13 @@ export const metadata: Metadata = {
 
 function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen w-full flex-1">
-      <SideNavBar />
-      <div className="flex size-full flex-1 flex-col">
+    <div className="flex h-[85dvh] w-full">
+      <div className="sm:w-1/8 md:w-20 ">
+        <SideNavBar />
+      </div>
+      <div className="flex w-4/5 flex-1 flex-col ">
         <TopNavBar />
-        <main className="grow">{children}</main>
+        {children}
       </div>
     </div>
   );

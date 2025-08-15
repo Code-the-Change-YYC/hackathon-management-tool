@@ -1,6 +1,5 @@
 import Image, { type StaticImageData } from "next/image";
 import { twMerge } from "tailwind-merge";
-
 import ABOUT_THE_CHALLENGE_IMAGE from "@/images/landingpage/AboutTheChallenge.png";
 import PRIZES_IMAGE from "@/images/landingpage/prizes.png";
 import REQUIREMENTS_IMAGE from "@/images/landingpage/requirements.png";
@@ -9,9 +8,9 @@ const CHALLENGE_QUOTES_SVG = "/svgs/landingPage/challenge_quotes.svg";
 const ABOUT_THE_CHALLENGE_BLURB = `Hack the Change aims to inspire students across Canada to leverage technology to enact social change. We’re looking for creative and innovative solutions to existing problems, with the goal of coding a better tomorrow.`;
 const ABOUT_THE_CHALLENGE_TITLE = (
   <div className="flex flex-row flex-nowrap text-nowrap">
-    <h1 className="  text-3xl font-semibold">
+    <h1 className="text-3xl font-semibold">
       About the
-      <span className=" italic text-fuzzy-peach"> Challenge</span>
+      <span className="italic text-fuzzy-peach"> Challenge</span>
     </h1>
     <Image
       src={CHALLENGE_QUOTES_SVG}

@@ -3,10 +3,8 @@
 import { generateClient } from "aws-amplify/api";
 import { useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
-
 import type { Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
-
 import FilterIcon from "../atoms/FilterIcon";
 
 type ITeamScores = {
@@ -37,10 +35,10 @@ function TableRow({
   index?: number;
   total?: number;
 }) {
-  const bgColor = index % 2 === 1 ? "bg-white" : "bg-gray-200";
+  const bgColor = index % 2 === 1 ? "bg-white" : "bg-dashboard-grey";
   return (
     <tr className={twMerge("border-b", bgColor)}>
-      <td className="truncate whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+      <td className="truncate whitespace-nowrap px-6 py-4 font-medium text-dark-grey">
         {teamName}
       </td>
       {Object.keys(components).map((componentId) => {
@@ -141,7 +139,7 @@ export default function RankingTable({
     [sortKey, sortAscending, computedScores],
   );
   return (
-    <table className=" w-full text-left text-lg font-medium text-gray-500">
+    <table className=" w-full text-left text-lg font-medium text-dark-grey">
       <thead className=" rounded-xl bg-awesome-purple text-lg  font-medium text-white">
         <tr>
           <th className=" px-6 py-3">

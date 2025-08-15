@@ -1,11 +1,9 @@
 import { generateClient } from "aws-amplify/api";
 import Image from "next/image";
-import { type SubmitHandler, useForm } from "react-hook-form";
-
+import { useForm, type SubmitHandler } from "react-hook-form";
 import type { Schema } from "@/amplify/data/resource";
 import { Button, SelectField } from "@aws-amplify/ui-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
 import { useUser } from "../contexts/UserContext";
 
 const exit_icon = "/svgs/judging/exit_icon.svg";
@@ -17,6 +15,7 @@ const MODAL_POPUP_TILE_STLYES = "w-4/5 max-w-[1200px] rounded-md bg-white p-6";
 interface ModalPopupProps {
   onClose: () => void;
   teamId: string;
+  teamName: string;
   hackathon: Pick<
     Schema["Hackathon"]["type"],
     "id" | "scoringComponents" | "scoringSidepots"
@@ -30,7 +29,7 @@ export type ScoreObject = {
 };
 
 const ModalPopup = (props: ModalPopupProps) => {
-  const { onClose, teamId, hackathon } = props;
+  const { onClose, teamId, hackathon, teamName } = props;
   const { currentUser } = useUser();
   const queryClient = useQueryClient();
 
@@ -40,7 +39,7 @@ const ModalPopup = (props: ModalPopupProps) => {
 
   const scoreOptions = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-  const { data: scoreData, isFetching: isFetchingScore } = useQuery({
+  const { isFetching: isFetchingScore } = useQuery({
     queryKey: ["Score", currentUser.username, teamId],
     queryFn: async () => {
       try {
@@ -62,24 +61,14 @@ const ModalPopup = (props: ModalPopupProps) => {
   const createScore = useMutation({
     mutationKey: ["Score", currentUser.username, teamId],
     mutationFn: async (input: Schema["Score"]["type"]) => {
-      if (scoreData) {
-        const { data, errors } = await client.models.Score.update({
-          judgeId: currentUser.username,
-          teamId: teamId,
-          score: JSON.stringify(input.score),
-        });
-        if (errors) throw Error(errors[0].message);
-        return data;
-      } else {
-        const { data, errors } = await client.models.Score.create({
-          judgeId: currentUser.username,
-          teamId: teamId,
-          hackathonId: hackathon.id,
-          score: JSON.stringify(input.score),
-        });
-        if (errors) throw Error(errors[0].message);
-        return data;
-      }
+      const { data, errors } = await client.models.Score.create({
+        judgeId: currentUser.username,
+        teamId: teamId,
+        hackathonId: hackathon.id,
+        score: JSON.stringify(input.score),
+      });
+      if (errors) throw Error(errors[0].message);
+      return data;
     },
     onSuccess: () => {
       onClose();
@@ -96,7 +85,6 @@ const ModalPopup = (props: ModalPopupProps) => {
   const scoreObject = watch("score") as ScoreObject;
 
   const updateScoringComponent = (id: string, score: string) => {
-    console.log(id, score);
     setValue("score", { ...scoreObject, [id]: score });
   };
 
@@ -106,8 +94,8 @@ const ModalPopup = (props: ModalPopupProps) => {
         <div className={MODAL_POPUP_SECTION_STYLES}>
           <div className={MODAL_POPUP_TILE_STLYES}>
             <div className="flex justify-between">
-              <h1 className="text-2xl font-bold">
-                {scoreData ? `Editing ${teamId}` : `Scoring ${teamId}`}
+              <h1 className="pb-4 text-6xl font-bold text-dark-pink">
+                Scoring <span className="text-medium-pink">{teamName}</span>
               </h1>
               <button onClick={onClose}>
                 <Image
@@ -123,31 +111,27 @@ const ModalPopup = (props: ModalPopupProps) => {
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-4"
               >
-                <p className="text-2xl">Main Components:</p>
-                <div className="flex">
+                <p className="text-2xl font-bold">Main Components:</p>
+                <div className="flex items-center gap-4">
                   {hackathon.scoringComponents.map((component) => (
-                    <div
-                      className="flex flex-row items-center gap-4"
-                      key={component.id}
-                    >
+                    <div key={component.id}>
+                      {/* <label>{component.friendlyName}</label> */}
                       <SelectField
                         onChange={(e) =>
                           updateScoringComponent(component.id, e.target.value)
                         }
                         value={scoreObject?.[component.id]}
-                        label={component.friendlyName}
                         options={scoreOptions}
+                        label={component.friendlyName}
                       />
                     </div>
                   ))}
                 </div>
-                <p className="text-2xl">Sidepots:</p>
-                <div className="flex">
+                <hr></hr>
+                <p className="text-2xl font-bold">Sidepots:</p>
+                <div className="flex items-center gap-4">
                   {hackathon.scoringSidepots.map((component) => (
-                    <div
-                      className="flex flex-row items-center gap-4"
-                      key={component.id}
-                    >
+                    <div key={component.id}>
                       <SelectField
                         onChange={(e) =>
                           updateScoringComponent(component.id, e.target.value)
@@ -159,7 +143,11 @@ const ModalPopup = (props: ModalPopupProps) => {
                     </div>
                   ))}
                 </div>
-                <Button type="submit" value="Submit">
+                <Button
+                  className="hover:bg-pastel-pink"
+                  type="submit"
+                  value="Submit"
+                >
                   Submit Score
                 </Button>
               </form>

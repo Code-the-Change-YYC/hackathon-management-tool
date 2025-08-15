@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
-
 import "@/app/globals.css";
 import ConfigureAmplifyClientSide from "@/components/_Amplify/ConfigureAmplify";
 import Provider from "@/components/contexts/Provider";
@@ -33,7 +32,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body
-        className={`${Omnes.className} flex size-full min-h-screen flex-col bg-white dark:text-black`}
+        className={`${Omnes.className} flex size-full min-h-screen w-dvw flex-col overflow-x-clip bg-white dark:text-black`}
       >
         <ToastProvider>
           <Provider>

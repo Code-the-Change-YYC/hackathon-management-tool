@@ -1,5 +1,4 @@
 import Image from "next/image";
-
 import Card from "../Dashboard/Card";
 
 interface StatsPanelProps {
