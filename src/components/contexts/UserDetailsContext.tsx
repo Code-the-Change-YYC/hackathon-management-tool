@@ -1,5 +1,6 @@
 "use client";
 
+import { getCurrentUser } from "aws-amplify/auth";
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { type UserDetailsNoFunctions } from "@/utils/amplify-utils";
 import { useQuery } from "@tanstack/react-query";
@@ -25,7 +26,7 @@ export function UserDetailsProvider({
   async function fetchUserDetails(): Promise<UserDetailsNoFunctions> {
     // migh tneed to remove this is a scuffed fix
     const currentUser = await getCurrentUser();
-    if (!currentUser?.userId) return null;
+    if (!currentUser?.userId) return {} as UserDetailsNoFunctions;
     const resp = await fetch("/api/user");
     if (!resp || !resp.ok) throw new Error("Failed to fetch user details");
     return await resp.json();
