@@ -1,5 +1,6 @@
+import debounce from "lodash.debounce";
 import type { Dispatch, SetStateAction } from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import type { RankingInfo } from "@tanstack/match-sorter-utils";
 import { rankItem } from "@tanstack/match-sorter-utils";
@@ -129,6 +130,17 @@ export default function tanstackTableHelper<
       toast.error(`Error updating ${typeName}`);
     },
   });
+
+  const debouncedDelete = useMemo(
+    () => debounce((data: any) => deleteMutation.mutate(data), 1000),
+    [deleteMutation.mutate],
+  );
+
+  const debouncedUpdate = useMemo(
+    () => debounce((data: any) => updateMutation.mutate(data), 1000),
+    [updateMutation.mutate],
+  );
+
   const table = useReactTable({
     data,
     columns,
@@ -160,9 +172,9 @@ export default function tanstackTableHelper<
         );
       },
       deleteData: (element, rowIndex) => {
-        deleteMutation.mutate({ id: element, rowIndex });
+        debouncedDelete({ id: element, rowIndex });
       },
-      saveData: (data) => updateMutation.mutate(data),
+      saveData: (data) => debouncedUpdate(data),
     },
   });
   return table;

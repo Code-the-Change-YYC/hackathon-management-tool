@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import debounce from "lodash.debounce";
+import { useMemo, useState } from "react";
 import { TbInfoSquareRoundedFilled } from "react-icons/tb";
 import { createColumnHelper } from "@tanstack/react-table";
 import DeleteButton from "../teams/components/DeleteButton";
@@ -45,6 +46,13 @@ export const usersColumns = [
       },
     }) => {
       const [value, setValue] = useState(getValue()!);
+      const debouncedUpdate = useMemo(
+        () =>
+          debounce((newValue: string) => {
+            meta?.updateData(index, "teamId", newValue);
+          }, 300),
+        [meta, index],
+      );
       if (!getIsSelected()) return getValue();
       const onBlur = () => {
         meta?.updateData(index, "teamId", value);
@@ -53,7 +61,10 @@ export const usersColumns = [
         <input
           className="w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            setValue(e.target.value);
+            debouncedUpdate(e.target.value);
+          }}
           onBlur={onBlur}
         />
       );
@@ -70,6 +81,13 @@ export const usersColumns = [
     }) => {
       const initialValue = getValue()!;
       const [value, setValue] = useState(initialValue);
+      const debouncedUpdate = useMemo(
+        () =>
+          debounce((newValue: string) => {
+            meta?.updateData(index, "firstName", newValue);
+          }, 300),
+        [meta, index],
+      );
       if (!getIsSelected()) {
         return getValue();
       }
@@ -80,7 +98,10 @@ export const usersColumns = [
         <input
           className="w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            setValue(e.target.value);
+            debouncedUpdate(e.target.value);
+          }}
           onBlur={onBlur}
         />
       );
@@ -99,6 +120,13 @@ export const usersColumns = [
     }) => {
       const initialValue = getValue()!;
       const [value, setValue] = useState(initialValue);
+      const debouncedUpdate = useMemo(
+        () =>
+          debounce((newValue: string) => {
+            meta?.updateData(index, "lastName", newValue);
+          }, 300),
+        [meta, index],
+      );
       if (!getIsSelected()) {
         return getValue();
       }
@@ -109,7 +137,10 @@ export const usersColumns = [
         <input
           className="w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            setValue(e.target.value);
+            debouncedUpdate(e.target.value);
+          }}
           onBlur={onBlur}
         />
       );
@@ -128,6 +159,13 @@ export const usersColumns = [
     }) => {
       const initialValue = getValue();
       const [value, setValue] = useState(initialValue ?? "");
+      const debouncedUpdate = useMemo(
+        () =>
+          debounce((newValue: string) => {
+            meta?.updateData(index, "role", newValue);
+          }, 300),
+        [meta, index],
+      );
       if (!getIsSelected()) {
         return getValue();
       }
@@ -140,7 +178,7 @@ export const usersColumns = [
           className="w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple"
           onChange={(e) => {
             setValue(Role[e.target.value as keyof typeof Role]);
-            onBlur();
+            debouncedUpdate(Role[e.target.value as keyof typeof Role]);
           }}
           onBlur={onBlur}
         >

@@ -1,8 +1,9 @@
 "use client";
 
+import debounce from "lodash.debounce";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { toast } from "react-toastify";
 import { client } from "@/app/QueryProvider";
 import { useMutation } from "@tanstack/react-query";
@@ -11,40 +12,6 @@ import PurpleButton from "../PurpleButton";
 
 export default function JoinTeamCode() {
   const [teamIDInput, setTeamIDInput] = useState(Array(4).fill(""));
-  useEffect(() => {
-    const handlePasteEvent = (e: ClipboardEvent) => {
-      const clipboardContentsText = e.clipboardData?.getData("text");
-      if (clipboardContentsText?.length === 4) {
-        const teamIDArray = clipboardContentsText.split("");
-        e.preventDefault();
-        setTeamIDInput(teamIDArray);
-        joinTeamMutation.mutate(teamIDArray.join(""));
-      }
-    };
-    window.addEventListener("paste", handlePasteEvent);
-    return () => {
-      window.removeEventListener("paste", handlePasteEvent);
-    };
-  }, []);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const handleTeamIDInput = (
-    e: ChangeEvent<HTMLInputElement>,
-    index: number,
-  ) => {
-    const value = e.target.value;
-    if (value.length > 1) return;
-
-    const newTeamIDInput = [...teamIDInput];
-    newTeamIDInput[index] = value.toUpperCase();
-    setTeamIDInput(newTeamIDInput);
-
-    // Automatically focus the next input
-    if (value && index < teamIDInput.length - 1) {
-      inputRefs.current[index + 1]?.focus();
-    }
-  };
-  const router = useRouter();
-  const { currentUser } = useUser();
   const joinTeamMutation = useMutation({
     mutationFn: async (teamID: string) => {
       const toastObj = toast.loading("Joining team...");
@@ -71,6 +38,56 @@ export default function JoinTeamCode() {
     },
     mutationKey: ["JoinTeam"],
   });
+  const debouncedJoinTeam = useMemo(
+    () =>
+      debounce((teamId: string) => {
+        if (teamId.length === 4) {
+          joinTeamMutation.mutate(teamId);
+        }
+      }, 500),
+    [joinTeamMutation.mutate],
+  );
+
+  useEffect(() => {
+    const handlePasteEvent = (e: ClipboardEvent) => {
+      const clipboardContentsText = e.clipboardData?.getData("text");
+      if (clipboardContentsText?.length === 4) {
+        const teamIDArray = clipboardContentsText.split("");
+        e.preventDefault();
+        setTeamIDInput(teamIDArray);
+        debouncedJoinTeam(teamIDArray.join(""));
+      }
+    };
+    window.addEventListener("paste", handlePasteEvent);
+    return () => {
+      window.removeEventListener("paste", handlePasteEvent);
+    };
+  }, [debouncedJoinTeam]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const handleTeamIDInput = (
+    e: ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const value = e.target.value;
+    if (value.length > 1) return;
+
+    const newTeamIDInput = [...teamIDInput];
+    newTeamIDInput[index] = value.toUpperCase();
+    setTeamIDInput(newTeamIDInput);
+
+    // Automatically focus the next input
+    if (value && index < teamIDInput.length - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+
+    if (newTeamIDInput.every((char) => char !== "")) {
+      debouncedJoinTeam(newTeamIDInput.join(""));
+    }
+  };
+
+  const router = useRouter();
+  const { currentUser } = useUser();
+
   const handleJoinTeam = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const teamID = teamIDInput.join("");
@@ -80,6 +97,7 @@ export default function JoinTeamCode() {
     setTeamIDInput(Array(4).fill(""));
     inputRefs.current[0]?.focus();
   };
+
   return (
     <>
       <form className="flex flex-col gap-4" onSubmit={handleJoinTeam}>

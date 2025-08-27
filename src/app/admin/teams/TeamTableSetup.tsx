@@ -1,4 +1,5 @@
-import { useState } from "react";
+import debounce from "lodash.debounce";
+import { useMemo, useState } from "react";
 import { TbInfoSquareRoundedFilled } from "react-icons/tb";
 import { createColumnHelper } from "@tanstack/react-table";
 import DeleteButton from "./components/DeleteButton";
@@ -22,13 +23,27 @@ export const teamColumns = [
       },
     }) => {
       const [value, setValue] = useState(getValue());
+
+      const debouncedUpdate = useMemo(
+        () =>
+          debounce((newValue: string) => {
+            meta?.updateData(index, "name", newValue);
+          }, 300),
+        [meta, index],
+      );
+
       if (!getIsSelected()) return getValue();
       const onBlur = () => meta?.updateData(index, "name", value);
+      const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = e.target.value;
+        setValue(newValue);
+        debouncedUpdate(newValue);
+      };
       return (
         <input
           className="w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={onChange}
           onBlur={onBlur}
         />
       );
@@ -66,22 +81,32 @@ export const teamColumns = [
     }) => {
       const initialValue = getValue();
       const [value, setValue] = useState(initialValue);
+
+      const debouncedUpdate = useMemo(
+        () =>
+          debounce((newValue: boolean) => {
+            meta?.updateData(index, "approved", newValue);
+          }, 300),
+        [meta, index],
+      );
+
       if (!getIsSelected()) return getValue() ? "Approved" : "Not Approved";
       const ApproveStatus = {
         Approved: true,
         "Not Approved": false,
       } as const;
       const onBlur = () => meta?.updateData(index, "approved", value);
+      const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const newValue =
+          ApproveStatus[e.target.value as keyof typeof ApproveStatus];
+        setValue(newValue);
+        debouncedUpdate(newValue);
+      };
       return (
         <select
           value={value ? "Approved" : "Not Approved"}
           className="w-full rounded-md border border-awesomer-purple bg-white p-2 focus:outline-none focus:ring-1 focus:ring-awesomer-purple"
-          onChange={(e) => {
-            setValue(
-              ApproveStatus[e.target.value as keyof typeof ApproveStatus],
-            );
-            meta?.updateData(row.index, "approved", value);
-          }}
+          onChange={onChange}
           onBlur={onBlur}
         >
           {Object.keys(ApproveStatus).map((key) => (
