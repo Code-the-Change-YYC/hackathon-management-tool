@@ -1,6 +1,7 @@
 import type { AuthUser } from "aws-amplify/auth";
+import debounce from "lodash.debounce";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import type { Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
@@ -76,18 +77,27 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
 
     userMutation.mutate(formState);
   };
+
+  const debouncedUpdateForm = useMemo(
+    () =>
+      debounce((name: string, value: any) => {
+        if (name === "willEatMeals") {
+          setFormState((prevState) => ({
+            ...prevState,
+            [name]: value === "Yes",
+          }));
+        } else {
+          setFormState((prevState) => ({ ...prevState, [name]: value }));
+        }
+      }, 500),
+    [],
+  );
+
   const updateForm = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ): void => {
     const { name, value } = e.target;
-    if (name === "willEatMeals") {
-      setFormState((prevState) => ({
-        ...prevState,
-        [name]: value === MealOptions.Yes,
-      }));
-    } else {
-      setFormState((prevState) => ({ ...prevState, [name]: value }));
-    }
+    debouncedUpdateForm(name, value);
   };
 
   console.log(isPending);

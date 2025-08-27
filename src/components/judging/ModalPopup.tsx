@@ -1,5 +1,7 @@
 import { generateClient } from "aws-amplify/api";
+import debounce from "lodash.debounce";
 import Image from "next/image";
+import { useMemo } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { Schema } from "@/amplify/data/resource";
 import { Button, SelectField } from "@aws-amplify/ui-react";
@@ -83,9 +85,16 @@ const ModalPopup = (props: ModalPopupProps) => {
   };
 
   const scoreObject = watch("score") as ScoreObject;
+  const debouncedUpdateScore = useMemo(
+    () =>
+      debounce((id: string, score: string) => {
+        setValue("score", { ...scoreObject, [id]: score });
+      }, 300),
+    [scoreObject, setValue],
+  );
 
   const updateScoringComponent = (id: string, score: string) => {
-    setValue("score", { ...scoreObject, [id]: score });
+    debouncedUpdateScore(id, score);
   };
 
   return (

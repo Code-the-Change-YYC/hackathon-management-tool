@@ -1,4 +1,5 @@
 import { generateClient } from "aws-amplify/api";
+import debounce from "lodash.debounce";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -163,6 +164,31 @@ export default function JudgingTable(props: JudgingTableProps) {
                 scoreData?.score ? JSON.parse(scoreData?.score as string) : {}
               ) as ScoreObject;
 
+              const debouncedScoreUpdate = useMemo(
+                () =>
+                  debounce(
+                    async (teamId: string, columnId: string, value: string) => {
+                      try {
+                        await client.models.Score.update({
+                          judgeId: currentUser.username,
+                          teamId,
+                          score: JSON.stringify({
+                            ...scoreObject,
+                            [columnId]: value,
+                          }),
+                        });
+                        await refetch();
+                        toast.success("Score updated successfully!");
+                      } catch (error) {
+                        console.error("Error updating score:", error);
+                        toast.error("Error updating Score. Try again.");
+                      }
+                    },
+                    500,
+                  ),
+                [client, currentUser.username, scoreObject, refetch],
+              );
+
               const scoringComponentIds = useMemo(
                 () =>
                   hackathonData.scoringComponents.map(
@@ -246,11 +272,10 @@ export default function JudgingTable(props: JudgingTableProps) {
                               onChange={async (e) => {
                                 const newValue = e.target.value;
                                 setValue(`score.${columnId}`, newValue);
-
-                                await handleSave(
-                                  { score: { [columnId]: newValue } },
+                                debouncedScoreUpdate(
                                   team.id,
                                   columnId,
+                                  newValue,
                                 );
                               }}
                             >

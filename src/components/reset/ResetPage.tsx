@@ -1,7 +1,9 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
+import debounce from "lodash.debounce";
 import Image from "next/image";
+import { useMemo } from "react";
 import { useFieldArray, useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
@@ -111,6 +113,44 @@ export default function ResetPage() {
     name: "scoringSidepots",
   });
 
+  const debouncedRemoveComponent = useMemo(
+    () => debounce((index: number) => removeScoringComponent(index), 500),
+    [removeScoringComponent],
+  );
+
+  const debouncedRemoveSidepot = useMemo(
+    () => debounce((index: number) => removeScoringSidepot(index), 500),
+    [removeScoringSidepot],
+  );
+
+  const debouncedAppendComponent = useMemo(
+    () =>
+      debounce(
+        () =>
+          appendScoringComponent({
+            friendlyName: "",
+            isSidepot: false,
+            id: generateId(),
+          }),
+        500,
+      ),
+    [appendScoringComponent],
+  );
+
+  const debouncedAppendSidepot = useMemo(
+    () =>
+      debounce(
+        () =>
+          appendScoringSidepot({
+            friendlyName: "",
+            isSidepot: true,
+            id: generateId(),
+          }),
+        500,
+      ),
+    [appendScoringSidepot],
+  );
+
   if (hackathonData.isPending || userMutation.isPending)
     return (
       <div className="mt-16 flex w-full items-center justify-center">
@@ -151,7 +191,7 @@ export default function ResetPage() {
                     type="button"
                     variation="primary"
                     colorTheme="error"
-                    onClick={() => removeScoringComponent(index)}
+                    onClick={() => debouncedRemoveComponent(index)}
                   >
                     -
                   </Button>
@@ -161,13 +201,7 @@ export default function ResetPage() {
                 type="button"
                 variation="primary"
                 size="small"
-                onClick={() =>
-                  appendScoringComponent({
-                    friendlyName: "",
-                    isSidepot: false,
-                    id: generateId(),
-                  })
-                }
+                onClick={debouncedAppendComponent}
               >
                 Add Scoring Component
               </Button>
@@ -187,7 +221,7 @@ export default function ResetPage() {
                     variation="primary"
                     colorTheme="error"
                     type="button"
-                    onClick={() => removeScoringSidepot(index)}
+                    onClick={() => debouncedRemoveSidepot(index)}
                   >
                     -
                   </Button>
@@ -197,13 +231,7 @@ export default function ResetPage() {
                 type="button"
                 variation="primary"
                 size="small"
-                onClick={() => {
-                  appendScoringSidepot({
-                    friendlyName: "",
-                    isSidepot: true,
-                    id: generateId(),
-                  });
-                }}
+                onClick={debouncedAppendSidepot}
               >
                 Add Scoring Sidepot
               </Button>

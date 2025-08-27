@@ -1,6 +1,8 @@
 "use client";
 
+import debounce from "lodash.debounce";
 import { DateTime } from "luxon";
+import { useMemo } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { type Schema } from "@/amplify/data/resource";
@@ -23,6 +25,14 @@ const CreateFoodTicketForm = () => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<Schema["FoodEvent"]["type"]>();
+
+  const debouncedFormUpdate = useMemo(
+    () =>
+      debounce((field: string, value: string) => {
+        console.log(`Field ${field} updated to ${value} - Auto-saving...`);
+      }, 500),
+    [],
+  );
 
   const foodEventMutation = useMutation({
     mutationFn: createFoodEvent,
@@ -80,6 +90,9 @@ const CreateFoodTicketForm = () => {
             type="text"
             className={INPUT_STYLES}
             placeholder="Breakfast, Lunch, or Dinner"
+            onChange={(e) => {
+              debouncedFormUpdate(e.target.name || "name", e.target.value);
+            }}
           />
           {errors.name && (
             <div className="text-strawberry-red">{errors.name.message}</div>
@@ -91,6 +104,12 @@ const CreateFoodTicketForm = () => {
             })}
             className={INPUT_STYLES}
             placeholder="Description"
+            onChange={(e) => {
+              debouncedFormUpdate(
+                e.target.name || "description",
+                e.target.value,
+              );
+            }}
           />
           {errors.description && (
             <div className="text-strawberry-red">
@@ -104,6 +123,9 @@ const CreateFoodTicketForm = () => {
             })}
             type="datetime-local"
             className={INPUT_STYLES}
+            onChange={(e) => {
+              debouncedFormUpdate(e.target.name || "start", e.target.value);
+            }}
           />
           {errors.start && (
             <div className="text-strawberry-red">{errors.start.message}</div>
@@ -115,6 +137,9 @@ const CreateFoodTicketForm = () => {
             })}
             type="datetime-local"
             className={INPUT_STYLES}
+            onChange={(e) => {
+              debouncedFormUpdate(e.target.name || "end", e.target.value);
+            }}
           />
           {errors.end && (
             <div className="text-strawberry-red">{errors.end.message}</div>
@@ -127,6 +152,12 @@ const CreateFoodTicketForm = () => {
             type="text"
             className={INPUT_STYLES}
             placeholder="Number of Groups"
+            onChange={(e) => {
+              debouncedFormUpdate(
+                e.target.name || "totalGroupCount",
+                e.target.value,
+              );
+            }}
           />
           {errors.totalGroupCount && (
             <div className="text-strawberry-red">

@@ -1,6 +1,8 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
+import debounce from "lodash.debounce";
+import { useMemo } from "react";
 import { type Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
 
@@ -17,8 +19,12 @@ export interface TeamFormProp {
 }
 
 export default function TeamForm({ data, teamMutation }: TeamFormProp) {
+  const debouncedLeaveTeam = useMemo(
+    () => debounce(() => teamMutation.mutate(data), 1000),
+    [teamMutation.mutate, data],
+  );
   const handleLeaveTeamClick = () => {
-    teamMutation.mutate(data);
+    debouncedLeaveTeam();
   };
 
   const client = generateClient<Schema>();

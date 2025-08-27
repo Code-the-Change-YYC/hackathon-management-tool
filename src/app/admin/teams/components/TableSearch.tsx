@@ -1,7 +1,8 @@
 "use client";
 
+import debounce from "lodash.debounce";
 import Image from "next/image";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import search_icon from "@/svgs/admin/search_icon.svg";
 
 const TableSearch = ({
@@ -11,6 +12,11 @@ const TableSearch = ({
   tableDataLength: number;
   handleSearchChange: (e: string) => void;
 }) => {
+  const debouncedSearch = useMemo(
+    () => debounce(handleSearchChange, 300),
+    [handleSearchChange],
+  );
+
   return (
     <div className="relative flex w-full items-center justify-between rounded-t-md bg-white px-4 py-2">
       <h1 className="whitespace-nowrap py-6 pr-2 text-2xl font-semibold">
@@ -23,7 +29,7 @@ const TableSearch = ({
           type="text"
           placeholder="Search name"
           className="h-3/5 w-full rounded-md border border-black p-4 pr-10 font-light"
-          onChange={(e) => handleSearchChange(e.target.value)}
+          onChange={(e) => debouncedSearch(e.target.value)}
         />
         <Image
           src={search_icon}

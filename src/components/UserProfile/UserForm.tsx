@@ -1,7 +1,8 @@
 "use client";
 
+import debounce from "lodash.debounce";
 import type React from "react";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { type Schema } from "@/amplify/data/resource";
 import { type UserFormProp } from "@/components/UserProfile/UserProfile";
@@ -17,10 +18,28 @@ export default function UserForm({
   const { pending } = useFormStatus();
   const [formState, setFormState] = useState<Schema["User"]["type"]>(data);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setFormState((prevState) => ({ ...prevState, [name]: value }));
-  };
+  const debouncedSave = useMemo(
+    () =>
+      debounce((formData: Schema["User"]["type"]) => {
+        if (isEditing) {
+          userMutation.mutate(formData);
+        }
+      }, 500),
+    [userMutation.mutate, isEditing],
+  );
+
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const { name, value } = e.target;
+      const newState = { ...formState, [name]: value };
+      setFormState(newState);
+
+      if (isEditing) {
+        debouncedSave(newState);
+      }
+    },
+    [formState, debouncedSave, isEditing],
+  );
 
   const handleCancelClick = () => {
     setIsEditing(false);
