@@ -9,12 +9,12 @@ const RubricPage = () => {
 
       <JudgingRubric
         tableBackgroundColor="bg-light-grey"
-        dividerColor="border-[#C4C4C4]"
+        dividerColor="border-ehhh-grey"
         headerTextColor="text-white"
-        headerBackgroundColor="bg-[#72E4CE]"
+        headerBackgroundColor="bg-dark-green/50"
         textColor="text-dark-grey"
         oddRowColor="odd:bg-light-grey"
-        evenRowColor="even:bg-[#E4E4E4]"
+        evenRowColor="even:bg-dashboard-grey"
       />
     </div>
   );
