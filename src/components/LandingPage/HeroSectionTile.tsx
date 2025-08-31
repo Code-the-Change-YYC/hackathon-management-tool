@@ -11,7 +11,7 @@ const HeroSectionTile = ({
   const eventYear = eventDate.getFullYear();
 
   return (
-    <div className={"flex flex-col px-4 pt-10 md:items-center md:px-0 "}>
+    <div className={"flex flex-col px-4 md:items-center md:px-0 md:pt-16 "}>
       <h1 className="text-shadow-title flex-wrap text-5xl font-black text-pastel-green drop-shadow-lg md:text-center md:text-6xl">
         <span className="text-white">{eventName} </span> {" " + eventYear}
       </h1>
