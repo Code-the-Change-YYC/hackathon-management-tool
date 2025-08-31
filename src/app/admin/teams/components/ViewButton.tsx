@@ -31,9 +31,7 @@ export default function ViewButton({ team }: { team: Team }) {
                   <td className={"rounded-md p-2"}>
                     {`${member.firstName} ${member.lastName}`}
                   </td>
-                  <td className={"rounded-md p-2"}>
-                    {member.checkedIn ? "Checked In" : "Not Checked In"}
-                  </td>
+                  <td className={"rounded-md p-2"}>{member.id}</td>
                 </tr>
               ))}
             </tbody>
