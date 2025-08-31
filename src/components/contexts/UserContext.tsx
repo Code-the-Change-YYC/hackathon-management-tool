@@ -67,12 +67,11 @@ export function UserContextProvider({ children }: Props) {
         const userRole = (
           user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
         ).filter((group) => Object.keys(UserType).includes(group))?.[0];
-
         if (!userRole) {
           // Logout User if not in group
           signOut();
-          console.error("User not in group");
         }
+
         if (!user.userSub) {
           throw new Error("No user");
         }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useUser } from "@/components/contexts/UserContext";
+import { useUserDetails } from "@/components/contexts/UserDetailsContext";
 
 interface NavItem {
   name: string;
@@ -98,13 +98,13 @@ function GenericNav({ navItems }: { navItems: NavItem[] }) {
 }
 
 export default function UserBasedNav() {
-  const { currentUser } = useUser();
+  const { userDetails } = useUserDetails();
 
-  if (!currentUser) {
+  if (!userDetails) {
     return <div className="p-4 text-center">Loading...</div>;
   }
 
-  const role = currentUser?.role || "Participant";
+  const role = userDetails?.role || "Participant";
   const navItems = navigationMap[role] || navigationMap.Participant;
 
   return <GenericNav navItems={navItems} />;

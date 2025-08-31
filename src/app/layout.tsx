@@ -17,7 +17,7 @@ const Omnes = localFont({
 });
 export const metadata: Metadata = {
   title: "Hack the Change",
-  description: "Hack the Change Participant Portal",
+  description: "Hack the Change",
   icons: [
     {
       rel: "icon",
@@ -26,6 +26,41 @@ export const metadata: Metadata = {
       url: "/favicon.ico",
     },
   ],
+  keywords: [
+    "hackathon",
+    "portal",
+    "participants",
+    "innovation",
+    "YYC",
+    "Hack the Change",
+  ],
+  authors: [
+    { name: "Code the Change YYC", url: "https://hackthechangeyyc.ca" },
+  ],
+  openGraph: {
+    title: "Hack the Change",
+    description:
+      "Join the Hack the Change hackathon and collaborate for impact.",
+    url: "https://hackthechangeyyc.ca",
+    siteName: "Hack the Change",
+    images: [
+      {
+        url: "/public/images/landingpage/HeroSection/htc2024graphiclight2.png",
+        width: 1200,
+        height: 630,
+        alt: "Hack the Change Banner",
+      },
+    ],
+    locale: "en_CA",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hack the Change",
+    description: "Hack the Change Participant Portal",
+    images: ["/public/images/landingpage/HeroSection/htc2024graphiclight2.png"],
+    creator: "@hackthechangeyyc",
+  },
 };
 
 function RootLayout({ children }: { children: React.ReactNode }) {
