@@ -13,7 +13,7 @@ type UserFormData = {
   lastName: string;
   email: string;
   institution: string;
-  progam: string;
+  program: string;
   willEatMeals: boolean;
   allergies: string;
 };
