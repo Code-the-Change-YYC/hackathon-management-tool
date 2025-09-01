@@ -63,7 +63,7 @@ function GenericNav({ navItems }: { navItems: NavItem[] }) {
       >
         <button
           onClick={toggleMenu}
-          className="group fixed left-20 top-12 z-50 rounded-full p-2 text-awesomer-purple transition-colors hover:bg-awesome-purple "
+          className="group fixed left-20 top-12 z-50 rounded-full p-2 text-awesomer-purple transition-colors hover:bg-awesome-purple"
           aria-label="Close menu"
         >
           <div className="relative size-8">
@@ -88,7 +88,7 @@ function GenericNav({ navItems }: { navItems: NavItem[] }) {
         </div>
 
         <div className="mt-auto border-t bg-awesome-purple p-4">
-          <div className=" text-center text-xs text-awesomer-purple">
+          <div className="text-center text-xs text-awesomer-purple">
             Navigation Menu
           </div>
         </div>

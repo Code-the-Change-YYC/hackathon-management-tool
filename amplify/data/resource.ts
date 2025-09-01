@@ -31,6 +31,7 @@ const schema = a
             allow.groups(["Admin"]).to(["read", "create"]),
           ]),
         institution: a.string(),
+        program: a.string(),
         completedRegistration: a.boolean(),
         allergies: a.string(),
         willEatMeals: a.boolean(),
