@@ -13,6 +13,7 @@ type UserFormData = {
   lastName: string;
   email: string;
   institution: string;
+  progam: string;
   willEatMeals: boolean;
   allergies: string;
 };
@@ -23,6 +24,7 @@ const getFormValues = (userDetails: any): UserFormData => ({
   lastName: userDetails?.lastName || "",
   email: userDetails?.email || "",
   institution: userDetails?.institution || "",
+  program: userDetails?.program || "",
   willEatMeals: Boolean(userDetails?.willEatMeals),
   allergies: userDetails?.allergies || "",
 });
@@ -153,10 +155,8 @@ export default function UserForm({
       <input
         className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
         type="text"
-        placeholder={formState.program ?? "e.g. Engineering"}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
-        value={formState.program ?? ""}
-        name="program"
+        placeholder={"e.g. Engineering"}
+        {...register("program")}
         disabled={!isEditing} // Disabled when not in edit mode
       />
       <label>Do you want provided meals at the hackathon?</label>
