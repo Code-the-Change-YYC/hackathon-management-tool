@@ -1,9 +1,5 @@
 import CreateTeamPage from "@/app/participant/team-selection/CreateTeamPage";
 
 export default function TeamSelection() {
-  return (
-    <main>
-      <CreateTeamPage />
-    </main>
-  );
+  return <main></main>;
 }
