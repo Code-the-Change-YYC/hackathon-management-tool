@@ -47,7 +47,7 @@ export default async function AboutEventTile() {
     <div className="flex w-full flex-col items-center bg-white py-10 md:py-20">
       <div className="z-100 mb-8 mt-4 flex w-4/5 flex-col rounded-3xl border-4 border-dark-pink bg-pastel-pink shadow-[15px_15px_0px_0px_dark-pink] xl:mb-12 xl:mt-8">
         <div className="relative rounded-t-2xl border-b-4 border-dark-pink bg-dark-pink">
-          <div className="flex h-1/2 w-full items-center justify-center overflow-hidden rounded-t-3xl ">
+          <div className="flex h-1/2 w-full items-center justify-center overflow-hidden rounded-t-3xl">
             <Image
               src={
                 eventDetails.locationImage.fields.file?.url
