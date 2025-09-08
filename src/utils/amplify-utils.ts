@@ -34,6 +34,7 @@ const selectionSet = [
   "role",
   "email",
   "institution",
+  "program",
   "completedRegistration",
   "allergies",
   "willEatMeals",
@@ -50,7 +51,7 @@ export type UserDetailsNoFunctions = SelectionSet<
 
 export async function AuthGetCurrentUserDetails() {
   const cookieStore = cookies();
-  const all = cookieStore.getAll();
+  const all = (await cookieStore).getAll();
   // amplifygen2 stores cookies named like .idToken, accessToken, etc.
   // might have to change this to a better implemeantion
   const idTokenCookie = all.find((c) => c.name.includes(".idToken"));

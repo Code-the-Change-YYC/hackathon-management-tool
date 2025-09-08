@@ -35,6 +35,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         firstName: input.firstName,
         lastName: input.lastName,
         institution: input.institution,
+        program: input.program,
         willEatMeals: input.willEatMeals,
         allergies: input.allergies,
         completedRegistration: true,
@@ -64,6 +65,7 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
     "Other",
     "None",
   ];
+  const programs = ["Engineering", "Computer Science", "Other"];
   enum MealOptions {
     "Yes" = "Yes",
     "No" = "No",
@@ -172,6 +174,22 @@ export default function PersonalFormFields({ user }: { user: AuthUser }) {
         {institutions.map((institution) => (
           <option key={institution} value={institution}>
             {institution}
+          </option>
+        ))}
+      </SelectField>
+      <SelectField
+        required
+        name="program"
+        label="Which program are you in?"
+        value={formState?.program ?? "Select Program"}
+        onChange={(e) => updateForm(e)}
+      >
+        <option selected disabled>
+          Select Program
+        </option>
+        {programs.map((program) => (
+          <option key={program} value={program}>
+            {program}
           </option>
         ))}
       </SelectField>
