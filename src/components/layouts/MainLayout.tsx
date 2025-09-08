@@ -27,7 +27,7 @@ export default async function MainLayout({ children }: Props) {
             initialUserDetails={userDetails ?? ({} as UserDetailsNoFunctions)}
           >
             <Header />
-            <main className="flex flex-col items-center justify-between">
+            <main className="flex flex-1 flex-col items-center justify-between">
               {children}
             </main>
             <Footer />
