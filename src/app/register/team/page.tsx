@@ -22,8 +22,8 @@ export default function page() {
           </h2>
         </div>
         <div className="flex flex-col items-center justify-between text-white lg:flex-row">
-          <Link href={"/register/team/remind"}>
-            <PurpleButton>Remind me later</PurpleButton>
+          <Link href={"/"}>
+            <PurpleButton>Go back Home</PurpleButton>
           </Link>
           <Link href={"/register/team/discord"}>
             <PurpleButton>Yes!</PurpleButton>

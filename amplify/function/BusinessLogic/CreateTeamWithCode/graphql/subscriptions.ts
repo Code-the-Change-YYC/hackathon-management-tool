@@ -110,6 +110,7 @@ export const onCreateScore =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -225,6 +226,7 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -276,6 +278,7 @@ export const onCreateUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -391,6 +394,7 @@ export const onDeleteScore =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -506,6 +510,7 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -557,6 +562,7 @@ export const onDeleteUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -672,6 +678,7 @@ export const onUpdateScore =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -787,6 +794,7 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -838,6 +846,7 @@ export const onUpdateUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
