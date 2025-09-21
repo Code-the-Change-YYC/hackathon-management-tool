@@ -31,6 +31,7 @@ const schema = a
             allow.groups(["Admin"]).to(["read", "create"]),
           ]),
         institution: a.string(),
+        program: a.string(),
         completedRegistration: a.boolean(),
         allergies: a.string(),
         willEatMeals: a.boolean(),
@@ -311,10 +312,6 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: "userPool",
-    // API Key is used for a.allow.public() rules
-    apiKeyAuthorizationMode: {
-      expiresInDays: 30,
-    },
     lambdaAuthorizationMode: {
       function: DemoAuthFunction,
     },

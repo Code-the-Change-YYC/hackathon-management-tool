@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useUser } from "@/components/contexts/UserContext";
+import { useUserDetails } from "@/components/contexts/UserDetailsContext";
 
 interface NavItem {
   name: string;
@@ -28,7 +28,6 @@ const navigationMap: Record<string, NavItem[]> = {
     { name: "Dashboard", route: "/participant" },
     { name: "Food Ticket", route: "/participant/profile/food-ticket" },
     { name: "Important Information", route: "/participant/important-info" },
-    { name: "Teams Judging Information", route: "/participant/judging-info" },
   ],
 };
 
@@ -63,7 +62,7 @@ function GenericNav({ navItems }: { navItems: NavItem[] }) {
       >
         <button
           onClick={toggleMenu}
-          className="group fixed left-20 top-12 z-50 rounded-full p-2 text-awesomer-purple transition-colors hover:bg-awesome-purple "
+          className="group fixed left-20 top-12 z-50 rounded-full p-2 text-awesomer-purple transition-colors hover:bg-awesome-purple"
           aria-label="Close menu"
         >
           <div className="relative size-8">
@@ -88,7 +87,7 @@ function GenericNav({ navItems }: { navItems: NavItem[] }) {
         </div>
 
         <div className="mt-auto border-t bg-awesome-purple p-4">
-          <div className=" text-center text-xs text-awesomer-purple">
+          <div className="text-center text-xs text-awesomer-purple">
             Navigation Menu
           </div>
         </div>
@@ -98,13 +97,13 @@ function GenericNav({ navItems }: { navItems: NavItem[] }) {
 }
 
 export default function UserBasedNav() {
-  const { currentUser } = useUser();
+  const { userDetails } = useUserDetails();
 
-  if (!currentUser) {
+  if (!userDetails) {
     return <div className="p-4 text-center">Loading...</div>;
   }
 
-  const role = currentUser?.role || "Participant";
+  const role = userDetails?.role || "Participant";
   const navItems = navigationMap[role] || navigationMap.Participant;
 
   return <GenericNav navItems={navItems} />;

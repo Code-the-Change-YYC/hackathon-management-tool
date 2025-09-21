@@ -1,13 +1,35 @@
 "use client";
 
-import type React from "react";
-import { useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useFormStatus } from "react-dom";
+import { useForm } from "react-hook-form";
 import { type Schema } from "@/amplify/data/resource";
+import { useUserDetails } from "@/components/contexts/UserDetailsContext";
 import { type UserFormProp } from "@/components/UserProfile/UserProfile";
 
+type UserFormData = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  institution: string;
+  program: string;
+  willEatMeals: boolean;
+  allergies: string;
+};
+
+const getFormValues = (userDetails: any): UserFormData => ({
+  id: userDetails?.id || "",
+  firstName: userDetails?.firstName || "",
+  lastName: userDetails?.lastName || "",
+  email: userDetails?.email || "",
+  institution: userDetails?.institution || "",
+  program: userDetails?.program || "",
+  willEatMeals: Boolean(userDetails?.willEatMeals),
+  allergies: userDetails?.allergies || "",
+});
+
 export default function UserForm({
-  data,
   userMutation,
   setIsEditing,
   isEditing,
@@ -15,62 +37,103 @@ export default function UserForm({
   setEnableCancelSave,
 }: UserFormProp) {
   const { pending } = useFormStatus();
-  const [formState, setFormState] = useState<Schema["User"]["type"]>(data);
+  const { userDetails } = useUserDetails();
+  const value = useMemo(() => getFormValues(userDetails), [userDetails]);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors, dirtyFields },
+  } = useForm<UserFormData>({
+    defaultValues: value,
+  });
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setFormState((prevState) => ({ ...prevState, [name]: value }));
-  };
+  const willEatMeals = watch("willEatMeals");
+
+  useEffect(() => {
+    if (userDetails) {
+      reset(value);
+    }
+  }, [value, reset]);
 
   const handleCancelClick = () => {
     setIsEditing(false);
     setEnableCancelSave(false);
+    reset(value);
   };
 
-  const handleSaveClick = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent default form submission behavior
+  const handleSaveClick = (data: UserFormData) => {
     setIsEditing(false); // Exit edit mode
     setEnableCancelSave(false);
-    userMutation.mutate(formState);
-    console.log(formState); // Log the form state
+
+    const dirtyData: Record<string, any> = {};
+
+    Object.keys(dirtyFields).forEach((key) => {
+      const fieldKey = key as keyof UserFormData;
+      if (dirtyFields[fieldKey]) {
+        dirtyData[fieldKey] = data[fieldKey];
+      }
+    });
+
+    if (dirtyFields.willEatMeals && data.willEatMeals) {
+      dirtyData.allergies = data.allergies;
+    }
+
+    const formattedData = {
+      id: data.id,
+      ...dirtyData,
+    } as Schema["User"]["type"];
+
+    userMutation.mutate(formattedData);
   };
 
   return (
-    <form className={"flex flex-col md:mx-10"} onSubmit={handleSaveClick}>
+    <form
+      className={"flex flex-col md:mx-10"}
+      onSubmit={handleSubmit(handleSaveClick)}
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5">
         <div className="flex flex-col">
           <label>First Name</label>
           <input
             className={`md:text-md  my-2 rounded-full border-4 border-white bg-white py-2 ps-3 text-sm ${isEditing ? "text-black" : "text-ehhh-grey"}`}
             type="text"
-            placeholder={formState.firstName ?? "First Name"}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
-            value={formState.firstName ?? ""}
-            name="firstName"
+            placeholder={"First Name"}
+            {...register("firstName", {
+              required: isEditing ? "First name is required" : false,
+            })}
             disabled={!isEditing} // Disabled when not in edit mode
           />
+          {errors.firstName && (
+            <span className="text-sm text-strawberry-red">
+              {errors.firstName.message}
+            </span>
+          )}
         </div>
         <div className="flex flex-col">
           <label>Last Name</label>
           <input
             className={`${"md:text-md  my-2 rounded-full border-4 border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
             type="text"
-            placeholder={formState.lastName ?? "Last Name"}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
-            name="lastName"
-            value={formState.lastName ?? ""}
+            placeholder={"Last Name"}
+            {...register("lastName", {
+              required: isEditing ? "Last name is required" : false,
+            })}
             disabled={!isEditing} // Disabled when not in edit mode
           />
+          {errors.lastName && (
+            <span className="text-sm text-strawberry-red">
+              {errors.lastName.message}
+            </span>
+          )}
         </div>
       </div>
       <label>Email</label>
       <input
         className={`${"md:text-md  my-2 rounded-full border-4  border-white bg-white py-2 ps-3 text-sm"} ${"text-ehhh-grey"}`}
-        type="text"
-        placeholder={formState.email ?? ""}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
-        value={formState.email ?? ""}
-        name="email"
+        type="email"
+        value={userDetails?.email || ""}
         disabled // Should not be able to edit email
       />
       <label>Password</label>
@@ -84,37 +147,40 @@ export default function UserForm({
       <input
         className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
         type="text"
-        placeholder={formState.institution ?? "e.g. University of Calgary"}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
-        value={formState.institution ?? ""}
-        name="institution"
+        placeholder={"e.g. University of Calgary"}
+        {...register("institution")}
+        disabled={!isEditing} // Disabled when not in edit mode
+      />
+      <label>Program</label>
+      <input
+        className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
+        type="text"
+        placeholder={"e.g. Engineering"}
+        {...register("program")}
         disabled={!isEditing} // Disabled when not in edit mode
       />
       <label>Do you want provided meals at the hackathon?</label>
       <select
         className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
-        value={formState.willEatMeals ? "Yes" : "No"}
-        onChange={(e) =>
-          setFormState((prevState) => ({
-            ...prevState,
-            willEatMeals: e.target.value === "Yes",
-          }))
-        }
+        {...register("willEatMeals", {
+          setValueAs: (value) => {
+            if (typeof value === "boolean") return value;
+            return value === "true";
+          },
+        })}
         disabled={!isEditing} // Disabled when not in edit mode
       >
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
+        <option value="true">Yes</option>
+        <option value="false">No</option>
       </select>
-      {formState.willEatMeals && (
+      {willEatMeals && (
         <>
           <label>Do you have any allergies?</label>
           <input
             className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white  py-2 ps-3 text-sm"} ${isEditing ? "text-black" : "text-ehhh-grey"}`}
             type="text"
-            placeholder={formState.allergies ?? "e.g. Dairy, Nuts, etc."}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
-            value={formState.allergies ?? ""}
-            name="allergies"
+            placeholder={"e.g. Dairy, Nuts, etc."}
+            {...register("allergies")}
             disabled={!isEditing} // Disabled when not in edit mode
           />
         </>
@@ -127,8 +193,7 @@ export default function UserForm({
       <input
         className={`${"md:text-md  my-2 rounded-full border-4  border-white  bg-white  py-2 ps-3 text-sm"} ${"text-ehhh-grey"}`}
         type="text"
-        value={formState.checkedIn ? "Yes" : "No"}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e)}
+        value={userDetails?.checkedIn ? "Yes" : "No"}
         readOnly
       />
       <div className=" mb-10 mt-3 flex flex-col justify-between md:flex-row">

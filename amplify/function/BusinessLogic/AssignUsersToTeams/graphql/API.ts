@@ -59,6 +59,7 @@ export type User = {
   institution?: string | null;
   lastName?: string | null;
   profileOwner?: string | null;
+  program?: string | null;
   role?: string | null;
   team?: Team | null;
   teamId?: string | null;
@@ -363,6 +364,7 @@ export type ModelUserFilterInput = {
   not?: ModelUserFilterInput | null;
   or?: Array<ModelUserFilterInput | null> | null;
   profileOwner?: ModelStringInput | null;
+  program?: string | null;
   role?: ModelStringInput | null;
   teamId?: ModelIDInput | null;
   updatedAt?: ModelStringInput | null;
@@ -511,6 +513,7 @@ export type ModelUserConditionInput = {
   not?: ModelUserConditionInput | null;
   or?: Array<ModelUserConditionInput | null> | null;
   profileOwner?: ModelStringInput | null;
+  program?: string | null;
   role?: ModelStringInput | null;
   teamId?: ModelIDInput | null;
   updatedAt?: ModelStringInput | null;
@@ -528,6 +531,7 @@ export type CreateUserInput = {
   institution?: string | null;
   lastName?: string | null;
   profileOwner?: string | null;
+  program?: string | null;
   role?: string | null;
   teamId?: string | null;
   willEatMeals?: boolean | null;
@@ -637,6 +641,7 @@ export type UpdateUserInput = {
   institution?: string | null;
   lastName?: string | null;
   profileOwner?: string | null;
+  program?: string | null;
   role?: string | null;
   teamId?: string | null;
   willEatMeals?: boolean | null;
@@ -775,6 +780,7 @@ export type ModelSubscriptionUserFilterInput = {
   lastName?: ModelSubscriptionStringInput | null;
   or?: Array<ModelSubscriptionUserFilterInput | null> | null;
   profileOwner?: ModelStringInput | null;
+  program?: string | null;
   role?: ModelSubscriptionStringInput | null;
   teamId?: ModelSubscriptionIDInput | null;
   updatedAt?: ModelSubscriptionStringInput | null;
@@ -923,6 +929,7 @@ export type GetScoreQuery = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1035,6 +1042,7 @@ export type GetUserQuery = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -1085,6 +1093,7 @@ export type GetUserFoodEventAttendanceQuery = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1286,6 +1295,7 @@ export type ListUsersQuery = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1419,6 +1429,7 @@ export type SetUserAsCheckedInMutation = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -1544,6 +1555,7 @@ export type CreateScoreMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1659,6 +1671,7 @@ export type CreateUserMutation = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -1710,6 +1723,7 @@ export type CreateUserFoodEventAttendanceMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1829,6 +1843,7 @@ export type DeleteScoreMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1944,6 +1959,7 @@ export type DeleteUserMutation = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -1995,6 +2011,7 @@ export type DeleteUserFoodEventAttendanceMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2114,6 +2131,7 @@ export type UpdateScoreMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2229,6 +2247,7 @@ export type UpdateUserMutation = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -2280,6 +2299,7 @@ export type UpdateUserFoodEventAttendanceMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2395,6 +2415,7 @@ export type OnCreateScoreSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2508,6 +2529,7 @@ export type OnCreateUserSubscription = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -2558,6 +2580,7 @@ export type OnCreateUserFoodEventAttendanceSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2673,6 +2696,7 @@ export type OnDeleteScoreSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2786,6 +2810,7 @@ export type OnDeleteUserSubscription = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -2836,6 +2861,7 @@ export type OnDeleteUserFoodEventAttendanceSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2951,6 +2977,7 @@ export type OnUpdateScoreSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -3064,6 +3091,7 @@ export type OnUpdateUserSubscription = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -3114,6 +3142,7 @@ export type OnUpdateUserFoodEventAttendanceSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
