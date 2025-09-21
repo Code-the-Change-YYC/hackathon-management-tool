@@ -1,19 +1,7 @@
-import dynamic from "next/dynamic";
-import KevinLoadingRing from "@/components/KevinLoadingRing";
+import { UserType } from "@/components/contexts/UserContext";
+import withAuthGuard from "@/components/hoc/withAuthGuard";
+import UserProfile from "@/components/UserProfile/UserProfile";
 
-// Dynamically import UserProfile with preloading
-const UserProfile = dynamic(
-  () => import("@/components/UserProfile/UserProfile"),
-  {
-    ssr: true,
-    loading: () => (
-      <div className="flex w-full items-center justify-center">
-        <KevinLoadingRing />
-      </div>
-    ),
-  },
-);
-
-export default function Profile() {
+function Profile() {
   return <UserProfile />;
 }

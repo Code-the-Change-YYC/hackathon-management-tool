@@ -34,7 +34,7 @@ export default function RubricTable(props: RubricTableProps) {
               <th className={`${props.dividerColor} w-1/6 border-r`}>
                 Effective (7-8)
               </th>
-              <th className={`${props.dividerColor} w-1/6 border-r`}>
+              <th className={`${props.dividerColor} w-1/6`}>
                 Excellent (9-10)
               </th>
             </tr>

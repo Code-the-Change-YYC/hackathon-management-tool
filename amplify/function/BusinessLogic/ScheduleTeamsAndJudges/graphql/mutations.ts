@@ -121,6 +121,7 @@ export const SetUserAsCheckedIn =
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -249,6 +250,7 @@ export const createScore = /* GraphQL */ `mutation CreateScore(
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -368,6 +370,7 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -420,6 +423,7 @@ export const createUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -543,6 +547,7 @@ export const deleteScore = /* GraphQL */ `mutation DeleteScore(
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -662,6 +667,7 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -714,6 +720,7 @@ export const deleteUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -837,6 +844,7 @@ export const updateScore = /* GraphQL */ `mutation UpdateScore(
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -956,6 +964,7 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -1008,6 +1017,7 @@ export const updateUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt

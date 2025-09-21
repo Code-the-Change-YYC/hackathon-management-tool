@@ -11,8 +11,6 @@ export default function RoleBasedLayout({
 
   // This example uses the UserBasedNav component in the layout:
   return (
-    <div className="flex w-full flex-col bg-fuzzy-peach">
-      <main className="">{children}</main>
-    </div>
+    <div className="flex w-full flex-1 flex-col bg-fuzzy-peach">{children}</div>
   );
 }
