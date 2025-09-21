@@ -22,13 +22,13 @@ const schema = a
           .default("Participant")
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
-            allow.groups(["Admin"]).to(["read", "update", "create"]),
+            allow.groups(["Admin"]).to(["read", "update", "create", "delete"]),
           ]),
         email: a
           .string()
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
-            allow.groups(["Admin"]).to(["read", "create"]),
+            allow.groups(["Admin"]).to(["read", "create", "delete"]),
           ]),
         institution: a.string(),
         program: a.string(),
