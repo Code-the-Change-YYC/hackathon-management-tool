@@ -52,7 +52,7 @@ const TeamProfile = () => {
 
   return (
     <>
-      {isFetching || !userTeamId ? (
+      {isFetching ? (
         <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
           <KevinLoadingRing />
         </div>
