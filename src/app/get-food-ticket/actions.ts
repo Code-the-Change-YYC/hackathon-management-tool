@@ -17,10 +17,9 @@ type FoodEvent = Schema["FoodEvent"]["type"];
  * @returns
  */
 export async function getUpcomingFoodEventDetails(userID: string): Promise<{
-  queuePosition: string;
   eventName: string;
   eventDescription: string;
-  eventTime: string;
+
   timeslot: string;
 }> {
   const foodEvents = (await client.models.FoodEvent.list()).data;
@@ -49,29 +48,18 @@ export async function getUpcomingFoodEventDetails(userID: string): Promise<{
         nextFoodEvent.end,
       );
 
-      const eventDuration =
-        new Date(nextFoodEvent.start) + " to " + new Date(nextFoodEvent.end);
-
       return {
-        queuePosition:
-          "You are in position number " +
-          (userGroupPositionNumber + 1) +
-          " out of " +
-          nextFoodEvent.totalGroupCount +
-          " groups",
-        eventName: nextFoodEvent.name,
         eventDescription: nextFoodEvent.description,
-        eventTime: eventDuration,
+
+        eventName: nextFoodEvent.name,
         timeslot: userTimeSlot,
       };
     }
   }
   return {
-    queuePosition: "",
-    eventName: "No Upcoming Food Event",
-    eventDescription: "No Event....",
-    eventTime: "",
-    timeslot: "",
+    eventName: "No meal scheduled.",
+    eventDescription: "",
+    timeslot: "Check back later!",
   };
 }
 

@@ -40,22 +40,29 @@ export function getTimeForFoodGroupPositionNumber(
   const groupEndTime = new Date(
     start.getTime() + groupDuration * (groupPositionNumber + 1),
   );
-  const options: Intl.DateTimeFormatOptions = {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "long",
     day: "2-digit",
+    timeZone: process.env.TIME_ZONE,
+  };
+
+  const timeOptions: Intl.DateTimeFormatOptions = {
     hour: "numeric",
     minute: "numeric",
     timeZone: process.env.TIME_ZONE,
     hour12: true,
   };
 
-  // Format the date with the specified options
-  return (
-    groupStartTime.toLocaleString("en-US", options).replace(/,/g, "") +
-    " to " +
-    groupEndTime.toLocaleString("en-US", options).replace(/,/g, "")
+  // Format the date and time separately for a cleaner look
+  const date = groupStartTime.toLocaleString("en-US", dateOptions);
+  const startTimeFormatted = groupStartTime.toLocaleString(
+    "en-US",
+    timeOptions,
   );
+  const endTimeFormatted = groupEndTime.toLocaleString("en-US", timeOptions);
+
+  return `${date} - ${startTimeFormatted} to ${endTimeFormatted}`;
 }
 
 /**

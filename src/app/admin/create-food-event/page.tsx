@@ -69,30 +69,26 @@ export default function FoodEvents() {
     }
   };
 
-  return (
-    <div>
-      {isFetching ? (
-        <div className={LOADING_SCREEN_STYLES}>
-          <h1 className="text-2xl">Loading...</h1>
-        </div>
-      ) : (
-        <div className="w-full bg-medium-grey py-8">
-          <div className="m-6 rounded-md bg-white px-10 pb-10">
-            <CreateFoodEventForm />
-            <OutputFoodEvent
-              foodData={foodData}
-              handleDeletePopUp={handleDeletePopUp}
-              deleteFoodEventId={deleteFoodEventId ?? ""}
-            />
-            <DeletePopUp
-              isPopUpVisible={showDeletePopup}
-              onClose={handleClosePopUp}
-              handleDelete={handleDelete}
-              deleteFoodEventId={deleteFoodEventId ?? ""}
-            />
-          </div>
-        </div>
-      )}
+  return isFetching ? (
+    <div className={LOADING_SCREEN_STYLES}>
+      <h1 className="text-2xl">Loading...</h1>
+    </div>
+  ) : (
+    <div className="flex-1 overflow-y-auto bg-medium-grey py-8">
+      <div className="m-6 rounded-md bg-white px-10 pb-10">
+        <CreateFoodEventForm />
+        <OutputFoodEvent
+          foodData={foodData}
+          handleDeletePopUp={handleDeletePopUp}
+          deleteFoodEventId={deleteFoodEventId ?? ""}
+        />
+        <DeletePopUp
+          isPopUpVisible={showDeletePopup}
+          onClose={handleClosePopUp}
+          handleDelete={handleDelete}
+          deleteFoodEventId={deleteFoodEventId ?? ""}
+        />
+      </div>
     </div>
   );
 }
