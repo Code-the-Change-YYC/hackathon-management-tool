@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Mentors from "@/components/resources/mentors";
 import Resources from "@/components/resources/resources";
 
 export default function ResourcePage() {
@@ -16,8 +17,8 @@ export default function ResourcePage() {
           Resources
         </h1>
       </div>
-
       <Resources />
+
       <div className="flex flex-row justify-center text-center">
         <h1 className="whitespace-nowrap text-center text-2xl font-extrabold text-awesomer-purple md:text-4xl">
           Mentors
@@ -30,6 +31,7 @@ export default function ResourcePage() {
           className="pointer-events-none -mt-8"
         />
       </div>
+      <Mentors />
     </div>
   );
 }
