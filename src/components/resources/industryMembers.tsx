@@ -9,7 +9,7 @@ export default function IndustryMembers() {
   const industryBackground = "bg-medium-grey";
 
   return (
-    <div className="grid grid-cols-3 gap-14">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-3 xl:gap-14">
       {industryMembers.map((member) => (
         <MemberCards
           key={member.name}

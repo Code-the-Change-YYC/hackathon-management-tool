@@ -2,21 +2,41 @@ import MemberCards from "./memberCards";
 
 export default function EventsMembers() {
   const eventsMembers = [
-    { name: "Simar Kandola", discord: "tbd", role: "VP Events" },
-    { name: "Tanvi Mahal", discord: "tbd", role: "Jr VP Events" },
-    { name: "May Liu", discord: "tbd", role: "Events Commissioner" },
-    { name: "Adithya Sagar", discord: "tbd", role: "Events Commissioner" },
-    { name: "Anthony Chan", discord: "tbd", role: "Events Commissioner" },
-    { name: "Sebastian Nieto", discord: "tbd", role: "Events Commissioner" },
-    { name: "Hira Asad", discord: "tbd", role: "Events Commissioner" },
-    { name: "Abudllah Yousaf", discord: "tbd", role: "Events Commissioner" },
-    { name: "Ana DuCristea", discord: "tbd", role: "Events Commissioner" },
+    { name: "Simar Kandola", discord: "coming soon", role: "VP Events" },
+    { name: "Tanvi Mahal", discord: "coming soon", role: "Jr VP Events" },
+    { name: "May Liu", discord: "coming soon", role: "Events Commissioner" },
+    {
+      name: "Adithya Sagar",
+      discord: "coming soon",
+      role: "Events Commissioner",
+    },
+    {
+      name: "Anthony Chan",
+      discord: "coming soon",
+      role: "Events Commissioner",
+    },
+    {
+      name: "Sebastian Nieto",
+      discord: "coming soon",
+      role: "Events Commissioner",
+    },
+    { name: "Hira Asad", discord: "coming soon", role: "Events Commissioner" },
+    {
+      name: "Abudllah Yousaf",
+      discord: "coming soon",
+      role: "Events Commissioner",
+    },
+    {
+      name: "Ana DuCristea",
+      discord: "coming soon",
+      role: "Events Commissioner",
+    },
   ];
 
   const eventsBackground = "bg-lilac-purple";
 
   return (
-    <div className="grid grid-cols-3 gap-14">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-3 xl:gap-14">
       {eventsMembers.map((member) => (
         <MemberCards
           key={member.name}

@@ -11,13 +11,13 @@ export default function Mentors() {
   const [isSelected, setIsSelected] = useState<string>("events");
 
   return (
-    <div className="flex flex-col items-center justify-center gap-5">
-      <div className="flex w-full flex-row items-center justify-center gap-10">
+    <div className="z-10 flex flex-col items-center justify-center gap-5">
+      <div className="grid w-full grid-cols-2 justify-items-center px-4 md:flex md:justify-center lg:gap-12">
         {roles.map((role) => (
           <div>
             <button
               onClick={() => setIsSelected(role)}
-              className={`mb-8 h-16 w-40 rounded-full border-4 text-center text-2xl font-bold transition-all duration-200 ${isSelected === role ? "border-dark-green bg-pastel-green text-dark-green" : "border-pastel-green bg-dark-green text-white hover:scale-105"}`}
+              className={`mb-5 h-14 w-36 rounded-full border-4 text-center text-xl font-bold transition-all duration-200 md:mb-8 md:h-16 md:w-40 md:text-2xl ${isSelected === role ? "border-dark-green bg-pastel-green text-dark-green" : "border-pastel-green bg-dark-green text-white hover:scale-105"}`}
             >
               {role.charAt(0).toUpperCase() + role.slice(1)}
             </button>
