@@ -111,7 +111,7 @@ export default function JudgingTable({
   return (
     <>
       <div className="flex w-full flex-col justify-center gap-4 py-6 xl:flex-row">
-        <div className=" flex w-full flex-row gap-4 xl:w-1/4 xl:flex-col">
+        <div className="flex w-full flex-row gap-4 xl:w-1/4 xl:flex-col">
           {panelData.map((item, index) => (
             <StatsPanel
               key={index}
