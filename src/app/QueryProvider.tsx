@@ -1,6 +1,6 @@
 "use client";
 
-import { generateClient } from "aws-amplify/api";
+import { generateClient } from "aws-amplify/data";
 import React from "react";
 import type { Schema } from "@/amplify/data/resource";
 import { Authenticator } from "@aws-amplify/ui-react";

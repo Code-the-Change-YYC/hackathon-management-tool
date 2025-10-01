@@ -9,10 +9,11 @@ import { createMessageAndCode } from "@/amplify/function/BusinessLogic/utils/cry
 import { getUpcomingFoodEventDetails } from "@/app/get-food-ticket/actions";
 import { UserType, useUser } from "@/components/contexts/UserContext";
 import KevinLoadingRing from "@/components/KevinLoadingRing";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function UserFoodTicket() {
   const client = generateClient<Schema>();
+  const queryClient = useQueryClient();
 
   const userId = useUser().currentUser.username as string;
   const { currentUser } = useUser();
@@ -36,15 +37,10 @@ export default function UserFoodTicket() {
 
   const { data, isFetching } = useQuery({
     initialDataUpdatedAt: 0,
-    queryKey: ["User", userId],
+    queryKey: ["FoodTicket", userId],
     queryFn: async () => {
-      const {
-        queuePosition,
-        eventName,
-        eventDescription,
-        eventTime,
-        timeslot,
-      } = await getUpcomingFoodEventDetails(userId);
+      const { eventName, timeslot, eventDescription } =
+        await getUpcomingFoodEventDetails(userId);
 
       let verificationCode = "";
 
@@ -68,10 +64,9 @@ export default function UserFoodTicket() {
       }
 
       return {
-        queuePosition,
         eventName,
         eventDescription,
-        eventTime,
+
         timeslot,
         verificationCode,
       };
@@ -79,11 +74,9 @@ export default function UserFoodTicket() {
   });
 
   const foodTicketData = {
-    "Queue Position": `You are in position ${data?.queuePosition ?? "unknown"} in the queue.`,
-    "Event Name": data?.eventName ?? "N/A",
-    "Event Description": data?.eventDescription ?? "N/A",
-    "Event Time": data?.eventTime ?? "N/A",
-    timeslot: data?.timeslot ?? "N/A",
+    "Event Name": data?.eventName,
+    "Event Description": data?.eventDescription,
+    timeslot: data?.timeslot,
     userCode: data?.verificationCode ?? "N/A",
   };
   const [qrSize, setQrSize] = useState(300); // Default size
@@ -108,6 +101,21 @@ export default function UserFoodTicket() {
     // Clean up event listener on component unmount
     return () => window.removeEventListener("resize", updateQrSize);
   }, []);
+
+  useEffect(() => {
+    if (isAdmin || isJudge) return;
+
+    const subscription = client.models.FoodEvent.onCreate().subscribe({
+      next: () => {
+        queryClient.invalidateQueries({ queryKey: ["FoodTicket", userId] });
+      },
+      error: (error) => {
+        console.error("Error fetching new food ticket:", error);
+      },
+    });
+
+    return () => subscription.unsubscribe();
+  }, [userId, isAdmin, isJudge, client, queryClient]);
 
   return (
     <>
@@ -159,17 +167,19 @@ export default function UserFoodTicket() {
                 logoPadding={3}
                 logoPaddingStyle="square"
               />
-              <div className="flex flex-col flex-wrap">
-                {Object.entries(foodTicketData)
-                  .slice(0, -1)
-                  .map(([key, value]) => (
-                    <div className="flex w-full flex-wrap" key={key}>
-                      <h1 className="my-2 w-fit text-lg md:mt-2 md:text-xl">
-                        <strong>{key}:</strong>{" "}
-                        <span className="text-md">{` ${value}`}</span>
-                      </h1>
-                    </div>
-                  ))}
+              <div className="flex flex-col flex-wrap text-center md:text-left">
+                <span className="text-8xl font-bold">
+                  {foodTicketData["Event Name"]}
+                </span>
+                <span className="text-4xl">
+                  {foodTicketData["Event Description"]}
+                </span>
+                <br />
+                {foodTicketData.timeslot &&
+                  foodTicketData.timeslot !== "Check back later!" && (
+                    <span className="text-4xl font-bold">Your Timeslot:</span>
+                  )}
+                <span className="text-3xl">{foodTicketData.timeslot}</span>
               </div>
             </div>
           </div>

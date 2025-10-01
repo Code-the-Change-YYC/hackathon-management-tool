@@ -1,11 +1,11 @@
 "use client";
 
+import { generateClient } from "aws-amplify/data";
 import { DateTime } from "luxon";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { type Schema } from "@/amplify/data/resource";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createFoodEvent } from "./userFoodEventActions";
 
 const HEADER_STYLES = "text-2xl my-8";
 const INPUT_STYLES =
@@ -15,19 +15,44 @@ const SUBMIT_STYLES =
 const CLEAR_STYLES =
   "bg-white px-5 py-3 text-black rounded-md border border-regal-blue/50 hover:bg-lilac-purple/50 hover:text-awesomer-purple";
 
+const client = generateClient<Schema>();
+
+type CreateFoodEventInput = {
+  name: string;
+  description: string;
+  start: string;
+  end: string;
+  totalGroupCount: number;
+};
+
 const CreateFoodTicketForm = () => {
   const queryClient = useQueryClient();
+
+  const createFoodEvent = async (fields: CreateFoodEventInput) => {
+    const { errors } = await client.models.FoodEvent.create({
+      name: fields.name,
+      description: fields.description,
+      start: fields.start,
+      end: fields.end,
+      totalGroupCount: fields.totalGroupCount,
+    });
+
+    if (errors) {
+      throw new Error(errors[0].message);
+    }
+  };
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<Schema["FoodEvent"]["type"]>();
+  } = useForm<CreateFoodEventInput>();
 
   const foodEventMutation = useMutation({
     mutationFn: createFoodEvent,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["FoodEvents"] });
+      queryClient.invalidateQueries({ queryKey: ["FoodTicket"] });
       reset();
     },
     onError: (error) => {
@@ -35,7 +60,7 @@ const CreateFoodTicketForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<Schema["FoodEvent"]["type"]> = (data) => {
+  const onSubmit: SubmitHandler<CreateFoodEventInput> = (data) => {
     // Parse and validate the start date
     const startDateTime = DateTime.fromISO(data.start, {
       zone: "America/Edmonton",
@@ -60,10 +85,13 @@ const CreateFoodTicketForm = () => {
     }
 
     const formattedData = {
-      ...data,
+      name: data.name,
+      description: data.description,
+      totalGroupCount: data.totalGroupCount,
       start: startDateTime.toISO().toString(),
       end: endDateTime.toISO().toString(),
     };
+
     foodEventMutation.mutate(formattedData);
   };
 
