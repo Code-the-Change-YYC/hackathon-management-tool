@@ -2,7 +2,9 @@
 
 import { generateClient } from "aws-amplify/api";
 import { type Schema } from "@/amplify/data/resource";
+import { leaveTeam } from "@/app/participant/profile/team-details/userTeamEventActions";
 import { useQuery } from "@tanstack/react-query";
+import { useUser } from "../contexts/UserContext";
 
 const INPUT_STYLES =
   "rounded-full border-4 placeholder-black border-white bg-white bg-white/30 ps-3 py-2 my-2 text-sm md:text-md backdrop-opacity-30";
@@ -17,8 +19,14 @@ export interface TeamFormProp {
 }
 
 export default function TeamForm({ data, teamMutation }: TeamFormProp) {
-  const handleLeaveTeamClick = () => {
-    teamMutation.mutate(data);
+  const { currentUser } = useUser();
+  const handleLeaveTeamClick = async () => {
+    try {
+      await leaveTeam(currentUser.id);
+      teamMutation.mutate();
+    } catch (error) {
+      console.error("Error Leaving team:", error);
+    }
   };
 
   const client = generateClient<Schema>();
