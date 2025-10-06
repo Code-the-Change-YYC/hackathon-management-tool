@@ -60,14 +60,14 @@ body {
 
 .text-shadow-title-hackathon-finished {
   text-shadow:
-    -3px -3px 0 #533DE0,
-    3px -3px 0 #533DE0,
-    -3px 3px 0 #533DE0,
-    3px 3px 0 #533DE0,
-    -3px -3px 0 #533DE0,
-    3px -3px 0 #533DE0,
-    -3px 3px 0 #533DE0,
-    3px 3px 0 #533DE0;
+    -3px -3px 0 #533de0,
+    3px -3px 0 #533de0,
+    -3px 3px 0 #533de0,
+    3px 3px 0 #533de0,
+    -3px -3px 0 #533de0,
+    3px -3px 0 #533de0,
+    -3px 3px 0 #533de0,
+    3px 3px 0 #533de0;
 }
 
 .lds-ring,

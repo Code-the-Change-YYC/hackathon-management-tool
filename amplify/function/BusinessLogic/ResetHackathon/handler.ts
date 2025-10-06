@@ -1,14 +1,7 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 import { v4 as uuidv4 } from "uuid";
-
-import {
-  AdminDeleteUserCommand,
-  CognitoIdentityProviderClient,
-} from "@aws-sdk/client-cognito-identity-provider";
-
-import type { Schema } from "../../../data/resource";
-import type { ScoreComponentTypeInput } from "./graphql/API";
+import type { ScoreComponentTypeInput } from "@/amplify/graphql/API";
 import {
   createHackathon,
   deleteScore,
@@ -16,14 +9,19 @@ import {
   deleteTeamRoom,
   deleteUser,
   updateHackathon,
-} from "./graphql/mutations";
+} from "@/amplify/graphql/mutations";
 import {
   listHackathons,
   listScores,
   listTeamRooms,
   listTeams,
   listUsers,
-} from "./graphql/queries";
+} from "@/amplify/graphql/queries";
+import {
+  AdminDeleteUserCommand,
+  CognitoIdentityProviderClient,
+} from "@aws-sdk/client-cognito-identity-provider";
+import type { Schema } from "../../../data/resource";
 
 Amplify.configure(
   {
@@ -108,23 +106,36 @@ export const handler: Handler = async (event) => {
         const id = user.id;
         // only delete the participants
         if (user.role === "Participant") {
-          // Delete the user from Cognito
           const deleteUserCommand = new AdminDeleteUserCommand({
             Username: id,
             UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
           });
 
-          cognitoClient.send(deleteUserCommand);
+          try {
+            // Delete the user from Cognito
+            await cognitoClient.send(deleteUserCommand);
+          } catch (err: any) {
+            if (err.name !== "UserNotFoundException") {
+              throw err;
+            }
+            // else: ignore, user already deleted
+          }
 
-          const { errors } = await client.graphql({
-            query: deleteUser,
-            variables: {
-              input: {
-                id: id,
+          try {
+            // Delete the user from Dynamo
+            await cognitoClient.send(deleteUserCommand);
+            const { errors } = await client.graphql({
+              query: deleteUser,
+              variables: {
+                input: {
+                  id: id,
+                },
               },
-            },
-          });
-          if (errors) throw errors;
+            });
+            if (errors) throw errors;
+          } catch (err) {
+            console.error(err);
+          }
         }
       }
     }

@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config, PluginAPI } from "tailwindcss/types/config";
 
 const config: Config = {
   content: [
@@ -25,6 +25,7 @@ const config: Config = {
         grapefruit: "#FF6B54",
         "pastel-green": "#BAFBE4",
         "dark-green": "#00D3A9",
+        "emerald-green": "#017D66",
         "regal-blue": "#396fb3",
         "lilac-purple": "#D6C9FF",
         "awesome-purple": "#A689FF",
@@ -44,7 +45,7 @@ const config: Config = {
   },
 
   plugins: [
-    function ({ addUtilities }) {
+    function ({ addUtilities }: PluginAPI) {
       const newUtilities = {
         "::-webkit-scrollbar": {
           width: "2px",
@@ -61,7 +62,7 @@ const config: Config = {
         },
       };
 
-      addUtilities(newUtilities, ["responsive", "hover"]);
+      addUtilities(newUtilities);
     },
   ],
 };

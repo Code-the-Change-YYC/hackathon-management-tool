@@ -8,8 +8,7 @@ import { StartHackathon } from "@/amplify/function/BusinessLogic/StartHackathon/
 import { StopHackathon } from "@/amplify/function/BusinessLogic/StopHackathon/resource";
 import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-
+import { a, defineData, type ClientSchema } from "@aws-amplify/backend";
 import { PostConfirmation } from "../auth/PostConfirmation/resource";
 import { ScheduleTeamsAndJudges } from "../function/BusinessLogic/ScheduleTeamsAndJudges/resource";
 
@@ -25,15 +24,16 @@ const schema = a
           .default("Participant")
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
-            allow.groups(["Admin"]).to(["read", "update", "create"]),
+            allow.groups(["Admin"]).to(["read", "update", "create", "delete"]),
           ]),
         email: a
           .string()
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
-            allow.groups(["Admin"]).to(["read", "create"]),
+            allow.groups(["Admin"]).to(["read", "create", "delete"]),
           ]),
         institution: a.string(),
+        program: a.string(),
         completedRegistration: a.boolean(),
         allergies: a.string(),
         willEatMeals: a.boolean(),
@@ -106,8 +106,6 @@ const schema = a
       .model({
         id: a.id(),
         score: a.json().required(),
-        hackathonId: a.id().required(),
-        hackathon: a.belongsTo("Hackathon", "hackathonId"),
         judgeId: a.id().required(),
         judge: a.belongsTo("User", "judgeId"),
         teamId: a.id().required(),
@@ -160,7 +158,6 @@ const schema = a
           .required()
           .array()
           .required(),
-        scores: a.hasMany("Score", "hackathonId"),
       })
       .authorization((allow) => [
         allow.group("Admin").to(["read", "update", "create", "delete"]),
@@ -333,10 +330,6 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: "userPool",
-    // API Key is used for a.allow.public() rules
-    apiKeyAuthorizationMode: {
-      expiresInDays: 30,
-    },
     lambdaAuthorizationMode: {
       function: DemoAuthFunction,
     },

@@ -1,10 +1,9 @@
 import Image from "next/image";
-
 import JudgingRubric from "../../judging/RubricTable";
 
 const RubricPage = () => {
   return (
-    <div className="flex h-full w-dvw flex-col bg-pastel-green">
+    <div className="flex h-full w-dvw flex-col bg-dashboard-grey">
       <div className="flex h-40 items-center justify-center gap-2 md:h-60">
         <Image
           src="/svgs/judgingRubric/rubric_left.svg"
@@ -26,13 +25,13 @@ const RubricPage = () => {
       </div>
 
       <JudgingRubric
-        tableBackgroundColor="bg-[#E3FFF8]"
+        tableBackgroundColor="bg-light-grey"
         dividerColor="border-dark-green"
-        headerTextColor="text-dark-green"
-        headerBackgroundColor="bg-[#D2F4EA]"
-        textColor="text-[#017D66]"
-        oddRowColor="odd:bg-[#E3FFF8]"
-        evenRowColor="even:bg-[#D2F4EA]"
+        headerTextColor="text-white"
+        headerBackgroundColor="bg-dark-green/60"
+        textColor="text-emerald-green"
+        oddRowColor="odd:bg-light-grey"
+        evenRowColor="even:bg-dark-green/15"
       />
     </div>
   );

@@ -51,7 +51,7 @@ interface EventDetails {
   endDate: Date;
 }
 export const event: EventDetails = {
-  title: "Hack the Change 2024",
+  title: "Hack the Change 2025",
   description: `
 Join us for an exciting hackathon event! This is a great opportunity to showcase your skills, network with other tech enthusiasts, and compete for amazing cash prizes. Here's what you can expect:
 

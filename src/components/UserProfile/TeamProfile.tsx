@@ -2,9 +2,9 @@
 
 import { type Schema } from "@/amplify/data/resource";
 import { client } from "@/app/QueryProvider";
+import { useUser } from "@/components/contexts/UserContext";
 import KevinLoadingRing from "@/components/KevinLoadingRing";
 import TeamForm from "@/components/UserProfile/TeamForm";
-import { useUser } from "@/components/contexts/UserContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const BUTTON_STYLES =

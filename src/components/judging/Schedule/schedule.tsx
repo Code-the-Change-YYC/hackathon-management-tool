@@ -2,7 +2,6 @@
 
 import { generateClient } from "aws-amplify/api";
 import { useState } from "react";
-
 import { type Schema } from "@/amplify/data/resource";
 import JudgingTimeline from "@/components/admin/Judging/JudgingTimeline";
 import { useQuery } from "@tanstack/react-query";

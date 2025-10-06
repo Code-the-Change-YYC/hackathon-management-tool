@@ -61,6 +61,7 @@ export type User = {
   institution?: string | null;
   lastName?: string | null;
   profileOwner?: string | null;
+  program?: string | null;
   role?: string | null;
   team?: Team | null;
   teamId?: string | null;
@@ -77,8 +78,6 @@ export type ModelScoreConnection = {
 export type Score = {
   __typename: "Score";
   createdAt: string;
-  hackathon?: Hackathon | null;
-  hackathonId: string;
   id?: string | null;
   judge?: User | null;
   judgeId: string;
@@ -86,25 +85,6 @@ export type Score = {
   team?: Team | null;
   teamId: string;
   updatedAt: string;
-};
-
-export type Hackathon = {
-  __typename: "Hackathon";
-  createdAt: string;
-  endDate: string;
-  id: string;
-  scores?: ModelScoreConnection | null;
-  scoringComponents: Array<ScoreComponentType>;
-  scoringSidepots: Array<ScoreComponentType>;
-  startDate: string;
-  updatedAt: string;
-};
-
-export type ScoreComponentType = {
-  __typename: "ScoreComponentType";
-  friendlyName: string;
-  id: string;
-  isSidepot: boolean;
 };
 
 export type Team = {
@@ -152,6 +132,24 @@ export type Room = {
   name: string;
   teamRoom?: ModelTeamRoomConnection | null;
   updatedAt: string;
+};
+
+export type Hackathon = {
+  __typename: "Hackathon";
+  createdAt: string;
+  endDate: string;
+  id: string;
+  scoringComponents: Array<ScoreComponentType>;
+  scoringSidepots: Array<ScoreComponentType>;
+  startDate: string;
+  updatedAt: string;
+};
+
+export type ScoreComponentType = {
+  __typename: "ScoreComponentType";
+  friendlyName: string;
+  id: string;
+  isSidepot: boolean;
 };
 
 export type ModelFoodEventFilterInput = {
@@ -282,7 +280,6 @@ export type ModelRoomConnection = {
 export type ModelScoreFilterInput = {
   and?: Array<ModelScoreFilterInput | null> | null;
   createdAt?: ModelStringInput | null;
-  hackathonId?: ModelIDInput | null;
   id?: ModelIDInput | null;
   judgeId?: ModelIDInput | null;
   not?: ModelScoreFilterInput | null;
@@ -365,6 +362,7 @@ export type ModelUserFilterInput = {
   not?: ModelUserFilterInput | null;
   or?: Array<ModelUserFilterInput | null> | null;
   profileOwner?: ModelStringInput | null;
+  program?: ModelStringInput | null;
   role?: ModelStringInput | null;
   teamId?: ModelIDInput | null;
   updatedAt?: ModelStringInput | null;
@@ -448,7 +446,6 @@ export type CreateRoomInput = {
 export type ModelScoreConditionInput = {
   and?: Array<ModelScoreConditionInput | null> | null;
   createdAt?: ModelStringInput | null;
-  hackathonId?: ModelIDInput | null;
   not?: ModelScoreConditionInput | null;
   or?: Array<ModelScoreConditionInput | null> | null;
   score?: ModelStringInput | null;
@@ -456,7 +453,6 @@ export type ModelScoreConditionInput = {
 };
 
 export type CreateScoreInput = {
-  hackathonId: string;
   id?: string | null;
   judgeId: string;
   score: string;
@@ -513,6 +509,7 @@ export type ModelUserConditionInput = {
   not?: ModelUserConditionInput | null;
   or?: Array<ModelUserConditionInput | null> | null;
   profileOwner?: ModelStringInput | null;
+  program?: ModelStringInput | null;
   role?: ModelStringInput | null;
   teamId?: ModelIDInput | null;
   updatedAt?: ModelStringInput | null;
@@ -530,6 +527,7 @@ export type CreateUserInput = {
   institution?: string | null;
   lastName?: string | null;
   profileOwner?: string | null;
+  program?: string | null;
   role?: string | null;
   teamId?: string | null;
   willEatMeals?: boolean | null;
@@ -607,7 +605,6 @@ export type UpdateRoomInput = {
 };
 
 export type UpdateScoreInput = {
-  hackathonId?: string | null;
   id?: string | null;
   judgeId: string;
   score?: string | null;
@@ -639,6 +636,7 @@ export type UpdateUserInput = {
   institution?: string | null;
   lastName?: string | null;
   profileOwner?: string | null;
+  program?: string | null;
   role?: string | null;
   teamId?: string | null;
   willEatMeals?: boolean | null;
@@ -727,7 +725,6 @@ export type ModelSubscriptionRoomFilterInput = {
 export type ModelSubscriptionScoreFilterInput = {
   and?: Array<ModelSubscriptionScoreFilterInput | null> | null;
   createdAt?: ModelSubscriptionStringInput | null;
-  hackathonId?: ModelSubscriptionIDInput | null;
   id?: ModelSubscriptionIDInput | null;
   judgeId?: ModelSubscriptionIDInput | null;
   or?: Array<ModelSubscriptionScoreFilterInput | null> | null;
@@ -777,6 +774,7 @@ export type ModelSubscriptionUserFilterInput = {
   lastName?: ModelSubscriptionStringInput | null;
   or?: Array<ModelSubscriptionUserFilterInput | null> | null;
   profileOwner?: ModelStringInput | null;
+  program?: ModelSubscriptionStringInput | null;
   role?: ModelSubscriptionStringInput | null;
   teamId?: ModelSubscriptionIDInput | null;
   updatedAt?: ModelSubscriptionStringInput | null;
@@ -850,10 +848,6 @@ export type GetHackathonQuery = {
     createdAt: string;
     endDate: string;
     id: string;
-    scores?: {
-      __typename: "ModelScoreConnection";
-      nextToken?: string | null;
-    } | null;
     scoringComponents: Array<{
       __typename: "ScoreComponentType";
       friendlyName: string;
@@ -902,15 +896,6 @@ export type GetScoreQuery = {
   getScore?: {
     __typename: "Score";
     createdAt: string;
-    hackathon?: {
-      __typename: "Hackathon";
-      createdAt: string;
-      endDate: string;
-      id: string;
-      startDate: string;
-      updatedAt: string;
-    } | null;
-    hackathonId: string;
     id?: string | null;
     judge?: {
       __typename: "User";
@@ -925,6 +910,7 @@ export type GetScoreQuery = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1037,6 +1023,7 @@ export type GetUserQuery = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -1087,6 +1074,7 @@ export type GetUserFoodEventAttendanceQuery = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1182,7 +1170,6 @@ export type ListScoresQuery = {
     items: Array<{
       __typename: "Score";
       createdAt: string;
-      hackathonId: string;
       id?: string | null;
       judgeId: string;
       score: string;
@@ -1288,6 +1275,7 @@ export type ListUsersQuery = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1421,6 +1409,7 @@ export type SetUserAsCheckedInMutation = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -1470,10 +1459,6 @@ export type CreateHackathonMutation = {
     createdAt: string;
     endDate: string;
     id: string;
-    scores?: {
-      __typename: "ModelScoreConnection";
-      nextToken?: string | null;
-    } | null;
     scoringComponents: Array<{
       __typename: "ScoreComponentType";
       friendlyName: string;
@@ -1523,15 +1508,6 @@ export type CreateScoreMutation = {
   createScore?: {
     __typename: "Score";
     createdAt: string;
-    hackathon?: {
-      __typename: "Hackathon";
-      createdAt: string;
-      endDate: string;
-      id: string;
-      startDate: string;
-      updatedAt: string;
-    } | null;
-    hackathonId: string;
     id?: string | null;
     judge?: {
       __typename: "User";
@@ -1546,6 +1522,7 @@ export type CreateScoreMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1661,6 +1638,7 @@ export type CreateUserMutation = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -1712,6 +1690,7 @@ export type CreateUserFoodEventAttendanceMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1755,10 +1734,6 @@ export type DeleteHackathonMutation = {
     createdAt: string;
     endDate: string;
     id: string;
-    scores?: {
-      __typename: "ModelScoreConnection";
-      nextToken?: string | null;
-    } | null;
     scoringComponents: Array<{
       __typename: "ScoreComponentType";
       friendlyName: string;
@@ -1808,15 +1783,6 @@ export type DeleteScoreMutation = {
   deleteScore?: {
     __typename: "Score";
     createdAt: string;
-    hackathon?: {
-      __typename: "Hackathon";
-      createdAt: string;
-      endDate: string;
-      id: string;
-      startDate: string;
-      updatedAt: string;
-    } | null;
-    hackathonId: string;
     id?: string | null;
     judge?: {
       __typename: "User";
@@ -1831,6 +1797,7 @@ export type DeleteScoreMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -1946,6 +1913,7 @@ export type DeleteUserMutation = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -1997,6 +1965,7 @@ export type DeleteUserFoodEventAttendanceMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2040,10 +2009,6 @@ export type UpdateHackathonMutation = {
     createdAt: string;
     endDate: string;
     id: string;
-    scores?: {
-      __typename: "ModelScoreConnection";
-      nextToken?: string | null;
-    } | null;
     scoringComponents: Array<{
       __typename: "ScoreComponentType";
       friendlyName: string;
@@ -2093,15 +2058,6 @@ export type UpdateScoreMutation = {
   updateScore?: {
     __typename: "Score";
     createdAt: string;
-    hackathon?: {
-      __typename: "Hackathon";
-      createdAt: string;
-      endDate: string;
-      id: string;
-      startDate: string;
-      updatedAt: string;
-    } | null;
-    hackathonId: string;
     id?: string | null;
     judge?: {
       __typename: "User";
@@ -2116,6 +2072,7 @@ export type UpdateScoreMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2231,6 +2188,7 @@ export type UpdateUserMutation = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -2282,6 +2240,7 @@ export type UpdateUserFoodEventAttendanceMutation = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2323,10 +2282,6 @@ export type OnCreateHackathonSubscription = {
     createdAt: string;
     endDate: string;
     id: string;
-    scores?: {
-      __typename: "ModelScoreConnection";
-      nextToken?: string | null;
-    } | null;
     scoringComponents: Array<{
       __typename: "ScoreComponentType";
       friendlyName: string;
@@ -2374,15 +2329,6 @@ export type OnCreateScoreSubscription = {
   onCreateScore?: {
     __typename: "Score";
     createdAt: string;
-    hackathon?: {
-      __typename: "Hackathon";
-      createdAt: string;
-      endDate: string;
-      id: string;
-      startDate: string;
-      updatedAt: string;
-    } | null;
-    hackathonId: string;
     id?: string | null;
     judge?: {
       __typename: "User";
@@ -2397,6 +2343,7 @@ export type OnCreateScoreSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2510,6 +2457,7 @@ export type OnCreateUserSubscription = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -2560,6 +2508,7 @@ export type OnCreateUserFoodEventAttendanceSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2601,10 +2550,6 @@ export type OnDeleteHackathonSubscription = {
     createdAt: string;
     endDate: string;
     id: string;
-    scores?: {
-      __typename: "ModelScoreConnection";
-      nextToken?: string | null;
-    } | null;
     scoringComponents: Array<{
       __typename: "ScoreComponentType";
       friendlyName: string;
@@ -2652,15 +2597,6 @@ export type OnDeleteScoreSubscription = {
   onDeleteScore?: {
     __typename: "Score";
     createdAt: string;
-    hackathon?: {
-      __typename: "Hackathon";
-      createdAt: string;
-      endDate: string;
-      id: string;
-      startDate: string;
-      updatedAt: string;
-    } | null;
-    hackathonId: string;
     id?: string | null;
     judge?: {
       __typename: "User";
@@ -2675,6 +2611,7 @@ export type OnDeleteScoreSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2788,6 +2725,7 @@ export type OnDeleteUserSubscription = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -2838,6 +2776,7 @@ export type OnDeleteUserFoodEventAttendanceSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -2879,10 +2818,6 @@ export type OnUpdateHackathonSubscription = {
     createdAt: string;
     endDate: string;
     id: string;
-    scores?: {
-      __typename: "ModelScoreConnection";
-      nextToken?: string | null;
-    } | null;
     scoringComponents: Array<{
       __typename: "ScoreComponentType";
       friendlyName: string;
@@ -2930,15 +2865,6 @@ export type OnUpdateScoreSubscription = {
   onUpdateScore?: {
     __typename: "Score";
     createdAt: string;
-    hackathon?: {
-      __typename: "Hackathon";
-      createdAt: string;
-      endDate: string;
-      id: string;
-      startDate: string;
-      updatedAt: string;
-    } | null;
-    hackathonId: string;
     id?: string | null;
     judge?: {
       __typename: "User";
@@ -2953,6 +2879,7 @@ export type OnUpdateScoreSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;
@@ -3066,6 +2993,7 @@ export type OnUpdateUserSubscription = {
     institution?: string | null;
     lastName?: string | null;
     profileOwner?: string | null;
+    program?: string | null;
     role?: string | null;
     team?: {
       __typename: "Team";
@@ -3116,6 +3044,7 @@ export type OnUpdateUserFoodEventAttendanceSubscription = {
       institution?: string | null;
       lastName?: string | null;
       profileOwner?: string | null;
+      program?: string | null;
       role?: string | null;
       teamId?: string | null;
       updatedAt: string;

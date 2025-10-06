@@ -1,11 +1,14 @@
-import { deleteRoom } from "../AddUserToGroup/graphql/mutations";
-import { createRoom, deleteTeamRoom } from "./graphql/mutations";
+import {
+  createRoom,
+  deleteRoom,
+  deleteTeamRoom,
+} from "@/amplify/graphql/mutations";
 import {
   listRooms,
   listTeamRooms,
   listTeams,
   listUsers,
-} from "./graphql/queries";
+} from "@/amplify/graphql/queries";
 import { client } from "./handler";
 
 export async function deleteRooms() {

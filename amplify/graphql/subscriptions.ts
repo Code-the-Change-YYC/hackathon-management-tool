@@ -1,7 +1,7 @@
 /* tslint:disable */
-
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
+
 import * as APITypes from "./API";
 
 type GeneratedSubscription<InputType, OutputType> = string & {
@@ -37,10 +37,6 @@ export const onCreateHackathon =
     createdAt
     endDate
     id
-    scores {
-      nextToken
-      __typename
-    }
     scoringComponents {
       friendlyName
       id
@@ -88,15 +84,6 @@ export const onCreateScore =
   /* GraphQL */ `subscription OnCreateScore($filter: ModelSubscriptionScoreFilterInput) {
   onCreateScore(filter: $filter) {
     createdAt
-    hackathon {
-      createdAt
-      endDate
-      id
-      startDate
-      updatedAt
-      __typename
-    }
-    hackathonId
     id
     judge {
       JUDGE_roomId
@@ -110,6 +97,7 @@ export const onCreateScore =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -225,6 +213,7 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -276,6 +265,7 @@ export const onCreateUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -318,10 +308,6 @@ export const onDeleteHackathon =
     createdAt
     endDate
     id
-    scores {
-      nextToken
-      __typename
-    }
     scoringComponents {
       friendlyName
       id
@@ -369,15 +355,6 @@ export const onDeleteScore =
   /* GraphQL */ `subscription OnDeleteScore($filter: ModelSubscriptionScoreFilterInput) {
   onDeleteScore(filter: $filter) {
     createdAt
-    hackathon {
-      createdAt
-      endDate
-      id
-      startDate
-      updatedAt
-      __typename
-    }
-    hackathonId
     id
     judge {
       JUDGE_roomId
@@ -391,6 +368,7 @@ export const onDeleteScore =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -506,6 +484,7 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -557,6 +536,7 @@ export const onDeleteUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -599,10 +579,6 @@ export const onUpdateHackathon =
     createdAt
     endDate
     id
-    scores {
-      nextToken
-      __typename
-    }
     scoringComponents {
       friendlyName
       id
@@ -650,15 +626,6 @@ export const onUpdateScore =
   /* GraphQL */ `subscription OnUpdateScore($filter: ModelSubscriptionScoreFilterInput) {
   onUpdateScore(filter: $filter) {
     createdAt
-    hackathon {
-      createdAt
-      endDate
-      id
-      startDate
-      updatedAt
-      __typename
-    }
-    hackathonId
     id
     judge {
       JUDGE_roomId
@@ -672,6 +639,7 @@ export const onUpdateScore =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -787,6 +755,7 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -838,6 +807,7 @@ export const onUpdateUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt

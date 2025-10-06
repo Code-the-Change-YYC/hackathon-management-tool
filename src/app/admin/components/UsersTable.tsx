@@ -1,17 +1,17 @@
 "use client";
 
+import { generateClient } from "aws-amplify/api";
 import { useCallback, useMemo, useState } from "react";
-
 import { type Schema } from "@/amplify/data/resource";
-import { client } from "@/app/QueryProvider";
 import tanstackTableHelper from "@/components/TanstackTableHelper";
-
 import TableSearch from "../teams/components/TableSearch";
 import TanstackTableBody from "../teams/components/TanstackTableBody";
 import TableFooter from "../teams/components/TanstackTableFooter";
 import TanstackTableHead from "../teams/components/TanstackTableHead";
 import type { User } from "../users/UserTablePage";
 import { usersColumns } from "./UsersTableSetup";
+
+const client = generateClient<Schema>();
 
 export default function UsersTable({ users }: { users: User[] }) {
   const [data, setData] = useState(users);

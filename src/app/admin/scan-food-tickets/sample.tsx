@@ -3,9 +3,7 @@
 // THIS PAGE IS A SAMPLE, PLEASE REPLACE IT AND IMPROVE IT FROM HERE
 import { generateClient } from "aws-amplify/data";
 import { useEffect, useState } from "react";
-
 import { type Schema } from "@/amplify/data/resource";
-
 import TicketVerification from "./TicketVerification/TicketVerification";
 
 type FoodEvent = Schema["FoodEvent"]["type"];

@@ -1,7 +1,7 @@
 /* tslint:disable */
-
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
+
 import * as APITypes from "./API";
 
 type GeneratedMutation<InputType, OutputType> = string & {
@@ -92,7 +92,6 @@ export const ResetHackathon = /* GraphQL */ `mutation ResetHackathon(
   APITypes.ResetHackathonMutationVariables,
   APITypes.ResetHackathonMutation
 >;
-
 export const ScheduleTeamsAndJudges =
   /* GraphQL */ `mutation ScheduleTeamsAndJudges(
   $judgingSessionsPerTeam: Int!
@@ -145,6 +144,7 @@ export const SetUserAsCheckedIn =
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -196,10 +196,6 @@ export const createHackathon = /* GraphQL */ `mutation CreateHackathon(
     createdAt
     endDate
     id
-    scores {
-      nextToken
-      __typename
-    }
     scoringComponents {
       friendlyName
       id
@@ -251,15 +247,6 @@ export const createScore = /* GraphQL */ `mutation CreateScore(
 ) {
   createScore(condition: $condition, input: $input) {
     createdAt
-    hackathon {
-      createdAt
-      endDate
-      id
-      startDate
-      updatedAt
-      __typename
-    }
-    hackathonId
     id
     judge {
       JUDGE_roomId
@@ -273,6 +260,7 @@ export const createScore = /* GraphQL */ `mutation CreateScore(
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -392,6 +380,7 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -444,6 +433,7 @@ export const createUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -490,10 +480,6 @@ export const deleteHackathon = /* GraphQL */ `mutation DeleteHackathon(
     createdAt
     endDate
     id
-    scores {
-      nextToken
-      __typename
-    }
     scoringComponents {
       friendlyName
       id
@@ -545,15 +531,6 @@ export const deleteScore = /* GraphQL */ `mutation DeleteScore(
 ) {
   deleteScore(condition: $condition, input: $input) {
     createdAt
-    hackathon {
-      createdAt
-      endDate
-      id
-      startDate
-      updatedAt
-      __typename
-    }
-    hackathonId
     id
     judge {
       JUDGE_roomId
@@ -567,6 +544,7 @@ export const deleteScore = /* GraphQL */ `mutation DeleteScore(
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -686,6 +664,7 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -738,6 +717,7 @@ export const deleteUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -784,10 +764,6 @@ export const updateHackathon = /* GraphQL */ `mutation UpdateHackathon(
     createdAt
     endDate
     id
-    scores {
-      nextToken
-      __typename
-    }
     scoringComponents {
       friendlyName
       id
@@ -839,15 +815,6 @@ export const updateScore = /* GraphQL */ `mutation UpdateScore(
 ) {
   updateScore(condition: $condition, input: $input) {
     createdAt
-    hackathon {
-      createdAt
-      endDate
-      id
-      startDate
-      updatedAt
-      __typename
-    }
-    hackathonId
     id
     judge {
       JUDGE_roomId
@@ -861,6 +828,7 @@ export const updateScore = /* GraphQL */ `mutation UpdateScore(
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -980,6 +948,7 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -1032,6 +1001,7 @@ export const updateUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt

@@ -1,10 +1,9 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 import type { AppSyncResolverHandler } from "aws-lambda";
-
-import type { Schema } from "../../../data/resource";
+import { updateUser } from "@/amplify/graphql/mutations";
 import { data } from "../_amplify_model/amplify_outputs.json";
-import { updateUser } from "./graphql/mutations";
+import type { Schema } from "../../../data/resource";
 
 const MAX_TEAM_MEMBERS = 6;
 Amplify.configure(

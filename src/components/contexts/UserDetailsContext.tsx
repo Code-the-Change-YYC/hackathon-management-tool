@@ -1,12 +1,13 @@
 "use client";
 
-import { type ReactNode, createContext, useContext, useMemo } from "react";
-
+import { getCurrentUser } from "aws-amplify/auth";
+import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { type UserDetailsNoFunctions } from "@/utils/amplify-utils";
 import { useQuery } from "@tanstack/react-query";
 
 interface UserDetailsContextType {
   userDetails: UserDetailsNoFunctions;
+  isLoading: boolean;
 }
 
 const UserDetailsContext = createContext<UserDetailsContextType>(
@@ -23,12 +24,15 @@ export function UserDetailsProvider({
   const queryKey = ["User"];
 
   async function fetchUserDetails(): Promise<UserDetailsNoFunctions> {
+    // migh tneed to remove this is a scuffed fix
+    const currentUser = await getCurrentUser();
+    if (!currentUser?.userId) return {} as UserDetailsNoFunctions;
     const resp = await fetch("/api/user");
     if (!resp || !resp.ok) throw new Error("Failed to fetch user details");
     return await resp.json();
   }
 
-  const { data: userDetails } = useQuery<UserDetailsNoFunctions>({
+  const { data: userDetails, isLoading } = useQuery<UserDetailsNoFunctions>({
     queryKey,
     queryFn: fetchUserDetails,
     initialData: initialUserDetails,
@@ -40,8 +44,8 @@ export function UserDetailsProvider({
   });
 
   const value = useMemo(() => {
-    return { userDetails };
-  }, [userDetails]);
+    return { userDetails, isLoading };
+  }, [userDetails, isLoading]);
 
   return (
     <UserDetailsContext.Provider value={{ ...value }}>

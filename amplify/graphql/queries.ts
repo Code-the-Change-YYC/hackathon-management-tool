@@ -1,7 +1,7 @@
 /* tslint:disable */
-
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
+
 import * as APITypes from "./API";
 
 type GeneratedQuery<InputType, OutputType> = string & {
@@ -60,10 +60,6 @@ export const getHackathon = /* GraphQL */ `query GetHackathon($id: ID!) {
     createdAt
     endDate
     id
-    scores {
-      nextToken
-      __typename
-    }
     scoringComponents {
       friendlyName
       id
@@ -107,15 +103,6 @@ export const getScore =
   /* GraphQL */ `query GetScore($judgeId: ID!, $teamId: ID!) {
   getScore(judgeId: $judgeId, teamId: $teamId) {
     createdAt
-    hackathon {
-      createdAt
-      endDate
-      id
-      startDate
-      updatedAt
-      __typename
-    }
-    hackathonId
     id
     judge {
       JUDGE_roomId
@@ -129,6 +116,7 @@ export const getScore =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -233,6 +221,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     institution
     lastName
     profileOwner
+    program
     role
     team {
       approved
@@ -279,6 +268,7 @@ export const getUserFoodEventAttendance =
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt
@@ -400,7 +390,6 @@ export const listScores = /* GraphQL */ `query ListScores(
   ) {
     items {
       createdAt
-      hackathonId
       id
       judgeId
       score
@@ -532,6 +521,7 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       institution
       lastName
       profileOwner
+      program
       role
       teamId
       updatedAt

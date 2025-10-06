@@ -1,6 +1,5 @@
 import CheckUserLoggedIn from "@/components/CheckUserLoggedIn";
 import { SuspenseWrapper } from "@/components/SuspenseWrapper";
-
 import UserTablePage from "./UserTablePage";
 
 export const dynamic = "force-dynamic";

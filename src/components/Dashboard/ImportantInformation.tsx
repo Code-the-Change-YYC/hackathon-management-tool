@@ -1,9 +1,8 @@
 import Image from "next/image";
-
+import Link from "next/link";
 import { fetchContent } from "@/app/actions";
 import type { CeremonyDetails } from "@/app/contentfulTypes";
 import ImportantInfoIcon from "@/images/dashboard/ImportantInfoIcon.png";
-
 // import { formatDate } from "@/utils/date-utils";
 import Card from "./Card";
 
@@ -22,8 +21,16 @@ export default async function ImportantInformation() {
           src={ImportantInfoIcon}
           alt={"Important Info Icon"}
         />
-        <div className="text-start font-medium">
-          Important <br /> Information
+        <div className="flex flex-col gap-2">
+          <div className="text-start font-medium">
+            Important <br /> Information
+          </div>
+          <Link
+            href="/participant/important-info"
+            className="text-left text-xl text-dark-grey/60 underline md:text-2xl"
+          >
+            View More
+          </Link>
         </div>
       </div>
       <div className="grid w-full gap-4 p-6">

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
-
 import Header from "@/components/LoginForm/Header";
 
 export default function RegistrationLayout({
@@ -25,7 +24,7 @@ export default function RegistrationLayout({
   return (
     <div
       className={twMerge(
-        "flex h-[90dvh] w-full flex-col items-center justify-center overflow-hidden py-6",
+        "flex w-full flex-1 flex-col items-center justify-center overflow-hidden",
         bgColor,
       )}
     >

@@ -1,5 +1,4 @@
 import { SuspenseWrapper } from "@/components/SuspenseWrapper";
-
 import TeamsTable from "./components/TeamsTablePage";
 
 export const revalidate = 0;

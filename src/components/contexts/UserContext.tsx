@@ -3,9 +3,7 @@
 import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession, signOut } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
-import { useContext } from "react";
-import { type ReactNode, createContext, useEffect } from "react";
-
+import { createContext, useContext, useEffect, type ReactNode } from "react";
 import { type Schema } from "@/amplify/data/resource";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -69,12 +67,11 @@ export function UserContextProvider({ children }: Props) {
         const userRole = (
           user.tokens?.idToken?.payload["cognito:groups"] as UserType[]
         ).filter((group) => Object.keys(UserType).includes(group))?.[0];
-
         if (!userRole) {
           // Logout User if not in group
           signOut();
-          console.error("User not in group");
         }
+
         if (!user.userSub) {
           throw new Error("No user");
         }

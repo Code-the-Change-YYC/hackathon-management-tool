@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-
 import KevinLoadingRing from "@/components/KevinLoadingRing";
 import RegistrationLayout from "@/components/layouts/RegistrationLayout";
 
