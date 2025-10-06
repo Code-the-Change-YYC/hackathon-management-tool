@@ -1,9 +1,9 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
-
 import type { Schema } from "../../../data/resource";
-import { updateHackathon } from "../ResetHackathon/graphql/mutations";
-import { listHackathons } from "../ResetHackathon/graphql/queries";
+
+import { updateHackathon } from "@/amplify/graphql/mutations";
+import { listHackathons } from "@/amplify/graphql/queries";
 
 Amplify.configure(
   {
