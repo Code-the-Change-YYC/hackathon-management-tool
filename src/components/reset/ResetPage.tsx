@@ -46,54 +46,33 @@ export default function ResetPage() {
   });
 
   const startHackathonMutation = useMutation({
-    mutationFn: async ({
-      startDate,
-      endDate,
-    }: {
-      startDate: string;
-      endDate: string;
-    }) => {
-      const toastObj = toast.loading("Scheduling hackathon start...");
+    mutationFn: async (input: Schema["StartHackathon"]["args"]) => {
+      console.log(input);
+
       try {
-        const response = await client.mutations.StartHackathon({
-          startDate,
-          endDate,
-        });
-
-        console.log("StartHackathon response:", response);
-
-        if (response.errors && response.errors.length > 0) {
-          toast.dismiss(toastObj);
-          const error = response.errors[0];
-          console.error("GraphQL errors:", response.errors);
-          const errorMsg =
-            error.message || JSON.stringify(error) || "Unknown GraphQL error";
-          toast.error(`Error: ${errorMsg}`);
-          throw new Error(errorMsg);
+        const existingHackathon = await client.models.Hackathon.list();
+        if (existingHackathon.data && existingHackathon.data.length > 0) {
+          toast.error("A hackathon already exists. Please reset first.");
+          throw new Error("Hackathon already exists");
         }
 
-        if (response.data?.statusCode === 200) {
+        const toastObj = toast.loading("Scheduling hackathon start...");
+        const { data: statusCode, errors } =
+          await client.mutations.StartHackathon({
+            ...input,
+          });
+        if (errors) {
           toast.dismiss(toastObj);
-          toast.success("Hackathon start scheduled successfully");
-          await hackathonData.refetch();
-          return response.data;
-        } else {
-          toast.dismiss(toastObj);
-          const respData = response.data
-            ? JSON.stringify(response.data)
-            : "No data";
-          console.error("Unexpected response:", response);
-          toast.error(`Unexpected response: ${respData}`);
-          throw new Error(`Unexpected response: ${respData}`);
+          toast.error("Error scheduling hackathon start");
+          console.log(errors);
         }
-      } catch (error) {
+        void statusCode;
         toast.dismiss(toastObj);
-        console.error("Error scheduling hackathon start:", error);
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : JSON.stringify(error) || "Unknown error";
-        toast.error(`Failed to schedule: ${errorMessage}`);
+        toast.success("Hackathon start scheduled successfully");
+        await hackathonData.refetch();
+        return;
+      } catch (error) {
+        console.error("Error scheduling hackathon start", error);
         throw error;
       }
     },

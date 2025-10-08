@@ -1,6 +1,6 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
-import { createHackathon, updateHackathon } from "@/amplify/graphql/mutations";
+import { createHackathon } from "@/amplify/graphql/mutations";
 import { listHackathons } from "@/amplify/graphql/queries";
 import type { Schema } from "../../../data/resource";
 
@@ -49,44 +49,29 @@ export const handler: Handler = async (event) => {
     const existingHackathons = hackathonItems?.listHackathons?.items || [];
 
     if (existingHackathons.length > 0) {
-      const hackathonId = existingHackathons[0].id;
-
-      const { errors } = await client.graphql({
-        query: updateHackathon,
-        variables: {
-          input: {
-            id: hackathonId,
-            startDate: startDate,
-            endDate: endDate,
-          },
-        },
-      });
-
-      if (errors) throw errors;
-
-      console.log(
-        `Hackathon updated to start on ${startDate} and end on ${endDate}`,
-      );
-    } else {
-      const { errors } = await client.graphql({
-        query: createHackathon,
-        variables: {
-          input: {
-            id: "1",
-            startDate: startDate,
-            endDate: endDate,
-            scoringComponents: [],
-            scoringSidepots: [],
-          },
-        },
-      });
-
-      if (errors) throw errors;
-
-      console.log(
-        `Hackathon created and scheduled to start on ${startDate} and end on ${endDate}`,
+      throw new Error(
+        "A hackathon already exists. Please reset the hackathon before starting a new one.",
       );
     }
+
+    const { errors } = await client.graphql({
+      query: createHackathon,
+      variables: {
+        input: {
+          id: "1",
+          startDate: startDate,
+          endDate: endDate,
+          scoringComponents: [],
+          scoringSidepots: [],
+        },
+      },
+    });
+
+    if (errors) throw errors;
+
+    console.log(
+      `Hackathon created and scheduled to start on ${startDate} and end on ${endDate}`,
+    );
 
     return {
       statusCode: 200,
