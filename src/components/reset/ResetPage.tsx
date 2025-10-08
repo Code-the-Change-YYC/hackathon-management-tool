@@ -53,60 +53,47 @@ export default function ResetPage() {
       startDate: string;
       endDate: string;
     }) => {
+      const toastObj = toast.loading("Scheduling hackathon start...");
       try {
-        const toastObj = toast.loading("Scheduling hackathon start...");
-        const { data: statusCode, errors } =
-          await client.mutations.StartHackathon({
-            startDate,
-            endDate,
-          });
-        if (errors) {
-          toast.dismiss(toastObj);
-          toast.error("Error scheduling hackathon start");
-          console.log(errors);
-          throw errors;
-        }
-        void statusCode;
-        toast.dismiss(toastObj);
-        toast.success("Hackathon start scheduled successfully");
-        return;
-      } catch (error) {
-        console.error("Error scheduling hackathon start", error);
-        throw error;
-      }
-    },
-  });
+        const response = await client.mutations.StartHackathon({
+          startDate,
+          endDate,
+        });
 
-  const stopHackathonMutation = useMutation({
-    mutationFn: async ({ stopDate }: { stopDate?: string }) => {
-      try {
-        const toastObj = toast.loading(
-          stopDate ? "Scheduling hackathon stop..." : "Stopping hackathon...",
-        );
-        const { data: statusCode, errors } =
-          await client.mutations.StopHackathon({
-            stopDate,
-          });
-        if (errors) {
+        console.log("StartHackathon response:", response);
+
+        if (response.errors && response.errors.length > 0) {
           toast.dismiss(toastObj);
-          toast.error(
-            stopDate
-              ? "Error scheduling hackathon stop"
-              : "Error stopping hackathon",
-          );
-          console.log(errors);
-          throw errors;
+          const error = response.errors[0];
+          console.error("GraphQL errors:", response.errors);
+          const errorMsg =
+            error.message || JSON.stringify(error) || "Unknown GraphQL error";
+          toast.error(`Error: ${errorMsg}`);
+          throw new Error(errorMsg);
         }
-        void statusCode;
-        toast.dismiss(toastObj);
-        toast.success(
-          stopDate
-            ? "Hackathon stop scheduled successfully"
-            : "Hackathon stopped successfully",
-        );
-        return;
+
+        if (response.data?.statusCode === 200) {
+          toast.dismiss(toastObj);
+          toast.success("Hackathon start scheduled successfully");
+          await hackathonData.refetch();
+          return response.data;
+        } else {
+          toast.dismiss(toastObj);
+          const respData = response.data
+            ? JSON.stringify(response.data)
+            : "No data";
+          console.error("Unexpected response:", response);
+          toast.error(`Unexpected response: ${respData}`);
+          throw new Error(`Unexpected response: ${respData}`);
+        }
       } catch (error) {
-        console.error("Error with hackathon stop operation", error);
+        toast.dismiss(toastObj);
+        console.error("Error scheduling hackathon start:", error);
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : JSON.stringify(error) || "Unknown error";
+        toast.error(`Failed to schedule: ${errorMessage}`);
         throw error;
       }
     },
@@ -144,19 +131,6 @@ export default function ResetPage() {
       return;
     }
     startHackathonMutation.mutate({ startDate, endDate });
-  };
-
-  const handleStopHackathon = (immediate = false) => {
-    if (immediate) {
-      stopHackathonMutation.mutate({});
-    } else {
-      const { endDate } = getValues();
-      if (!endDate) {
-        toast.error("End date is required for scheduling stop");
-        return;
-      }
-      stopHackathonMutation.mutate({ stopDate: endDate });
-    }
   };
 
   const generateId = () => uuidv4();
@@ -210,8 +184,7 @@ export default function ResetPage() {
   if (
     hackathonData.isPending ||
     userMutation.isPending ||
-    startHackathonMutation.isPending ||
-    stopHackathonMutation.isPending
+    startHackathonMutation.isPending
   )
     return (
       <div className="mt-16 flex w-full items-center justify-center">
@@ -219,12 +192,13 @@ export default function ResetPage() {
       </div>
     );
 
-  if (
-    userMutation.isError ||
-    startHackathonMutation.isError ||
-    stopHackathonMutation.isError
-  )
+  if (userMutation.isError || startHackathonMutation.isError)
     return <div>Error, please try again later.</div>;
+
+  const hackathonExists =
+    hackathonData.data &&
+    Array.isArray(hackathonData.data) &&
+    hackathonData.data.length > 0;
 
   const [resetting, creating] = watch(["resetting", "creating"]);
 
@@ -343,28 +317,23 @@ export default function ResetPage() {
               </div>
 
               <div className="mt-4 flex flex-col gap-4">
-                <Button
-                  type="button"
-                  variation="primary"
-                  onClick={() => handleStartHackathon()}
-                >
-                  Schedule Hackathon Start
-                </Button>
-                <Button
-                  type="button"
-                  variation="primary"
-                  onClick={() => handleStopHackathon(false)}
-                >
-                  Schedule Hackathon End
-                </Button>
-                <Button
-                  type="button"
-                  variation="primary"
-                  colorTheme="error"
-                  onClick={() => handleStopHackathon(true)}
-                >
-                  Stop Hackathon Now
-                </Button>
+                {!hackathonExists && (
+                  <Button
+                    type="button"
+                    variation="primary"
+                    onClick={() => handleStartHackathon()}
+                  >
+                    Schedule Hackathon Start
+                  </Button>
+                )}
+                {hackathonExists && (
+                  <div className="rounded-md bg-green-50 p-4 text-center text-green-800">
+                    <p className="font-semibold">Hackathon Already Started</p>
+                    <p className="text-sm">
+                      Use the Reset form below to create a new hackathon
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

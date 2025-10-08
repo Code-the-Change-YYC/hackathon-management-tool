@@ -5,7 +5,6 @@ import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/reso
 import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMessageCode/resource";
 import { ResetHackathon } from "@/amplify/function/BusinessLogic/ResetHackathon/resource";
 import { StartHackathon } from "@/amplify/function/BusinessLogic/StartHackathon/resource";
-import { StopHackathon } from "@/amplify/function/BusinessLogic/StopHackathon/resource";
 import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { a, defineData, type ClientSchema } from "@aws-amplify/backend";
@@ -288,15 +287,6 @@ const schema = a
       })
       .authorization((allow) => [allow.group("Admin")])
       .handler(a.handler.function(StartHackathon))
-      .returns(a.ref("StatusCodeFunctionResponse")),
-
-    StopHackathon: a
-      .mutation()
-      .arguments({
-        stopDate: a.date(),
-      })
-      .authorization((allow) => [allow.group("Admin")])
-      .handler(a.handler.function(StopHackathon))
       .returns(a.ref("StatusCodeFunctionResponse")),
 
     // Custom resolvers

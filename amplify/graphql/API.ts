@@ -1360,6 +1360,19 @@ export type ResetHackathonMutation = {
   } | null;
 };
 
+export type StartHackathonMutationVariables = {
+  startDate: string;
+  endDate: string;
+};
+
+export type StartHackathonMutation = {
+  StartHackathon?: {
+    __typename: "StatusCodeFunctionResponse";
+    headers?: string | null;
+    statusCode?: number | null;
+  } | null;
+};
+
 export type ScheduleTeamsAndJudgesMutationVariables = {
   judgingSessionsPerTeam: number;
   numOfJudgingRooms: number;

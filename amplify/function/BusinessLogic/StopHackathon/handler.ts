@@ -42,7 +42,6 @@ export const handler: Handler = async (event) => {
   try {
     const { stopDate } = event.arguments;
 
-    // Fetch the current hackathon
     const { data: hackathonItems } = await client.graphql({
       query: listHackathons,
     });
@@ -54,12 +53,7 @@ export const handler: Handler = async (event) => {
     const hackathon = hackathonItems.listHackathons.items[0];
     const hackathonId = hackathon.id;
 
-    // If stopDate is provided, we're scheduling a future stop; otherwise, stop immediately
     if (stopDate) {
-      // For a full implementation with EventBridge, the AWS SDK would need to be properly
-      // configured in the project. For now, we'll just update the hackathon end date.
-
-      // Update hackathon with new end date
       const { errors } = await client.graphql({
         query: updateHackathon,
         variables: {
@@ -72,14 +66,14 @@ export const handler: Handler = async (event) => {
 
       if (errors) throw errors;
 
+      console.log(`Hackathon scheduled to stop on ${stopDate}`);
+
       return {
         statusCode: 200,
-        body: { message: `Hackathon scheduled to stop on ${stopDate}` },
         headers: { "Content-Type": "application/json" },
       };
     } else {
-      // Stop the hackathon immediately by updating the end date to now
-      const now = new Date().toISOString().split("T")[0]; // Get current date in YYYY-MM-DD format
+      const now = new Date().toISOString().split("T")[0];
 
       const { errors } = await client.graphql({
         query: updateHackathon,
@@ -93,20 +87,17 @@ export const handler: Handler = async (event) => {
 
       if (errors) throw errors;
 
+      console.log("Hackathon stopped successfully");
+
       return {
         statusCode: 200,
-        body: { message: "Hackathon stopped successfully" },
         headers: { "Content-Type": "application/json" },
       };
     }
   } catch (error) {
     console.error("Error stopping hackathon:", error);
     throw new Error(
-      JSON.stringify({
-        statusCode: 500,
-        body: { error: `Failed to stop hackathon: ${error}` },
-        headers: { "Content-Type": "application/json" },
-      }),
+      `Failed to stop hackathon: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 };

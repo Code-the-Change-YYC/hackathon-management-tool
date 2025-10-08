@@ -1,6 +1,6 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
-import { updateHackathon } from "@/amplify/graphql/mutations";
+import { createHackathon, updateHackathon } from "@/amplify/graphql/mutations";
 import { listHackathons } from "@/amplify/graphql/queries";
 import type { Schema } from "../../../data/resource";
 
@@ -42,51 +42,60 @@ export const handler: Handler = async (event) => {
   try {
     const { startDate, endDate } = event.arguments;
 
-    // Fetch the current hackathon
     const { data: hackathonItems } = await client.graphql({
       query: listHackathons,
     });
 
-    if (!hackathonItems || hackathonItems.listHackathons.items.length === 0) {
-      throw new Error("No hackathon found to start");
-    }
+    const existingHackathons = hackathonItems?.listHackathons?.items || [];
 
-    const hackathon = hackathonItems.listHackathons.items[0];
-    const hackathonId = hackathon.id;
+    if (existingHackathons.length > 0) {
+      const hackathonId = existingHackathons[0].id;
 
-    // Update hackathon with new start and end dates
-    const { errors } = await client.graphql({
-      query: updateHackathon,
-      variables: {
-        input: {
-          id: hackathonId,
-          startDate: startDate,
-          endDate: endDate,
+      const { errors } = await client.graphql({
+        query: updateHackathon,
+        variables: {
+          input: {
+            id: hackathonId,
+            startDate: startDate,
+            endDate: endDate,
+          },
         },
-      },
-    });
+      });
 
-    if (errors) throw errors;
+      if (errors) throw errors;
 
-    // We'll use AWS console and schedule instead of EventBridge for simplicity
-    // For a full implementation with EventBridge, the AWS SDK would need to be properly
-    // configured in the project
+      console.log(
+        `Hackathon updated to start on ${startDate} and end on ${endDate}`,
+      );
+    } else {
+      const { errors } = await client.graphql({
+        query: createHackathon,
+        variables: {
+          input: {
+            id: "1",
+            startDate: startDate,
+            endDate: endDate,
+            scoringComponents: [],
+            scoringSidepots: [],
+          },
+        },
+      });
+
+      if (errors) throw errors;
+
+      console.log(
+        `Hackathon created and scheduled to start on ${startDate} and end on ${endDate}`,
+      );
+    }
 
     return {
       statusCode: 200,
-      body: {
-        message: `Hackathon scheduled to start on ${startDate} and end on ${endDate}`,
-      },
       headers: { "Content-Type": "application/json" },
     };
   } catch (error) {
     console.error("Error scheduling hackathon start:", error);
     throw new Error(
-      JSON.stringify({
-        statusCode: 500,
-        body: { error: `Failed to schedule hackathon start: ${error}` },
-        headers: { "Content-Type": "application/json" },
-      }),
+      `Failed to schedule hackathon start: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 };

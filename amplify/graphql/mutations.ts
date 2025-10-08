@@ -92,6 +92,20 @@ export const ResetHackathon = /* GraphQL */ `mutation ResetHackathon(
   APITypes.ResetHackathonMutationVariables,
   APITypes.ResetHackathonMutation
 >;
+export const StartHackathon = /* GraphQL */ `mutation StartHackathon(
+  $startDate: AWSDate!
+  $endDate: AWSDate!
+) {
+  StartHackathon(startDate: $startDate, endDate: $endDate) {
+    headers
+    statusCode
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.StartHackathonMutationVariables,
+  APITypes.StartHackathonMutation
+>;
 export const ScheduleTeamsAndJudges =
   /* GraphQL */ `mutation ScheduleTeamsAndJudges(
   $judgingSessionsPerTeam: Int!

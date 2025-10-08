@@ -25,26 +25,46 @@ const HACKTIME_HEADER_STYLE = {
 
 export default function HackathonClock(props: {
   eventName: string;
-  eventDate: Date;
+  eventStartDate: Date;
+  eventEndDate?: Date;
 }) {
-  const { eventName, eventDate } = props;
+  const { eventName, eventStartDate, eventEndDate } = props;
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  const hackathonStatus = useMemo(() => {
+    if (currentTime < eventStartDate) {
+      return "before";
+    }
+    if (eventEndDate && currentTime >= eventEndDate) {
+      return "ended";
+    }
+    if (currentTime >= eventStartDate) {
+      return "ongoing";
+    }
+    return "before";
+  }, [currentTime, eventStartDate, eventEndDate]);
+
   useEffect(() => {
-    if (isHackathonTime) return;
+    if (hackathonStatus === "ended") return;
     const interval = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(interval);
-  }, [currentTime, eventDate]);
-  const isHackathonTime = useMemo(() => {
-    return currentTime >= eventDate;
-  }, [currentTime, eventDate]);
+  }, [hackathonStatus]);
 
   const timeRemaining = useMemo(() => {
-    return calculateDateDifference(eventDate, currentTime);
-  }, [currentTime, eventDate]);
-  const eventYear = eventDate.getFullYear();
-  if (isHackathonTime) {
+    if (hackathonStatus === "before") {
+      return calculateDateDifference(eventStartDate, currentTime);
+    }
+    if (hackathonStatus === "ongoing" && eventEndDate) {
+      return calculateDateDifference(eventEndDate, currentTime);
+    }
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  }, [currentTime, eventStartDate, eventEndDate, hackathonStatus]);
+
+  const eventYear = eventStartDate.getFullYear();
+
+  if (hackathonStatus === "ended") {
     return (
       <h1
         className="flex-wrap pt-14 text-4xl font-black text-awesomer-purple drop-shadow-lg md:pt-20 md:text-center md:text-5xl lg:pt-32"
@@ -52,8 +72,36 @@ export default function HackathonClock(props: {
       >
         {eventName} {eventYear}
         <br />
-        has begun!
+        has ended!
       </h1>
+    );
+  }
+
+  if (hackathonStatus === "ongoing") {
+    return (
+      <>
+        <h1
+          className="flex-wrap pt-14 text-4xl font-black text-awesomer-purple drop-shadow-lg md:pt-20 md:text-center md:text-5xl lg:pt-32"
+          style={HACKTIME_HEADER_STYLE}
+        >
+          {eventName} {eventYear}
+          <br />
+          is ongoing!
+        </h1>
+        {eventEndDate && (
+          <>
+            <h2 className="pt-4 text-center text-xl font-bold text-awesomer-purple">
+              Time remaining ...
+            </h2>
+            <div className="flex max-w-screen-md flex-row items-center justify-center gap-2 py-4">
+              <CountdownTimer name="Days" value={timeRemaining.days} />
+              <CountdownTimer name="Hours" value={timeRemaining.hours} />
+              <CountdownTimer name="Minutes" value={timeRemaining.minutes} />
+              <CountdownTimer name="Seconds" value={timeRemaining.seconds} />
+            </div>
+          </>
+        )}
+      </>
     );
   }
 
