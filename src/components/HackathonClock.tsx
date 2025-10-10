@@ -23,12 +23,13 @@ const HACKTIME_HEADER_STYLE = {
 	`,
 };
 
+const EVENT_NAME = "Hack the Change";
+
 export default function HackathonClock(props: {
-  eventName: string;
   eventStartDate: Date;
   eventEndDate?: Date;
 }) {
-  const { eventName, eventStartDate, eventEndDate } = props;
+  const { eventStartDate, eventEndDate } = props;
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const hackathonStatus = useMemo(() => {
@@ -70,7 +71,7 @@ export default function HackathonClock(props: {
         className="flex-wrap pt-14 text-4xl font-black text-awesomer-purple drop-shadow-lg md:pt-20 md:text-center md:text-5xl lg:pt-32"
         style={HACKTIME_HEADER_STYLE}
       >
-        {eventName} {eventYear}
+        {EVENT_NAME} {eventYear}
         <br />
         has ended!
       </h1>
@@ -84,7 +85,7 @@ export default function HackathonClock(props: {
           className="flex-wrap pt-14 text-4xl font-black text-awesomer-purple drop-shadow-lg md:pt-20 md:text-center md:text-5xl lg:pt-32"
           style={HACKTIME_HEADER_STYLE}
         >
-          {eventName} {eventYear}
+          {EVENT_NAME} {eventYear}
           <br />
           is ongoing!
         </h1>
@@ -108,7 +109,7 @@ export default function HackathonClock(props: {
   return (
     <>
       <h1 className="pt-4 text-center text-2xl font-bold text-awesomer-purple">
-        {eventName} begins in ...
+        {EVENT_NAME} begins in ...
       </h1>
       <div className="flex max-w-screen-md flex-row items-center justify-center gap-2 py-4">
         <CountdownTimer name="Days" value={timeRemaining.days} />

@@ -31,20 +31,3 @@ export async function fetchContent<T extends keyof ContentTypeMap>(
     throw new Error("Failed to fetch content" + (err as Error).message);
   }
 }
-
-export async function getHackathonData() {
-  try {
-    const { data: hackathonData } = await cookiesClient.models.Hackathon.list({
-      selectionSet: ["id", "startDate", "endDate"],
-    });
-
-    if (hackathonData && hackathonData.length > 0) {
-      return hackathonData[0];
-    }
-
-    return null;
-  } catch (err) {
-    console.error("Failed to fetch hackathon data:", err);
-    return null;
-  }
-}
