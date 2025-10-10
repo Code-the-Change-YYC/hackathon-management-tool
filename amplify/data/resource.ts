@@ -3,7 +3,7 @@ import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsers
 import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMessageCode/resource";
-import { ResetHackathon } from "@/amplify/function/BusinessLogic/ResetHackathon/resource";
+import { UpsertHackathon } from "@/amplify/function/BusinessLogic/UpsertHackathon/resource";
 import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { a, defineData, type ClientSchema } from "@aws-amplify/backend";
@@ -261,7 +261,7 @@ const schema = a
       .handler(a.handler.function(ScheduleTeamsAndJudges))
       .returns(a.ref("ScheduleTeamsAndJudgesResponse")),
 
-    ResetHackathon: a
+    UpsertHackathon: a
       .mutation()
       .arguments({
         scoringComponents: a.json().required(),
@@ -275,9 +275,8 @@ const schema = a
         safetyCheck: a.string().required(),
       })
       .authorization((allow) => [allow.group("Admin")])
-      .handler(a.handler.function(ResetHackathon))
+      .handler(a.handler.function(UpsertHackathon))
       .returns(a.ref("StatusCodeFunctionResponse")),
-
     // Custom resolvers
     SetUserAsCheckedIn: a
       .mutation()
@@ -298,7 +297,7 @@ const schema = a
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PostConfirmation).to(["mutate"]),
     allow.resource(VerifyUserMessage).to(["query", "mutate"]),
-    allow.resource(ResetHackathon).to(["mutate", "query"]),
+    allow.resource(UpsertHackathon).to(["mutate", "query"]),
     allow.resource(AddUserToGroup).to(["mutate"]),
     allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
     allow.resource(ScheduleTeamsAndJudges).to(["query", "mutate"]),

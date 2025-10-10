@@ -1,8 +1,8 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 import type { PostConfirmationTriggerHandler } from "aws-lambda";
-import { data } from "@/amplify/auth/PostConfirmation/amplify_outputs.json";
 import { type Schema } from "@/amplify/data/resource";
+import modelIntrospection from "@/amplify/function/BusinessLogic/utils/model-introspection.json";
 import {
   AdminAddUserToGroupCommand,
   CognitoIdentityProviderClient,
@@ -15,7 +15,7 @@ Amplify.configure(
         endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string, // replace with your defineData name
         region: process.env.AWS_REGION,
         defaultAuthMode: "identityPool",
-        modelIntrospection: data.model_introspection as any,
+        modelIntrospection: modelIntrospection as any,
       },
     },
   },

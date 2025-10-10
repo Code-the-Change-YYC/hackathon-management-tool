@@ -57,7 +57,7 @@ const client = generateClient<Schema>({
   authMode: "iam",
 });
 
-type Handler = Schema["ResetHackathon"]["functionHandler"];
+type Handler = Schema["UpsertHackathon"]["functionHandler"];
 
 export const handler: Handler = async (event) => {
   try {
