@@ -29,6 +29,7 @@ const navigationMap: Record<string, NavItem[]> = {
     { name: "Dashboard", route: "/participant" },
     { name: "Food Ticket", route: "/participant/profile/food-ticket" },
     { name: "Important Information", route: "/participant/important-info" },
+    { name: "Resources", route: "/participant/resources" },
   ],
 };
 

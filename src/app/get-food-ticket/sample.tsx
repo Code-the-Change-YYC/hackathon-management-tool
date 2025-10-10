@@ -15,8 +15,6 @@ export default function FoodPage() {
   const [userCode, setUserCode] = useState("");
   const [eventName, setEventName] = useState("");
   const [eventDescription, setEventDescription] = useState("");
-  const [eventTimeRange, setEventTimeRange] = useState("");
-  const [queueInfo, setQueueInfo] = useState("");
   const [userTimeSlot, setUserTimeSlot] = useState("");
   useEffect(() => {
     async function fetchData() {
@@ -25,21 +23,12 @@ export default function FoodPage() {
       await setUserVerificationCode(userId);
 
       if (userId) {
-        const {
-          queuePosition,
-          eventName,
-          eventDescription,
-          eventTime,
-          timeslot,
-        } = await getUpcomingFoodEventDetails(userId);
+        const { eventName, eventDescription, timeslot } =
+          await getUpcomingFoodEventDetails(userId);
 
         setEventName(eventName);
         setEventDescription(eventDescription);
-        setQueueInfo(queuePosition);
-        setEventTimeRange(eventTime);
         setUserTimeSlot(timeslot);
-      } else {
-        setQueueInfo("User does not have a team");
       }
     }
     fetchData();
@@ -71,9 +60,7 @@ export default function FoodPage() {
     <div className="mx-auto text-center">
       <h1>{eventName}</h1>
       <p>{eventDescription}</p>
-      <p>{eventTimeRange}</p>
       <p>your time slot for food is: {userTimeSlot}</p>
-      <p>{queueInfo}</p>
 
       <br></br>
       <a> {userCode}</a>
