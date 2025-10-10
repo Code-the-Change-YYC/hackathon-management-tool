@@ -1,8 +1,8 @@
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/data";
 import type { AppSyncResolverHandler } from "aws-lambda";
+import modelIntrospection from "@/amplify/function/BusinessLogic/utils/model-introspection.json";
 import { updateUser } from "@/amplify/graphql/mutations";
-import { data } from "../_amplify_model/amplify_outputs.json";
 import type { Schema } from "../../../data/resource";
 
 const MAX_TEAM_MEMBERS = 6;
@@ -13,7 +13,7 @@ Amplify.configure(
         endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string,
         region: process.env.AWS_REGION,
         defaultAuthMode: "iam",
-        modelIntrospection: data.model_introspection as any,
+        modelIntrospection: modelIntrospection as any,
       },
     },
   },

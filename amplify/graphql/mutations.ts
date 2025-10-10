@@ -3,14 +3,12 @@
 // this is an auto generated file. This will be overwritten
 
 import * as APITypes from "./API";
-
 type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationInput: InputType;
   __generatedMutationOutput: OutputType;
 };
 
-export const AddUserToGroup =
-  /* GraphQL */ `mutation AddUserToGroup($groupName: String!, $userId: String!) {
+export const AddUserToGroup = /* GraphQL */ `mutation AddUserToGroup($groupName: String!, $userId: String!) {
   AddUserToGroup(groupName: $groupName, userId: $userId) {
     body
     headers
@@ -19,11 +17,10 @@ export const AddUserToGroup =
   }
 }
 ` as GeneratedMutation<
-    APITypes.AddUserToGroupMutationVariables,
-    APITypes.AddUserToGroupMutation
-  >;
-export const AssignUsersToTeams =
-  /* GraphQL */ `mutation AssignUsersToTeams($teamId: String!, $userId: String!) {
+  APITypes.AddUserToGroupMutationVariables,
+  APITypes.AddUserToGroupMutation
+>;
+export const AssignUsersToTeams = /* GraphQL */ `mutation AssignUsersToTeams($teamId: String!, $userId: String!) {
   AssignUsersToTeams(teamId: $teamId, userId: $userId) {
     body
     headers
@@ -32,11 +29,10 @@ export const AssignUsersToTeams =
   }
 }
 ` as GeneratedMutation<
-    APITypes.AssignUsersToTeamsMutationVariables,
-    APITypes.AssignUsersToTeamsMutation
-  >;
-export const CreateTeamWithCode =
-  /* GraphQL */ `mutation CreateTeamWithCode($addCallerToTeam: Boolean!, $teamName: String!) {
+  APITypes.AssignUsersToTeamsMutationVariables,
+  APITypes.AssignUsersToTeamsMutation
+>;
+export const CreateTeamWithCode = /* GraphQL */ `mutation CreateTeamWithCode($addCallerToTeam: Boolean!, $teamName: String!) {
   CreateTeamWithCode(addCallerToTeam: $addCallerToTeam, teamName: $teamName) {
     body
     headers
@@ -45,11 +41,10 @@ export const CreateTeamWithCode =
   }
 }
 ` as GeneratedMutation<
-    APITypes.CreateTeamWithCodeMutationVariables,
-    APITypes.CreateTeamWithCodeMutation
-  >;
-export const DemoFunction =
-  /* GraphQL */ `mutation DemoFunction($content: String) {
+  APITypes.CreateTeamWithCodeMutationVariables,
+  APITypes.CreateTeamWithCodeMutation
+>;
+export const DemoFunction = /* GraphQL */ `mutation DemoFunction($content: String) {
   DemoFunction(content: $content) {
     body
     headers
@@ -58,56 +53,10 @@ export const DemoFunction =
   }
 }
 ` as GeneratedMutation<
-    APITypes.DemoFunctionMutationVariables,
-    APITypes.DemoFunctionMutation
-  >;
-export const ResetHackathon = /* GraphQL */ `mutation ResetHackathon(
-  $endDate: AWSDate!
-  $resetRooms: Boolean!
-  $resetScores: Boolean!
-  $resetTeams: Boolean!
-  $resetUsers: Boolean!
-  $safetyCheck: String!
-  $scoringComponents: AWSJSON!
-  $scoringSidepots: AWSJSON!
-  $startDate: AWSDate!
-) {
-  ResetHackathon(
-    endDate: $endDate
-    resetRooms: $resetRooms
-    resetScores: $resetScores
-    resetTeams: $resetTeams
-    resetUsers: $resetUsers
-    safetyCheck: $safetyCheck
-    scoringComponents: $scoringComponents
-    scoringSidepots: $scoringSidepots
-    startDate: $startDate
-  ) {
-    headers
-    statusCode
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.ResetHackathonMutationVariables,
-  APITypes.ResetHackathonMutation
+  APITypes.DemoFunctionMutationVariables,
+  APITypes.DemoFunctionMutation
 >;
-export const StartHackathon = /* GraphQL */ `mutation StartHackathon(
-  $startDate: AWSDate!
-  $endDate: AWSDate!
-) {
-  StartHackathon(startDate: $startDate, endDate: $endDate) {
-    headers
-    statusCode
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.StartHackathonMutationVariables,
-  APITypes.StartHackathonMutation
->;
-export const ScheduleTeamsAndJudges =
-  /* GraphQL */ `mutation ScheduleTeamsAndJudges(
+export const ScheduleTeamsAndJudges = /* GraphQL */ `mutation ScheduleTeamsAndJudges(
   $judgingSessionsPerTeam: Int!
   $numOfJudgingRooms: Int!
   $presentationDuration: Int!
@@ -126,11 +75,10 @@ export const ScheduleTeamsAndJudges =
   }
 }
 ` as GeneratedMutation<
-    APITypes.ScheduleTeamsAndJudgesMutationVariables,
-    APITypes.ScheduleTeamsAndJudgesMutation
-  >;
-export const SetUserAsCheckedIn =
-  /* GraphQL */ `mutation SetUserAsCheckedIn($userId: String!) {
+  APITypes.ScheduleTeamsAndJudgesMutationVariables,
+  APITypes.ScheduleTeamsAndJudgesMutation
+>;
+export const SetUserAsCheckedIn = /* GraphQL */ `mutation SetUserAsCheckedIn($userId: String!) {
   SetUserAsCheckedIn(userId: $userId) {
     JUDGE_givenScores {
       nextToken
@@ -175,9 +123,40 @@ export const SetUserAsCheckedIn =
   }
 }
 ` as GeneratedMutation<
-    APITypes.SetUserAsCheckedInMutationVariables,
-    APITypes.SetUserAsCheckedInMutation
-  >;
+  APITypes.SetUserAsCheckedInMutationVariables,
+  APITypes.SetUserAsCheckedInMutation
+>;
+export const UpsertHackathon = /* GraphQL */ `mutation UpsertHackathon(
+  $endDate: AWSDate!
+  $resetRooms: Boolean!
+  $resetScores: Boolean!
+  $resetTeams: Boolean!
+  $resetUsers: Boolean!
+  $safetyCheck: String!
+  $scoringComponents: AWSJSON!
+  $scoringSidepots: AWSJSON!
+  $startDate: AWSDate!
+) {
+  UpsertHackathon(
+    endDate: $endDate
+    resetRooms: $resetRooms
+    resetScores: $resetScores
+    resetTeams: $resetTeams
+    resetUsers: $resetUsers
+    safetyCheck: $safetyCheck
+    scoringComponents: $scoringComponents
+    scoringSidepots: $scoringSidepots
+    startDate: $startDate
+  ) {
+    headers
+    statusCode
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpsertHackathonMutationVariables,
+  APITypes.UpsertHackathonMutation
+>;
 export const createFoodEvent = /* GraphQL */ `mutation CreateFoodEvent(
   $condition: ModelFoodEventConditionInput
   $input: CreateFoodEventInput!
@@ -414,8 +393,7 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
   APITypes.CreateUserMutationVariables,
   APITypes.CreateUserMutation
 >;
-export const createUserFoodEventAttendance =
-  /* GraphQL */ `mutation CreateUserFoodEventAttendance(
+export const createUserFoodEventAttendance = /* GraphQL */ `mutation CreateUserFoodEventAttendance(
   $condition: ModelUserFoodEventAttendanceConditionInput
   $input: CreateUserFoodEventAttendanceInput!
 ) {
@@ -459,9 +437,9 @@ export const createUserFoodEventAttendance =
   }
 }
 ` as GeneratedMutation<
-    APITypes.CreateUserFoodEventAttendanceMutationVariables,
-    APITypes.CreateUserFoodEventAttendanceMutation
-  >;
+  APITypes.CreateUserFoodEventAttendanceMutationVariables,
+  APITypes.CreateUserFoodEventAttendanceMutation
+>;
 export const deleteFoodEvent = /* GraphQL */ `mutation DeleteFoodEvent(
   $condition: ModelFoodEventConditionInput
   $input: DeleteFoodEventInput!
@@ -698,8 +676,7 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
   APITypes.DeleteUserMutationVariables,
   APITypes.DeleteUserMutation
 >;
-export const deleteUserFoodEventAttendance =
-  /* GraphQL */ `mutation DeleteUserFoodEventAttendance(
+export const deleteUserFoodEventAttendance = /* GraphQL */ `mutation DeleteUserFoodEventAttendance(
   $condition: ModelUserFoodEventAttendanceConditionInput
   $input: DeleteUserFoodEventAttendanceInput!
 ) {
@@ -743,9 +720,9 @@ export const deleteUserFoodEventAttendance =
   }
 }
 ` as GeneratedMutation<
-    APITypes.DeleteUserFoodEventAttendanceMutationVariables,
-    APITypes.DeleteUserFoodEventAttendanceMutation
-  >;
+  APITypes.DeleteUserFoodEventAttendanceMutationVariables,
+  APITypes.DeleteUserFoodEventAttendanceMutation
+>;
 export const updateFoodEvent = /* GraphQL */ `mutation UpdateFoodEvent(
   $condition: ModelFoodEventConditionInput
   $input: UpdateFoodEventInput!
@@ -982,8 +959,7 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
   APITypes.UpdateUserMutationVariables,
   APITypes.UpdateUserMutation
 >;
-export const updateUserFoodEventAttendance =
-  /* GraphQL */ `mutation UpdateUserFoodEventAttendance(
+export const updateUserFoodEventAttendance = /* GraphQL */ `mutation UpdateUserFoodEventAttendance(
   $condition: ModelUserFoodEventAttendanceConditionInput
   $input: UpdateUserFoodEventAttendanceInput!
 ) {
@@ -1027,6 +1003,6 @@ export const updateUserFoodEventAttendance =
   }
 }
 ` as GeneratedMutation<
-    APITypes.UpdateUserFoodEventAttendanceMutationVariables,
-    APITypes.UpdateUserFoodEventAttendanceMutation
-  >;
+  APITypes.UpdateUserFoodEventAttendanceMutationVariables,
+  APITypes.UpdateUserFoodEventAttendanceMutation
+>;

@@ -12,10 +12,9 @@ import KevinLoadingRing from "../KevinLoadingRing";
 
 const client = generateClient<Schema>();
 export default function ResetPage() {
-  const userMutation = useMutation({
-    mutationFn: async (input: Schema["ResetHackathon"]["args"]) => {
+  const upsertHackathonMutation = useMutation({
+    mutationFn: async (input: Schema["UpsertHackathon"]["args"]) => {
       console.log(input);
-
       try {
         if (input.safetyCheck !== "i love code the change") {
           console.log(
@@ -26,7 +25,7 @@ export default function ResetPage() {
         // Here you would typically handle the submission to AWS Amplify
         const toastObj = toast.loading("Resetting...");
         const { data: statusCode, errors } =
-          await client.mutations.ResetHackathon({
+          await client.mutations.UpsertHackathon({
             ...input,
           });
         if (errors) {
@@ -40,39 +39,6 @@ export default function ResetPage() {
         return;
       } catch (error) {
         console.error("Error updating user", error);
-        throw error;
-      }
-    },
-  });
-
-  const startHackathonMutation = useMutation({
-    mutationFn: async (input: Schema["StartHackathon"]["args"]) => {
-      console.log(input);
-
-      try {
-        const existingHackathon = await client.models.Hackathon.list();
-        if (existingHackathon.data && existingHackathon.data.length > 0) {
-          toast.error("A hackathon already exists. Please reset first.");
-          throw new Error("Hackathon already exists");
-        }
-
-        const toastObj = toast.loading("Scheduling hackathon start...");
-        const { data: statusCode, errors } =
-          await client.mutations.StartHackathon({
-            ...input,
-          });
-        if (errors) {
-          toast.dismiss(toastObj);
-          toast.error("Error scheduling hackathon start");
-          console.log(errors);
-        }
-        void statusCode;
-        toast.dismiss(toastObj);
-        toast.success("Hackathon start scheduled successfully");
-        await hackathonData.refetch();
-        return;
-      } catch (error) {
-        console.error("Error scheduling hackathon start", error);
         throw error;
       }
     },
@@ -96,51 +62,35 @@ export default function ResetPage() {
     },
   });
 
-  const onSubmit: SubmitHandler<Schema["ResetHackathon"]["args"]> = (data) => {
+  const onSubmit: SubmitHandler<Schema["UpsertHackathon"]["args"]> = (data) => {
     // Convert scoringComponents and scoringSidepots to JSON strings
     data.scoringComponents = JSON.stringify(data.scoringComponents);
     data.scoringSidepots = JSON.stringify(data.scoringSidepots);
-    userMutation.mutate(data);
-  };
-
-  const handleStartHackathon = () => {
-    const { startDate, endDate } = getValues();
-    if (!startDate || !endDate) {
-      toast.error("Start and end dates are required");
-      return;
-    }
-    startHackathonMutation.mutate({ startDate, endDate });
+    upsertHackathonMutation.mutate(data);
   };
 
   const generateId = () => uuidv4();
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    watch,
-    setValue,
-    resetField,
-    getValues,
-  } = useForm({
-    defaultValues: {
-      scoringComponents: [
-        { friendlyName: "", isSidepot: false, id: generateId() },
-      ],
-      scoringSidepots: [
-        { friendlyName: "", isSidepot: true, id: generateId() },
-      ],
-      resetUsers: false,
-      resetTeams: false,
-      resetRooms: false,
-      resetScores: false,
-      startDate: "",
-      endDate: "",
-      safetyCheck: "",
-      resetting: true,
-      creating: false,
-    },
-  });
+  const { register, control, handleSubmit, watch, setValue, resetField } =
+    useForm({
+      defaultValues: {
+        scoringComponents: [
+          { friendlyName: "", isSidepot: false, id: generateId() },
+        ],
+        scoringSidepots: [
+          { friendlyName: "", isSidepot: true, id: generateId() },
+        ],
+        resetUsers: false,
+        resetTeams: false,
+        resetRooms: false,
+        resetScores: false,
+        startDate: "",
+        endDate: "",
+        safetyCheck: "",
+        resetting: true,
+        creating: false,
+      },
+    });
 
   const {
     fields: scoringComponents,
@@ -160,18 +110,14 @@ export default function ResetPage() {
     name: "scoringSidepots",
   });
 
-  if (
-    hackathonData.isPending ||
-    userMutation.isPending ||
-    startHackathonMutation.isPending
-  )
+  if (hackathonData.isPending || upsertHackathonMutation.isPending)
     return (
       <div className="mt-16 flex w-full items-center justify-center">
         <KevinLoadingRing />
       </div>
     );
 
-  if (userMutation.isError || startHackathonMutation.isError)
+  if (upsertHackathonMutation.isError)
     return <div>Error, please try again later.</div>;
 
   const hackathonExists =
@@ -185,7 +131,7 @@ export default function ResetPage() {
     setValue("resetting", false);
     setValue("creating", false);
 
-    setValue(value as keyof Schema["ResetHackathon"]["args"], true);
+    setValue(value as keyof Schema["UpsertHackathon"]["args"], true);
   };
 
   return (
@@ -294,26 +240,6 @@ export default function ResetPage() {
                   {...register("endDate")}
                 />
               </div>
-
-              <div className="mt-4 flex flex-col gap-4">
-                {!hackathonExists && (
-                  <Button
-                    type="button"
-                    variation="primary"
-                    onClick={() => handleStartHackathon()}
-                  >
-                    Schedule Hackathon Start
-                  </Button>
-                )}
-                {hackathonExists && (
-                  <div className="rounded-md bg-green-50 p-4 text-center text-green-800">
-                    <p className="font-semibold">Hackathon Already Started</p>
-                    <p className="text-sm">
-                      Use the Reset form below to create a new hackathon
-                    </p>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
           <div className="flex w-full flex-1 flex-col gap-2 rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black md:w-2/3">
@@ -332,8 +258,9 @@ export default function ResetPage() {
                     }}
                   />
                   <CheckboxField
+                    isDisabled={hackathonExists === false}
                     label="Creating Hackathon"
-                    {...register("resetting")}
+                    {...register("creating")}
                     checked={creating}
                     onChange={() => {
                       handleCheckboxChange(
@@ -345,33 +272,40 @@ export default function ResetPage() {
                       resetField("resetRooms");
                     }}
                   />
+                  {hackathonExists === false && (
+                    <span className="text-sm text-red-600">
+                      *A hackathon already exists, cannot create a new one*
+                    </span>
+                  )}
                 </div>
 
-                {resetting && (
-                  <div className="flex flex-col gap-5">
-                    <Label className="text-center">Reset Fields</Label>
-                    <CheckboxField
-                      label="Reset Users"
-                      {...register("resetUsers")}
-                      checked={watch("resetUsers")}
-                    />
-                    <CheckboxField
-                      label="Reset Teams"
-                      {...register("resetTeams")}
-                      checked={watch("resetTeams")}
-                    />
-                    <CheckboxField
-                      label="Reset Rooms"
-                      {...register("resetRooms")}
-                      checked={watch("resetRooms")}
-                    />
-                    <CheckboxField
-                      label="Reset Scores"
-                      {...register("resetScores")}
-                      checked={watch("resetScores")}
-                    />
-                  </div>
-                )}
+                <div className="flex flex-col gap-5">
+                  <Label className="text-center">Reset Fields</Label>
+                  <CheckboxField
+                    isDisabled={creating}
+                    label="Reset Users"
+                    {...register("resetUsers")}
+                    checked={watch("resetUsers")}
+                  />
+                  <CheckboxField
+                    isDisabled={creating}
+                    label="Reset Teams"
+                    {...register("resetTeams")}
+                    checked={watch("resetTeams")}
+                  />
+                  <CheckboxField
+                    isDisabled={creating}
+                    label="Reset Rooms"
+                    {...register("resetRooms")}
+                    checked={watch("resetRooms")}
+                  />
+                  <CheckboxField
+                    isDisabled={creating}
+                    label="Reset Scores"
+                    {...register("resetScores")}
+                    checked={watch("resetScores")}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -395,20 +329,20 @@ export default function ResetPage() {
                 <Button
                   variation="primary"
                   colorTheme={
-                    userMutation.isSuccess
+                    upsertHackathonMutation.isSuccess
                       ? "success"
-                      : userMutation.isError
+                      : upsertHackathonMutation.isError
                         ? "error"
                         : undefined // Set the colorTheme to undefined if none of the conditions are met
                   }
                   loadingText="Loading..."
                   type="submit"
-                  isLoading={userMutation.isPending}
+                  isLoading={upsertHackathonMutation.isPending}
                   className="w-1/3"
                 >
-                  {userMutation.isSuccess
+                  {upsertHackathonMutation.isSuccess
                     ? "Success"
-                    : userMutation.isError
+                    : upsertHackathonMutation.isError
                       ? "Error"
                       : "Submit"}
                 </Button>
