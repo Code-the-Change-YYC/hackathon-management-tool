@@ -27,7 +27,7 @@ const EVENT_NAME = "Hack the Change";
 
 export default function HackathonClock(props: {
   eventStartDate: Date;
-  eventEndDate?: Date;
+  eventEndDate: Date;
 }) {
   const { eventStartDate, eventEndDate } = props;
   const [currentTime, setCurrentTime] = useState(new Date());

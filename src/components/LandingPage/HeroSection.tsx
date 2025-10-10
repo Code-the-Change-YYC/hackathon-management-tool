@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { fetchContent } from "@/app/actions";
 import client from "@/components/_Amplify/AmplifyBackendClient";
 import { SuspenseWrapper } from "@/components/SuspenseWrapper";
 import HackathonClock from "../HackathonClock";
