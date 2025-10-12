@@ -159,6 +159,7 @@ const schema = a
       })
       .authorization((allow) => [
         allow.group("Admin").to(["read", "update", "create", "delete"]),
+        allow.guest().to(["read"]),
         allow.authenticated().to(["read"]),
       ]),
 
