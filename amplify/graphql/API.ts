@@ -1340,26 +1340,6 @@ export type DemoFunctionMutation = {
   } | null;
 };
 
-export type ResetHackathonMutationVariables = {
-  endDate: string;
-  resetRooms: boolean;
-  resetScores: boolean;
-  resetTeams: boolean;
-  resetUsers: boolean;
-  safetyCheck: string;
-  scoringComponents: string;
-  scoringSidepots: string;
-  startDate: string;
-};
-
-export type ResetHackathonMutation = {
-  ResetHackathon?: {
-    __typename: "StatusCodeFunctionResponse";
-    headers?: string | null;
-    statusCode?: number | null;
-  } | null;
-};
-
 export type ScheduleTeamsAndJudgesMutationVariables = {
   judgingSessionsPerTeam: number;
   numOfJudgingRooms: number;
@@ -1422,6 +1402,26 @@ export type SetUserAsCheckedInMutation = {
     teamId?: string | null;
     updatedAt: string;
     willEatMeals?: boolean | null;
+  } | null;
+};
+
+export type UpsertHackathonMutationVariables = {
+  endDate: string;
+  resetRooms: boolean;
+  resetScores: boolean;
+  resetTeams: boolean;
+  resetUsers: boolean;
+  safetyCheck: string;
+  scoringComponents: string;
+  scoringSidepots: string;
+  startDate: string;
+};
+
+export type UpsertHackathonMutation = {
+  UpsertHackathon?: {
+    __typename: "StatusCodeFunctionResponse";
+    headers?: string | null;
+    statusCode?: number | null;
   } | null;
 };
 
