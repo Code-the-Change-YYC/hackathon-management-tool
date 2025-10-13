@@ -64,7 +64,6 @@ const ModalPopup = (props: ModalPopupProps) => {
       const { data, errors } = await client.models.Score.create({
         judgeId: currentUser.username,
         teamId: teamId,
-        hackathonId: hackathon.id,
         score: JSON.stringify(input.score),
       });
       if (errors) throw Error(errors[0].message);

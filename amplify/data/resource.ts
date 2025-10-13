@@ -22,13 +22,13 @@ const schema = a
           .default("Participant")
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
-            allow.groups(["Admin"]).to(["read", "update", "create"]),
+            allow.groups(["Admin"]).to(["read", "update", "create", "delete"]),
           ]),
         email: a
           .string()
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
-            allow.groups(["Admin"]).to(["read", "create"]),
+            allow.groups(["Admin"]).to(["read", "create", "delete"]),
           ]),
         institution: a.string(),
         program: a.string(),
@@ -104,8 +104,6 @@ const schema = a
       .model({
         id: a.id(),
         score: a.json().required(),
-        hackathonId: a.id().required(),
-        hackathon: a.belongsTo("Hackathon", "hackathonId"),
         judgeId: a.id().required(),
         judge: a.belongsTo("User", "judgeId"),
         teamId: a.id().required(),
@@ -158,7 +156,6 @@ const schema = a
           .required()
           .array()
           .required(),
-        scores: a.hasMany("Score", "hackathonId"),
       })
       .authorization((allow) => [
         allow.group("Admin").to(["read", "update", "create", "delete"]),

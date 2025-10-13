@@ -11,7 +11,6 @@ export async function seedScore() {
           teamId: "1",
           judgeId: "1",
           score: "{}",
-          hackathonId: "1",
         });
       },
     ],
