@@ -17,6 +17,8 @@ Ensure you run `npm i` in the root of the repo before continuing. Please respond
 
 - Note: The Hackathon Management Tool's officialy-supported package manager shall be `npm`. Although you can use others, please be advised there will be limited support if you encounter issues.
 
+- Install prettier
+
 ### Amplify Backend Setup
 
 https://docs.amplify.aws/gen2/start/account-setup/
