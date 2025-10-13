@@ -61,37 +61,6 @@ export const DemoFunction =
     APITypes.DemoFunctionMutationVariables,
     APITypes.DemoFunctionMutation
   >;
-export const ResetHackathon = /* GraphQL */ `mutation ResetHackathon(
-  $endDate: AWSDate!
-  $resetRooms: Boolean!
-  $resetScores: Boolean!
-  $resetTeams: Boolean!
-  $resetUsers: Boolean!
-  $safetyCheck: String!
-  $scoringComponents: AWSJSON!
-  $scoringSidepots: AWSJSON!
-  $startDate: AWSDate!
-) {
-  ResetHackathon(
-    endDate: $endDate
-    resetRooms: $resetRooms
-    resetScores: $resetScores
-    resetTeams: $resetTeams
-    resetUsers: $resetUsers
-    safetyCheck: $safetyCheck
-    scoringComponents: $scoringComponents
-    scoringSidepots: $scoringSidepots
-    startDate: $startDate
-  ) {
-    headers
-    statusCode
-    __typename
-  }
-}
-` as GeneratedMutation<
-  APITypes.ResetHackathonMutationVariables,
-  APITypes.ResetHackathonMutation
->;
 export const ScheduleTeamsAndJudges =
   /* GraphQL */ `mutation ScheduleTeamsAndJudges(
   $judgingSessionsPerTeam: Int!
@@ -164,6 +133,37 @@ export const SetUserAsCheckedIn =
     APITypes.SetUserAsCheckedInMutationVariables,
     APITypes.SetUserAsCheckedInMutation
   >;
+export const UpsertHackathon = /* GraphQL */ `mutation UpsertHackathon(
+  $endDate: AWSDate!
+  $resetRooms: Boolean!
+  $resetScores: Boolean!
+  $resetTeams: Boolean!
+  $resetUsers: Boolean!
+  $safetyCheck: String!
+  $scoringComponents: AWSJSON!
+  $scoringSidepots: AWSJSON!
+  $startDate: AWSDate!
+) {
+  UpsertHackathon(
+    endDate: $endDate
+    resetRooms: $resetRooms
+    resetScores: $resetScores
+    resetTeams: $resetTeams
+    resetUsers: $resetUsers
+    safetyCheck: $safetyCheck
+    scoringComponents: $scoringComponents
+    scoringSidepots: $scoringSidepots
+    startDate: $startDate
+  ) {
+    headers
+    statusCode
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpsertHackathonMutationVariables,
+  APITypes.UpsertHackathonMutation
+>;
 export const createFoodEvent = /* GraphQL */ `mutation CreateFoodEvent(
   $condition: ModelFoodEventConditionInput
   $input: CreateFoodEventInput!

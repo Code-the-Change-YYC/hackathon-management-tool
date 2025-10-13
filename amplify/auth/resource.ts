@@ -1,6 +1,6 @@
 import { defineAuth, secret } from "@aws-amplify/backend";
 import { AddUserToGroup } from "../function/BusinessLogic/AddUserToGroup/resource";
-import { ResetHackathon } from "../function/BusinessLogic/ResetHackathon/resource";
+import { UpsertHackathon } from "../function/BusinessLogic/UpsertHackathon/resource";
 import { PostConfirmation } from "./PostConfirmation/resource";
 
 /**
@@ -20,7 +20,7 @@ export const auth = defineAuth({
       .resource(AddUserToGroup)
       .to(["addUserToGroup", "removeUserFromGroup", "listGroupsForUser"]),
 
-    allow.resource(ResetHackathon).to(["deleteUser"]),
+    allow.resource(UpsertHackathon).to(["deleteUser"]),
   ],
   loginWith: {
     email: {

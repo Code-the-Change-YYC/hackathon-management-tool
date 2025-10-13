@@ -21,6 +21,25 @@ Ensure you run `npm i` in the root of the repo before continuing. Please respond
 
 https://docs.amplify.aws/gen2/start/account-setup/
 
+### Giving guest users public access to read data
+
+You must specify the `authMode` as `apiKey`, ex:
+
+```
+  const { data: hackathonData } = await client.models.Hackathon.list({
+    selectionSet: ["id", "startDate", "endDate"],
+    authMode: "apiKey",
+  });
+```
+
+We have `userPool` as the default authMode which is why we have to do this. We don't do this on any pages where we KNOW users have to be logged in.
+
+https://docs.amplify.aws/react/build-a-backend/data/customize-authz/public-data-access/
+
+There is also a way to do it with identity pool but it doesn't work - let's say both admins (which are logged in) and a guest try and view it, when the admin logs out due to some weird SSR things it doesn't work. Just use API key
+
+Note that you have to rotate the API Key though!!! So deploy to rotate it.
+
 ## Running the dev Server with backend sandbox
 
 ```bash
