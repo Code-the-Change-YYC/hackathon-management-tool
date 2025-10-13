@@ -20,7 +20,7 @@ export const auth = defineAuth({
       .resource(AddUserToGroup)
       .to(["addUserToGroup", "removeUserFromGroup", "listGroupsForUser"]),
 
-    allow.resource(UpsertHackathon).to(["deleteUser"]),
+    allow.resource(UpsertHackathon).to(["deleteUser", "listUsersInGroup"]),
   ],
   loginWith: {
     email: {

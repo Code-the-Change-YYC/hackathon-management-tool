@@ -20,6 +20,7 @@ import {
 import {
   AdminDeleteUserCommand,
   CognitoIdentityProviderClient,
+  ListUsersInGroupCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import type { Schema } from "../../../data/resource";
 
@@ -95,8 +96,16 @@ export const handler: Handler = async (event) => {
     // Reset Users
     if (resettingUsers) {
       console.log("resetting all users");
+
+      // a note here
+      // - when we delete users we have to delete them from both cognito and dynamo
+      // - we only want to delete participants
+      // - it doesn't really matter that we delete them separately since the cognito id is different than the dynamo id
       const { data: usersResponse, errors } = await client.graphql({
         query: listUsers,
+        variables: {
+          filter: { role: { eq: "Participant" } },
+        },
       });
 
       if (errors) throw errors;
@@ -104,45 +113,80 @@ export const handler: Handler = async (event) => {
       const users = usersResponse.listUsers.items;
       for (const user of users) {
         const id = user.id;
-        // only delete the participants
-        if (user.role === "Participant") {
-          // even if the user doesn't exist in cognito, it shouldn't fail
+        try {
+          const { errors } = await client.graphql({
+            query: deleteUser,
+            variables: {
+              input: {
+                id: id,
+              },
+            },
+          });
+          if (errors) {
+            console.error(`Error deleting user ${id} from DynamoDB:`, errors);
+            throw errors;
+          }
+          console.log(`Deleted user ${id} from DynamoDB`);
+        } catch (err) {
+          console.error(`Failed to delete user ${id} from DynamoDB:`, err);
+          throw err;
+        }
+      }
+
+      let cognitoParticipantUsernames: Set<string> = new Set();
+
+      try {
+        const cognitoParticipantsCommand = new ListUsersInGroupCommand({
+          UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
+          GroupName: "Participant",
+        });
+
+        const cognitoParticipantsResponse = await cognitoClient.send(
+          cognitoParticipantsCommand,
+        );
+
+        if (cognitoParticipantsResponse.$metadata.httpStatusCode !== 200) {
+          throw new Error(
+            `Failed to list users in group Participant: ${JSON.stringify(
+              cognitoParticipantsResponse,
+            )}`,
+          );
+        } else if (
+          cognitoParticipantsResponse.Users === undefined ||
+          cognitoParticipantsResponse.Users.length === 0
+        ) {
+          throw new Error(`No users found in group Participant`);
+        }
+
+        cognitoParticipantUsernames = new Set(
+          (cognitoParticipantsResponse.Users || [])
+            .map((u) => u.Username)
+            .filter((username): username is string => !!username),
+        );
+        console.log(
+          `Found ${cognitoParticipantUsernames.size} participants in Cognito`,
+        );
+      } catch (err) {
+        console.error(`Failed to list Cognito participants:`, err);
+        throw err;
+      }
+
+      for (const username of cognitoParticipantUsernames) {
+        try {
           const deleteUserCommand = new AdminDeleteUserCommand({
-            Username: id,
+            Username: username,
             UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
           });
 
-          try {
-            await cognitoClient.send(deleteUserCommand);
-            console.log(`Deleted user ${id} from Cognito`);
-          } catch (err: any) {
-            if (err.name === "UserNotFoundException") {
-              console.log(
-                `User ${id} not found in Cognito, skipping Cognito deletion`,
-              );
-            } else {
-              console.error(`Error deleting user ${id} from Cognito:`, err);
-              throw err;
-            }
-          }
-
-          // even if they don't exist in cognito, try to delete from dynamo
-          try {
-            const { errors } = await client.graphql({
-              query: deleteUser,
-              variables: {
-                input: {
-                  id: id,
-                },
-              },
-            });
-            if (errors) {
-              console.error(`Error deleting user ${id} from DynamoDB:`, errors);
-              throw errors;
-            }
-            console.log(`Deleted user ${id} from DynamoDB`);
-          } catch (err) {
-            console.error(`Failed to delete user ${id} from DynamoDB:`, err);
+          await cognitoClient.send(deleteUserCommand);
+          console.log(`Deleted user ${username} from Cognito`);
+        } catch (err: any) {
+          if (err.name === "UserNotFoundException") {
+            console.log(
+              `User ${username} not found in Cognito, skipping Cognito deletion`,
+            );
+          } else {
+            console.error(`Error deleting user ${username} from Cognito:`, err);
             throw err;
           }
         }
