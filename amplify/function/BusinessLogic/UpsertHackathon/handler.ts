@@ -106,24 +106,28 @@ export const handler: Handler = async (event) => {
         const id = user.id;
         // only delete the participants
         if (user.role === "Participant") {
+          // even if the user doesn't exist in cognito, it shouldn't fail
           const deleteUserCommand = new AdminDeleteUserCommand({
             Username: id,
             UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
           });
 
           try {
-            // Delete the user from Cognito
             await cognitoClient.send(deleteUserCommand);
+            console.log(`Deleted user ${id} from Cognito`);
           } catch (err: any) {
-            if (err.name !== "UserNotFoundException") {
+            if (err.name === "UserNotFoundException") {
+              console.log(
+                `User ${id} not found in Cognito, skipping Cognito deletion`,
+              );
+            } else {
+              console.error(`Error deleting user ${id} from Cognito:`, err);
               throw err;
             }
-            // else: ignore, user already deleted
           }
 
+          // even if they don't exist in cognito, try to delete from dynamo
           try {
-            // Delete the user from Dynamo
-            await cognitoClient.send(deleteUserCommand);
             const { errors } = await client.graphql({
               query: deleteUser,
               variables: {
@@ -132,9 +136,14 @@ export const handler: Handler = async (event) => {
                 },
               },
             });
-            if (errors) throw errors;
+            if (errors) {
+              console.error(`Error deleting user ${id} from DynamoDB:`, errors);
+              throw errors;
+            }
+            console.log(`Deleted user ${id} from DynamoDB`);
           } catch (err) {
-            console.error(err);
+            console.error(`Failed to delete user ${id} from DynamoDB:`, err);
+            throw err;
           }
         }
       }
@@ -191,10 +200,20 @@ export const handler: Handler = async (event) => {
       const { data: scoresResponse, errors } = await client.graphql({
         query: listScores,
       });
+
       if (errors) throw errors;
+
       const scores = scoresResponse.listScores.items;
       for (const score of scores) {
+        // check if we have the required keys for deletion
+        // (createdAt/updatedAt can be null, but we need teamId/judgeId to delete)
+        if (!score.teamId || !score.judgeId) {
+          console.warn(`Skipping corrupted score: ${JSON.stringify(score)}`);
+          continue;
+        }
+
         // teamId is the partition key
+        // Verify score has required fields before attempting delete
         const teamId = score.teamId;
         const judgeId = score.judgeId;
         const { errors } = await client.graphql({
