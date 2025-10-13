@@ -11,7 +11,7 @@ const HERO_SECTION_BACKGROUND =
 export default async function HeroSection() {
   const { data: hackathonData } = await client.models.Hackathon.list({
     selectionSet: ["id", "startDate", "endDate"],
-    authMode: "iam",
+    authMode: "apiKey",
   });
 
   // super scuffed please seed every sandbox with a hackathon first prolly

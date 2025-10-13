@@ -159,7 +159,7 @@ const schema = a
       })
       .authorization((allow) => [
         allow.group("Admin").to(["read", "update", "create", "delete"]),
-        allow.guest().to(["read"]),
+        allow.publicApiKey().to(["read"]),
         allow.authenticated().to(["read"]),
       ]),
 
@@ -309,6 +309,9 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: "userPool",
+    apiKeyAuthorizationMode: {
+      expiresInDays: 30,
+    },
     lambdaAuthorizationMode: {
       function: DemoAuthFunction,
     },

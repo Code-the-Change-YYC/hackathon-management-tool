@@ -13,6 +13,7 @@ export default async function TeamConfirmation({
   teamID: string;
   state: "Joined" | "Registered";
 }) {
+  // this one doesn't need to be by api key because technically the user should be signed in
   const { data: hackathonData } = await client.models.Hackathon.list({
     selectionSet: ["id", "startDate", "endDate"],
   });
