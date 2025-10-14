@@ -124,7 +124,7 @@ export default function UserFoodTicket() {
           <KevinLoadingRing />
         </div>
       ) : (
-        <div className="flex size-full flex-col items-center bg-fuzzy-peach">
+        <div className="relative mb-10 flex w-full flex-col items-center justify-center bg-fuzzy-peach">
           <div className="hidden md:block">
             <Image
               src="/images/userProfile/Star_Icons.svg"
@@ -148,13 +148,11 @@ export default function UserFoodTicket() {
               className="md:absolute md:right-10 md:top-[60rem]"
             />{" "}
           </div>
-          <div className="mb-3 flex w-fit flex-col items-center justify-between uppercase text-grapefruit md:mx-10 md:px-16 md:py-10">
-            <div className="flex flex-row justify-between">
-              <h1 className="mt-3 text-lg font-bold md:text-2xl">
-                My Food Ticket
-              </h1>
-            </div>
-            <div className="bg-pink mt-10 flex w-fit flex-col items-center gap-5 rounded-3xl border-4 border-white bg-white/30 px-8 py-20 sm:flex-row sm:justify-start lg:gap-12 lg:px-20 lg:py-16">
+          <div className="mb-3 flex w-full max-w-5xl flex-col items-center justify-between uppercase text-grapefruit md:mx-10 md:px-16 md:py-10">
+            <h1 className="mb-8 mt-3 text-lg font-bold md:text-2xl">
+              My Food Ticket
+            </h1>
+            <div className="flex w-fit flex-col items-center justify-center gap-10 rounded-3xl border-2 border-white bg-white/30 p-8 sm:flex-row sm:p-12 lg:border-4">
               <QRCode
                 value={foodTicketData.userCode}
                 size={qrSize}
@@ -168,10 +166,10 @@ export default function UserFoodTicket() {
                 logoPaddingStyle="square"
               />
               <div className="flex flex-col flex-wrap text-center md:text-left">
-                <span className="text-8xl font-bold">
+                <span className="text-4xl font-bold lg:text-8xl">
                   {foodTicketData["Event Name"]}
                 </span>
-                <span className="text-4xl">
+                <span className="text-2xl lg:text-4xl">
                   {foodTicketData["Event Description"]}
                 </span>
                 <br />
