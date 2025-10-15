@@ -1,19 +1,27 @@
+import Image from "next/image";
+
 export default function JoinTeamInstructions() {
   return (
     <ol className="flex list-inside list-decimal flex-col gap-4 px-6 text-lg font-medium">
       <li>
-        Join the
-        <span className=" font-bold">
+        Join the{" "}
+        <span className="font-bold">
           <a
-            className="hover:text-awesomer-purple"
+            className="mx-0.5 inline-flex flex-row gap-1 text-awesome-purple hover:text-awesomer-purple"
             target="_blank"
             rel="noreferrer"
             href={process.env.NEXT_PUBLIC_DISCORD_LINK}
           >
             {" "}
             Code the Change YYC Discord{" "}
+            <Image
+              src="/svgs/createTeamPage/redirect.svg"
+              alt="Redirect icon"
+              width={16}
+              height={16}
+            />
           </a>
-        </span>
+        </span>{" "}
         and navigate to the
         <span className="font-bold"> #looking-for-a-team </span> channel.
       </li>

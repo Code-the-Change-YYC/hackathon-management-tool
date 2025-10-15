@@ -33,7 +33,7 @@ export default function ProjectSubmission() {
             <p>
               On{" "}
               <span className="font-bold text-awesome-purple">
-                Sunday, November 10th,{" "}
+                Sunday, November 9th,{" "}
               </span>
               submit your project{" "}
               <span className="font-bold text-awesome-purple">
@@ -42,12 +42,18 @@ export default function ProjectSubmission() {
               </span>
               . You can do this on our{" "}
               <a
-                href=""
+                href="https://hack-the-change-2025.devpost.com/"
                 target="_blank"
                 rel="noopener noreffer"
-                className="text-awesome-purple underline"
+                className="inline-flex flex-row gap-1 text-awesome-purple underline"
               >
                 DevPost Page
+                <Image
+                  src="/svgs/importantInfo/purpleRedirect.svg"
+                  alt="Redirect icon"
+                  width={16}
+                  height={16}
+                />
               </a>
               .
             </p>
@@ -144,9 +150,15 @@ export default function ProjectSubmission() {
               href="https://www.twitch.tv/codethechangeyyc"
               target="_blank"
               rel="noopener noreffer"
-              className="text-awesome-purple underline"
+              className="inline-flex flex-row gap-1 text-awesome-purple underline"
             >
               Twitch!
+              <Image
+                src="/svgs/importantInfo/purpleRedirect.svg"
+                alt="Redirect icon"
+                width={16}
+                height={16}
+              />
             </a>
           </p>
         </div>
