@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import RedirectIcon from "../RedirectIcon";
 import CarouselInfo from "./carouselCard";
 
 export default function Carousel() {
@@ -105,10 +106,20 @@ export default function Carousel() {
               <span className="font-bold text-fuzzy-peach">
                 Don't be afraid to ask for help!
               </span>{" "}
-              We have mentors always available in the Discord Server if you need
-              some help. If you have any other questions regarding the
-              technicalities of the hackathon, you can find support from Code
-              the Change YYC members by creating a ticket in the Discord Server.
+              We have mentors always available in the Hack the Change 2025{" "}
+              <a
+                className="mx-0.5 inline-flex flex-row items-center gap-1 text-fuzzy-peach underline"
+                target="_blank"
+                rel="noreferrer"
+                href={process.env.NEXT_PUBLIC_DISCORD_LINK}
+              >
+                {" "}
+                Discord <RedirectIcon className="h-4 w-4 text-fuzzy-peach" />
+              </a>
+              if you need some help. If you have any other questions regarding
+              the technicalities of the hackathon, you can find support from
+              Code the Change YYC members by creating a ticket in the Discord
+              Server.
             </li>
           </ul>
         </>

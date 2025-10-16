@@ -7,7 +7,7 @@ export default async function JudgeShowcase() {
   const judges = await fetchContent("hackathonJudge");
   return (
     <div className="flex flex-col justify-center bg-white p-10">
-      <div className="flex flex-col items-center sm:w-1/4 sm:pr-5">
+      <div className="mb-4 flex flex-col items-center sm:w-1/4 sm:pr-5">
         <h1 className="text-2xl font-extrabold">Judges</h1>
         <Image
           src={squigglySvg}
@@ -44,6 +44,7 @@ export default async function JudgeShowcase() {
           </div>
         ))}
       </div>
+      <p className="mt-4 text-center text-2xl">Full List Coming Soon!</p>
     </div>
   );
 }

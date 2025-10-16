@@ -17,7 +17,7 @@ const ABOUT_THE_CHALLENGE_TITLE = (
       width={20}
       height={20}
       alt="Challenge quotes"
-      className=" mb-4 ml-1 select-none"
+      className="mb-4 ml-1 select-none"
     />
   </div>
 );
@@ -31,14 +31,16 @@ const REQUIREMENTS_TITLE = (
       width={20}
       height={20}
       alt="Challenge quotes"
-      className=" mr-1 mt-2 select-none"
+      className="mr-1 mt-2 select-none"
     />
     Requirements
   </div>
 );
 
 const PRIZES_QUOTES_SVG = "/svgs/landingPage/prizes_quotes.svg";
-const PRIZES_BLURB = `Prizes: 1st place - $5,000 CAD; 2nd place - $3,000; 3rd place - $2,000; All prizes will be split between students and the charities of their choice.`;
+const PRIZES_BLURB = `Prizes: 1st place - $4,700 CAD; 2nd place - $2,700; 3rd place - $2,000; 
+  Side Pots: Three side pots worth $200 CAD each; 
+  All prizes will be split between students and the charities of their choice.`;
 const PRIZES_TITLE = (
   <div className="flex flex-row text-3xl font-semibold italic text-[#00AA88]">
     Prizes
@@ -47,7 +49,7 @@ const PRIZES_TITLE = (
       width={20}
       height={20}
       alt="Challenge quotes"
-      className=" ml-1 mt-2 select-none"
+      className="ml-1 mt-2 select-none"
     />
   </div>
 );
@@ -94,14 +96,14 @@ function SectionContainer({
   return (
     <div
       className={twMerge(
-        `flex w-full flex-row items-center justify-between gap-16  px-[5%] py-20`,
+        `flex w-full flex-row items-center justify-between gap-16 px-[5%] py-20`,
         bgColor,
         fontColor,
       )}
     >
-      <div className={twMerge(`z-10 flex flex-col gap-4 `, fontColor)}>
+      <div className={twMerge(`z-10 flex flex-col gap-4`, fontColor)}>
         {title}
-        <p className=" max-w-lg font-medium">{blurb}</p>
+        <p className="max-w-lg font-medium">{blurb}</p>
       </div>
       <div
         className={twMerge(
@@ -125,20 +127,20 @@ function SectionContainer({
 export default function HackathonInformationContainer() {
   return (
     <div className="relative overflow-hidden">
-      <div className=" pointer-events-none hidden select-none lg:block ">
+      <div className="pointer-events-none hidden select-none lg:block">
         <Image
           src="/svgs/landingPage/vector_2.svg"
           alt=""
           width={140}
           height={80}
-          className="absolute  -left-28  top-52"
+          className="absolute -left-28 top-52"
         />
         <Image
           src="/svgs/landingPage/vector_14.svg"
           alt=""
           width={436}
           height={90}
-          className="absolute  top-[22rem]"
+          className="absolute top-[22rem]"
         />
         <Image
           src="/svgs/landingPage/vector_15.svg"
