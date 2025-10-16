@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import RedirectIcon from "../RedirectIcon";
 
 export default function ProjectSubmission() {
   return (
@@ -45,15 +46,10 @@ export default function ProjectSubmission() {
                 href="https://hack-the-change-2025.devpost.com/"
                 target="_blank"
                 rel="noopener noreffer"
-                className="inline-flex flex-row gap-1 text-awesome-purple underline"
+                className="inline-flex flex-row items-center gap-1 text-awesome-purple underline"
               >
                 DevPost Page
-                <Image
-                  src="/svgs/importantInfo/purpleRedirect.svg"
-                  alt="Redirect icon"
-                  width={16}
-                  height={16}
-                />
+                <RedirectIcon className="h-4 w-4 text-awesome-purple" />
               </a>
               .
             </p>
@@ -150,15 +146,10 @@ export default function ProjectSubmission() {
               href="https://www.twitch.tv/codethechangeyyc"
               target="_blank"
               rel="noopener noreffer"
-              className="inline-flex flex-row gap-1 text-awesome-purple underline"
+              className="inline-flex flex-row items-center gap-1 text-awesome-purple underline"
             >
               Twitch!
-              <Image
-                src="/svgs/importantInfo/purpleRedirect.svg"
-                alt="Redirect icon"
-                width={16}
-                height={16}
-              />
+              <RedirectIcon className="h-4 w-4 text-awesome-purple" />
             </a>
           </p>
         </div>

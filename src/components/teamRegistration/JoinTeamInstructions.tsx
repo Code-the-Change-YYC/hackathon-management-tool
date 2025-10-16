@@ -1,4 +1,4 @@
-import Image from "next/image";
+import RedirectIcon from "../RedirectIcon";
 
 export default function JoinTeamInstructions() {
   return (
@@ -7,19 +7,14 @@ export default function JoinTeamInstructions() {
         Join the{" "}
         <span className="font-bold">
           <a
-            className="mx-0.5 inline-flex flex-row gap-1 text-awesome-purple hover:text-awesomer-purple"
+            className="mx-0.5 inline-flex flex-row items-center gap-1 text-awesome-purple hover:text-awesomer-purple"
             target="_blank"
             rel="noreferrer"
             href={process.env.NEXT_PUBLIC_DISCORD_LINK}
           >
             {" "}
             Code the Change YYC Discord{" "}
-            <Image
-              src="/svgs/createTeamPage/redirect.svg"
-              alt="Redirect icon"
-              width={16}
-              height={16}
-            />
+            <RedirectIcon className="h-4 w-4 text-awesome-purple hover:text-awesomer-purple" />
           </a>
         </span>{" "}
         and navigate to the

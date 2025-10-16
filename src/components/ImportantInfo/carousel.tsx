@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import RedirectIcon from "../RedirectIcon";
 import CarouselInfo from "./carouselCard";
 
 export default function Carousel() {
@@ -107,19 +108,13 @@ export default function Carousel() {
               </span>{" "}
               We have mentors always available in the Hack the Change 2025{" "}
               <a
-                className="mx-0.5 inline-flex flex-row gap-1 text-fuzzy-peach underline"
+                className="mx-0.5 inline-flex flex-row items-center gap-1 text-fuzzy-peach underline"
                 target="_blank"
                 rel="noreferrer"
                 href={process.env.NEXT_PUBLIC_DISCORD_LINK}
               >
                 {" "}
-                Discord{" "}
-                <Image
-                  src="/svgs/importantInfo/orangeRedirect.svg"
-                  alt="Redirect icon"
-                  width={16}
-                  height={16}
-                />
+                Discord <RedirectIcon className="h-4 w-4 text-fuzzy-peach" />
               </a>
               if you need some help. If you have any other questions regarding
               the technicalities of the hackathon, you can find support from
