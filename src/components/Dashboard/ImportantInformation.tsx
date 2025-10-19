@@ -38,13 +38,13 @@ export default async function ImportantInformation() {
           <h1 className="pb-2 text-3xl font-bold">Opening Ceremony</h1>
           <p>Location: {ceremonyDetails.openingCeremonyLocation}</p>
           {/* <p>Time: {formatDate(openingCeremonyDate)}</p> */}
-          <p>Nov 9, 10:00 AM</p>
+          <p>Nov 8, 10:00 AM</p>
         </div>
         <div className="text-start text-2xl font-normal">
           <h1 className="pb-2 text-3xl font-bold">Closing Ceremony</h1>
           <p>Location: {ceremonyDetails.closingCeremonyLocation}</p>
           {/* <p>Time: {formatDate(closingCeremonyDate)}</p> */}
-          <p>Nov 10, 5:00 PM</p>
+          <p>Nov 9, 5:30 PM</p>
         </div>
       </div>
     </Card>

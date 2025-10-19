@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import RedirectIcon from "../RedirectIcon";
 
 export default function ProjectSubmission() {
   return (
@@ -33,7 +34,7 @@ export default function ProjectSubmission() {
             <p>
               On{" "}
               <span className="font-bold text-awesome-purple">
-                Sunday, November 10th,{" "}
+                Sunday, November 9th,{" "}
               </span>
               submit your project{" "}
               <span className="font-bold text-awesome-purple">
@@ -42,12 +43,13 @@ export default function ProjectSubmission() {
               </span>
               . You can do this on our{" "}
               <a
-                href=""
+                href="https://hack-the-change-2025.devpost.com/"
                 target="_blank"
                 rel="noopener noreffer"
-                className="text-awesome-purple underline"
+                className="inline-flex flex-row items-center gap-1 text-awesome-purple underline"
               >
                 DevPost Page
+                <RedirectIcon className="h-4 w-4 text-awesome-purple" />
               </a>
               .
             </p>
@@ -144,9 +146,10 @@ export default function ProjectSubmission() {
               href="https://www.twitch.tv/codethechangeyyc"
               target="_blank"
               rel="noopener noreffer"
-              className="text-awesome-purple underline"
+              className="inline-flex flex-row items-center gap-1 text-awesome-purple underline"
             >
               Twitch!
+              <RedirectIcon className="h-4 w-4 text-awesome-purple" />
             </a>
           </p>
         </div>
