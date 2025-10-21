@@ -18,6 +18,7 @@ const TeamProfile = () => {
   const queryClient = useQueryClient();
 
   const userTeamId = useUser().currentUser.teamId as string;
+  const userId = useUser().currentUser.id as string;
 
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["Team"]["type"],
@@ -38,7 +39,7 @@ const TeamProfile = () => {
   const teamMutation = useMutation({
     mutationFn: async () => {
       try {
-        await client.models.User.update({ id: userTeamId, teamId: null });
+        await client.models.User.update({ id: userId, teamId: null });
       } catch (error) {
         console.error("Error updating ids", error);
         throw error;

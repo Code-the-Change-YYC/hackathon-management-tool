@@ -37,7 +37,7 @@ export default async function TeamConfirmation({
           <Underline noTick>Make sure to add to your Calendar!</Underline>
         </h1>
         <hr />
-        <CalendarSection />
+        {/* <CalendarSection /> */}
       </CountdownWindow>
 
       <div className="my-4 flex w-full justify-center text-white sm:justify-end">
