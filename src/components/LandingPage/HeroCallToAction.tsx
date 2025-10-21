@@ -14,7 +14,7 @@ export default function HeroCallToAction() {
     <>
       <div className={LINK_STYLES}>
         <a href={userId !== "" ? "/participant/profile" : "/register"}>
-          <div className=" rounded-2xl border-4 border-white bg-awesomer-purple px-6 py-2 text-sm text-white  hover:opacity-70 md:mb-0 md:px-6">
+          <div className=" text-md rounded-2xl border-4 border-white bg-awesomer-purple px-8 py-4 text-white  hover:opacity-70 md:mb-0 md:px-4">
             {userId ? "Go to Profile" : "Join Hackathon"}
           </div>
         </a>

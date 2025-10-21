@@ -6,7 +6,7 @@ export default function ProjectSubmission() {
   return (
     <div className="flex w-full flex-col gap-5 bg-pastel-green pb-10">
       <div className="flex flex-col gap-1">
-        <h1 className="mt-10 text-center text-xl text-black">
+        <h1 className="mt-10 text-center text-5xl text-black">
           Submitting your Project
         </h1>
         <div className="pointer-events-none flex justify-center">
