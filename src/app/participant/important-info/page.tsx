@@ -28,7 +28,7 @@ export default function ImportantInfo() {
           height={0}
           className="pointer-events-none mt-8 h-auto w-[20vw] max-w-96 opacity-0 md:opacity-100 lg:mt-14 xl:mt-20"
         />
-        <h1 className="mt-10 whitespace-nowrap text-center text-3xl text-white md:mt-8 md:text-4xl lg:mt-10 xl:mt-16">
+        <h1 className="mt-10 whitespace-nowrap text-center text-4xl text-white md:mt-8 md:text-8xl lg:mt-10 xl:mt-16">
           Important Information
         </h1>
         <Image
@@ -40,7 +40,32 @@ export default function ImportantInfo() {
         />
       </div>
 
-      <p className="mx-4 my-14 text-center text-lg font-semibold text-grey-purple/70">
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="/participant/rubric"
+          className="rounded-full bg-white px-6 py-3 font-semibold text-awesome-purple shadow-lg transition-all hover:scale-105 hover:bg-awesomer-purple hover:text-white"
+        >
+          Rubric
+        </a>
+        <a
+          href={process.env.NEXT_PUBLIC_DEVPOST_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full bg-white px-6 py-3 font-semibold text-awesome-purple shadow-lg transition-all hover:scale-105 hover:bg-awesomer-purple hover:text-white"
+        >
+          Devpost
+        </a>
+        <a
+          href={process.env.NEXT_PUBLIC_DISCORD_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full bg-white px-6 py-3 font-semibold text-awesome-purple shadow-lg transition-all hover:scale-105 hover:bg-awesomer-purple hover:text-white"
+        >
+          Discord
+        </a>
+      </div>
+
+      <p className="mx-4 my-14 text-center text-xl font-semibold text-grey-purple/70">
         Here are the rules, code of conduct, steps to submit your project, tips
         for success, and answers to frequently asked questions (FAQs)!
       </p>
