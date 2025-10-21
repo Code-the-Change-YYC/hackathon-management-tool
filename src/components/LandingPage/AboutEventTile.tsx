@@ -17,16 +17,16 @@ interface EventDetailProps {
 
 const EventDetail = ({ iconSrc, iconName, children }: EventDetailProps) => {
   return (
-    <div className="ml-4 flex items-center md:ml-10">
-      <div className="m-4 rounded-xl bg-white p-1">
+    <div className="group flex items-center gap-4 rounded-3xl bg-white/50 p-4 transition-all duration-300">
+      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-md transition-transform duration-300 group-hover:scale-110">
         <Image
           src={iconSrc || "/placeholder.svg"}
           alt={`${iconName} icon`}
-          width={35}
-          height={35}
+          width={28}
+          height={28}
         />
       </div>
-      <h2 className="text-lg font-extrabold leading-tight text-dark-grey">
+      <h2 className="text-xl font-bold  text-dark-grey md:text-2xl">
         {children}
       </h2>
     </div>
@@ -46,8 +46,8 @@ export default async function AboutEventTile() {
   return (
     <div className="flex w-full flex-col items-center bg-white py-10 md:py-20">
       <div className="z-100 mb-8 mt-4 flex w-4/5 flex-col rounded-3xl border-4 border-dark-pink bg-pastel-pink shadow-[15px_15px_0px_0px_dark-pink] xl:mb-12 xl:mt-8">
-        <div className="relative rounded-t-2xl border-b-4 border-dark-pink bg-dark-pink">
-          <div className="flex h-1/2 w-full items-center justify-center overflow-hidden rounded-t-3xl">
+        <div className="relative rounded-t-3xl border-b-4 border-dark-pink bg-dark-pink">
+          <div className="flex h-1/2 w-full items-center justify-center overflow-hidden rounded-t-3xl bg-dark-pink">
             <Image
               src={
                 eventDetails.locationImage.fields.file?.url
@@ -61,10 +61,12 @@ export default async function AboutEventTile() {
               priority
               className="size-full object-contain"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           </div>
         </div>
-        <div className="flex w-full items-center rounded-b-20 md:rounded-r-2xl md:rounded-bl-none">
-          <div>
+
+        <div className="rounded-3xl bg-pastel-pink p-8 shadow-lg md:p-12">
+          <div className="grid gap-6 md:grid-cols-2">
             <EventDetail iconSrc={icons.date} iconName="date">
               {formattedDate}
             </EventDetail>

@@ -33,8 +33,8 @@ export default function CountdownWindow({
           />
         </SuspenseWrapper>
         <p className="px-4 text-center text-lg font-semibold text-black">
-          Join us for the two-day for-charity hackathon hosted on November 11th
-          to 12th by{" "}
+          Join us for the two-day for-charity hackathon hosted on November 8th
+          to 9th by{" "}
           <Link
             className=" font-bold text-awesomer-purple underline"
             target="_blank"
