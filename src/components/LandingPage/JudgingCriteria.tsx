@@ -1,65 +1,66 @@
 import Image from "next/image";
 
-const judgingCriteriaStyles =
-  "relative flex -mt-5 justify-between bg-pastel-green py-20 px-[5%] md:px-24 lg:px-40 drop-shadow-lg md:drop-shadow-none";
-
-const itemStyles =
-  "flex justify-start p-4 lg:px-6 lg:text-[1.0rem] items-start";
-
 const checkMarkSvg = "/svgs/landingPage/check_mark_bkg.svg";
 
 export const JUDGING_CRITERIA = [
   {
-    category: "Judging Criteria - Idea",
+    category: "Innovation & Creativity",
     description:
-      "Does the product address the prompt? Does the product introduce a new/unique approach or perspective?",
+      "Is the idea original or a fresh take on existing solutions? Does it creatively apply technology to urban challenges (e.g., housing, mobility, disaster resilience, inclusivity)?",
   },
   {
-    category: "Judging Criteria - Effectiveness",
+    category: "Impact & Relevance to Prompt",
     description:
-      "Does the product function as intended? Does the product execute on its idea in a way that’s effective?",
+      "Does the solution clearly address the challenge? Could it meaningfully improve lives?",
   },
   {
-    category: "Judging Criteria - Technical Challenge",
+    category: "Feasibility & Scalability",
     description:
-      "Is the implementation complex? Does the product feature different parts? Does the product use interesting concepts or technologies?",
+      "Is the solution practical given real constraints (budget, infrastructure, etc.)? Could it scale beyond a demo into a real city/community setting?",
   },
   {
-    category: "Judging Criteria - Presentation/Marketability",
+    category: "Technical Execution",
     description:
-      "Does the team seem organized in their presentation/demo? Does the presentation engage the judges and have real-world marketability?",
+      "Quality of the implementation (working prototype, technical depth, stability)? Use of appropriate technology stack. Is the solution technically sound and well-built?",
   },
   {
-    category: "Judging Criteria - Design",
+    category: "User Experience & Design",
     description:
-      "Is the product aesthetically pleasing? Is the product easy to use? Does the design of the product elevate its function and original idea?",
+      "Is the solution intuitive, accessible and user-friendly? Is the solution aesthetically pleasing? Does the design of the product elevate its function and original idea?",
   },
 ];
 
 const JudgingCriteria = () => {
-  const listJudgingCriteria = JUDGING_CRITERIA.map((criterion, index) => (
-    <li key={index} className={itemStyles}>
-      <Image
-        src={checkMarkSvg}
-        alt="check mark icon"
-        width={60}
-        height={60}
-        className="mr-6"
-      ></Image>
-      <div>
-        <h2>{criterion.category}</h2>
-        <p>{criterion.description}</p>
-      </div>
-    </li>
-  ));
   return (
-    <div className={judgingCriteriaStyles}>
-      <div>
-        <h1 className="mb-10 text-2xl font-bold">
-          Judging
-          <em className="text-awesomer-purple"> Criteria</em>
-        </h1>
-        <ul className="flex flex-col">{listJudgingCriteria}</ul>
+    <div className="relative -mt-5 flex flex-col items-center bg-pastel-green px-[5%] py-20 drop-shadow-lg md:drop-shadow-none">
+      <h1 className="mb-12 text-center text-4xl font-bold md:text-5xl lg:text-6xl">
+        Judging
+        <em className="text-awesomer-purple"> Criteria</em>
+      </h1>
+
+      <div className="grid w-full max-w-7xl gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        {JUDGING_CRITERIA.map((criterion, index) => (
+          <div
+            key={index}
+            className="group flex flex-col items-start rounded-2xl bg-white/80 p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-2xl lg:p-8"
+          >
+            <div className="mb-4 flex w-full items-center gap-4">
+              <Image
+                src={checkMarkSvg}
+                alt="check mark icon"
+                width={60}
+                height={60}
+                className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
+              />
+              <h2 className="text-2xl font-bold text-gray-800 lg:text-3xl">
+                {criterion.category}
+              </h2>
+            </div>
+            <p className="text-base leading-relaxed text-gray-700 lg:text-lg">
+              {criterion.description}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

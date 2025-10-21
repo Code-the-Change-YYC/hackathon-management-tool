@@ -166,7 +166,7 @@ export default function FaqInfo() {
   };
   return (
     <div className="relative w-full bg-white">
-      <h1 className="mt-10 text-center text-xl font-semibold">FAQ</h1>
+      <h1 className="mt-10 text-center text-8xl font-semibold">FAQ</h1>
       <div className="pointer-events-none flex justify-center">
         <Image
           src="/svgs/importantInfo/greenUnderline.svg"
@@ -175,7 +175,7 @@ export default function FaqInfo() {
           height={30}
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 flex items-center">
+      <div className="pointer-events-none absolute inset-0 flex h-[100vh] items-center">
         <Image
           src="/svgs/importantInfo/purpleSquiggly.svg"
           alt="Purple squiggle"
@@ -190,7 +190,7 @@ export default function FaqInfo() {
         />
       </div>
 
-      <div className="relative z-10 m-5 p-2">
+      <div className="relative z-10 m-5 min-h-[96vh] p-2">
         {accordion.map((item) => (
           <FaqAccordion
             key={item.key}
