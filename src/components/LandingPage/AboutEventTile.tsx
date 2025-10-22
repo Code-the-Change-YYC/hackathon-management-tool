@@ -26,7 +26,7 @@ const EventDetail = ({ iconSrc, iconName, children }: EventDetailProps) => {
           height={28}
         />
       </div>
-      <h2 className="text-xl font-bold  text-dark-grey md:text-2xl">
+      <h2 className="text-xl font-bold text-dark-grey md:text-2xl">
         {children}
       </h2>
     </div>

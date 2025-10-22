@@ -11,14 +11,14 @@ export default function ImportantInfo() {
         alt="White stars"
         width={30}
         height={30}
-        className="pointer-events-none absolute left-4 top-72 md:left-24 md:top-52 lg:left-36 lg:top-64"
+        className="pointer-events-none absolute left-4 top-96 md:left-24 md:top-52 lg:left-36 lg:top-60"
       />
       <Image
         src="/svgs/importantInfo/starIcons.svg"
         alt="White stars"
         width={30}
         height={30}
-        className="pointer-events-none absolute right-4 top-[870px] md:right-20 md:top-[760px] lg:right-36 lg:top-[730px]"
+        className="pointer-events-none absolute right-4 top-[870px] md:right-20 md:top-[760px] lg:right-28 lg:top-[730px]"
       />
       <div className="flex w-full flex-row items-center justify-center gap-2 md:gap-6">
         <Image
@@ -28,7 +28,7 @@ export default function ImportantInfo() {
           height={0}
           className="pointer-events-none mt-8 h-auto w-[20vw] max-w-96 opacity-0 md:opacity-100 lg:mt-14 xl:mt-20"
         />
-        <h1 className="mt-10 whitespace-nowrap text-center text-4xl text-white md:mt-8 md:text-8xl lg:mt-10 xl:mt-16">
+        <h1 className="mx-4 mt-10 whitespace-nowrap text-wrap text-center text-4xl text-white md:mt-8 md:text-7xl lg:mt-10 xl:mt-16">
           Important Information
         </h1>
         <Image
@@ -40,10 +40,10 @@ export default function ImportantInfo() {
         />
       </div>
 
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-4 md:gap-8">
         <a
           href="/participant/rubric"
-          className="rounded-full bg-white px-6 py-3 font-semibold text-awesome-purple shadow-lg transition-all hover:scale-105 hover:bg-awesomer-purple hover:text-white"
+          className="rounded-full bg-white px-6 py-3 text-lg font-semibold text-awesome-purple shadow-lg transition-all hover:scale-105 hover:bg-awesomer-purple hover:text-white md:px-7 md:py-4 md:text-xl"
         >
           Rubric
         </a>
@@ -51,7 +51,7 @@ export default function ImportantInfo() {
           href={process.env.NEXT_PUBLIC_DEVPOST_LINK}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full bg-white px-6 py-3 font-semibold text-awesome-purple shadow-lg transition-all hover:scale-105 hover:bg-awesomer-purple hover:text-white"
+          className="rounded-full bg-white px-5 py-3 text-lg font-semibold text-awesome-purple shadow-lg transition-all hover:scale-105 hover:bg-awesomer-purple hover:text-white md:px-6 md:py-4 md:text-xl"
         >
           Devpost
         </a>
@@ -59,13 +59,13 @@ export default function ImportantInfo() {
           href={process.env.NEXT_PUBLIC_DISCORD_LINK}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full bg-white px-6 py-3 font-semibold text-awesome-purple shadow-lg transition-all hover:scale-105 hover:bg-awesomer-purple hover:text-white"
+          className="rounded-full bg-white px-5 py-3 text-lg font-semibold text-awesome-purple shadow-lg transition-all hover:scale-105 hover:bg-awesomer-purple hover:text-white md:px-6 md:py-4 md:text-xl"
         >
           Discord
         </a>
       </div>
 
-      <p className="mx-4 my-14 text-center text-xl font-semibold text-grey-purple/70">
+      <p className="mx-6 my-14 text-center text-xl font-semibold text-grey-purple/70">
         Here are the rules, code of conduct, steps to submit your project, tips
         for success, and answers to frequently asked questions (FAQs)!
       </p>

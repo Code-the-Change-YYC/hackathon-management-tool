@@ -1,8 +1,10 @@
 "use client";
 
 import { generateClient } from "aws-amplify/api";
+import { useState } from "react";
 import { type Schema } from "@/amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
+import KevinLoadingRing from "../KevinLoadingRing";
 
 const INPUT_STYLES =
   "rounded-full border-4 placeholder-black border-white bg-white bg-white/30 ps-3 py-2 my-2 text-sm md:text-md backdrop-opacity-30";
@@ -17,11 +19,20 @@ export interface TeamFormProp {
 }
 
 export default function TeamForm({ data, teamMutation }: TeamFormProp) {
-  const handleLeaveTeamClick = () => {
-    teamMutation.mutate(data);
-  };
-
   const client = generateClient<Schema>();
+  const [isLeaving, setIsLeaving] = useState(false);
+
+  const handleLeaveTeamClick = async () => {
+    try {
+      setIsLeaving(true);
+      await teamMutation.mutate(data);
+      // fix to eventually not have to refresh the page to show that a user has left a team
+      // same for after a user has joined a team
+      window.location.reload();
+    } finally {
+      setIsLeaving(false);
+    }
+  };
 
   const { data: teamData, isFetching } = useQuery({
     initialData: null,
@@ -37,6 +48,10 @@ export default function TeamForm({ data, teamMutation }: TeamFormProp) {
     },
     enabled: !!data,
   });
+
+  if (isLeaving) {
+    <KevinLoadingRing />;
+  }
 
   return (
     <>

@@ -12,7 +12,7 @@ export default async function ThankSponsors() {
   );
 
   return (
-    <div className="relative mt-8 flex flex-col items-center justify-center overflow-hidden pb-12 ">
+    <div className="relative mt-8 flex flex-col items-center justify-center overflow-hidden pb-12">
       <div className="flex w-full justify-center sm:h-48">
         <div className="relative z-10 overflow-hidden sm:flex sm:w-2/5">
           <Image
@@ -40,14 +40,14 @@ export default async function ThankSponsors() {
           />
         </div>
       </div>
-      <div className="grid w-full grid-cols-2 gap-6 px-8 pt-10  md:grid-cols-4">
+      <div className="grid w-full grid-cols-2 gap-6 px-8 pt-10 md:grid-cols-4">
         {sortedSponsors.map((sponsor, index) => (
           <div
             className="flex flex-row items-center justify-center gap-2 sm:gap-3"
             key={index}
           >
             <div className="group flex flex-col items-center justify-center gap-3">
-              <div className="relative  ">
+              <div className="relative">
                 <Link
                   href={sponsor.fields.sponsorPage}
                   target="_blank"

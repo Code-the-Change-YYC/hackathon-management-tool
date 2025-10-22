@@ -8,7 +8,7 @@ const CHALLENGE_QUOTES_SVG = "/svgs/landingPage/challenge_quotes.svg";
 const ABOUT_THE_CHALLENGE_BLURB = `Hack the Change aims to inspire students across Canada to leverage technology to enact social change. We’re looking for creative and innovative solutions to existing problems, with the goal of coding a better tomorrow.`;
 const ABOUT_THE_CHALLENGE_TITLE = (
   <div className="flex flex-row flex-wrap items-center">
-    <h1 className="text-4xl font-semibold md:text-6xl lg:text-8xl">
+    <h1 className="text-3xl font-semibold md:text-5xl lg:text-7xl">
       About the
       <span className="italic text-fuzzy-peach"> Challenge</span>
     </h1>
@@ -17,7 +17,7 @@ const ABOUT_THE_CHALLENGE_TITLE = (
       width={20}
       height={20}
       alt="Challenge quotes"
-      className="mb-4 ml-1 select-none"
+      className="mb-7 ml-1 select-none"
     />
   </div>
 );
@@ -25,13 +25,13 @@ const ABOUT_THE_CHALLENGE_TITLE = (
 const REQUIREMENTS_QUOTES_SVG = "/svgs/landingPage/requirements_quotes.svg";
 const REQUIREMENTS_BLURB = `Open to all Canadian students, at the university, college, or high school level.`;
 const REQUIREMENTS_TITLE = (
-  <div className="flex flex-row items-center text-4xl font-semibold italic text-awesomer-purple md:text-6xl lg:text-8xl">
+  <div className="flex flex-row items-center text-3xl font-semibold italic text-awesomer-purple md:text-5xl lg:text-7xl">
     <Image
       src={REQUIREMENTS_QUOTES_SVG}
-      width={20}
-      height={20}
+      width={22}
+      height={22}
       alt="Challenge quotes"
-      className="mr-1 mt-2 select-none"
+      className="mr-1 select-none"
     />
     Requirements
   </div>
@@ -40,14 +40,14 @@ const REQUIREMENTS_TITLE = (
 const PRIZES_QUOTES_SVG = "/svgs/landingPage/prizes_quotes.svg";
 const PRIZES_BLURB = `All prizes will be split between students and the charities of their choice.`;
 const PRIZES_TITLE = (
-  <div className="flex flex-row items-center text-6xl font-bold italic text-[#00AA88] md:text-8xl">
+  <div className="flex flex-row items-center text-5xl font-bold italic text-[#00AA88] md:text-7xl">
     Prizes
     <Image
       src={PRIZES_QUOTES_SVG}
       width={20}
       height={20}
       alt="Challenge quotes"
-      className="ml-1 mt-2 select-none"
+      className="ml-2 mt-2 select-none"
     />
   </div>
 );
@@ -66,7 +66,7 @@ const PRIZES_DATA = [
     place: "Side Pots",
     amount: "$200",
     color: "bg-dark-pink",
-    note: "Hunter Hub for Entrepeneurial Thinking",
+    note: "Benevity",
   },
   {
     place: "Side Pots",
@@ -175,7 +175,7 @@ function SectionContainer({
             <h3 className="mb-6 text-center text-3xl font-bold text-gray-800 md:text-4xl">
               Side Pots
             </h3>
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-3 md:gap-8">
               {PRIZES_DATA.filter((p) => p.place === "Side Pots").map(
                 (prize, index) => (
                   <div
@@ -189,7 +189,7 @@ function SectionContainer({
                       {prize.amount}
                     </p>
                     {prize.note && (
-                      <p className="mt-2 text-center text-sm font-bold text-gray-700 md:text-base">
+                      <p className="mt-2 text-center text-base font-bold text-black/50 md:text-lg">
                         {prize.note}
                       </p>
                     )}
@@ -270,7 +270,7 @@ export default function HackathonInformationContainer() {
           alt=""
           width={436}
           height={90}
-          className="absolute top-[22rem]"
+          className="absolute top-[24rem]"
         />
         <Image
           src="/svgs/landingPage/vector_15.svg"
@@ -291,7 +291,7 @@ export default function HackathonInformationContainer() {
           alt=""
           width={815}
           height={448}
-          className="absolute left-60 top-[50rem] w-2/3 max-w-7xl"
+          className="absolute left-60 top-[55rem] w-2/3 max-w-7xl"
         />
 
         <Image

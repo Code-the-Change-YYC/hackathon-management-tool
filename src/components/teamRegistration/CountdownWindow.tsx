@@ -16,7 +16,7 @@ export default function CountdownWindow({
     <>
       <div className="w-full rounded-t-3xl bg-awesome-purple p-4">
         <Image
-          className=" cursor-pointer"
+          className="cursor-pointer"
           src={"/svgs/heroSection/window_control_buttons.svg"}
           alt="check mark icon"
           width={50}
@@ -36,7 +36,7 @@ export default function CountdownWindow({
           Join us for the two-day for-charity hackathon hosted on November 8th
           to 9th by{" "}
           <Link
-            className=" font-bold text-awesomer-purple underline"
+            className="font-bold text-awesomer-purple underline"
             target="_blank"
             href={"https://www.codethechangeyyc.ca/"}
           >

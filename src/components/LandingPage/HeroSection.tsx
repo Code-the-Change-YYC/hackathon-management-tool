@@ -23,7 +23,7 @@ export default async function HeroSection() {
   const eventEndDate = new Date(hackathonData[0].endDate);
 
   return (
-    <div className="relative flex  flex-col items-center justify-center  md:px-8 md:py-16 lg:px-32">
+    <div className="relative flex flex-col items-center justify-center md:px-8 md:py-16 lg:px-32">
       <Image
         src={HERO_SECTION_BACKGROUND}
         alt="Landing page background"

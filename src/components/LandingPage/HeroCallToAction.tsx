@@ -14,13 +14,13 @@ export default function HeroCallToAction() {
     <>
       <div className={LINK_STYLES}>
         <a href={userId !== "" ? "/participant/profile" : "/register"}>
-          <div className=" text-md rounded-2xl border-4 border-white bg-awesomer-purple px-8 py-4 text-white  hover:opacity-70 md:mb-0 md:px-4">
+          <div className="text-md rounded-2xl border-4 border-white bg-awesomer-purple px-8 py-4 text-white hover:opacity-70 md:mb-0 md:px-4">
             {userId ? "Go to Profile" : "Join Hackathon"}
           </div>
         </a>
       </div>
       {userId === "" && (
-        <div className={" flex gap-1 pb-4 font-bold opacity-95 "}>
+        <div className={"flex gap-1 pb-4 font-bold opacity-95"}>
           {"Already registered? "}
           <Link href="/login" className="text-awesomer-purple hover:opacity-70">
             {" Sign in"}
