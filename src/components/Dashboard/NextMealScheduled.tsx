@@ -21,7 +21,7 @@ export default function NextMealScheduled() {
       };
     },
   });
-  const location = "ENG";
+  const location = "ENG 224";
   return (
     <Card className="flex h-full flex-row justify-start gap-8">
       <Link href={href}>

@@ -31,7 +31,7 @@ export default function TeamsTable({ teams }: { teams: Team[] }) {
     typeName: "Team",
   });
   return (
-    <div className="teams group flex flex-1 flex-col justify-between overflow-hidden rounded-3xl bg-white p-2 text-xl outline  outline-awesomer-purple">
+    <div className="teams group flex flex-1 flex-col justify-between overflow-hidden rounded-3xl bg-white p-2 text-xl outline outline-awesomer-purple">
       <div className="overflow-x-auto">
         <div className="w-full">
           <TableSearch
