@@ -33,7 +33,7 @@ export const JUDGING_CRITERIA = [
 const JudgingCriteria = () => {
   return (
     <div className="relative -mt-5 flex flex-col items-center bg-pastel-green px-[5%] py-20 drop-shadow-lg md:drop-shadow-none">
-      <h1 className="mb-12 text-center text-4xl font-bold md:text-5xl lg:text-6xl">
+      <h1 className="mb-12 text-center text-3xl font-bold md:text-5xl lg:text-7xl">
         Judging
         <em className="text-awesomer-purple"> Criteria</em>
       </h1>
@@ -52,7 +52,7 @@ const JudgingCriteria = () => {
                 height={60}
                 className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
               />
-              <h2 className="text-2xl font-bold text-gray-800 lg:text-3xl">
+              <h2 className="text-2xl font-bold text-gray-800">
                 {criterion.category}
               </h2>
             </div>

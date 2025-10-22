@@ -166,12 +166,14 @@ export default function FaqInfo() {
   };
   return (
     <div className="relative w-full bg-white">
-      <h1 className="mt-10 text-center text-8xl font-semibold">FAQ</h1>
+      <h1 className="mt-10 text-center text-4xl font-semibold md:text-7xl">
+        FAQ
+      </h1>
       <div className="pointer-events-none flex justify-center">
         <Image
           src="/svgs/importantInfo/greenUnderline.svg"
           alt="Green underline"
-          width={60}
+          width={120}
           height={30}
         />
       </div>

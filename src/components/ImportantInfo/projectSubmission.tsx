@@ -5,15 +5,15 @@ import RedirectIcon from "../RedirectIcon";
 export default function ProjectSubmission() {
   return (
     <div className="flex w-full flex-col gap-5 bg-pastel-green pb-10">
-      <div className="flex flex-col gap-1">
-        <h1 className="mt-10 text-center text-5xl text-black">
+      <div className="flex flex-col gap-2">
+        <h1 className="mx-4 mt-10 text-wrap text-center text-4xl font-bold text-black md:text-7xl">
           Submitting your Project
         </h1>
         <div className="pointer-events-none flex justify-center">
           <Image
             src="/svgs/importantInfo/purpleUnderline.svg"
             alt="Purple Underline"
-            width={90}
+            width={220}
             height={30}
           />
         </div>
@@ -43,7 +43,7 @@ export default function ProjectSubmission() {
               </span>
               . You can do this on our{" "}
               <a
-                href="https://hack-the-change-2025.devpost.com/"
+                href={process.env.NEXT_PUBLIC_DEVPOST_LINK}
                 target="_blank"
                 rel="noopener noreffer"
                 className="inline-flex flex-row items-center gap-1 text-awesome-purple underline"
