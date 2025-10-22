@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { fetchContent } from "@/app/actions";
+import client from "@/components/_Amplify/AmplifyBackendClient";
 import { Underline } from "@/utils/text-utils";
 import PurpleButton from "../PurpleButton";
 import CalendarSection from "./CalendarSection";
@@ -13,20 +13,31 @@ export default async function TeamConfirmation({
   teamID: string;
   state: "Joined" | "Registered";
 }) {
-  const hackathonDetails = (await fetchContent("hackathonDetails"))[0];
-  const hackathonInformation = {
-    eventName: hackathonDetails.fields.eventName,
-    eventDate: new Date(hackathonDetails.fields.eventDate),
-  };
+  // this one doesn't need to be by api key because technically the user should be signed in
+  const { data: hackathonData } = await client.models.Hackathon.list({
+    selectionSet: ["id", "startDate", "endDate"],
+  });
+
+  // super scuffed please seed every sandbox with a hackathon first prolly
+  if (hackathonData && hackathonData.length === 0) {
+    return <div>Hackathon hasn't been created yet</div>;
+  }
+
+  const eventStartDate = new Date(hackathonData[0].startDate);
+  const eventEndDate = new Date(hackathonData[0].endDate);
+
   return (
     <>
       <TeamInformation state={state} teamID={teamID} />
-      <CountdownWindow hackathonInformation={hackathonInformation}>
+      <CountdownWindow
+        eventStartDate={eventStartDate}
+        eventEndDate={eventEndDate}
+      >
         <h1 className="text-2xl font-semibold">
-          <Underline noTick>Add to Calendar</Underline>
+          <Underline noTick>Make sure to add to your Calendar!</Underline>
         </h1>
         <hr />
-        <CalendarSection />
+        {/* <CalendarSection /> */}
       </CountdownWindow>
 
       <div className="my-4 flex w-full justify-center text-white sm:justify-end">

@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { fetchContent } from "@/app/actions";
+import client from "@/components/_Amplify/AmplifyBackendClient";
+import { SuspenseWrapper } from "@/components/SuspenseWrapper";
 import HackathonClock from "../HackathonClock";
 import HeroSectionTile from "./HeroSectionTile";
 import WindowContainer from "./WindowContainer";
@@ -8,10 +9,21 @@ const HERO_SECTION_BACKGROUND =
   "/images/landingpage/HeroSection/htc2024graphiclight2.png";
 
 export default async function HeroSection() {
-  const res = (await fetchContent("hackathonDetails"))[0];
-  const hackathonDetails = res.fields;
+  const { data: hackathonData } = await client.models.Hackathon.list({
+    selectionSet: ["id", "startDate", "endDate"],
+    authMode: "apiKey",
+  });
+
+  // super scuffed please seed every sandbox with a hackathon first prolly
+  if (hackathonData && hackathonData.length === 0) {
+    return <div>Hackathon hasn't been created yet</div>;
+  }
+
+  const eventStartDate = new Date(hackathonData[0].startDate);
+  const eventEndDate = new Date(hackathonData[0].endDate);
+
   return (
-    <div className="relative flex h-[100dvh] flex-col items-center justify-center md:px-8 md:py-16 lg:px-32">
+    <div className="relative flex flex-col items-center justify-center md:px-8 md:py-16 lg:px-32">
       <Image
         src={HERO_SECTION_BACKGROUND}
         alt="Landing page background"
@@ -21,13 +33,15 @@ export default async function HeroSection() {
         quality={100}
         priority
       />
-      <HeroSectionTile hackathonDetails={hackathonDetails} />
-      <WindowContainer>
-        <HackathonClock
-          eventName={hackathonDetails.eventName}
-          eventDate={new Date(hackathonDetails.eventDate)}
-        />
-      </WindowContainer>
+      <HeroSectionTile eventStartDate={eventStartDate} />
+      <SuspenseWrapper>
+        <WindowContainer>
+          <HackathonClock
+            eventStartDate={eventStartDate}
+            eventEndDate={eventEndDate}
+          />
+        </WindowContainer>
+      </SuspenseWrapper>
     </div>
   );
 }

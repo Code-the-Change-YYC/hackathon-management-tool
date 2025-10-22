@@ -6,6 +6,7 @@ import { useUser } from "@/components/contexts/UserContext";
 import KevinLoadingRing from "@/components/KevinLoadingRing";
 import TeamForm from "@/components/UserProfile/TeamForm";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import RedirectIcon from "../RedirectIcon";
 
 const BUTTON_STYLES =
   " rounded-full border-4 border-white bg-grapefruit px-10  md:px-12 py-2 my-2 text-white";
@@ -17,6 +18,7 @@ const TeamProfile = () => {
   const queryClient = useQueryClient();
 
   const userTeamId = useUser().currentUser.teamId as string;
+  const userId = useUser().currentUser.id as string;
 
   const { data, isFetching } = useQuery({
     initialData: {} as Schema["Team"]["type"],
@@ -37,7 +39,7 @@ const TeamProfile = () => {
   const teamMutation = useMutation({
     mutationFn: async () => {
       try {
-        await client.models.User.update({ id: userTeamId, teamId: null });
+        await client.models.User.update({ id: userId, teamId: null });
       } catch (error) {
         console.error("Error updating ids", error);
         throw error;
@@ -52,13 +54,13 @@ const TeamProfile = () => {
 
   return (
     <>
-      {isFetching || !userTeamId ? (
+      {isFetching ? (
         <div className="flex h-screen w-full items-center justify-center bg-fuzzy-peach">
           <KevinLoadingRing />
         </div>
       ) : (
         <>
-          <div className="  mb-3 flex justify-between uppercase text-grapefruit md:mx-10">
+          <div className="mb-3 flex justify-between uppercase text-grapefruit md:mx-10">
             <h1 className="my-4 text-lg font-bold md:mt-3 md:text-2xl">
               Team Details
             </h1>
@@ -79,8 +81,19 @@ const TeamProfile = () => {
                 </h1>
                 <ol className="space-y-4 pl-4">
                   <li>
-                    1. Join the <strong>Code the Change YYC</strong> Discord and
-                    navigate to the #looking-for-a-team channel.
+                    1. Join the{" "}
+                    <strong>
+                      <a
+                        className="mx-0.5 inline-flex flex-row items-center gap-1 text-awesome-purple"
+                        target="_blank"
+                        rel="noreferrer"
+                        href={process.env.NEXT_PUBLIC_DISCORD_LINK}
+                      >
+                        Code the Change YYC Discord{" "}
+                        <RedirectIcon className="h-4 w-4 text-awesome-purple" />
+                      </a>
+                    </strong>{" "}
+                    and navigate to the #looking-for-a-team channel.
                   </li>
                   <li>
                     2. Reach out to an <strong>existing</strong> team or form a

@@ -3,7 +3,7 @@ import { AssignUsersToTeams } from "@/amplify/function/BusinessLogic/AssignUsers
 import { CreateTeamWithCode } from "@/amplify/function/BusinessLogic/CreateTeamWithCode/resource";
 import { DemoFunction } from "@/amplify/function/BusinessLogic/DemoFunction/resource";
 import { GetUserMessageCode } from "@/amplify/function/BusinessLogic/GetUserMessageCode/resource";
-import { ResetHackathon } from "@/amplify/function/BusinessLogic/ResetHackathon/resource";
+import { UpsertHackathon } from "@/amplify/function/BusinessLogic/UpsertHackathon/resource";
 import { VerifyUserMessage } from "@/amplify/function/BusinessLogic/VerifyUserMessage/resource";
 import { DemoAuthFunction } from "@/amplify/function/CustomAuthorization/DemoAuthFunction/resource";
 import { a, defineData, type ClientSchema } from "@aws-amplify/backend";
@@ -22,13 +22,13 @@ const schema = a
           .default("Participant")
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
-            allow.groups(["Admin"]).to(["read", "update", "create"]),
+            allow.groups(["Admin"]).to(["read", "update", "create", "delete"]),
           ]),
         email: a
           .string()
           .authorization((allow) => [
             allow.ownerDefinedIn("profileOwner").to(["read", "create"]),
-            allow.groups(["Admin"]).to(["read", "create"]),
+            allow.groups(["Admin"]).to(["read", "create", "delete"]),
           ]),
         institution: a.string(),
         program: a.string(),
@@ -104,8 +104,6 @@ const schema = a
       .model({
         id: a.id(),
         score: a.json().required(),
-        hackathonId: a.id().required(),
-        hackathon: a.belongsTo("Hackathon", "hackathonId"),
         judgeId: a.id().required(),
         judge: a.belongsTo("User", "judgeId"),
         teamId: a.id().required(),
@@ -158,10 +156,10 @@ const schema = a
           .required()
           .array()
           .required(),
-        scores: a.hasMany("Score", "hackathonId"),
       })
       .authorization((allow) => [
         allow.group("Admin").to(["read", "update", "create", "delete"]),
+        allow.publicApiKey().to(["read"]),
         allow.authenticated().to(["read"]),
       ]),
 
@@ -264,7 +262,7 @@ const schema = a
       .handler(a.handler.function(ScheduleTeamsAndJudges))
       .returns(a.ref("ScheduleTeamsAndJudgesResponse")),
 
-    ResetHackathon: a
+    UpsertHackathon: a
       .mutation()
       .arguments({
         scoringComponents: a.json().required(),
@@ -278,9 +276,8 @@ const schema = a
         safetyCheck: a.string().required(),
       })
       .authorization((allow) => [allow.group("Admin")])
-      .handler(a.handler.function(ResetHackathon))
+      .handler(a.handler.function(UpsertHackathon))
       .returns(a.ref("StatusCodeFunctionResponse")),
-
     // Custom resolvers
     SetUserAsCheckedIn: a
       .mutation()
@@ -301,7 +298,7 @@ const schema = a
     allow.resource(AssignUsersToTeams).to(["query", "mutate"]),
     allow.resource(PostConfirmation).to(["mutate"]),
     allow.resource(VerifyUserMessage).to(["query", "mutate"]),
-    allow.resource(ResetHackathon).to(["mutate", "query"]),
+    allow.resource(UpsertHackathon).to(["mutate", "query"]),
     allow.resource(AddUserToGroup).to(["mutate"]),
     allow.resource(CreateTeamWithCode).to(["query", "mutate"]),
     allow.resource(ScheduleTeamsAndJudges).to(["query", "mutate"]),
@@ -312,6 +309,9 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: "userPool",
+    apiKeyAuthorizationMode: {
+      expiresInDays: 30,
+    },
     lambdaAuthorizationMode: {
       function: DemoAuthFunction,
     },

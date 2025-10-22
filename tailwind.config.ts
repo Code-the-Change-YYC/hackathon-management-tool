@@ -30,6 +30,7 @@ const config: Config = {
         "lilac-purple": "#D6C9FF",
         "awesome-purple": "#A689FF",
         "awesomer-purple": "#7055FD",
+        "pale-grey": "#F9F9F9",
         "light-grey": "#F2F2F2",
         "dashboard-grey": "#E5E5E5",
         "grey-purple": "#4B486D",

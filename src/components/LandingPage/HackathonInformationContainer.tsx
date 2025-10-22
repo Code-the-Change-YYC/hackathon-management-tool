@@ -7,8 +7,8 @@ import REQUIREMENTS_IMAGE from "@/images/landingpage/requirements.png";
 const CHALLENGE_QUOTES_SVG = "/svgs/landingPage/challenge_quotes.svg";
 const ABOUT_THE_CHALLENGE_BLURB = `Hack the Change aims to inspire students across Canada to leverage technology to enact social change. We’re looking for creative and innovative solutions to existing problems, with the goal of coding a better tomorrow.`;
 const ABOUT_THE_CHALLENGE_TITLE = (
-  <div className="flex flex-row flex-nowrap text-nowrap">
-    <h1 className="text-3xl font-semibold">
+  <div className="flex flex-row flex-wrap items-center">
+    <h1 className="text-3xl font-semibold md:text-5xl lg:text-7xl">
       About the
       <span className="italic text-fuzzy-peach"> Challenge</span>
     </h1>
@@ -17,40 +17,64 @@ const ABOUT_THE_CHALLENGE_TITLE = (
       width={20}
       height={20}
       alt="Challenge quotes"
-      className=" mb-4 ml-1 select-none"
+      className="mb-7 ml-1 select-none"
     />
   </div>
 );
 
 const REQUIREMENTS_QUOTES_SVG = "/svgs/landingPage/requirements_quotes.svg";
-const REQUIREMENTS_BLURB = `Requirements: Open to all Canadian students, at the university, college, or high school level. (Must be an accredited institution)`;
+const REQUIREMENTS_BLURB = `Open to all Canadian students, at the university, college, or high school level.`;
 const REQUIREMENTS_TITLE = (
-  <div className="flex flex-row text-3xl font-semibold italic text-awesomer-purple">
+  <div className="flex flex-row items-center text-3xl font-semibold italic text-awesomer-purple md:text-5xl lg:text-7xl">
     <Image
       src={REQUIREMENTS_QUOTES_SVG}
-      width={20}
-      height={20}
+      width={22}
+      height={22}
       alt="Challenge quotes"
-      className=" mr-1 mt-2 select-none"
+      className="mr-1 select-none"
     />
     Requirements
   </div>
 );
 
 const PRIZES_QUOTES_SVG = "/svgs/landingPage/prizes_quotes.svg";
-const PRIZES_BLURB = `Prizes: 1st place - $5,000 CAD; 2nd place - $3,000; 3rd place - $2,000; All prizes will be split between students and the charities of their choice.`;
+const PRIZES_BLURB = `All prizes will be split between students and the charities of their choice.`;
 const PRIZES_TITLE = (
-  <div className="flex flex-row text-3xl font-semibold italic text-[#00AA88]">
+  <div className="flex flex-row items-center text-5xl font-bold italic text-[#00AA88] md:text-7xl">
     Prizes
     <Image
       src={PRIZES_QUOTES_SVG}
       width={20}
       height={20}
       alt="Challenge quotes"
-      className=" ml-1 mt-2 select-none"
+      className="ml-2 mt-2 select-none"
     />
   </div>
 );
+
+const PRIZES_DATA = [
+  { place: "1st Place", amount: "$4,700", color: "bg-awesomer-purple" },
+  { place: "2nd Place", amount: "$2,700", color: "bg-awesome-purple" },
+  { place: "3rd Place", amount: "$2,000", color: "bg-lilac-purple" },
+  {
+    place: "Side Pots",
+    amount: "$200",
+    color: "bg-dark-pink",
+    note: "AWS",
+  },
+  {
+    place: "Side Pots",
+    amount: "$200",
+    color: "bg-dark-pink",
+    note: "Benevity",
+  },
+  {
+    place: "Side Pots",
+    amount: "$200",
+    color: "bg-dark-pink",
+    note: "Arcurve",
+  },
+];
 interface SectionProps {
   title: React.ReactNode;
   sectionImage: string | StaticImageData;
@@ -91,18 +115,126 @@ function SectionContainer({
   bgColor,
   fontColor,
 }: SectionProps) {
+  const isPrizesSection = title === PRIZES_TITLE;
+
+  if (isPrizesSection) {
+    return (
+      <div
+        className={twMerge(
+          `flex w-full flex-col items-center justify-center gap-12 px-[5%] py-20`,
+          bgColor,
+          fontColor,
+        )}
+      >
+        {title}
+
+        <div className="z-10 flex w-full max-w-6xl flex-col items-center gap-12">
+          <div className="grid w-full gap-4 md:flex md:items-end md:justify-center md:gap-8">
+            <div className="flex flex-1 flex-col items-center md:order-2">
+              <Image
+                src="/svgs/admin/Kevin.svg"
+                alt="Kevin mascot"
+                width={300}
+                height={300}
+                className="-mb-8 hidden md:block"
+              />
+              <div className="flex w-full flex-col items-center justify-center rounded-2xl bg-awesomer-purple p-6 shadow-2xl transition-all duration-200 hover:scale-105 md:mb-4 md:h-64 md:justify-end md:rounded-t-2xl md:p-8">
+                <h2 className="text-3xl font-black text-gray-800 md:text-5xl">
+                  🏆 1st
+                </h2>
+                <p className="text-5xl font-black text-white md:text-8xl">
+                  $4,700
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-1 flex-col items-center md:order-1">
+              <div className="flex w-full flex-col items-center justify-center rounded-2xl bg-awesome-purple p-4 shadow-xl transition-all duration-200 hover:scale-105 md:mb-4 md:h-48 md:justify-end md:rounded-t-2xl md:p-6">
+                <h2 className="text-2xl font-black text-gray-800 md:text-4xl">
+                  2nd
+                </h2>
+                <p className="text-4xl font-black text-white md:text-6xl">
+                  $2,700
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-1 flex-col items-center md:order-3">
+              <div className="flex w-full flex-col items-center justify-center rounded-2xl bg-lilac-purple p-4 shadow-xl transition-all duration-200 hover:scale-105 md:mb-4 md:h-40 md:justify-end md:rounded-t-2xl md:p-6">
+                <h2 className="text-2xl font-black text-gray-800 md:text-4xl">
+                  3rd
+                </h2>
+                <p className="text-4xl font-black text-white md:text-6xl">
+                  $2,000
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full">
+            <h3 className="mb-6 text-center text-3xl font-bold text-gray-800 md:text-4xl">
+              Side Pots
+            </h3>
+            <div className="grid gap-4 md:grid-cols-3 md:gap-8">
+              {PRIZES_DATA.filter((p) => p.place === "Side Pots").map(
+                (prize, index) => (
+                  <div
+                    key={index}
+                    className={twMerge(
+                      "flex flex-col items-center justify-center rounded-2xl p-6 shadow-lg transition-all duration-500 hover:scale-105 md:p-8",
+                      prize.color,
+                    )}
+                  >
+                    <p className="text-4xl font-black text-white md:text-5xl">
+                      {prize.amount}
+                    </p>
+                    {prize.note && (
+                      <p className="mt-2 text-center text-base font-bold text-black/50 md:text-lg">
+                        {prize.note}
+                      </p>
+                    )}
+                  </div>
+                ),
+              )}
+            </div>
+          </div>
+        </div>
+
+        <p className="z-10 max-w-2xl text-center text-xl font-semibold md:text-2xl">
+          {blurb}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div
       className={twMerge(
-        `flex w-full flex-row items-center justify-between gap-16  px-[5%] py-20`,
+        `flex w-full flex-col items-center gap-8 px-[5%] py-12 md:py-20 lg:flex-row lg:items-center lg:justify-between lg:gap-16`,
         bgColor,
         fontColor,
       )}
     >
-      <div className={twMerge(`z-10 flex flex-col gap-4 `, fontColor)}>
-        {title}
-        <p className=" max-w-lg font-medium">{blurb}</p>
+      <div
+        className={twMerge(
+          "relative box-content aspect-square w-full max-w-sm md:max-w-md lg:hidden",
+        )}
+      >
+        <Image
+          src={sectionImage}
+          alt="Section image"
+          placeholder={typeof sectionImage === "string" ? undefined : "blur"}
+          className="rounded-3xl"
+          fill
+          sizes="(max-width: 768px) 90vw, (max-width: 1024px) 50vw, 400px"
+        />
       </div>
+
+      <div className={twMerge(`z-10 flex flex-col gap-4`, fontColor)}>
+        {title}
+        <p className="max-w-lg text-base font-medium md:text-lg">{blurb}</p>
+      </div>
+
       <div
         className={twMerge(
           "relative box-content hidden aspect-square w-2/3 min-w-48 max-w-96 lg:block",
@@ -111,7 +243,7 @@ function SectionContainer({
       >
         <Image
           src={sectionImage}
-          alt="About the challenge image"
+          alt="Section image"
           placeholder={typeof sectionImage === "string" ? undefined : "blur"}
           className="rounded-3xl"
           fill
@@ -125,20 +257,20 @@ function SectionContainer({
 export default function HackathonInformationContainer() {
   return (
     <div className="relative overflow-hidden">
-      <div className=" pointer-events-none hidden select-none lg:block ">
+      <div className="pointer-events-none hidden select-none lg:block">
         <Image
           src="/svgs/landingPage/vector_2.svg"
           alt=""
           width={140}
           height={80}
-          className="absolute  -left-28  top-52"
+          className="absolute -left-28 top-52"
         />
         <Image
           src="/svgs/landingPage/vector_14.svg"
           alt=""
           width={436}
           height={90}
-          className="absolute  top-[22rem]"
+          className="absolute top-[24rem]"
         />
         <Image
           src="/svgs/landingPage/vector_15.svg"
@@ -159,7 +291,7 @@ export default function HackathonInformationContainer() {
           alt=""
           width={815}
           height={448}
-          className="absolute left-60 top-[50rem] w-2/3 max-w-7xl"
+          className="absolute left-60 top-[55rem] w-2/3 max-w-7xl"
         />
 
         <Image

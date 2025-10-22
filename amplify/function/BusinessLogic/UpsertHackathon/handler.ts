@@ -1,0 +1,350 @@
+import { Amplify } from "aws-amplify";
+import { generateClient } from "aws-amplify/data";
+import { v4 as uuidv4 } from "uuid";
+import type { ScoreComponentTypeInput } from "@/amplify/graphql/API";
+import {
+  createHackathon,
+  deleteScore,
+  deleteTeam,
+  deleteTeamRoom,
+  deleteUser,
+  updateHackathon,
+} from "@/amplify/graphql/mutations";
+import {
+  listHackathons,
+  listScores,
+  listTeamRooms,
+  listTeams,
+  listUsers,
+} from "@/amplify/graphql/queries";
+import {
+  AdminDeleteUserCommand,
+  CognitoIdentityProviderClient,
+  ListUsersInGroupCommand,
+} from "@aws-sdk/client-cognito-identity-provider";
+import type { Schema } from "../../../data/resource";
+
+Amplify.configure(
+  {
+    API: {
+      GraphQL: {
+        endpoint: process.env.AMPLIFY_DATA_GRAPHQL_ENDPOINT as string,
+        region: process.env.AWS_REGION,
+        defaultAuthMode: "iam",
+      },
+    },
+  },
+  {
+    Auth: {
+      credentialsProvider: {
+        getCredentialsAndIdentityId: async () => ({
+          credentials: {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+            sessionToken: process.env.AWS_SESSION_TOKEN as string,
+          },
+        }),
+        clearCredentialsAndIdentityId: () => {
+          /* noop */
+        },
+      },
+    },
+  },
+);
+
+const cognitoClient = new CognitoIdentityProviderClient({});
+
+const client = generateClient<Schema>({
+  authMode: "iam",
+});
+
+type Handler = Schema["UpsertHackathon"]["functionHandler"];
+
+export const handler: Handler = async (event) => {
+  try {
+    // Extract arguments from the event if any
+    const {
+      safetyCheck,
+      resetRooms,
+      resetScores,
+      resetTeams,
+      resetUsers,
+      startDate,
+      endDate,
+      scoringComponents,
+      scoringSidepots,
+    } = event.arguments;
+    if (safetyCheck !== "i love code the change") {
+      throw new Error(
+        JSON.stringify({
+          statusCode: 403,
+          body: { value: "Safety check failed" },
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+    }
+
+    // Resetting Users variable
+    const resettingUsers: boolean = resetUsers;
+    // Reset teams if users are being reset
+    const resettingTeams: boolean = resetTeams || resettingUsers;
+    // Reset Rooms if teams are being reset
+    const resettingRooms: boolean = resetRooms || resettingTeams;
+    // Reset scores if teams are being reset
+    const resettingScores: boolean = resetScores || resettingTeams;
+
+    // Reset Users
+    if (resettingUsers) {
+      console.log("resetting all users");
+
+      // a note here
+      // - when we delete users we have to delete them from both cognito and dynamo
+      // - we only want to delete participants
+      // - it doesn't really matter that we delete them separately since the cognito id is different than the dynamo id
+      const { data: usersResponse, errors } = await client.graphql({
+        query: listUsers,
+        variables: {
+          filter: { role: { eq: "Participant" } },
+        },
+      });
+
+      if (errors) throw errors;
+
+      const users = usersResponse.listUsers.items;
+      for (const user of users) {
+        const id = user.id;
+        try {
+          const { errors } = await client.graphql({
+            query: deleteUser,
+            variables: {
+              input: {
+                id: id,
+              },
+            },
+          });
+          if (errors) {
+            console.error(`Error deleting user ${id} from DynamoDB:`, errors);
+            throw errors;
+          }
+          console.log(`Deleted user ${id} from DynamoDB`);
+        } catch (err) {
+          console.error(`Failed to delete user ${id} from DynamoDB:`, err);
+          throw err;
+        }
+      }
+
+      let cognitoParticipantUsernames: Set<string> = new Set();
+
+      try {
+        const cognitoParticipantsCommand = new ListUsersInGroupCommand({
+          UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
+          GroupName: "Participant",
+        });
+
+        const cognitoParticipantsResponse = await cognitoClient.send(
+          cognitoParticipantsCommand,
+        );
+
+        if (cognitoParticipantsResponse.$metadata.httpStatusCode !== 200) {
+          throw new Error(
+            `Failed to list users in group Participant: ${JSON.stringify(
+              cognitoParticipantsResponse,
+            )}`,
+          );
+        } else if (
+          cognitoParticipantsResponse.Users === undefined ||
+          cognitoParticipantsResponse.Users.length === 0
+        ) {
+          throw new Error(`No users found in group Participant`);
+        }
+
+        cognitoParticipantUsernames = new Set(
+          (cognitoParticipantsResponse.Users || [])
+            .map((u) => u.Username)
+            .filter((username): username is string => !!username),
+        );
+        console.log(
+          `Found ${cognitoParticipantUsernames.size} participants in Cognito`,
+        );
+      } catch (err) {
+        console.error(`Failed to list Cognito participants:`, err);
+        throw err;
+      }
+
+      for (const username of cognitoParticipantUsernames) {
+        try {
+          const deleteUserCommand = new AdminDeleteUserCommand({
+            Username: username,
+            UserPoolId: process.env.AMPLIFY_AUTH_USERPOOL_ID as string,
+          });
+
+          await cognitoClient.send(deleteUserCommand);
+          console.log(`Deleted user ${username} from Cognito`);
+        } catch (err: any) {
+          if (err.name === "UserNotFoundException") {
+            console.log(
+              `User ${username} not found in Cognito, skipping Cognito deletion`,
+            );
+          } else {
+            console.error(`Error deleting user ${username} from Cognito:`, err);
+            throw err;
+          }
+        }
+      }
+    }
+
+    // Reset Teams
+    if (resettingTeams) {
+      console.log("resetting all teams");
+      const { data: teamsResponse, errors } = await client.graphql({
+        query: listTeams,
+      });
+      if (errors) throw errors;
+
+      const teams = teamsResponse.listTeams.items;
+      for (const team of teams) {
+        const id = team.id;
+        const { errors } = await client.graphql({
+          query: deleteTeam,
+          variables: {
+            input: {
+              id: id,
+            },
+          },
+        });
+        if (errors) throw errors;
+      }
+    }
+
+    // Reset rooms
+    if (resettingRooms) {
+      console.log("resetting all teamRooms");
+      const { data: rooms, errors } = await client.graphql({
+        query: listTeamRooms,
+      });
+      if (errors) throw errors;
+      const teamRooms = rooms.listTeamRooms.items;
+      teamRooms.forEach(async (room) => {
+        const id = room.id;
+        const { errors } = await client.graphql({
+          query: deleteTeamRoom,
+          variables: {
+            input: {
+              id: id,
+            },
+          },
+        });
+        if (errors) throw errors;
+      });
+    }
+
+    // Reset Scores
+    if (resettingScores) {
+      console.log("resetting all scores");
+      const { data: scoresResponse, errors } = await client.graphql({
+        query: listScores,
+      });
+
+      if (errors) throw errors;
+
+      const scores = scoresResponse.listScores.items;
+      for (const score of scores) {
+        // check if we have the required keys for deletion
+        // (createdAt/updatedAt can be null, but we need teamId/judgeId to delete)
+        if (!score.teamId || !score.judgeId) {
+          console.warn(`Skipping corrupted score: ${JSON.stringify(score)}`);
+          continue;
+        }
+
+        // teamId is the partition key
+        // Verify score has required fields before attempting delete
+        const teamId = score.teamId;
+        const judgeId = score.judgeId;
+        const { errors } = await client.graphql({
+          query: deleteScore,
+          variables: {
+            input: {
+              teamId: teamId,
+              judgeId: judgeId,
+            },
+          },
+        });
+        if (errors) throw errors;
+      }
+    }
+
+    console.log("creating scoreComponents data");
+    console.log(scoringComponents as string);
+
+    // get the score Components Array from the JSON input
+    const scoringComponentsArray: ScoreComponentTypeInput[] =
+      typeof scoringComponents === "string"
+        ? JSON.parse(scoringComponents)
+        : scoringComponents;
+
+    console.log("creating scoringSidepots data");
+    console.log(scoringSidepots);
+
+    const scoringSidepotsArray: ScoreComponentTypeInput[] =
+      typeof scoringSidepots === "string"
+        ? JSON.parse(scoringSidepots)
+        : scoringSidepots;
+
+    // get the current hackathon model data items
+    const { data: hackathonItems } = await client.graphql({
+      query: listHackathons,
+    });
+    const HackathonItems = hackathonItems.listHackathons.items;
+
+    if (!(HackathonItems.length === 0)) {
+      console.log("resetting hackathon");
+      const HackathonID = HackathonItems[0].id;
+
+      const { errors } = await client.graphql({
+        query: updateHackathon,
+        variables: {
+          input: {
+            id: HackathonID,
+            startDate: startDate,
+            endDate: endDate,
+            scoringComponents: scoringComponentsArray,
+            scoringSidepots: scoringSidepotsArray,
+          },
+        },
+      });
+      if (errors) throw errors;
+    } else {
+      console.log("creating hackathon");
+      // creating new hackathon
+      const HackathonID = uuidv4();
+
+      const { errors } = await client.graphql({
+        query: createHackathon,
+        variables: {
+          input: {
+            startDate,
+            endDate,
+            scoringComponents: scoringComponentsArray,
+            scoringSidepots: scoringSidepotsArray,
+            id: HackathonID,
+          },
+        },
+      });
+
+      if (errors) throw errors;
+    }
+
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+    };
+  } catch (error) {
+    throw new Error(
+      JSON.stringify({
+        statusCode: 500,
+        body: { value: { error } },
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+  }
+};

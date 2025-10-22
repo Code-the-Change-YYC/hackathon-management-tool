@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default function Teams() {
   return (
-    <main className="flex size-full flex-1 flex-col bg-medium-grey p-2">
+    <main className="flex size-full flex-1 flex-col overflow-y-auto bg-medium-grey p-2">
       <SuspenseWrapper>
         <TeamsTable />
       </SuspenseWrapper>
