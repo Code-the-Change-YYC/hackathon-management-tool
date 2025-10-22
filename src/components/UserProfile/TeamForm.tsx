@@ -26,6 +26,8 @@ export default function TeamForm({ data, teamMutation }: TeamFormProp) {
     try {
       setIsLeaving(true);
       await teamMutation.mutate(data);
+      // fix to eventually not have to refresh the page to show that a user has left a team
+      // same for after a user has joined a team
       window.location.reload();
     } finally {
       setIsLeaving(false);
