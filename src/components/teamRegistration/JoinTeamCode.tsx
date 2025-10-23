@@ -44,7 +44,7 @@ export default function JoinTeamCode() {
     }
   };
   const router = useRouter();
-  const { currentUser } = useUser();
+  const { currentUser, revalidateUser } = useUser();
   const joinTeamMutation = useMutation({
     mutationFn: async (teamID: string) => {
       const toastObj = toast.loading("Joining team...");
@@ -62,6 +62,7 @@ export default function JoinTeamCode() {
     onSuccess: (data) => {
       if (data?.statusCode === 200) {
         toast.success("Team joined successfully");
+        revalidateUser();
         router.push(`/join/team/${teamIDInput.join("")}`);
       }
     },
