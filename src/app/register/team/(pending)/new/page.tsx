@@ -36,6 +36,7 @@ export default function page() {
           autoClose: 3000,
         });
         const teamID = JSON.parse(data.body?.toString() || "").value;
+        user.revalidateUser();
         router.push(`/register/team/${teamID}`);
       }
     },
