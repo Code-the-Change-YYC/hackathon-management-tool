@@ -18,6 +18,7 @@ const navigationMap: Record<string, NavItem[]> = {
     { name: "Scan Food Tickets", route: "/admin/scan-food-tickets" },
     { name: "Create Food Event", route: "/admin/create-food-event" },
     { name: "Judging Schedule", route: "/admin/schedule" },
+    { name: "Reset Hackathon", route: "/admin/reset" },
   ],
   Judge: [
     { name: "Dashboard", route: "/judging" },

@@ -64,7 +64,7 @@ const PRIZES_DATA = [
   },
   {
     place: "Side Pots",
-    amount: "$200",
+    amount: "$300",
     color: "bg-dark-pink",
     note: "Benevity",
   },
@@ -154,7 +154,7 @@ function SectionContainer({
                   2nd
                 </h2>
                 <p className="text-4xl font-black text-white md:text-6xl">
-                  $2,700
+                  $2,600
                 </p>
               </div>
             </div>
