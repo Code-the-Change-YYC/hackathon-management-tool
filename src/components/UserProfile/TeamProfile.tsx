@@ -16,7 +16,7 @@ const TEAM_INSTRUCTION_STYLES =
 
 const TeamProfile = () => {
   const queryClient = useQueryClient();
-
+  const { revalidateUser } = useUser();
   const userTeamId = useUser().currentUser.teamId as string;
   const userId = useUser().currentUser.id as string;
 
@@ -49,6 +49,7 @@ const TeamProfile = () => {
       queryClient.invalidateQueries({
         queryKey: ["Team", userTeamId],
       });
+      revalidateUser();
     },
   });
 
