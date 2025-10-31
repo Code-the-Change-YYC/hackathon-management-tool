@@ -52,7 +52,12 @@ export default function JudgingTable({
     });
 
   const { data: teamsLeft = 0, isFetching: teamsLeftIsFetching } = useQuery({
-    queryKey: ["TeamsLeftCount", teamsForRoomData, currentUser.username],
+    queryKey: [
+      "TeamsLeftCount",
+      teamsForRoomData,
+      currentUser.username,
+      teamsForRoomData?.map((t) => t?.id).join(","),
+    ],
     queryFn: async () => {
       if (!teamsForRoomData) return 0;
       const boolArray = await Promise.all(
@@ -67,11 +72,20 @@ export default function JudgingTable({
       );
       return teamsForRoomData.filter((_, i) => boolArray[i]).length;
     },
-    enabled: !!teamsForRoomData && !!currentUser.username,
+    enabled: !!teamsForRoomData?.length && !!currentUser.username,
   });
 
   const isFetching =
     roomIsFetching || teamsForRoomIsFetching || teamsLeftIsFetching;
+  console.log(
+    "Is fetching",
+    isFetching,
+    "Room Data",
+    roomData,
+    "Teams For RoomData",
+    teamsForRoomData,
+  );
+  console.log("Loading", isFetching || !roomData || !teamsForRoomData);
   if (isFetching || !roomData || !teamsForRoomData) {
     return <KevinLoadingRing />;
   }
