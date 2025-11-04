@@ -4,6 +4,7 @@ import { generateClient } from "aws-amplify/api";
 import { useState } from "react";
 import { type Schema } from "@/amplify/data/resource";
 import JudgingTimeline from "@/components/admin/Judging/JudgingTimeline";
+import KevinLoadingRing from "@/components/KevinLoadingRing";
 import { useQuery } from "@tanstack/react-query";
 
 const client = generateClient<Schema>();
@@ -114,8 +115,8 @@ export default function JudgingSchedule() {
         );
 
   return isLoading ? (
-    <div className=" mt-48 flex h-full items-center justify-center text-awesomer-purple">
-      Loading schedule...
+    <div className="flex h-screen items-center justify-center">
+      <KevinLoadingRing />
     </div>
   ) : (
     <div className="mt-8 flex flex-col items-center">
