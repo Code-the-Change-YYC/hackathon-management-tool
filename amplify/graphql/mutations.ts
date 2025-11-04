@@ -342,6 +342,7 @@ export const createTeamRoom = /* GraphQL */ `mutation CreateTeamRoom(
     time
     updatedAt
     zoomLink
+    duration
     __typename
   }
 }
