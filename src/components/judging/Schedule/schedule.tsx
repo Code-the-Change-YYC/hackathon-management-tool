@@ -94,7 +94,10 @@ export default function JudgingSchedule() {
               .join(", ") || "No Team Name",
           room_id: teamRoom.roomId,
           start: new Date(teamRoom.time),
-          end: new Date(new Date(teamRoom.time).getTime() + 15 * 60 * 1000),
+          end: new Date(
+            new Date(teamRoom.time).getTime() +
+              (teamRoom.duration ?? 10) * 60 * 1000,
+          ),
           zoomLink: teamRoom.zoomLink,
         }))
       : [];

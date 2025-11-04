@@ -72,7 +72,7 @@ export default function RoomAssigner({
           >
             <div className="flex w-full flex-col gap-4 md:flex-row">
               <div className="flex w-full flex-col gap-2 md:w-1/4">
-                <label htmlFor="numberOfRooms">Enter Number of Room:</label>
+                <label htmlFor="numberOfRooms">Enter Number of Rooms:</label>
                 <input
                   className="flex items-center justify-between rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black"
                   type="number"
@@ -82,7 +82,7 @@ export default function RoomAssigner({
                 />
               </div>
               <div className="flex w-full flex-col gap-2 md:w-1/4">
-                <label htmlFor="duration">Enter Judging Duration:</label>
+                <label htmlFor="duration">Enter Duration (minutes):</label>
                 <input
                   id="duration"
                   className="flex items-center justify-between rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black"

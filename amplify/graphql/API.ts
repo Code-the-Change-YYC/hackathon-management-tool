@@ -122,6 +122,7 @@ export type TeamRoom = {
   time: string;
   updatedAt: string;
   zoomLink: string;
+  duration?: number | null;
 };
 
 export type Room = {
@@ -493,6 +494,7 @@ export type CreateTeamRoomInput = {
   teamId: string;
   time: string;
   zoomLink: string;
+  duration?: number | null;
 };
 
 export type ModelUserConditionInput = {
@@ -623,6 +625,7 @@ export type UpdateTeamRoomInput = {
   teamId?: string | null;
   time?: string | null;
   zoomLink?: string | null;
+  duration?: number | null;
 };
 
 export type UpdateUserInput = {
