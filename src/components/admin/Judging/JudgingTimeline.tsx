@@ -49,9 +49,18 @@ export default function JudgingTimeline({
           viewerExtraComponent={(fields, event) => {
             return (
               <p>
-                {/* Replace with actual zoom link not the room id */}
                 <span className="font-bold">Zoom Link:</span>{" "}
-                <a href={event.zoomLink}>{event.title}</a>
+                {event.zoomLink ? (
+                  <a
+                    href={event.zoomLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Join Meeting
+                  </a>
+                ) : (
+                  <span className="text-dark-grey">Not available yet</span>
+                )}
               </p>
             );
           }}
