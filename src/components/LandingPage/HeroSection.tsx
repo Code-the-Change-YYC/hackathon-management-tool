@@ -19,8 +19,8 @@ export default async function HeroSection() {
     return <div>Hackathon hasn't been created yet</div>;
   }
 
-  const eventStartDate = new Date(hackathonData[0].startDate);
-  const eventEndDate = new Date(hackathonData[0].endDate);
+  const eventStartDate = new Date(2025, 10, 8, 9, 0, 0); // Month is 0-indexed → 10 = November
+  const eventEndDate = new Date(2025, 10, 9, 17, 0, 0); // Example: Sunday 5 PM
 
   return (
     <div className="relative flex flex-col items-center justify-center md:px-8 md:py-16 lg:px-32">

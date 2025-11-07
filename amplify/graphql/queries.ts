@@ -186,6 +186,7 @@ export const getTeamRoom = /* GraphQL */ `query GetTeamRoom($id: ID!) {
     time
     updatedAt
     zoomLink
+    duration
     __typename
   }
 }
@@ -427,6 +428,7 @@ export const listTeamRooms = /* GraphQL */ `query ListTeamRooms(
       time
       updatedAt
       zoomLink
+      duration
       __typename
     }
     nextToken
