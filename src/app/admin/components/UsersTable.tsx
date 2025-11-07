@@ -19,11 +19,21 @@ export default function UsersTable({ users }: { users: User[] }) {
   const deleteUser = async (id: Schema["User"]["deleteType"]) =>
     client.models.User.delete(id);
   const updateUser = async (updatedData: Schema["User"]["updateType"]) => {
+    if (updatedData.role) {
+      const roleUpdateResult = await client.mutations.AddUserToGroup({
+        userId: updatedData.id,
+        groupName: updatedData.role,
+      });
+
+      if (roleUpdateResult.errors) {
+        throw new Error("Failed to update user role in Cognito");
+      }
+    }
+
     return client.models.User.update({
       id: updatedData.id,
       firstName: updatedData.firstName,
       lastName: updatedData.lastName,
-      role: updatedData.role,
       teamId: updatedData.teamId,
     });
   };
