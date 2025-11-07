@@ -2,11 +2,16 @@ import MemberCards from "./memberCards";
 
 export default function GeneralMembers() {
   const generalMembers = [
-    { name: "Fiona Truong", discord: "coming soon", role: "Co-President" },
-    { name: "Nathan Phan", discord: "coming soon", role: "Co-President" },
-    { name: "Victoria Wong", discord: "coming soon", role: "VP Design" },
-    { name: "Ryan Obiar", discord: "coming soon", role: "VP Marketing" },
-    { name: "Grace Ilori", discord: "coming soon", role: "VP External" },
+    { name: "Fiona Truong", discord: ".fionaaa", role: "Co-President" },
+    { name: "Nathan Phan", discord: "natphaan", role: "Co-President" },
+    { name: "Victoria Wong", discord: "shib3", role: "VP Design" },
+    { name: "Ryan Obiar", discord: "", role: "VP Marketing" },
+    { name: "Grace Ilori", discord: "g542_542", role: "VP External" },
+    {
+      name: "Hanna Cho",
+      discord: "hannagracec",
+      role: "Marketing Commissioner",
+    },
   ];
 
   const generalBackground = "bg-pastel-pink";

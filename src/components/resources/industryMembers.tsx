@@ -2,8 +2,32 @@ import MemberCards from "./memberCards";
 
 export default function IndustryMembers() {
   const industryMembers = [
-    { name: "Kevin", discord: "KevinTheKeycap", role: "Organizer" },
-    { name: "Kevin", discord: "KevinTheKeycap", role: "Organizer" },
+    { name: "Alexandru Parcioaga", discord: "", role: "Arcurve" },
+    { name: "Karam Baroud", discord: "yeezy.yeezus", role: "ZeroKey" },
+    {
+      name: "Sankar Achary Jankoti",
+      discord: "",
+      role: "Infosys Limited",
+    },
+    { name: "Anthony Dam", discord: "anthony.cs", role: "Prev @ IBM" },
+    {
+      name: "Sidrah Abdullah",
+      discord: "degr8sid",
+      role: "University of Calgary",
+    },
+    {
+      name: "Farnaz Sheikhi",
+      discord: "",
+      role: "University of Calgary",
+    },
+    {
+      name: "Miti Mazmudar",
+      discord: "",
+      role: "University of Calgary",
+    },
+    { name: "Burton Jong", discord: "j05ng", role: "Pason" },
+    { name: "Anthony Chan", discord: "anthonyych4n", role: "Cisco" },
+    { name: "Matthew Liu", discord: "degr8sid", role: "Enbridge" },
   ];
 
   const industryBackground = "bg-medium-grey";

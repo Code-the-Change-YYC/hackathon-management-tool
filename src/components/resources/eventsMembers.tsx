@@ -2,34 +2,38 @@ import MemberCards from "./memberCards";
 
 export default function EventsMembers() {
   const eventsMembers = [
-    { name: "Simar Kandola", discord: "coming soon", role: "VP Events" },
-    { name: "Tanvi Mahal", discord: "coming soon", role: "Jr VP Events" },
-    { name: "May Liu", discord: "coming soon", role: "Events Commissioner" },
+    { name: "Simar Kandola", discord: "_the_real_ninja", role: "VP Events" },
+    { name: "Tanvi Mahal", discord: "tm.88", role: "Jr VP Events" },
+    { name: "May Liu", discord: "pickupmay", role: "Events Coordinator" },
     {
       name: "Adithya Sagar",
-      discord: "coming soon",
-      role: "Events Commissioner",
+      discord: "",
+      role: "Events Coordinator",
     },
     {
       name: "Anthony Chan",
-      discord: "coming soon",
-      role: "Events Commissioner",
+      discord: "anthonyych4n",
+      role: "Events Coordinator",
     },
     {
       name: "Sebastian Nieto",
-      discord: "coming soon",
-      role: "Events Commissioner",
+      discord: ".sebbyn",
+      role: "Events Coordinator",
     },
-    { name: "Hira Asad", discord: "coming soon", role: "Events Commissioner" },
+    {
+      name: "Hira Asad",
+      discord: "purplebarney84",
+      role: "Events Coordinator",
+    },
     {
       name: "Abudllah Yousaf",
-      discord: "coming soon",
-      role: "Events Commissioner",
+      discord: "nicetrylilbro",
+      role: "Events Coordinator",
     },
     {
       name: "Ana DuCristea",
-      discord: "coming soon",
-      role: "Events Commissioner",
+      discord: "anacoda",
+      role: "Events Coordinator",
     },
   ];
 
