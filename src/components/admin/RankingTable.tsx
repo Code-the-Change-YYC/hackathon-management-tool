@@ -29,11 +29,13 @@ function TableRow({
   components = {},
   index = 0,
   total = 0,
+  scoringMetrics,
 }: {
   teamName?: string;
   components?: ITeamScores[string]["components"];
   index?: number;
   total?: number;
+  scoringMetrics: Schema["Hackathon"]["type"]["scoringComponents"];
 }) {
   const bgColor = index % 2 === 1 ? "bg-white" : "bg-dashboard-grey";
   return (
@@ -41,19 +43,33 @@ function TableRow({
       <td className="truncate whitespace-nowrap px-6 py-4 font-medium text-dark-grey">
         {teamName}
       </td>
-      {Object.keys(components).map((componentId) => {
-        return (
-          <td
-            key={componentId}
-            className="border-l-2 border-l-white px-6 py-4 text-black"
-          >
-            {components[componentId]}
-          </td>
-        );
-      })}
+      {scoringMetrics
+        .filter((metric) => !metric.isSidepot)
+        .map((metric) => {
+          return (
+            <td
+              key={metric.id}
+              className="border-l-2 border-l-white px-6 py-4 text-black"
+            >
+              {components[metric.id] || 0}
+            </td>
+          );
+        })}
       <td className="border-l-2 border-l-white px-6 py-4 text-black">
         {total}
       </td>
+      {scoringMetrics
+        .filter((metric) => metric.isSidepot)
+        .map((metric) => {
+          return (
+            <td
+              key={metric.id}
+              className="border-l-2 border-l-white px-6 py-4 text-black"
+            >
+              {components[metric.id] || 0}
+            </td>
+          );
+        })}
     </tr>
   );
 }
@@ -101,7 +117,11 @@ export default function RankingTable({
             Number(score.score[scoreComponentId])
           : score.score[scoreComponentId];
 
-        return total + Number(score.score[scoreComponentId]);
+        // Only add to total if it's not a sidepot
+        if (!metric.isSidepot) {
+          return total + Number(score.score[scoreComponentId]);
+        }
+        return total;
       }, 0);
 
       acc[score.teamId].total += teamScore;
@@ -145,24 +165,25 @@ export default function RankingTable({
           <th className=" px-6 py-3">
             <div className="flex items-center capitalize">Team</div>
           </th>
-          {scoringMetrics.map((metric) => {
-            return (
-              <th key={metric.id} className=" px-6 py-3">
-                <div className="flex items-center capitalize">
-                  {metric.friendlyName}
-                  {metric.isSidepot ? " (Sidepot)" : null}
-                  <button
-                    onClick={() => {
-                      setSortKey(metric.id);
-                      setSortAscending(!sortAscending);
-                    }}
-                  >
-                    <FilterIcon />
-                  </button>
-                </div>
-              </th>
-            );
-          })}
+          {scoringMetrics
+            .filter((metric) => !metric.isSidepot)
+            .map((metric) => {
+              return (
+                <th key={metric.id} className=" px-6 py-3">
+                  <div className="flex items-center capitalize">
+                    {metric.friendlyName}
+                    <button
+                      onClick={() => {
+                        setSortKey(metric.id);
+                        setSortAscending(!sortAscending);
+                      }}
+                    >
+                      <FilterIcon />
+                    </button>
+                  </div>
+                </th>
+              );
+            })}
           <th className=" px-6 py-3">
             <div className="flex items-center capitalize">
               Total
@@ -176,6 +197,25 @@ export default function RankingTable({
               </button>
             </div>
           </th>
+          {scoringMetrics
+            .filter((metric) => metric.isSidepot)
+            .map((metric) => {
+              return (
+                <th key={metric.id} className=" px-6 py-3">
+                  <div className="flex items-center capitalize">
+                    {metric.friendlyName} (Sidepot)
+                    <button
+                      onClick={() => {
+                        setSortKey(metric.id);
+                        setSortAscending(!sortAscending);
+                      }}
+                    >
+                      <FilterIcon />
+                    </button>
+                  </div>
+                </th>
+              );
+            })}
         </tr>
       </thead>
       <tbody>
@@ -185,6 +225,7 @@ export default function RankingTable({
               teamName={computedScores[teamId].name}
               components={computedScores[teamId].components}
               total={computedScores[teamId].total}
+              scoringMetrics={scoringMetrics}
               key={index}
               index={index}
             />
