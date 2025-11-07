@@ -77,15 +77,7 @@ export default function JudgingTable({
 
   const isFetching =
     roomIsFetching || teamsForRoomIsFetching || teamsLeftIsFetching;
-  console.log(
-    "Is fetching",
-    isFetching,
-    "Room Data",
-    roomData,
-    "Teams For RoomData",
-    teamsForRoomData,
-  );
-  console.log("Loading", isFetching || !roomData || !teamsForRoomData);
+
   if (isFetching || !roomData || !teamsForRoomData) {
     return <KevinLoadingRing />;
   }
