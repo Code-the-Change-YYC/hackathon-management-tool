@@ -49,7 +49,7 @@ const AssignedTeamsPage = () => {
     return <div className="p-6">You have no room assigned yet.</div>;
 
   return (
-    <div className="h-dvh p-6">
+    <div className="p-6">
       <h1 className="mb-4 text-2xl font-semibold">
         Your Teams: {roomData?.name ?? ""}
       </h1>
