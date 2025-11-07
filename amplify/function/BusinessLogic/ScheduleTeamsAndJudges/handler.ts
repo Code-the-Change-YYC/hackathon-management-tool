@@ -118,6 +118,7 @@ export const handler: Schema["ScheduleTeamsAndJudges"]["functionHandler"] =
                 time: currTime.toISOString(),
                 roomId: roomIds[column],
                 zoomLink: "",
+                duration: presentationDuration,
               },
             },
           }),

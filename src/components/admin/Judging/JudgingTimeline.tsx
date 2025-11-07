@@ -1,6 +1,7 @@
 "use client";
 
 import { Scheduler } from "@aldabil/react-scheduler";
+import RedirectIcon from "../../RedirectIcon";
 
 type JudgeRoom = {
   roomName: string;
@@ -48,11 +49,14 @@ export default function JudgingTimeline({
           deletable={false}
           viewerExtraComponent={(fields, event) => {
             return (
-              <p>
+              <a
+                href={event.zoomLink}
+                className="inline-flex flex-row items-center gap-1 text-dark-green hover:underline"
+              >
                 {/* Replace with actual zoom link not the room id */}
-                <span className="font-bold">Zoom Link:</span>{" "}
-                <a href={event.zoomLink}>{event.title}</a>
-              </p>
+                <span className="font-bold">Zoom Link</span>
+                <RedirectIcon />
+              </a>
             );
           }}
         />

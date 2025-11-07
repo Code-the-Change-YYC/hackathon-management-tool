@@ -21,6 +21,8 @@ export default function RoomAssigner({
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const ZOOM_LINK = process.env.NEXT_PUBLIC_ZOOM_LINK;
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
@@ -48,13 +50,21 @@ export default function RoomAssigner({
         presentationDuration: Number(duration),
       });
 
-      const meetingData = await createZoomMeeting(
-        formattedDate,
-        Number(duration),
-      );
+      // dynamically create zoom links
+      // const meetingData = await createZoomMeeting(
+      //   formattedDate,
+      //   Number(duration),
+      // );
 
-      setMeetingLink(meetingData.join_url);
-      updateTeamRoomsWithZoomLink(meetingData.join_url);
+      // setMeetingLink(meetingData.join_url);
+      // updateTeamRoomsWithZoomLink();
+
+      // temporary hardcoded zoom link
+      if (!ZOOM_LINK) {
+        throw new Error("Zoom link missing in .env.");
+      }
+
+      updateTeamRoomsWithZoomLink(ZOOM_LINK);
     } catch (err) {
       setError("Failed to create Zoom meeting.");
     } finally {
@@ -72,7 +82,7 @@ export default function RoomAssigner({
           >
             <div className="flex w-full flex-col gap-4 md:flex-row">
               <div className="flex w-full flex-col gap-2 md:w-1/4">
-                <label htmlFor="numberOfRooms">Enter Number of Room:</label>
+                <label htmlFor="numberOfRooms">Enter Number of Rooms:</label>
                 <input
                   className="flex items-center justify-between rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black"
                   type="number"
@@ -82,7 +92,7 @@ export default function RoomAssigner({
                 />
               </div>
               <div className="flex w-full flex-col gap-2 md:w-1/4">
-                <label htmlFor="duration">Enter Judging Duration:</label>
+                <label htmlFor="duration">Enter Duration (minutes):</label>
                 <input
                   id="duration"
                   className="flex items-center justify-between rounded-lg border-2 border-awesome-purple bg-white p-4 font-bold text-black duration-100 hover:border-awesomer-purple active:border-awesome-purple active:text-black"

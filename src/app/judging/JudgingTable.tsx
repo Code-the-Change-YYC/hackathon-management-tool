@@ -20,7 +20,6 @@ export default function JudgingTable({
 }) {
   const [selectedTeam, setSelectedTeamId] = useState("");
   const [teamName, setTeamName] = useState("");
-  const [teamsLeft, setTeamsLeft] = useState(0);
 
   const { currentUser } = useUser();
   const { data: roomData, isFetching: roomIsFetching } = useQuery({
@@ -51,30 +50,45 @@ export default function JudgingTable({
         return teams;
       },
     });
-  const isFetching = roomIsFetching && teamsForRoomIsFetching;
+
+  const { data: teamsLeft = 0, isFetching: teamsLeftIsFetching } = useQuery({
+    queryKey: [
+      "TeamsLeftCount",
+      teamsForRoomData,
+      currentUser.username,
+      teamsForRoomData?.map((t) => t?.id).join(","),
+    ],
+    queryFn: async () => {
+      if (!teamsForRoomData) return 0;
+      const boolArray = await Promise.all(
+        teamsForRoomData.map(async (team) => {
+          const scores = await team?.scores();
+          return (
+            scores?.data.filter(
+              (score) => score.judgeId === currentUser.username,
+            ).length === 0
+          );
+        }),
+      );
+      return teamsForRoomData.filter((_, i) => boolArray[i]).length;
+    },
+    enabled: !!teamsForRoomData?.length && !!currentUser.username,
+  });
+
+  const isFetching =
+    roomIsFetching || teamsForRoomIsFetching || teamsLeftIsFetching;
+  console.log(
+    "Is fetching",
+    isFetching,
+    "Room Data",
+    roomData,
+    "Teams For RoomData",
+    teamsForRoomData,
+  );
+  console.log("Loading", isFetching || !roomData || !teamsForRoomData);
   if (isFetching || !roomData || !teamsForRoomData) {
     return <KevinLoadingRing />;
   }
-  async function getFilteredTeamsCount() {
-    // https://medium.com/@debbs119/array-filter-and-array-map-with-async-functions-9636e1ae8d6e --> why it needs to map to a boolean array first
-    if (!teamsForRoomData) {
-      return;
-    }
-    const boolArray = await Promise.all(
-      teamsForRoomData?.map(async (team) => {
-        const scores = await team?.scores();
-        return (
-          scores?.data.filter((score) => score.judgeId === currentUser.username)
-            .length === 0
-        );
-      }),
-    );
-    setTeamsLeft(
-      teamsForRoomData?.filter((_, index) => boolArray[index]).length,
-    );
-  }
-
-  getFilteredTeamsCount();
 
   const panelData = [
     {

@@ -131,6 +131,7 @@ const schema = a
         id: a.id().required(),
         time: a.datetime().required(),
         zoomLink: a.string().required(),
+        duration: a.integer(),
         teamId: a.id().required(),
         roomId: a.id().required(),
         team: a.belongsTo("Team", "teamId"),
