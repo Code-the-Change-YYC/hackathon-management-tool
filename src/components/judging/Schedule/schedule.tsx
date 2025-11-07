@@ -103,57 +103,21 @@ export default function JudgingSchedule() {
         }))
       : [];
 
-  // State to manage the filter (all teams or assigned teams)
-  const [filter, setFilter] = useState<"all" | "assigned">("all");
-
-  // Filtered events based on the selected filter
-  const filteredEvents =
-    filter === "all"
-      ? judgingEvents
-      : judgingEvents.filter((event) =>
-          judgeData?.some((judge) => judge.JUDGE_roomId === event.room_id),
-        );
-
   return isLoading ? (
     <div className="flex h-screen items-center justify-center">
       <KevinLoadingRing />
     </div>
   ) : (
     <div className="mt-8 flex flex-col items-center">
-      {/* Filter Buttons */}
       <div className="mb-6 flex space-x-4">
-        <button
-          onClick={() => setFilter("all")}
-          className={`rounded px-4 py-2 ${
-            filter === "all"
-              ? "bg-awesomer-purple text-white"
-              : "bg-dashboard-grey"
-          }`}
-        >
-          All Teams
-        </button>
-        <button
-          onClick={() => setFilter("assigned")}
-          className={`rounded px-4 py-2 ${
-            filter === "assigned"
-              ? "bg-awesomer-purple text-white"
-              : "bg-dashboard-grey"
-          }`}
-        >
-          Assigned Teams
-        </button>
+        <div className="text-6xl text-awesomer-purple">Judging Schedule</div>
       </div>
 
-      {/* Schedule Display */}
       <div className="w-full max-w-[1000px] rounded-md border border-awesomer-purple bg-light-grey p-4 text-lg text-black">
-        {filteredEvents.length > 0 ? (
-          <JudgingTimeline
-            judgeRooms={judgeRooms}
-            judgingEvents={filteredEvents}
-          />
-        ) : (
-          <div className="flex justify-center">Schedule not made yet</div>
-        )}
+        <JudgingTimeline
+          judgeRooms={judgeRooms}
+          judgingEvents={judgingEvents}
+        />
       </div>
     </div>
   );
