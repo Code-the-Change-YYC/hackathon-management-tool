@@ -50,9 +50,6 @@ export default async function JudgeShowcase() {
           </div>
         ))}
       </div>
-      <p className="mt-12 text-center text-2xl font-semibold text-gray-600 md:text-3xl">
-        Full List Coming Soon!
-      </p>
     </div>
   );
 }
