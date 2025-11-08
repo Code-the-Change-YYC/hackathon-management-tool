@@ -19,11 +19,15 @@ export default async function UserTablePage() {
   let nextToken: string | null | undefined = undefined;
 
   do {
-    const { data: users, nextToken: token } = await client.models.User.list({
-      selectionSet,
-      nextToken,
-      limit: 1000,
-    });
+    const {
+      data: users,
+      nextToken: token,
+    }: { data?: User[]; nextToken?: string | null } =
+      await client.models.User.list({
+        selectionSet,
+        nextToken,
+        limit: 1000,
+      });
 
     if (users && Array.isArray(users)) {
       allUsers = [...allUsers, ...users];
