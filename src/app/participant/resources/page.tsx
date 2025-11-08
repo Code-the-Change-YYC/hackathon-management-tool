@@ -21,13 +21,13 @@ export default function ResourcePage() {
         src="/svgs/resources/pinkSquiggly.svg"
         alt="Pink Squiggly"
         fill
-        className="pointer-events-none opacity-0 md:mt-[540px] md:opacity-100 lg:mt-[600px] xl:mt-[400px] 2xl:mt-52"
+        className="pointer-events-none opacity-0 md:mt-[540px] md:opacity-100 lg:mt-[600px] xl:mt-[400px] 2xl:mt-64"
       />
       <Image
         src="/svgs/resources/orangeSquiggly.svg"
         alt="Orange Squiggly"
         fill
-        className="pointer-events-none rotate-180 opacity-0 md:mt-[800px] md:opacity-100 lg:mt-[900px] xl:mt-[680px] 2xl:mt-[430px]"
+        className="pointer-events-none rotate-180 opacity-0 md:mt-[800px] md:opacity-100 lg:mt-[900px] xl:mt-[680px] 2xl:mt-[390px]"
       />
       <div className="z-10 flex flex-col gap-12 bg-light-grey py-10">
         <div className="mt-2 flex flex-row justify-center text-center">

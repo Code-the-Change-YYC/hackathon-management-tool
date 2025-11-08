@@ -7,8 +7,8 @@ import IndustryMembers from "./industryMembers";
 import TechMembers from "./techMembers";
 
 export default function Mentors() {
-  const roles = ["events", "tech", "general", "industry"];
-  const [isSelected, setIsSelected] = useState<string>("events");
+  const roles = ["event", "tech", "general", "industry"];
+  const [isSelected, setIsSelected] = useState<string>("event");
 
   return (
     <div className="z-10 flex flex-col items-center justify-center gap-5">
@@ -24,7 +24,7 @@ export default function Mentors() {
           </div>
         ))}
       </div>
-      {isSelected === "events" && <EventsMembers />}
+      {isSelected === "event" && <EventsMembers />}
       {isSelected === "tech" && <TechMembers />}
       {isSelected === "general" && <GeneralMembers />}
       {isSelected === "industry" && <IndustryMembers />}
