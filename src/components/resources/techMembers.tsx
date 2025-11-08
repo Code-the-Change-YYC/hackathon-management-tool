@@ -3,13 +3,15 @@ import MemberCards from "./memberCards";
 export default function TechMembers() {
   const techMembers = [
     { name: "Burton Jong", discord: "j05ng", role: "VP Tech" },
-    { name: "Fisayo Adabs", discord: "", role: "Tech Lead" },
-    { name: "Anthony Chan", discord: "anthonyych4n", role: "Tech Lead" },
+    {
+      name: "Simar Kandola",
+      discord: "_the_real_ninja",
+      role: "HTC Developer",
+    },
+    { name: "Fiona Truong", discord: ".fionaaa", role: "HTC Developer" },
     { name: "Matthew Liu", discord: "degr8sid", role: "Tech Lead" },
-    { name: "Simar Kandola", discord: "_the_real_ninja", role: "Developer" },
-    { name: "Fiona Truong", discord: ".fionaaa", role: "Developer" },
-    { name: "Yahya Asmara", discord: "", role: "Developer" },
-    { name: "Jason Duong", discord: "", role: "Developer" },
+    { name: "Yahya Asmara", discord: "aphva", role: "Developer" },
+    { name: "Jason Duong", discord: "plehhelp", role: "Developer" },
   ];
 
   const techBackground = "bg-fuzzy-peach";

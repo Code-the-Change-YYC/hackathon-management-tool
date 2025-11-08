@@ -2,11 +2,15 @@ import MemberCards from "./memberCards";
 
 export default function IndustryMembers() {
   const industryMembers = [
-    { name: "Alexandru Parcioaga", discord: "", role: "Arcurve" },
+    {
+      name: "Alexandru Parcioaga",
+      discord: "alexandrumentor_87981_83719",
+      role: "Arcurve",
+    },
     { name: "Karam Baroud", discord: "yeezy.yeezus", role: "ZeroKey" },
     {
       name: "Sankar Achary Jankoti",
-      discord: "",
+      discord: "sankarjankoti_38615",
       role: "Infosys Limited",
     },
     { name: "Anthony Dam", discord: "anthony.cs", role: "Prev @ IBM" },
@@ -22,7 +26,7 @@ export default function IndustryMembers() {
     },
     {
       name: "Miti Mazmudar",
-      discord: "",
+      discord: "dettanym",
       role: "University of Calgary",
     },
     { name: "Burton Jong", discord: "j05ng", role: "Pason" },

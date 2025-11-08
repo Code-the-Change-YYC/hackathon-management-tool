@@ -4,36 +4,26 @@ export default function EventsMembers() {
   const eventsMembers = [
     { name: "Simar Kandola", discord: "_the_real_ninja", role: "VP Events" },
     { name: "Tanvi Mahal", discord: "tm.88", role: "Jr VP Events" },
-    { name: "May Liu", discord: "pickupmay", role: "Events Coordinator" },
+    { name: "May Liu", discord: "pickupmay", role: "Event Coordinator" },
     {
       name: "Adithya Sagar",
-      discord: "",
-      role: "Events Coordinator",
+      discord: "adithyasagar778",
+      role: "Event Coordinator",
     },
     {
       name: "Anthony Chan",
       discord: "anthonyych4n",
-      role: "Events Coordinator",
-    },
-    {
-      name: "Sebastian Nieto",
-      discord: ".sebbyn",
-      role: "Events Coordinator",
+      role: "Event Coordinator",
     },
     {
       name: "Hira Asad",
       discord: "purplebarney84",
-      role: "Events Coordinator",
+      role: "Event Coordinator",
     },
     {
       name: "Abudllah Yousaf",
       discord: "nicetrylilbro",
-      role: "Events Coordinator",
-    },
-    {
-      name: "Ana DuCristea",
-      discord: "anacoda",
-      role: "Events Coordinator",
+      role: "Event Coordinator",
     },
   ];
 
